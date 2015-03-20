@@ -1,4 +1,4 @@
-﻿{
+{
   "Connections": [
     {
       "Name": "Adventureworks",
@@ -12,18 +12,22 @@
         {
           "Label": "Date",
           "SqlKey": "@dateid",
-          "Value": "",
+          "Value": null,
           "InputType": 2,
-          "Choices": {},
           "Mandatory": true,
-          "HelpText": "",
-          "Key": "dateid"
+          "HelpText": null,
+          "Key": "dateid",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
         },
         {
           "Label": "Period",
           "SqlKey": "@periodstart_@periodend",
-          "Value": "",
+          "Value": null,
           "InputType": 3,
+          "Mandatory": true,
+          "HelpText": "Välj period",
+          "Key": "periodstart_periodend",
           "Choices": {
             "2013-04-08_2013-04-09": "This Week",
             "2013-04-01_2013-04-07": "Last Week",
@@ -31,9 +35,7 @@
             "2013-03-01_2013-03-30": "Last Month",
             "2013-04-01_2013-06-30": "Current Quarter"
           },
-          "Mandatory": true,
-          "HelpText": "V\u00e4lj period",
-          "Key": "periodstart_periodend"
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
         }
       ],
       "ConnectionStringName": "Adventureworks",
@@ -46,15 +48,15 @@
       "ResultType": 0,
       "Parameters": [
         {
-          "LookupReportId": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a",
           "Label": "Category",
           "SqlKey": "@subid",
           "Value": "",
           "InputType": 4,
-          "Choices": {},
           "Mandatory": true,
           "HelpText": "",
-          "Key": "subid"
+          "Key": "subid",
+          "Choices": {},
+          "LookupReportId": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a"
         }
       ],
       "ConnectionStringName": "Adventureworks",

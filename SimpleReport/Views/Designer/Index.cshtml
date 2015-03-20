@@ -61,106 +61,30 @@
 
 <section class="content-header">
     <h1>
-        Report Designer 
+        Report Designer <small>Here you can edit existing reports or create new ones.</small>
     </h1>
 </section>
 <section class="content">
-    <p>Here you can edit existing reports or create new ones.</p>
-    Choose report to Edit: <select data-bind="options: Reports,optionsText: 'Name', value:Report"></select>
-    <div class="box box-primary">
-        <form data-bind="with:Report, submit: Save" method="post" role="form">
 
-            <div class="box-header">
-                <h3 class="box-title" data-bind="text: Name"></h3>
-            </div>
-
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <div class="form-group">
-                            <label class="control-label">Name</label>
-                            <div>
-                                <input type="text" name="Name" data-bind="value: Name" class="form-control" placeholder="Give your report a name">
-                                <span class="help-block">This Name is also the link in the report menu</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Description</label>
-                            <div>
-                                <input type="text" name="Description" data-bind="value: Description" class="form-control" placeholder="Give your report a user-friendly description">
-                                <span class="help-block">This description is shown to the user when he executes the report</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">SQL statement</label>
-                            <div>
-                                <textarea rows="5" class="form-control" data-bind="value: Sql,event: { keyup: $parent.analyzeSql }"></textarea>
-                                <span class="help-block">Write or paste your SQL statement here.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <!-- ko foreach: Parameters-->
-                    <div class="col-sm-6 col-md-4">
-                        <div class="box box-solid box-info">
-                            <div class="box-header with-border">
-                                <h3 class="box-title" data-bind="text: SqlKey"></h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="row"><div class="col-md-2">Value</div><div class="col-md-10"><input type="text" name="Value" data-bind="value: Value" class="form-control"></div></div>
-                                <div class="row">
-                                    <div class="col-md-2">Type</div><div class="col-md-4"><select name="InputType" data-bind="options: $root.InputTypes, optionsText: 'Value', optionsValue:'Key', value:InputType" class="form-control"></select></div>
-                                    <div class="col-md-2">Required</div><div class="col-md-4"><div class="checkbox"><input type="checkbox" data-bind="checked: Mandatory"></div></div>
-                                </div>
-                                <div class="row"><div class="col-md-2">Label</div><div class="col-md-10"><input type="text" name="Label" data-bind="value: Label" class="form-control"></div></div>
-                                <div class="row"><div class="col-md-2">Help text</div><div class="col-md-10"><input type="text" name="HelpText" data-bind="value: HelpText" class="form-control"></div></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /ko -->
-                </div>
-                
-            </div>
-            @*<div class="form-group">
-                <label class="control-label">Parameters</label>
-                <div>
-                    <table>
-                        <tbody>
-                            <tr align="left">
-                                <th>ID</th>
-                                <th>SqlKey</th>
-                                <th>Default value</th>
-                                <th>InputType</th>
-                                <th title="Required">Req'd</th>
-                                <th>Label</th>
-                                <th>Helptext</th>
-                            </tr>
-                            <!-- ko foreach: Parameters-->
-                            <tr>
-                                <td class=""><span data-bind="text: $index()+1"></span></td>
-                                <td class=""><input type="text" name="SqlKey" data-bind="value: SqlKey" class="form-control"></td>
-                                <td class=""><input type="text" name="Value" data-bind="value: Value" class="form-control"></td>
-                                <td class="">
-                                    <select name="InputType" data-bind="options: $root.InputTypes, optionsText: 'Value', optionsValue:'Key', value:InputType"></select>
-                                </td>
-                                <td class=""><input type="checkbox" data-bind="checked: Mandatory" class="checkbox"></td>
-                                <td class=""><input type="text" name="Label" data-bind="value: Label" class="form-control"></td>
-                                <td class=""><input type="text" name="HelpText" data-bind="value: HelpText" class="form-control"></td>
-                            </tr>
-                            <!-- /ko -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>*@
-</div>
-            <div class="box-footer">
-                <div class="form-group">
-                    <div class="controls">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </form>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Reports</a></li>
+            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Dropdown parameters</a></li>
+            <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Connections</a></li>
+        </ul>
     </div>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_1">
+            @Html.Partial("_ReportDesigner")
+        </div>
+        <div class="tab-pane" id="tab_2">
+
+        </div>
+        <div class="tab-pane" id="tab_3">
+
+        </div>
+    </div><!-- /.tab-content -->
+
+
 </section>
