@@ -1,0 +1,75 @@
+﻿@using System.Web.Optimization
+@using SimpleReport.Model
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Simple Report Tool: @ViewBag.Title</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    @Styles.Render("~/bundles/css")
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css">
+    @Scripts.Render("~/bundles/scripts")
+</head>
+<body class="skin-blue" data-spy="scroll" data-target="#scrollspy">
+    <div class="wrapper">
+        <header class="main-header">
+            <a class="logo" href="#"><b>Simple</b> reports</a>
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar" style="height: auto;">
+                <!-- search form -->
+                @*<form action="#" method="get" class="sidebar-form">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button type="submit" name="seach" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>*@
+                <!-- /.search form -->
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu">
+                    <li class="header">REPORTS</li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-table"></i><span>Database name</span> <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            @foreach (ReportInfo reportInfo in Model.Reports)
+                            {
+                                <li><a href="@Url.Action("Report", "Home", new { reportId = reportInfo.ID })"><i class="fa fa-circle-o"></i>@reportInfo.Name</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="header">HELP</li>
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 0.5
+            </div>
+            <strong>Free and Open source</strong> please share your changes with others
+        </footer>
+    </div>
+    
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+﻿@using SimpleReport.Model
+@model SimpleReport.ViewModel.ReportViewModel
+@{
+    ViewBag.Title = "View Report";
+}
+<script>
+    $(function () {
+        $("form").validate(
+        {
+            rules: {
+                @String.Join(",", Model.Report.Parameters.Where(r => r.Mandatory).Select(par => Html.Raw(par.Key + ": {required:true}")))
+            },
+            highlight: function (label) {
+                $(label).closest('.control-group').removeClass('success').addClass('error');
+            },
+            success: function (label) {
+                label.html('&nbsp;').closest('.control-group').removeClass('error').addClass('success');
+            }
+        });
+        $(".numeric").numeric();
+        $(".datepicker").datepicker();
+    });
+</script>
+  
+
+<section class="content-header">
+    <h1>
+        @Model.Report.Name
+    </h1>
+</section>
+<section class="content">
+    <p >@Model.Report.Description</p>
+    
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Parameters</h3>
+        </div>
+        @using (Html.BeginForm("ExecuteReport", "Home", FormMethod.Get, new { role = "form" }))
+        {
+            <div class="box-body">
+                <div class="row">
+                    <input type="hidden" name="reportId" value="@Model.Report.ID" class="form-control">
+
+                    @foreach (Parameter par in Model.Report.Parameters)
+                    {
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label" for="@par.Key">@par.Label</label>
+                                <div class="controls">
+                                    @switch (par.InputType)
+                                    {
+                                        case ParameterInputType.Integer:
+                                            <input type="text" name="@par.Key" value="@par.Value" placeholder="Integer" class="numeric form-control">
+                                            break;
+                                        case ParameterInputType.Date:
+                                            <div class="input-append date col-sm-3 col-md-3" data-date-format="dd-mm-yyyy">
+                                                <input type="text" name="@par.Key" value="@par.Value" class="datepicker form-control" placeholder="Date" readonly="readonly">
+                                                <span class="add-on"><i class="icon-calendar"></i></span>
+                                            </div>
+                                            break;
+                                        case ParameterInputType.Period:
+                                        case ParameterInputType.Lookup:
+                                            <select name="@par.Key" class="form-control">
+                                                <option value="">[Please Choose...]</option>
+                                                @foreach (KeyValuePair<string, string> p in par.Choices)
+                                                {
+                                                    <option value="@p.Key">@p.Value</option>
+                                                }
+                                            </select>
+                                            break;
+                                        default:
+                                            <input type="text" name="@par.Key" value="@par.Value" class="form-control" placeholder="String">
+                                            break;
+                                    }
+                                    <span class="help-block">@par.HelpText</span>
+                                    <label for="@par.Key" generated="true" class="help-block error" style=""></label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                
+                </div>
+            </div>
+            <div class="box-footer">
+                <div class="form-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-primary">Execute</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
