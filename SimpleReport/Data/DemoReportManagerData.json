@@ -12,7 +12,7 @@
         {
           "Label": "Date",
           "SqlKey": "@dateid",
-          "Value": null,
+          "Value": "date",
           "InputType": 2,
           "Mandatory": true,
           "HelpText": null,
