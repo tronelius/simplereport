@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Http;
-using SimpleReport.Model;
+using SimpleReport.Model; 
 
 namespace SimpleReport.Controllers.Api
 {
@@ -19,12 +19,40 @@ namespace SimpleReport.Controllers.Api
 
 
         [AcceptVerbs("POST")]
-        public IHttpActionResult Save([FromBody]Report reportToSave)
+        public IHttpActionResult SaveReport([FromBody]Report reportToSave)
         {
             try { 
                 _reportManager.SaveReport(reportToSave);
                 return Ok();
             } catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
+        public IHttpActionResult SaveConnection([FromBody]Connection conn)
+        {
+            try
+            {
+                _reportManager.SaveConnection(conn);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
+        public IHttpActionResult SaveLookupReport([FromBody]LookupReport lrpt)
+        {
+            try
+            {
+                _reportManager.SaveLookupReport(lrpt);
+                return Ok();
+            }
+            catch (Exception ex)
             {
                 return InternalServerError();
             }
