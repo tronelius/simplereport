@@ -11,6 +11,9 @@ namespace SimpleReport.App_Start
             // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
             public static void RegisterBundles(BundleCollection bundles)
             {
+                bundles.Add(new ScriptBundle("~/bundles/designer").Include(
+                    "~/Scripts/app/designer.js"));
+
                 bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                           "~/Scripts/jquery-{version}.js",
                           "~/Scripts/jquery.validate.min.js",
@@ -19,8 +22,10 @@ namespace SimpleReport.App_Start
                           "~/Scripts/bootstrap.js",
                           "~/Scripts/bootstrap-datepicker.js",
                           "~/Scripts/underscore.min.js",
-                          "~/Scripts/knockout-{version}.js",
-                          "~/Scripts/knockout.mapping-latest.js",
+                          //"~/Scripts/knockout-{version}.js",
+                          //"~/Scripts/knockout.mapping-latest.js",
+                          "~/scripts/angular.js",
+                          "~/scripts/toastr.js",
                           "~/Content/js/app.js"));
 
                 bundles.Add(new StyleBundle("~/bundles/css").Include(

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
-using SimpleReport.Model; 
+using System.Web.Http.Results;
+using SimpleReport.Model;
+using SimpleReport.ViewModel;
 
 namespace SimpleReport.Controllers.Api
 {
@@ -12,11 +15,25 @@ namespace SimpleReport.Controllers.Api
             _reportManager = reportManager;
         }
 
-        public DesignerController()
-        {
+        //public DesignerController()
+        //{
             
-        }
+        //}
 
+        [AcceptVerbs("GET")]
+        public IHttpActionResult Reports()
+        {
+            try
+            {
+                DesignerViewModel vm = new DesignerViewModel();
+                vm.Reports = _reportManager.GetReports().ToList();
+                return Ok(vm);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
 
         [AcceptVerbs("POST")]
         public IHttpActionResult SaveReport([FromBody]Report reportToSave)

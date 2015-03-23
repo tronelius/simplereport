@@ -1,8 +1,10 @@
+@using System.Web.Optimization
 @model SimpleReport.ViewModel.DesignerViewModel
 @{
     ViewBag.Title = "Report Designer";
 }
-<script type="">
+@Scripts.Render("~/bundles/designer")
+@*<script type="text/javascript">
     function ReportViewModel() {
         var self = this;
         self.Reports = ko.observableArray();
@@ -60,19 +62,19 @@
         vm.Load(data);
         ko.applyBindings(vm);
     });
-</script>
+</script>*@
 
 <section class="content-header">
     <h1>
         Report Designer <small>Here you can edit existing reports or create new ones.</small>
     </h1>
 </section>
-<section class="content ">
+<section class="content" ng-cloak ng-app="designer" ng-controller="designerController">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Reports</a></li>
-            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Dropdown parameters</a></li>
-            <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Connections</a></li>
+            <li ng-class="{active: activeTab == 'report'}"><a ng-click="showReportTab()" data-toggle="tab" aria-expanded="true">Reports</a></li>
+            <li ng-class="{active: activeTab == 'lookup'}"><a ng-click="showLookupTab()" data-toggle="tab" aria-expanded="false">Dropdown parameters</a></li>
+            <li ng-class="{active: activeTab == 'connection'}"><a ng-click="showConnectionTab()" data-toggle="tab" aria-expanded="false">Connections</a></li>
         </ul>
     </div>
 
@@ -87,6 +89,4 @@
             @Html.Partial("_Connections")
         </div>
     </div><!-- /.tab-content -->
-
-
 </section>
