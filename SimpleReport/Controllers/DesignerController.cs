@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using SimpleReport.Model;
@@ -16,13 +16,6 @@ namespace SimpleReport.Controllers
         {
             var vm = GetReportViewModel();
             return View(vm);
-        }
-
-        [HttpPost]
-        public ActionResult Save(Report reportToSave)
-        {
-            _reportManager.SaveReport(reportToSave);
-            return Index();
         }
 
         private DesignerViewModel GetReportViewModel()

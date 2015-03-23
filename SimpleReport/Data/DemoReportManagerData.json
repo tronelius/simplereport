@@ -50,10 +50,10 @@
         {
           "Label": "Category",
           "SqlKey": "@subid",
-          "Value": "",
+          "Value": null,
           "InputType": 4,
           "Mandatory": true,
-          "HelpText": "",
+          "HelpText": "Parameter with lookup",
           "Key": "subid",
           "Choices": {},
           "LookupReportId": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a"

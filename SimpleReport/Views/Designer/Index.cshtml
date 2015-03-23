@@ -9,19 +9,22 @@
         self.Report = ko.observable();
         self.Report.Name = ko.observable();
         self.InputTypes = ko.observableArray();
-        self.SaveUrl = '/Designer/Save';
+        self.SaveUrl = '../api/Designer/Save';
 
         self.Save = function(){
-            var jsonData = ko.toJSON({ reportToSave: self.Report });
+            var jsonData = ko.toJSON(self.Report);
             $.ajax({
                 type: 'post',
                 url: self.SaveUrl,
                 data: jsonData,
-                contentType: 'application/json',
+                processData: false,
+                contentType: 'application/json; charset=utf-8',
                 success: function(result) {
                     if (!result.success) {
                         alert(result.error);
-                    } else {}
+                    } else {
+                    
+                    }
                 }
             });
         };

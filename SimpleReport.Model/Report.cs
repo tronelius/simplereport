@@ -108,16 +108,12 @@ namespace SimpleReport.Model
             ResultType= ResultType.SimpleExcel;
             Parameters = new ParameterList();
         } 
-        /*: this(Guid.NewGuid().ToString(),string.Empty, string.Empty,string.Empty,string.Empty,new List<Parameter>(),ResultType.SimpleExcel )
-        {}*/
 
         public Report(string id, string name, string description, string connectionStringName, string sql, List<Parameter> parameters, ResultType resultType) : base(id,name, description,connectionStringName,sql)
         {
             Parameters = new ParameterList(parameters);
             ResultType = resultType;
         }
-
-       
 
         public bool IsParameterValueValid()
         {

@@ -9,23 +9,10 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SimpleReport.Model.Storage;
 
 namespace SimpleReport.Model
 {
-    public class ReportManagerData
-    {
-        public List<Connection> Connections;
-        public List<Report> Reports;
-        public List<LookupReport> LookupReports;
-
-        public ReportManagerData()
-        {
-            Connections = new List<Connection>();
-            Reports = new List<Report>();
-            LookupReports = new List<LookupReport>();
-        }
-    }
-
     public class ReportManager 
     {
         private readonly IStorage _storage;
@@ -40,6 +27,8 @@ namespace SimpleReport.Model
             ResolveAllReferences();
         }
 
+        //refactor this pattern later.
+        #region Reports
         public IEnumerable<Report> GetReports()
         {
             return _reportManagerData.Reports.Cast<Report>();
@@ -71,18 +60,62 @@ namespace SimpleReport.Model
 
         public void SaveReport(Report reportToSave)
         {
-            int index = _reportManagerData.Reports.FindIndex(r => r.ID == reportToSave.ID);
-            if (index == -1)
+            Report existingReport = _reportManagerData.Reports.FirstOrDefault(r => r.ID == reportToSave.ID);
+            if (existingReport == null)
                 _reportManagerData.Reports.Add(reportToSave);
             else
-                _reportManagerData.Reports[index] = reportToSave;
+                existingReport = reportToSave;
             _storage.SaveModel(_reportManagerData);
         }
+        #endregion
 
-        public void AddConnection(Connection conn)
+        #region connections
+        public IEnumerable<Connection> GetConnections()
         {
-            _reportManagerData.Connections.Add(conn);
+            return _reportManagerData.Connections;
         }
+
+        public Connection Getconnection(Guid id)
+        {
+            return _reportManagerData.Connections.FirstOrDefault(cnn => cnn.Id == id);
+        }
+
+        public void SaveConnection(Connection conn)
+        {
+            Connection existingConnection = Getconnection(conn.Id);
+            if (existingConnection != null)
+                existingConnection = conn;
+            else
+                _reportManagerData.Connections.Add(conn);
+           _storage.SaveModel(_reportManagerData);
+            
+        }
+
+        #endregion
+
+        #region LookupReport
+        public IEnumerable<LookupReport> GetLookupReports()
+        {
+            return _reportManagerData.LookupReports;
+        }
+
+        public LookupReport GetLookupReport(Guid id)
+        {
+            return _reportManagerData.LookupReports.FirstOrDefault(cnn => cnn.ID == id);
+        }
+
+        public void SaveLookupReport(LookupReport rpt)
+        {
+            LookupReport existingLookupreport = GetLookupReport(rpt.ID);
+            if (existingLookupreport != null)
+                existingLookupreport = rpt;
+            else
+                _reportManagerData.LookupReports.Add(rpt);
+           _storage.SaveModel(_reportManagerData);
+            
+        }
+
+        #endregion
 
         private void ResolveAllReferences()
         {

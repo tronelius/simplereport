@@ -62,13 +62,14 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="ErrorInfo.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
-    <Compile Include="FileStorage.cs" />
-    <Compile Include="interfaces\IStorage.cs" />
+    <Compile Include="Storage\FileStorage.cs" />
+    <Compile Include="Storage\IStorage.cs" />
     <Compile Include="KeyValue.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportManager.cs" />
     <Compile Include="Report.cs" />
+    <Compile Include="ReportManagerData.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ValidatableEntity.cs" />
   </ItemGroup>
