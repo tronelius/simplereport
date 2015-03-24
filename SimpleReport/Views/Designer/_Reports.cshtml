@@ -4,30 +4,29 @@
             <div class="form-inline">
                 <div class="form-group">
                     <label class="control-label">Choose report to edit</label>
-                    <select data-bind="options: Reports,optionsText: 'Name', value:Report" class="form-control"></select>
-                </div>
+                    <select ng-model="report" class="form-control" ng-options="item as item.Name for item in reportList"></select>
+                    </div>
                 <button class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Add new</button>
             </div>
         </div>
     </div>
 
-<form data-bind="with:Report, submit: Save" method="post" role="form">
-
+<form  role="form" ng-hide="!report">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="box box-primary">
                 <div class="box-body">
                     <div class="form-group">
                         <label class="control-label">Name</label>
                         <div>
-                            <input type="text" name="Name" data-bind="value: Name" class="form-control" placeholder="Give your report a name">
+                            <input type="text" ng-model="report.Name" class="form-control" placeholder="Give your report a name">
                             <span class="help-block">This Name is also the link in the report menu</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Description</label>
                         <div>
-                            <input type="text" name="Description" data-bind="value: Description" class="form-control" placeholder="Give your report a user-friendly description">
+                            <input type="text" name="Description" ng-model="report.Description" class="form-control" placeholder="Give your report a user-friendly description">
                             <span class="help-block">This description is shown to the user when he executes the report</span>
                         </div>
                     </div>
@@ -35,13 +34,13 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="box box-primary">
                 <div class="box-body">
                     <div class="form-group">
                         <label class="control-label">SQL statement</label>
                         <div>
-                            <textarea rows="6" class="form-control" data-bind="value: Sql,event: { keyup: $parent.analyzeSql }"></textarea>
+                            <textarea rows="6" class="form-control" ng-model="report.Sql"></textarea>
                             <span class="help-block">Write or paste your SQL statement here.</span>
                         </div>
                     </div>
@@ -50,8 +49,7 @@
         </div>
     </div>
     <div class="row">
-        <!-- ko foreach: Parameters-->
-        <div class="col-md-4">
+        <div class="col-md-4" ng-repeat="param in report.Parameters">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title" data-bind="text: SqlKey"></h3>
@@ -61,7 +59,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Value</label>
                             <div class="col-md-10">
-                                <input type="text" name="Value" data-bind="value: Value" class="form-control">
+                                <input type="text" name="Value" ng-model="param.Value" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -69,11 +67,11 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" title="The type of parameter to present to the user">Type</label>
                             <div class="col-md-4">
-                                <select name="InputType" data-bind="options: $root.InputTypes, optionsText: 'Value', optionsValue:'Key', value:InputType" class="form-control"></select>
+                                <select name="InputType" ng-model="param.InputType" ng-options="item.Key as item.Value for item in inputTypes" class="form-control"></select>
                             </div>
                             <div class="col-md-6">
                                 <div class="checkbox">
-                                    <input type="checkbox" data-bind="checked: Mandatory"><span title="Required/Mandatory to fill in the parameter">Req'd</span>
+                                    <input type="checkbox" ng-model="param.Mandatory"><span title="Required/Mandatory to fill in the parameter">Req'd</span>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +80,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" title="Label for the parameter">Label</label>
                             <div class="col-md-10">
-                                <input type="text" name="Label" data-bind="value: Label" class="form-control">
+                                <input type="text" name="Label" ng-model="param.Label" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -90,19 +88,19 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" title="Help Text for the parameter">Help</label>
                             <div class="col-md-10">
-                                <input type="text" name="HelpText" data-bind="value: HelpText" class="form-control">
+                                <input type="text" name="HelpText" ng-model="param.HelpText" class="form-control">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /ko -->
+       
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="box-footer">
-                <button type="submit" class="btn btn-success">Save changes</button>
+                <button type="button" class="btn btn-success" ng-click="save()">Save changes</button>
             </div>
         </div>
     </div>

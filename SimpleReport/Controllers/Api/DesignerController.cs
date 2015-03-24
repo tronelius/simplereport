@@ -15,11 +15,6 @@ namespace SimpleReport.Controllers.Api
             _reportManager = reportManager;
         }
 
-        //public DesignerController()
-        //{
-            
-        //}
-
         [AcceptVerbs("GET")]
         public IHttpActionResult Reports()
         {

@@ -8,6 +8,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Ninject;
 using Ninject.Web.Common;
+using Ninject.Web.WebApi;
 using SimpleReport.App_Start;
 using SimpleReport.Model;
 using SimpleReport.Model.Storage;
@@ -26,6 +27,7 @@ namespace SimpleReport
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            
         }
 
         protected override IKernel CreateKernel()
@@ -33,6 +35,7 @@ namespace SimpleReport
             var kernel = new StandardKernel();
             kernel.Bind<IStorage>().To<FileStorage>();
             kernel.Bind<ReportManager>().ToSelf().InSingletonScope();
+            GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
             return kernel;
         }
 

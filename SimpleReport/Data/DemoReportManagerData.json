@@ -1,6 +1,7 @@
 {
   "Connections": [
     {
+      "Id": "00000000-0000-0000-0000-000000000000",
       "Name": "Adventureworks",
       "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
     }
@@ -14,7 +15,7 @@
           "SqlKey": "@dateid",
           "Value": "date",
           "InputType": 2,
-          "Mandatory": true,
+          "Mandatory": false,
           "HelpText": null,
           "Key": "dateid",
           "Choices": {},

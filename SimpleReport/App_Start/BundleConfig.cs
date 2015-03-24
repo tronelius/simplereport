@@ -32,7 +32,8 @@ namespace SimpleReport.App_Start
                           "~/Content/bootstrap.css",
                           "~/Content/custom.css",
                           "~/Content/css/AdminLTE.css",
-                          "~/Content/css/skins/_all-skins.css"));
+                          "~/Content/css/skins/_all-skins.css",
+                          "~/Content/toastr.css"));
             }
         }
     }
