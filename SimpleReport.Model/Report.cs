@@ -13,12 +13,13 @@ using OfficeOpenXml;
 
 namespace SimpleReport.Model
 {
-    
     public class ReportInfo : ValidatableEntity
     {
         public Guid ID { get; set; }
         [Required][StringLength(300)] 
         public string Name { get; set; }
+        [StringLength(50)]
+        public string Group { get; set; }
         [StringLength(1000)] 
         public string Description { get; set; }
         
@@ -97,7 +98,6 @@ namespace SimpleReport.Model
         }
     }
 
-    
     public class Report : LookupReport
     {
         public ResultType ResultType { get; set; }
@@ -134,7 +134,5 @@ namespace SimpleReport.Model
             Parameters.ReadParameters(queryString);
         }
     }
-
-
 
 }

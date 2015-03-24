@@ -42,7 +42,8 @@
       "ConnectionStringName": "Adventureworks",
       "Sql": "SELECT TOP 1000 [ProductID],[StartDate],[EndDate],[StandardCost],[ModifiedDate] FROM [Production].[ProductCostHistory] where [StartDate] between @periodstart and @periodend and ModifiedDate > @dateid",
       "ID": "a70722b1-deb7-4b48-b90b-d3c651459502",
-      "Name": "Production Cost History Report",
+        "Name": "Production Cost History Report",
+        "Group": "Cost",
       "Description": "Beskrivning..."
     },
     {
@@ -64,6 +65,7 @@
       "Sql": "SELECT TOP 1000 [ProductID],[Name] ,[ProductNumber] from [Production].[Product] where [ProductSubcategoryID] = @subid",
       "ID": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
       "Name": "Product List",
+      "Group": "Production",
       "Description": "gets all products from a certain category"
     }
   ],

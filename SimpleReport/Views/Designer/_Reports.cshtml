@@ -30,6 +30,13 @@
                             <span class="help-block">This description is shown to the user when he executes the report</span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label">Group</label>
+                        <div>
+                            <input type="text" name="Group" ng-model="report.Group" class="form-control" placeholder="Folder group name">
+                            <span class="help-block">All reports are grouped in the left hand navigation menu in folders, just give it a name to create a new folder</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,7 +47,7 @@
                     <div class="form-group">
                         <label class="control-label">SQL statement</label>
                         <div>
-                            <textarea rows="6" class="form-control" ng-model="report.Sql"></textarea>
+                            <textarea rows="9" class="form-control" ng-model="report.Sql"></textarea>
                             <span class="help-block">Write or paste your SQL statement here.</span>
                         </div>
                     </div>
