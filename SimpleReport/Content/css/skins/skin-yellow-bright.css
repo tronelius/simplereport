@@ -1,0 +1,134 @@
+/*
+ * Skin: Yellow-Bright
+ * ------------
+ */
+.skin-yellow-bright .main-header .navbar {
+    background-color: #ffd622;
+}
+.skin-yellow-bright .main-header .navbar .nav > li > a {
+  color: #000000;
+}
+.skin-yellow-bright .main-header .navbar .nav > li > a:hover,
+.skin-yellow-bright .main-header .navbar .nav > li > a:active,
+.skin-yellow-bright .main-header .navbar .nav > li > a:focus,
+.skin-yellow-bright .main-header .navbar .nav .open > a,
+.skin-yellow-bright .main-header .navbar .nav .open > a:hover,
+.skin-yellow-bright .main-header .navbar .nav .open > a:focus {
+  background: rgba(0, 0, 0, 0.1);
+  color: #f6f6f6;
+}
+.skin-yellow-bright .main-header .navbar .navbar-custom-menu > .nav {
+  margin-right: 10px;
+}
+.skin-yellow-bright .main-header .navbar .sidebar-toggle {
+  color: #000000;
+}
+.skin-yellow-bright .main-header .navbar .sidebar-toggle:hover {
+  color: #f6f6f6;
+  background: rgba(0, 0, 0, 0.1);
+}
+.skin-yellow-bright .main-header .navbar .sidebar-toggle {
+  color: #000000;
+}
+.skin-yellow-bright .main-header .navbar .sidebar-toggle:hover {
+  background-color: #CCA81C;
+}
+@media (max-width: 767px) {
+  .skin-yellow-bright .main-header .navbar .dropdown-menu li.divider {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .skin-yellow-bright .main-header .navbar .dropdown-menu li a {
+    color: #fff;
+  }
+  .skin-yellow-bright .main-header .navbar .dropdown-menu li a:hover {
+    background: #CCA81C;
+  }
+}
+.skin-yellow-bright .main-header .logo {
+  background-color: #000000;
+  color: #ffd622;
+  border-bottom: 0px solid transparent;
+}
+.skin-yellow-bright .main-header .logo > a {
+  color: #000000;
+}
+.skin-yellow-bright .content-header {
+  background: transparent;
+}
+.skin-yellow-bright .user-panel > .info,
+.skin-yellow-bright .user-panel > .info > a {
+  color: #fff;
+}
+.skin-yellow-bright .sidebar-menu > li.header {
+  color: #4b646f;
+  background: #1a2226;
+}
+.skin-yellow-bright .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+  margin-right: 1px;
+}
+.skin-yellow-bright .sidebar-menu > li > a:hover,
+.skin-yellow-bright .sidebar-menu > li.active > a {
+  color: #ffffff;
+  background: #1e282c;
+  border-left-color: #ffd622;
+}
+.skin-yellow-bright .sidebar-menu > li > .treeview-menu {
+  margin: 0 1px;
+  background: #2c3b41;
+}
+.skin-yellow-bright .wrapper,
+.skin-yellow-bright .main-sidebar,
+.skin-yellow-bright .left-side {
+  background: #222d32;
+}
+.skin-yellow-bright .sidebar a {
+  color: #b8c7ce;
+}
+.skin-yellow-bright .sidebar a:hover {
+  text-decoration: none;
+}
+.skin-yellow-bright .treeview-menu > li > a {
+  color: #8aa4af;
+}
+.skin-yellow-bright .treeview-menu > li.active > a,
+.skin-yellow-bright .treeview-menu > li > a:hover {
+  color: #ffffff;
+}
+.skin-yellow-bright .sidebar-form {
+  border-radius: 3px;
+  border: 1px solid #374850;
+  margin: 10px 10px;
+}
+.skin-yellow-bright .sidebar-form input[type="text"],
+.skin-yellow-bright .sidebar-form .btn {
+  box-shadow: none;
+  background-color: #374850;
+  border: 1px solid transparent;
+  height: 35px;
+  -webkit-transition: all 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
+  -o-transition: all 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
+  transition: all 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
+}
+.skin-yellow-bright .sidebar-form input[type="text"] {
+  color: #666;
+  border-top-left-radius: 2px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 2px !important;
+}
+.skin-yellow-bright .sidebar-form input[type="text"]:focus,
+.skin-yellow-bright .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  background-color: #fff;
+  color: #666;
+}
+.skin-yellow-bright .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  border-left-color: #fff;
+}
+.skin-yellow-bright .sidebar-form .btn {
+  color: #999;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 2px !important;
+  border-bottom-right-radius: 2px !important;
+  border-bottom-left-radius: 0 !important;
+}

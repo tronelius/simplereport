@@ -22,8 +22,6 @@ namespace SimpleReport.App_Start
                           "~/Scripts/bootstrap.js",
                           "~/Scripts/bootstrap-datepicker.js",
                           "~/Scripts/underscore.min.js",
-                          //"~/Scripts/knockout-{version}.js",
-                          //"~/Scripts/knockout.mapping-latest.js",
                           "~/scripts/angular.js",
                           "~/scripts/toastr.js",
                           "~/Content/js/app.js"));
