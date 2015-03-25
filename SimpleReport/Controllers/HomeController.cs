@@ -36,11 +36,6 @@ namespace SimpleReport.Controllers
             return File(result.AsFile(), result.MimeType, result.FileName);
         }
 
-        private ReportViewModel GetReportViewModel()
-        {
-            ReportViewModel vm = new ReportViewModel();
-            vm.Reports = _reportManager.GetReports();
-            return vm;
-        }
+       
     }
 }

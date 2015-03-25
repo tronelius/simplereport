@@ -14,22 +14,8 @@ namespace SimpleReport.Controllers
 
         public ActionResult Index()
         {
-            var vm = GetReportViewModel();
-            return View(vm);
+            return View(GetReportViewModel());
         }
-
-        private DesignerViewModel GetReportViewModel()
-        {
-            DesignerViewModel vm = new DesignerViewModel();
-            vm.Reports = _reportManager.GetReports().ToList();
-            if (vm.Reports.Count() > 0)
-                vm.Report = vm.Reports[0];
-            else
-                vm.Report = null;
-            return vm;
-        }
-
-       
 
 
     }

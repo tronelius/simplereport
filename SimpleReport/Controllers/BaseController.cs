@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SimpleReport.Model;
+using SimpleReport.ViewModel;
 
 namespace SimpleReport.Controllers
 {
@@ -15,6 +16,12 @@ namespace SimpleReport.Controllers
             _reportManager = reportManager;
         }
 
+        protected ReportViewModel GetReportViewModel()
+        {
+            ReportViewModel vm = new ReportViewModel();
+            vm.Reports = _reportManager.GetReports();
+            return vm;
+        }
         
     }
 }
