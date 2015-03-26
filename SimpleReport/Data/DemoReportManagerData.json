@@ -1,7 +1,7 @@
 {
   "Connections": [
     {
-      "Id": "00000000-0000-0000-0000-000000000000",
+      "Id": "4F4FE880-D557-4350-AD7E-4FDB53968698",
       "Name": "Adventureworks",
       "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
     }
@@ -39,11 +39,11 @@
           "LookupReportId": "00000000-0000-0000-0000-000000000000"
         }
       ],
-      "ConnectionStringName": "Adventureworks",
+      "ConnectionId": "4F4FE880-D557-4350-AD7E-4FDB53968698",
       "Sql": "SELECT TOP 1000 [ProductID],[StartDate],[EndDate],[StandardCost],[ModifiedDate] FROM [Production].[ProductCostHistory] where [StartDate] between @periodstart and @periodend and ModifiedDate > @dateid",
       "ID": "a70722b1-deb7-4b48-b90b-d3c651459502",
-        "Name": "Production Cost History Report",
-        "Group": "Cost",
+      "Name": "Production Cost History Report",
+      "Group": "Cost",
       "Description": "Beskrivning..."
     },
     {
@@ -61,7 +61,7 @@
           "LookupReportId": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a"
         }
       ],
-      "ConnectionStringName": "Adventureworks",
+      "ConnectionId": "4F4FE880-D557-4350-AD7E-4FDB53968698",
       "Sql": "SELECT TOP 1000 [ProductID],[Name] ,[ProductNumber] from [Production].[Product] where [ProductSubcategoryID] = @subid",
       "ID": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
       "Name": "Product List",
@@ -71,7 +71,7 @@
   ],
   "LookupReports": [
     {
-      "ConnectionStringName": "Adventureworks",
+      "ConnectionId": "4F4FE880-D557-4350-AD7E-4FDB53968698",
       "Sql": "SELECT [ProductSubcategoryID] as id,Name as Name FROM [Production].[ProductSubcategory]",
       "ID": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a",
       "Name": "LookupTest",

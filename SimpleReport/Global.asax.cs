@@ -33,8 +33,8 @@ namespace SimpleReport
         protected override IKernel CreateKernel()
         {
             var kernel = new StandardKernel();
-            kernel.Bind<IStorage>().To<FileStorage>();
-            kernel.Bind<ReportManager>().ToSelf().InSingletonScope();
+            kernel.Bind<IStorage>().To<FileStorage>().InRequestScope();
+            kernel.Bind<ReportManager>().ToSelf();
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
             return kernel;
         }

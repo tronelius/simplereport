@@ -14,12 +14,6 @@ namespace SimpleReport.ViewModel
         public List<Report> Reports { get; set; }
         public IEnumerable<KeyValue> InputTypes {get;set;}
 
-       
-        public string Json()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
-
         public DesignerViewModel()
         {
             ParameterInputType types = new ParameterInputType();

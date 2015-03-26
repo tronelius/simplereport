@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 namespace SimpleReport.Model
 {
-    public class ReportManagerData
+    public class ReportDataModel
     {
         public List<Connection> Connections;
         public List<Report> Reports;
         public List<LookupReport> LookupReports;
 
-        public ReportManagerData()
+        public ReportDataModel()
         {
             Connections = new List<Connection>();
             Reports = new List<Report>();

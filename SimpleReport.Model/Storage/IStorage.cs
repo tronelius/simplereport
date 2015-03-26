@@ -1,9 +1,25 @@
-﻿namespace SimpleReport.Model.Storage
+﻿using System;
+using System.Collections.Generic;
+
+namespace SimpleReport.Model.Storage
 {
     public interface IStorage
     {
-        ReportManagerData LoadModel();
-        void SaveModel(ReportManagerData data);
+        ReportDataModel LoadModel();
+        void SaveModel(ReportDataModel data);
+
+        IEnumerable<Report> GetReports();
+        Report GetReport(Guid id);
+        bool SaveReport(Report report);
+
+        IEnumerable<Connection> GetConnections();
+        Connection GetConnection(Guid id);
+        bool SaveConnection(Connection connection);
+
+        IEnumerable<LookupReport> GetLookupReports();
+        LookupReport GetLookupReport(Guid id);
+        bool SaveLookupReport(LookupReport lookupReport);
+
 
     }
 }

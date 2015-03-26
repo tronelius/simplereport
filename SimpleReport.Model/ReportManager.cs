@@ -18,34 +18,33 @@ namespace SimpleReport.Model
         private readonly IStorage _storage;
         private readonly string _filename;
         public  double _version = 1.0;
-        private ReportManagerData _reportManagerData;
+        //private ReportDataModel _reportDataModel;
 
         public ReportManager(IStorage storage)
         {
             _storage = storage;
-            _reportManagerData = _storage.LoadModel();
-            ResolveAllReferences();
+            //_reportDataModel = _storage.LoadModel();
+            //ResolveAllReferences();
         }
 
-        //refactor this pattern later.
         #region Reports
         public IEnumerable<Report> GetReports()
         {
-            return _reportManagerData.Reports.Cast<Report>();
+            return _storage.GetReports();
         }
+
 
         public Report GetReport(Guid id)
         {
-            Report report = _reportManagerData.Reports.FirstOrDefault(r => r.ID == id);
+            Report report = _storage.GetReport(id);
 
             IEnumerable<Parameter> lookupParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Lookup);
             foreach (Parameter lookupParameter in lookupParameters)
             {
-                LookupReport rpt = _reportManagerData.LookupReports.FirstOrDefault(r => r.ID == lookupParameter.LookupReportId);
+                LookupReport rpt = _storage.GetLookupReport(lookupParameter.LookupReportId);
                 if (rpt != null) {
                     if (lookupParameter.Choices != null)
                         lookupParameter.Choices.Clear();
-                    
                     rpt.Execute().ToList().ForEach(rp => lookupParameter.Choices.Add(rp.Key,rp.Value));
                 }
             }
@@ -60,74 +59,45 @@ namespace SimpleReport.Model
 
         public void SaveReport(Report reportToSave)
         {
-            Report existingReport = _reportManagerData.Reports.FirstOrDefault(r => r.ID == reportToSave.ID);
-            if (existingReport == null)
-                _reportManagerData.Reports.Add(reportToSave);
-            else
-                existingReport = reportToSave;
-            _storage.SaveModel(_reportManagerData);
+            _storage.SaveReport(reportToSave);
         }
         #endregion
 
         #region connections
         public IEnumerable<Connection> GetConnections()
         {
-            return _reportManagerData.Connections;
+            return _storage.GetConnections();
         }
 
         public Connection Getconnection(Guid id)
         {
-            return _reportManagerData.Connections.FirstOrDefault(cnn => cnn.Id == id);
+            return _storage.GetConnection(id);
         }
 
         public void SaveConnection(Connection conn)
         {
-            Connection existingConnection = Getconnection(conn.Id);
-            if (existingConnection != null)
-                existingConnection = conn;
-            else
-                _reportManagerData.Connections.Add(conn);
-           _storage.SaveModel(_reportManagerData);
-            
+                _storage.SaveConnection(conn);   
         }
 
         #endregion
 
         #region LookupReport
-        public IEnumerable<LookupReport> GetLookupReports()
+        public IEnumerable<ReportInfo> GetLookupReports()
         {
-            return _reportManagerData.LookupReports;
+            return _storage.GetLookupReports();
         }
 
         public LookupReport GetLookupReport(Guid id)
         {
-            return _reportManagerData.LookupReports.FirstOrDefault(cnn => cnn.ID == id);
+            return _storage.GetLookupReport(id);
         }
 
         public void SaveLookupReport(LookupReport rpt)
         {
-            LookupReport existingLookupreport = GetLookupReport(rpt.ID);
-            if (existingLookupreport != null)
-                existingLookupreport = rpt;
-            else
-                _reportManagerData.LookupReports.Add(rpt);
-           _storage.SaveModel(_reportManagerData);
-            
+            _storage.SaveLookupReport(rpt);
         }
 
         #endregion
-
-        private void ResolveAllReferences()
-        {
-            foreach (LookupReport report in _reportManagerData.Reports.OfType<LookupReport>().Union(_reportManagerData.LookupReports))
-            {
-                Connection conn = _reportManagerData.Connections.FirstOrDefault(c => c.Name == report.ConnectionStringName);
-                if (conn == null)
-                    throw new Exception(string.Format("Connectionstring {0} not defined in report named: {1}", report.ConnectionStringName, report.Name));
-                report.SetConnection(conn);    
-            }
-        }
-       
     }
 
    

@@ -36,18 +36,19 @@ namespace SimpleReport.Model
         }*/
 
         public ReportInfo(){}
-        public ReportInfo(string id, string name, string description)
+        public ReportInfo(Guid id, string name, string description, string group)
         {
-            Guid guid;
-            if (!Guid.TryParse(id, out guid))
-                throw new ArgumentException("Supplied string ID is not a valid Unique Identifier");
+            //Guid guid;
+            //if (!Guid.TryParse(id, out guid))
+            //    throw new ArgumentException("Supplied string ID is not a valid Unique Identifier");
 
             if (string.IsNullOrWhiteSpace(name))
                 throw new Exception(string.Format("Missing name in report"));
 
-            ID = guid;
+            ID = id;
             Name = name;
             Description = description;
+            Group = @group;
             //Errors = new List<ErrorInfo>();
         }
 
@@ -55,9 +56,10 @@ namespace SimpleReport.Model
     
     public class LookupReport : ReportInfo
     {
-        protected Connection Connection;
+        [NonSerialized]
+        public Connection Connection;
         [Required]
-        public string ConnectionStringName { get; set; }
+        public Guid ConnectionId { get; set; }
         [Required]
         public string Sql { get; set; }
 
@@ -65,15 +67,11 @@ namespace SimpleReport.Model
         {
         }
 
-        public LookupReport(string id, string name, string description, string connectionStringName,string sql) : base(id, name, description)
+        public LookupReport(Guid id, string name, string description, Guid connectionId,string sql, string group) : base(id, name, description, group)
         {
             if (string.IsNullOrWhiteSpace(sql))
                 throw new Exception(string.Format("Missing SQL in report with Name:{0}", name));
-
-            if (string.IsNullOrWhiteSpace(connectionStringName))
-                throw new Exception(string.Format("Missing Connectionstring Name in report with Name:{0}", name));
-
-            ConnectionStringName = connectionStringName;
+            ConnectionId = connectionId;
             Sql = sql;
         }
 
@@ -91,11 +89,12 @@ namespace SimpleReport.Model
             return collection;
         }
 
-        public void SetConnection(Connection conn)
-        {
-            //Think, anything more?
-            Connection = conn;
-        }
+       
+        //public void SetConnection(Connection conn)
+        //{
+        //    //Think, anything more?
+        //    Connection = conn;
+        //}
     }
 
     public class Report : LookupReport
@@ -109,7 +108,7 @@ namespace SimpleReport.Model
             Parameters = new ParameterList();
         } 
 
-        public Report(string id, string name, string description, string connectionStringName, string sql, List<Parameter> parameters, ResultType resultType) : base(id,name, description,connectionStringName,sql)
+        public Report(Guid id, string name, string description, Guid connectionId, string sql, List<Parameter> parameters, ResultType resultType, string group) : base(id,name, description,connectionId,sql, group)
         {
             Parameters = new ParameterList(parameters);
             ResultType = resultType;

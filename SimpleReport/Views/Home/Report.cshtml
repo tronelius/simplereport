@@ -46,17 +46,19 @@
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                             <div class="form-group">
                                 <label class="control-label" for="@par.Key">@par.Label</label>
-                                <div class="controls">
+                                
                                     @switch (par.InputType)
                                     {
                                         case ParameterInputType.Integer:
                                             <input type="text" name="@par.Key" value="@par.Value" placeholder="Integer" class="numeric form-control">
                                             break;
                                         case ParameterInputType.Date:
-                                            <div class="input-append date col-sm-3 col-md-3" data-date-format="dd-mm-yyyy">
-                                                <input type="text" name="@par.Key" value="@par.Value" class="datepicker form-control" placeholder="Date" readonly="readonly">
-                                                <span class="add-on"><i class="icon-calendar"></i></span>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
                                             </div>
+                                            <input type="text" name="@par.Key" value="@par.Value" class="form-control datepicker pull-right">
+                                        </div>
                                             break;
                                         case ParameterInputType.Period:
                                         case ParameterInputType.Lookup:
@@ -68,13 +70,13 @@
                                                 }
                                             </select>
                                             break;
-                                        default:
+                                            default:
                                             <input type="text" name="@par.Key" value="@par.Value" class="form-control" placeholder="String">
                                             break;
-                                    }
-                                    <span class="help-block">@par.HelpText</span>
-                                    <label for="@par.Key" generated="true" class="help-block error" style=""></label>
-                                </div>
+                                            }
+                                        
+                                <span class="help-block">@par.HelpText</span>
+                                <label for="@par.Key" generated="true" class="help-block error" style=""></label>
                             </div>
                         </div>
                     }
