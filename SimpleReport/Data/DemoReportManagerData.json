@@ -1,12 +1,34 @@
 {
   "Connections": [
     {
-      "Id": "4F4FE880-D557-4350-AD7E-4FDB53968698",
+      "Id": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Name": "Adventureworks",
       "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
     }
   ],
   "Reports": [
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Category",
+          "SqlKey": "@subid",
+          "Value": null,
+          "InputType": 4,
+          "Mandatory": true,
+          "HelpText": "Parameter with lookup",
+          "Key": "subid",
+          "Choices": {},
+          "LookupReportId": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a"
+        }
+      ],
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Sql": "SELECT TOP 1000 [ProductID],[Name] ,[ProductNumber] from [Production].[Product] where [ProductSubcategoryID] = @subid",
+      "ID": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
+      "Name": "Product List",
+      "Group": "Production",
+      "Description": "gets all products from a certain category"
+    },
     {
       "ResultType": 0,
       "Parameters": [
@@ -39,42 +61,21 @@
           "LookupReportId": "00000000-0000-0000-0000-000000000000"
         }
       ],
-      "ConnectionId": "4F4FE880-D557-4350-AD7E-4FDB53968698",
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Sql": "SELECT TOP 1000 [ProductID],[StartDate],[EndDate],[StandardCost],[ModifiedDate] FROM [Production].[ProductCostHistory] where [StartDate] between @periodstart and @periodend and ModifiedDate > @dateid",
       "ID": "a70722b1-deb7-4b48-b90b-d3c651459502",
-      "Name": "Production Cost History Report",
+      "Name": "Production Cost History Report2",
       "Group": "Cost",
       "Description": "Beskrivning..."
-    },
-    {
-      "ResultType": 0,
-      "Parameters": [
-        {
-          "Label": "Category",
-          "SqlKey": "@subid",
-          "Value": null,
-          "InputType": 4,
-          "Mandatory": true,
-          "HelpText": "Parameter with lookup",
-          "Key": "subid",
-          "Choices": {},
-          "LookupReportId": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a"
-        }
-      ],
-      "ConnectionId": "4F4FE880-D557-4350-AD7E-4FDB53968698",
-      "Sql": "SELECT TOP 1000 [ProductID],[Name] ,[ProductNumber] from [Production].[Product] where [ProductSubcategoryID] = @subid",
-      "ID": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
-      "Name": "Product List",
-      "Group": "Production",
-      "Description": "gets all products from a certain category"
     }
   ],
   "LookupReports": [
     {
-      "ConnectionId": "4F4FE880-D557-4350-AD7E-4FDB53968698",
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Sql": "SELECT [ProductSubcategoryID] as id,Name as Name FROM [Production].[ProductSubcategory]",
       "ID": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a",
       "Name": "LookupTest",
+      "Group": null,
       "Description": ""
     }
   ]

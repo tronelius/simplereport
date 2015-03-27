@@ -4,66 +4,6 @@
     ViewBag.Title = "Report Designer";
 }
 @Scripts.Render("~/bundles/designer")
-@*<script type="text/javascript">
-    function ReportViewModel() {
-        var self = this;
-        self.Reports = ko.observableArray();
-        self.Report = ko.observable();
-        self.Report.Name = ko.observable();
-        self.InputTypes = ko.observableArray();
-        self.SaveUrl = '../api/Designer/Save';
-
-        self.Save = function(){
-            var jsonData = ko.toJSON(self.Report);
-            $.ajax({
-                type: 'post',
-                url: self.SaveUrl,
-                data: jsonData,
-                processData: false,
-                contentType: 'application/json; charset=utf-8',
-                success: function(result) {
-                    if (!result.success) {
-                        alert(result.error);
-                    } else {
-                    
-                    }
-                }
-            });
-        };
-
-        self.Load = function(data) {
-            self.Reports(data.Reports);
-            self.Report(data.Report);
-            self.InputTypes(data.InputTypes);
-        };
-
-        self.analyzeSql = function() {
-            var re = /(@@\w+)/g;
-            var match;
-            var existingParameters = _.pluck(self.Report().Parameters, 'SqlKey');
-            while (match = re.exec(self.Report().Sql)) {
-                console.debug(match[0]);
-                console.debug(self.Reports().Parameters);
-                if (!_.contains(existingParameters), match) {
-                    alert('new' + match);
-                    console.debug(self.Reports().Parameters);
-                    self.Reports().Parameters.push({SqlKey:match, Value:'',InputType:0,Mandatory:false, Label:'',HelpText:''})
-                }
-            }
-
-
-        };
-
-    };
-
-    $(function () {
-        var data = @Html.Raw(Model.Json());
-        var vm = new ReportViewModel();
-        vm.Load(data);
-        ko.applyBindings(vm);
-    });
-</script>*@
-
 <section class="content-header">
     <h1>
         Report Designer <small>Here you can edit existing reports or create new ones.</small>
@@ -88,5 +28,5 @@
         <div class="tab-pane" id="tab_3">
             @Html.Partial("_Connections")
         </div>
-    </div><!-- /.tab-content -->
+    </div>
 </section>

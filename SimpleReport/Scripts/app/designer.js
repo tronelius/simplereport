@@ -15,6 +15,46 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             });
     };
 
+    $scope.reportChanged = function () {
+        console.debug('report changed');
+        $scope.latestSql = $scope.report.Sql;
+    };
+
+    $scope.analyzeSQL = function () {
+        var currentSQL = $scope.report.Sql;
+        var re = /(@\w+)/g;
+        var match;
+        var currentPosition = $('#sqlarea').prop('selectionStart');
+        var foundMatches = [];
+        while (match = re.exec(currentSQL)) {
+            console.debug(match[0]);
+            var existingparam = _.findWhere($scope.report.Parameters, { SqlKey:match[0]});
+            if (existingparam === undefined) {
+                if (currentPosition >= match.index && currentPosition <= match.index + match[0].length) {
+                    console.debug('updated existing');
+                    //existingparam.SqlKey = match[0];
+                } else {
+                    console.debug('new');
+                    $scope.report.Parameters.push({ SqlKey: match[0], Value: '', InputType: 0, Mandatory: false, Label: '', HelpText: '' });
+                }
+            } else {
+                console.debug('existing untouched');
+            }
+            foundMatches.push(match[0]);
+        }
+
+        //Delete params no longer in the SQL
+        var i = $scope.report.Parameters.length;
+        while (i--) {
+            if (_.indexOf(foundMatches, $scope.report.Parameters[i].SqlKey) === -1) {
+                $scope.report.Parameters.splice(i, 1);
+                console.debug('deleted orphaned');
+            }
+        }
+        
+        $scope.latestSql = currentSQL;
+    };
+
     $scope.save = function () {
         $.ajax({
             type: 'post',
@@ -27,7 +67,6 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }).error(function (data) {
             toastr.error("Server error when saveing report, please try again later.","Error");
         });
-        //$http.post('api/Designer/SaveReport')
     };
     $scope.showReportTab();
 }]);
