@@ -16,12 +16,14 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("GET")]
-        public IHttpActionResult Reports()
+        public IHttpActionResult GetViewModel()
         {
             try
             {
                 DesignerViewModel vm = new DesignerViewModel();
-                vm.Reports = _reportManager.GetReports().ToList();
+                vm.Reports = _reportManager.GetReports();
+                vm.Connections = _reportManager.GetConnections();
+                vm.LookupReports = _reportManager.GetLookupReports();
                 return Ok(vm);
             }
             catch (Exception ex)

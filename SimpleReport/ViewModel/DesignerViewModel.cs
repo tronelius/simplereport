@@ -11,8 +11,10 @@ namespace SimpleReport.ViewModel
     public class DesignerViewModel 
     {
         public Report Report { get; set; }
-        public List<Report> Reports { get; set; }
+        public IEnumerable<Report> Reports { get; set; }
         public IEnumerable<KeyValue> InputTypes {get;set;}
+        public IEnumerable<Connection> Connections { get; set; }
+        public IEnumerable<LookupReport> LookupReports { get; set; } 
 
         public DesignerViewModel()
         {

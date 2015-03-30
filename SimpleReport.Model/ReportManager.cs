@@ -82,7 +82,7 @@ namespace SimpleReport.Model
         #endregion
 
         #region LookupReport
-        public IEnumerable<ReportInfo> GetLookupReports()
+        public IEnumerable<LookupReport> GetLookupReports()
         {
             return _storage.GetLookupReports();
         }

@@ -4,31 +4,14 @@
       "Id": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Name": "Adventureworks",
       "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
+    },
+    {
+      "Id": "f7d12d58-300c-4505-a440-a5d30fc78086",
+      "Name": "Adventureworks Test",
+      "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
     }
   ],
   "Reports": [
-    {
-      "ResultType": 0,
-      "Parameters": [
-        {
-          "Label": "Category",
-          "SqlKey": "@subid",
-          "Value": null,
-          "InputType": 4,
-          "Mandatory": true,
-          "HelpText": "Parameter with lookup",
-          "Key": "subid",
-          "Choices": {},
-          "LookupReportId": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a"
-        }
-      ],
-      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
-      "Sql": "SELECT TOP 1000 [ProductID],[Name] ,[ProductNumber] from [Production].[Product] where [ProductSubcategoryID] = @subid",
-      "ID": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
-      "Name": "Product List",
-      "Group": "Production",
-      "Description": "gets all products from a certain category"
-    },
     {
       "ResultType": 0,
       "Parameters": [
@@ -67,6 +50,28 @@
       "Name": "Production Cost History Report2",
       "Group": "Cost",
       "Description": "Beskrivning..."
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Category",
+          "SqlKey": "@subid",
+          "Value": null,
+          "InputType": 4,
+          "Mandatory": true,
+          "HelpText": "Parameter with lookup",
+          "Key": "subid",
+          "Choices": {},
+          "LookupReportId": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a"
+        }
+      ],
+      "ConnectionId": "f7d12d58-300c-4505-a440-a5d30fc78086",
+      "Sql": "SELECT TOP 1000 [ProductID],[Name] ,[ProductNumber] from [Production].[Product] where [ProductSubcategoryID] = @subid",
+      "ID": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
+      "Name": "Product List",
+      "Group": "Production",
+      "Description": "gets all products from a certain category"
     }
   ],
   "LookupReports": [
@@ -79,4 +84,5 @@
       "Description": ""
     }
   ]
+}  ]
 }
