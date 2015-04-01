@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 
 namespace SimpleReport.Model.Storage
 {
@@ -8,7 +9,8 @@ namespace SimpleReport.Model.Storage
         ReportDataModel LoadModel();
         void SaveModel(ReportDataModel data);
 
-        IEnumerable<Report> GetReports();
+        IEnumerable<Report> GetAllReports();
+        //IEnumerable<Report> GetReportsForMe(IPrincipal user);
         Report GetReport(Guid id);
         bool SaveReport(Report report);
 

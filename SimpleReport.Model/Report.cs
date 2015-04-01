@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using OfficeOpenXml;
@@ -23,28 +24,19 @@ namespace SimpleReport.Model
         [StringLength(1000)] 
         public string Description { get; set; }
         
+        ///AccessId=null=> Free for all!
+        public Guid AccessId { get; set; }
+        [NonSerialized]
+        public Access Access;
         /*public List<ErrorInfo> Errors { get; private set; } 
-        
-        public bool CanExecute()
-        {
-            return Errors.Count(e => e.Level == ErrorLevel.Fatal)> 0;
-        }
-
-        public bool IsValid()
-        {
-            return Errors.Count(e => e.Level > ErrorLevel.Warning) > 0;
-        }*/
+        public bool CanExecute() { return Errors.Count(e => e.Level == ErrorLevel.Fatal)> 0;}
+        public bool IsValid(){ return Errors.Count(e => e.Level > ErrorLevel.Warning) > 0;}*/
 
         public ReportInfo(){}
         public ReportInfo(Guid id, string name, string description, string group)
         {
-            //Guid guid;
-            //if (!Guid.TryParse(id, out guid))
-            //    throw new ArgumentException("Supplied string ID is not a valid Unique Identifier");
-
             if (string.IsNullOrWhiteSpace(name))
                 throw new Exception(string.Format("Missing name in report"));
-
             ID = id;
             Name = name;
             Description = description;
@@ -92,9 +84,7 @@ namespace SimpleReport.Model
 
     public class Report : LookupReport
     {
-        public Guid AccessId { get; set; }
-        [NonSerialized] 
-        public Access Access;
+        //private string 
         public ResultType ResultType { get; set; }
         public ParameterList Parameters { get; set; }
 
@@ -122,6 +112,11 @@ namespace SimpleReport.Model
             
             DataTable result = ADO.GetResults<dynamic>(Connection, Sql, Parameters.CreateParameters());
             return new Result(this.ResultType, result,this);
+        }
+
+        public bool IsAvailableForMe(IPrincipal user)
+        {
+            return (Access == null || user.IsInRole(Access.ADGroup));
         }
 
         public void ReadParameters(NameValueCollection queryString)

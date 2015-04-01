@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Principal;
 using System.Web.Http;
 using System.Web.Http.Results;
 using SimpleReport.Model;
@@ -21,7 +22,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                DesignerViewModel vm = new DesignerViewModel(_reportStorage);
+                DesignerViewModel vm = new DesignerViewModel(_reportStorage, User);
                
                 return Ok(vm);
             }

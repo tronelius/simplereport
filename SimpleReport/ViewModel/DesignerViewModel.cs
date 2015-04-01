@@ -3,6 +3,7 @@ using SimpleReport.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using SimpleReport.Model.Extensions;
 using SimpleReport.Model.Storage;
@@ -18,15 +19,15 @@ namespace SimpleReport.ViewModel
         public IEnumerable<LookupReport> LookupReports { get; set; }
         public List<Access> AccessLists { get; set; }
 
-        public DesignerViewModel(IStorage reportStorage)
+        public DesignerViewModel(IStorage reportStorage, IPrincipal user)
         {
-            Reports = reportStorage.GetReports();
+            Reports = reportStorage.GetAllReports().Where(r => r.IsAvailableForMe(user));
             Connections = reportStorage.GetConnections();
             LookupReports = reportStorage.GetLookupReports();
             AccessLists = reportStorage.GetAccessLists().ToList();
             ParameterInputType types = new ParameterInputType();
             InputTypes = types.ToKeyValues();
-            AccessLists.Insert(0,new Access(null,"Free for all",""));
+            AccessLists.Insert(0,new Access(Guid.Empty,"Free for all",""));
             
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using SimpleReport.Model;
 using SimpleReport.Model.Storage;
 using SimpleReport.ViewModel;
@@ -21,7 +22,7 @@ namespace SimpleReport.Controllers
         protected ReportViewModel GetReportViewModel()
         {
             ReportViewModel vm = new ReportViewModel();
-            vm.Reports = _reportStorage.GetReports();
+            vm.Reports = _reportStorage.GetAllReports().Where(a => a.IsAvailableForMe(User));
             return vm;
         }
         

@@ -53,7 +53,7 @@
       "Description": "Beskrivning..."
     },
     {
-      "AccessId": "00000000-0000-0000-0000-000000000000",
+      "AccessId": "37cc35cc-f1e7-4977-a83c-5a321b8acae4",
       "ResultType": 0,
       "Parameters": [
         {
@@ -90,7 +90,7 @@
     {
       "Id": "37cc35cc-f1e7-4977-a83c-5a321b8acae4",
       "Name": "Only developers",
-      "ADGroup": "utvecklare"
+      "ADGroup": "utvecklare2"
     }
   ]
 }

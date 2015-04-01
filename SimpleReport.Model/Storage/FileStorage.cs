@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using Newtonsoft.Json;
 using SimpleReport.Model.Exceptions;
 
@@ -53,10 +54,20 @@ namespace SimpleReport.Model.Storage
             }
         }
 
-        public IEnumerable<Report> GetReports()
+        public IEnumerable<Report> GetAllReports()
         {
-            return _dataModel.Reports;
+            var reports = _dataModel.Reports;
+            reports.ForEach(LoadAndSetAccess);
+            return reports;
         }
+
+        //public IEnumerable<Report> GetReportsForMe(IPrincipal user)
+        //{
+        //    var reports = _dataModel.Reports;
+        //    reports.ForEach(LoadAndSetAccess);
+        //    reports = reports.Where(a => a.Access == null || user.IsInRole(a.Access.ADGroup)).ToList();
+        //    return reports;
+        //}
 
         public Report GetReport(Guid id)
         {
@@ -64,6 +75,7 @@ namespace SimpleReport.Model.Storage
             if (report == null)
                 throw new EntityNotFoundException("Report not found");
             LoadAndSetConnection(report);
+            LoadAndSetAccess(report);
             return report;
         }
 
@@ -71,8 +83,14 @@ namespace SimpleReport.Model.Storage
         {
             var connection = GetConnection(report.ConnectionId);
             if (connection == null)
-                throw new EntityNotFoundException("Report has a ConnectionId that cannot be found");
+                throw new EntityNotFoundException("This report has a connection that cannot be found");
             report.Connection = connection;
+        }
+
+        private void LoadAndSetAccess(Report report)
+        {
+            var access = GetAccessList(report.AccessId);
+            report.Access = access;
         }
 
         public bool SaveReport(Report report)
@@ -138,8 +156,6 @@ namespace SimpleReport.Model.Storage
         public Access GetAccessList(Guid id)
         {
             var accesslist = _dataModel.AccessLists.FirstOrDefault(c => c.Id == id);
-            if (accesslist == null)
-                throw new EntityNotFoundException("Accesslist not found");
             return accesslist;
         }
 

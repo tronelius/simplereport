@@ -25,7 +25,11 @@ namespace SimpleReport.Controllers
         public ActionResult Report(Guid reportId)
         {
             var vm = GetReportViewModel();
-            vm.Report = _reportResolver.GetReport(reportId);
+            var report = _reportResolver.GetReport(reportId);
+            if (!report.IsAvailableForMe(User))
+                ModelState.AddModelError("AccessControl","You don't have access to view this report!");
+            else
+                vm.Report = report;
             return View(vm);
         }
 
