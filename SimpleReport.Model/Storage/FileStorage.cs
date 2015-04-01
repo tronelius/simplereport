@@ -129,5 +129,28 @@ namespace SimpleReport.Model.Storage
             return true;          
         }
 
+
+        public IEnumerable<Access> GetAccessLists()
+        {
+            return _dataModel.AccessLists;
+        }
+
+        public Access GetAccessList(Guid id)
+        {
+            var accesslist = _dataModel.AccessLists.FirstOrDefault(c => c.Id == id);
+            if (accesslist == null)
+                throw new EntityNotFoundException("Accesslist not found");
+            return accesslist;
+        }
+
+        public bool SaveAccessList(Access accesslist)
+        {
+            Access existing = _dataModel.AccessLists.FirstOrDefault(r => r.Id == accesslist.Id);
+            if (existing != null)
+                _dataModel.AccessLists.Remove(existing);
+            _dataModel.AccessLists.Add(existing);
+            SaveModel(_dataModel);
+            return true;      
+        }
     }
 }

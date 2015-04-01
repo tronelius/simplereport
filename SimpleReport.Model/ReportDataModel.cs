@@ -7,12 +7,14 @@ namespace SimpleReport.Model
         public List<Connection> Connections;
         public List<Report> Reports;
         public List<LookupReport> LookupReports;
+        public List<Access> AccessLists; 
 
         public ReportDataModel()
         {
             Connections = new List<Connection>();
             Reports = new List<Report>();
             LookupReports = new List<LookupReport>();
+            AccessLists = new List<Access>();
         }
     }
 }

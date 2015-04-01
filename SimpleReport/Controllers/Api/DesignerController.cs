@@ -3,16 +3,17 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using SimpleReport.Model;
+using SimpleReport.Model.Storage;
 using SimpleReport.ViewModel;
 
 namespace SimpleReport.Controllers.Api
 {
     public class DesignerController : ApiController
     {
-        private readonly ReportManager _reportManager;
-        public DesignerController(ReportManager reportManager)
+        private readonly IStorage _reportStorage;
+        public DesignerController(IStorage reportstorage)
         {
-            _reportManager = reportManager;
+            _reportStorage = reportstorage;
         }
 
         [AcceptVerbs("GET")]
@@ -20,10 +21,8 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                DesignerViewModel vm = new DesignerViewModel();
-                vm.Reports = _reportManager.GetReports();
-                vm.Connections = _reportManager.GetConnections();
-                vm.LookupReports = _reportManager.GetLookupReports();
+                DesignerViewModel vm = new DesignerViewModel(_reportStorage);
+               
                 return Ok(vm);
             }
             catch (Exception ex)
@@ -36,7 +35,7 @@ namespace SimpleReport.Controllers.Api
         public IHttpActionResult SaveReport([FromBody]Report reportToSave)
         {
             try { 
-                _reportManager.SaveReport(reportToSave);
+                _reportStorage.SaveReport(reportToSave);
                 return Ok();
             } catch (Exception ex)
             {
@@ -49,7 +48,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                _reportManager.SaveConnection(conn);
+                _reportStorage.SaveConnection(conn);
                 return Ok();
             }
             catch (Exception ex)
@@ -63,7 +62,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                _reportManager.SaveLookupReport(lrpt);
+                _reportStorage.SaveLookupReport(lrpt);
                 return Ok();
             }
             catch (Exception ex)

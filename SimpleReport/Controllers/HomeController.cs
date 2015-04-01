@@ -10,7 +10,11 @@ namespace SimpleReport.Controllers
 {
     public class HomeController : BaseController
     {
-        public HomeController(ReportManager reportManager) : base(reportManager) {}
+        private readonly ReportResolver _reportResolver;
+        public HomeController(ReportResolver reportResolver) : base(reportResolver.Storage)
+        {
+            _reportResolver = reportResolver;
+        }
 
         public ActionResult Index()
         {
@@ -21,7 +25,7 @@ namespace SimpleReport.Controllers
         public ActionResult Report(Guid reportId)
         {
             var vm = GetReportViewModel();
-            vm.Report = _reportManager.GetReport(reportId);
+            vm.Report = _reportResolver.GetReport(reportId);
             return View(vm);
         }
 
@@ -29,7 +33,7 @@ namespace SimpleReport.Controllers
         {
             var vm = GetReportViewModel();
 
-            Report report = _reportManager.GetReport(reportId);
+            Report report = _reportResolver.GetReport(reportId);
             report.ReadParameters(Request.QueryString);
 
             Result result = report.Execute();

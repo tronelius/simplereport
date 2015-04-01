@@ -10,15 +10,15 @@ namespace SimpleReport.Controllers
 {
     public class ReportController : ApiController
     {
-        ReportManager _reportManager;
-        public ReportController(ReportManager reportManager)
+        ReportResolver ReportResolver;
+        public ReportController(ReportResolver reportResolver)
         {
-            _reportManager = reportManager;
+            ReportResolver = reportResolver;
         }
 
         public Report Get(Guid id)
         {
-            return _reportManager.GetReport(id);
+            return ReportResolver.GetReport(id);
         } 
     }
 }

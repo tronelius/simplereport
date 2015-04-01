@@ -34,7 +34,7 @@ namespace SimpleReport
         {
             var kernel = new StandardKernel();
             kernel.Bind<IStorage>().To<FileStorage>().InRequestScope();
-            kernel.Bind<ReportManager>().ToSelf();
+            kernel.Bind<ReportResolver>().ToSelf();
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
             return kernel;
         }

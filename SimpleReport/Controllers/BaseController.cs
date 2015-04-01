@@ -4,22 +4,24 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SimpleReport.Model;
+using SimpleReport.Model.Storage;
 using SimpleReport.ViewModel;
 
 namespace SimpleReport.Controllers
 {
     public class BaseController : Controller
     {
-        protected readonly ReportManager _reportManager;
-        public BaseController(ReportManager reportManager)
+        protected readonly IStorage _reportStorage;
+
+        public BaseController(IStorage reportStorage)
         {
-            _reportManager = reportManager;
+            _reportStorage = reportStorage;
         }
 
         protected ReportViewModel GetReportViewModel()
         {
             ReportViewModel vm = new ReportViewModel();
-            vm.Reports = _reportManager.GetReports();
+            vm.Reports = _reportStorage.GetReports();
             return vm;
         }
         

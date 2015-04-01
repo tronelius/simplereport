@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Access.cs" />
     <Compile Include="Ado.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -68,7 +69,7 @@
     <Compile Include="KeyValue.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportManager.cs" />
+    <Compile Include="ReportResolver.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="ReportDataModel.cs" />
     <Compile Include="Result.cs" />

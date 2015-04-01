@@ -12,9 +12,10 @@
 <section class="content" ng-cloak ng-app="designer" ng-controller="designerController">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li ng-class="{active: activeTab == 'report'}"><a data-toggle="tab" aria-expanded="true">Reports</a></li>
-            <li ng-class="{active: activeTab == 'lookup'}"><a data-toggle="tab" aria-expanded="false">Dropdown parameters</a></li>
-            <li ng-class="{active: activeTab == 'connection'}"><a data-toggle="tab" aria-expanded="false">Connections</a></li>
+            <li href="#tab_1" ng-class="{active: activeTab == 'report'}"><a data-toggle="tab" aria-expanded="true">Reports</a></li>
+            <li href="#tab_2" ng-class="{active: activeTab == 'lookup'}"><a data-toggle="tab" aria-expanded="false">Dropdown parameters</a></li>
+            <li href="#tab_3" ng-class="{active: activeTab == 'connection'}"><a data-toggle="tab" aria-expanded="false">Connections</a></li>
+            <li href="#tab_4" ng-class="{active: activeTab == 'accesslists'}"><a data-toggle="tab" aria-expanded="false">Access control lists</a></li>
         </ul>
     </div>
 
@@ -27,6 +28,9 @@
         </div>
         <div class="tab-pane" id="tab_3">
             @Html.Partial("_Connections")
+        </div>
+        <div class="tab-pane" id="tab_4">
+            @Html.Partial("_AccessLists")
         </div>
     </div>
 </section>

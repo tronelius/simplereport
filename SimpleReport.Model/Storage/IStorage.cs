@@ -20,6 +20,8 @@ namespace SimpleReport.Model.Storage
         LookupReport GetLookupReport(Guid id);
         bool SaveLookupReport(LookupReport lookupReport);
 
-
+        IEnumerable<Access> GetAccessLists();
+        Access GetAccessList(Guid id);
+        bool SaveAccessList(Access accesslist);
     }
 }

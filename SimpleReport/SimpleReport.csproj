@@ -221,7 +221,9 @@
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -235,6 +237,7 @@
     <Content Include="Views\Designer\_Reports.cshtml" />
     <Content Include="Views\Designer\_LookupReports.cshtml" />
     <Content Include="Views\Designer\_Connections.cshtml" />
+    <Content Include="Views\Designer\_AccessLists.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

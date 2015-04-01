@@ -88,17 +88,13 @@ namespace SimpleReport.Model
             }
             return collection;
         }
-
-       
-        //public void SetConnection(Connection conn)
-        //{
-        //    //Think, anything more?
-        //    Connection = conn;
-        //}
     }
 
     public class Report : LookupReport
     {
+        public Guid AccessId { get; set; }
+        [NonSerialized] 
+        public Access Access;
         public ResultType ResultType { get; set; }
         public ParameterList Parameters { get; set; }
 

@@ -11,7 +11,8 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.inputTypes = data.InputTypes;
                 $scope.reportList = data.Reports;
                 $scope.connections = data.Connections;
-                $scope.lookupReports = data.lookupReports;
+                $scope.lookupReports = data.LookupReports;
+                $scope.accessLists = data.AccessLists;
             }).
             error(function (data) {
                 toastr.error("Couldn't get list of reports from server.","Error");

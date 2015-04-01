@@ -10,7 +10,7 @@ namespace SimpleReport.Controllers
 {
     public class DesignerController : BaseController
     {
-        public DesignerController(ReportManager reportManager) : base(reportManager){}
+        public DesignerController(ReportResolver reportResolver) : base(reportResolver.Storage){}
 
         public ActionResult Index()
         {
