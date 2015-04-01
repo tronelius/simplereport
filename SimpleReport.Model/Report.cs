@@ -114,9 +114,9 @@ namespace SimpleReport.Model
             return new Result(this.ResultType, result,this);
         }
 
-        public bool IsAvailableForMe(IPrincipal user)
+        public bool IsAvailableForMe(IPrincipal user, string adminAccessRole)
         {
-            return (Access == null || user.IsInRole(Access.ADGroup));
+            return (Access == null || user.IsInRole(Access.ADGroup) || user.IsInRole(adminAccessRole));
         }
 
         public void ReadParameters(NameValueCollection queryString)

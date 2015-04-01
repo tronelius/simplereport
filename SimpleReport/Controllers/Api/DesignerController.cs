@@ -9,6 +9,7 @@ using SimpleReport.ViewModel;
 
 namespace SimpleReport.Controllers.Api
 {
+    //Todo dynamic acesscontrol needed.
     public class DesignerController : ApiController
     {
         private readonly IStorage _reportStorage;

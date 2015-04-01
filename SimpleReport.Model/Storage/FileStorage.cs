@@ -61,14 +61,6 @@ namespace SimpleReport.Model.Storage
             return reports;
         }
 
-        //public IEnumerable<Report> GetReportsForMe(IPrincipal user)
-        //{
-        //    var reports = _dataModel.Reports;
-        //    reports.ForEach(LoadAndSetAccess);
-        //    reports = reports.Where(a => a.Access == null || user.IsInRole(a.Access.ADGroup)).ToList();
-        //    return reports;
-        //}
-
         public Report GetReport(Guid id)
         {
             var report =_dataModel.Reports.FirstOrDefault(r => r.ID == id);
@@ -167,6 +159,18 @@ namespace SimpleReport.Model.Storage
             _dataModel.AccessLists.Add(existing);
             SaveModel(_dataModel);
             return true;      
+        }
+
+        public Settings GetSettings()
+        {
+            return _dataModel.Settings;
+        }
+
+        public bool SaveSettings(Settings settings)
+        {
+            _dataModel.Settings = settings;
+            SaveModel(_dataModel);
+            return true;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace SimpleReport.Controllers
         {
             var vm = GetReportViewModel();
             var report = _reportResolver.GetReport(reportId);
-            if (!report.IsAvailableForMe(User))
+            if (!report.IsAvailableForMe(User, _reportStorage.GetSettings().AdminAccess))
                 ModelState.AddModelError("AccessControl","You don't have access to view this report!");
             else
                 vm.Report = report;

@@ -6,7 +6,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
 
     $scope.init = function() {
         $scope.activeTab = 'report';
-        $http.get('../api/Designer/GetViewModel').
+        $http.get('api/Designer/GetViewModel').
             success(function (data) {
                 $scope.inputTypes = data.InputTypes;
                 $scope.reportList = data.Reports;

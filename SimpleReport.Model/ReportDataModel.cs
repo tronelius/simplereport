@@ -7,7 +7,8 @@ namespace SimpleReport.Model
         public List<Connection> Connections;
         public List<Report> Reports;
         public List<LookupReport> LookupReports;
-        public List<Access> AccessLists; 
+        public List<Access> AccessLists;
+        public Settings Settings;
 
         public ReportDataModel()
         {
@@ -15,6 +16,7 @@ namespace SimpleReport.Model
             Reports = new List<Report>();
             LookupReports = new List<LookupReport>();
             AccessLists = new List<Access>();
+            Settings = new Settings();
         }
     }
 }

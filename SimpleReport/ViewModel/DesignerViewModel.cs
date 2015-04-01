@@ -21,7 +21,7 @@ namespace SimpleReport.ViewModel
 
         public DesignerViewModel(IStorage reportStorage, IPrincipal user)
         {
-            Reports = reportStorage.GetAllReports().Where(r => r.IsAvailableForMe(user));
+            Reports = reportStorage.GetAllReports();
             Connections = reportStorage.GetConnections();
             LookupReports = reportStorage.GetLookupReports();
             AccessLists = reportStorage.GetAccessLists().ToList();

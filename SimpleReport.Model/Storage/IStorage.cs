@@ -25,5 +25,7 @@ namespace SimpleReport.Model.Storage
         IEnumerable<Access> GetAccessLists();
         Access GetAccessList(Guid id);
         bool SaveAccessList(Access accesslist);
+        Settings GetSettings();
+        bool SaveSettings(Settings settings);
     }
 }

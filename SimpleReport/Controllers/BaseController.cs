@@ -22,7 +22,7 @@ namespace SimpleReport.Controllers
         protected ReportViewModel GetReportViewModel()
         {
             ReportViewModel vm = new ReportViewModel();
-            vm.Reports = _reportStorage.GetAllReports().Where(a => a.IsAvailableForMe(User));
+            vm.Reports = _reportStorage.GetAllReports().Where(a => a.IsAvailableForMe(User, _reportStorage.GetSettings().AdminAccess));
             return vm;
         }
         
