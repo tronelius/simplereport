@@ -18,13 +18,19 @@ namespace SimpleReport.Controllers.Api
             _reportStorage = reportstorage;
         }
 
+        private void CheckForAdminAccess()
+        {
+            if (!User.IsInRole(_reportStorage.GetSettings().AdminAccess))
+                throw new Exception("Action not allowed");
+        }
+
         [AcceptVerbs("GET")]
         public IHttpActionResult GetViewModel()
         {
             try
             {
+                CheckForAdminAccess();
                 DesignerViewModel vm = new DesignerViewModel(_reportStorage, User);
-               
                 return Ok(vm);
             }
             catch (Exception ex)
@@ -36,7 +42,8 @@ namespace SimpleReport.Controllers.Api
         [AcceptVerbs("POST")]
         public IHttpActionResult SaveReport([FromBody]Report reportToSave)
         {
-            try { 
+            try {
+                CheckForAdminAccess();
                 _reportStorage.SaveReport(reportToSave);
                 return Ok();
             } catch (Exception ex)
@@ -50,6 +57,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
+                CheckForAdminAccess();
                 _reportStorage.SaveConnection(conn);
                 return Ok();
             }
@@ -64,6 +72,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
+                CheckForAdminAccess();
                 _reportStorage.SaveLookupReport(lrpt);
                 return Ok();
             }
@@ -78,6 +87,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
+                CheckForAdminAccess();
                 _reportStorage.SaveAccessList(acc);
                 return Ok();
             }

@@ -22,5 +22,6 @@ namespace SimpleReport.ViewModel
     public class ReportViewModel : ReportInfoViewModel
     {
         public Report Report { get; set; }
+        public string AdminRole { get; set; }
     }
 }

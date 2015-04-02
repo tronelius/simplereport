@@ -14,7 +14,9 @@ namespace SimpleReport.Controllers
 
         public ActionResult Index()
         {
-            return View(GetReportViewModel());
+            if (User.IsInRole(_reportStorage.GetSettings().AdminAccess))
+                return View(GetReportViewModel());
+            return Redirect("~");
         }
 
 
