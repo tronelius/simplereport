@@ -19,7 +19,7 @@ namespace SimpleReport.Model
                     SqlCommand cmd = null;
                     DataTable table = new DataTable();
                     cmd = cn.CreateCommand();
-                    cmd.CommandType = query.ToLower().Contains("select ") ? CommandType.Text : CommandType.StoredProcedure ;
+                    cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure ;
                     cmd.CommandText = query;
                     if (param != null)
                         cmd.Parameters.AddRange(param.ToArray());
