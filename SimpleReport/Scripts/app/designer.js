@@ -2,8 +2,7 @@
 
 angular.module('designer').controller('designerController', ['$scope', '$http', function ($scope, $http) {
     $scope.activeTab = 'report';
-    $scope.parameterPositionHash = [];
-    
+
     $scope.init = function() {
         $scope.activeTab = 'report';
         $http.get('api/Designer/GetViewModel').
@@ -18,11 +17,21 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 toastr.error("Couldn't get list of reports from server.","Error");
             });
     };
+    $scope.init();
 
+    //Globals and help functions
     var regExParameterMatch = /(@\w+)/g;
     var parameterPositionHash = [];
+    function updateCollection(collection, updatedEntity) {
+        var index = collection.indexOf(_.find(collection, function (entity) { return entity.Id === updatedEntity.Id }));
+        if (index !== -1) {
+            collection.splice(index, 1, updatedEntity);
+        } else {
+            collection.push(updatedEntity);
+        }
+    }
 
-    //Can it be the same loop?
+    //Reports
     $scope.reportDataChanged = function () {
         console.debug('report changed');
         $scope.latestSql = $scope.report.Sql;
@@ -34,10 +43,6 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
         }
     };
-    $scope.connectionChanged = function () { };
-    $scope.accessListChanged = function () {};
-    $scope.lookupReportChanged = function () {};
-
     $scope.analyzeSQL = function () {
         var currentSQL = $scope.report.Sql;
         var match;
@@ -45,7 +50,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         var foundMatches = [];
         while (match = regExParameterMatch.exec(currentSQL)) {
             //console.debug(match[0]);
-            var existingparam = _.findWhere($scope.report.Parameters, { SqlKey:match[0]});
+            var existingparam = _.findWhere($scope.report.Parameters, { SqlKey: match[0] });
             if (existingparam === undefined) {
                 if (currentPosition >= match.index && currentPosition <= match.index + match[0].length) {
                     //console.debug('updated existing');
@@ -62,7 +67,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 }
             }
             //else {
-                //console.debug('existing untouched');
+            //console.debug('existing untouched');
             //}
             foundMatches.push(match[0]);
         }
@@ -77,22 +82,10 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }
         $scope.reportDataChanged();
     };
-
     $scope.addNewParameter = function (keyOfParameter) {
         //console.debug('new parameter');
-        $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: '', InputType: 0, Mandatory: false, Label: '', HelpText: '' });
+        $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
     };
-
-    $scope.verifyLookupSql = function () {
-        var re = /((\bid\b).+(\bname\b))|((\bname\b).+(\bid\b))/i;
-        var match;
-        if ((match = re.exec($scope.lookupreport.Sql)) !== null) {
-            $scope.lookupreport.SqlOk = false;
-        } else {
-            $scope.lookupreport.SqlOk = true;
-        }
-    }
-
     $scope.saveReport = function () {
         $.ajax({
             type: 'post',
@@ -101,11 +94,16 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             processData: false,
             contentType: 'application/json; charset=utf-8'
         }).success(function (data) {
-            toastr.success("Report saved","Saved");
+            toastr.success("Report saved", "Saved");
+            $scope.report = data;
+            updateCollection($scope.reportList, $scope.report);
         }).error(function (data) {
-            toastr.error("Server error when saving report.","Error");
+            toastr.error("Server error when saving report.", "Error");
         });
     };
+
+    //Connections
+    $scope.connectionChanged = function () { };
     $scope.saveConnection = function () {
         $.ajax({
             type: 'post',
@@ -115,10 +113,30 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             contentType: 'application/json; charset=utf-8'
         }).success(function (data) {
             toastr.success("Connection saved", "Saved");
+            $scope.connection = data;
+            updateCollection($scope.connections, $scope.connection);
         }).error(function (data) {
             toastr.error("Server error when saving connection.", "Error");
         });
     };
+    $scope.addNewConnection = function() {
+        $scope.connection = {Id:null,Name:"",ConnectionString:""};
+    }
+
+    //Dropdown parameters
+    $scope.lookupReportChanged = function () {};
+    $scope.verifyLookupSql = function () {
+        var re = /((\bid\b).+(\bname\b))|((\bname\b).+(\bid\b))/i;
+        var match;
+        if ((match = re.exec($scope.lookupreport.Sql)) !== null) {
+            $scope.lookupreport.SqlOk = false;
+        } else {
+            $scope.lookupreport.SqlOk = true;
+        }
+    }
+    $scope.addNewDropdownParameter = function () {
+        $scope.lookupreport = { Id: null, Name: "", ConnectionId:null, Sql:"" };
+    }
     $scope.saveDropdownParameter = function () {
         $.ajax({
             type: 'post',
@@ -128,23 +146,32 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             contentType: 'application/json; charset=utf-8'
         }).success(function (data) {
             toastr.success("Dropdown parameter saved", "Saved");
+            $scope.lookupreport = data;
+            updateCollection($scope.lookupReports, $scope.lookupreport);
         }).error(function (data) {
             toastr.error("Server error when saving dropdown parameter.", "Error");
         });
     };
+
+    //Access Lists
+    $scope.accessListChanged = function () { };
+    $scope.addNewAccessList = function () {
+        $scope.access = { Id: null };
+    }
     $scope.saveAccesList = function () {
         $.ajax({
             type: 'post',
             url: 'api/Designer/SaveAccessList',
-            data: JSON.stringify($scope.accessList),
+            data: JSON.stringify($scope.access),
             processData: false,
             contentType: 'application/json; charset=utf-8'
         }).success(function (data) {
             toastr.success("Access control list saved", "Saved");
+            $scope.access = data;
+            updateCollection($scope.accessLists, $scope.access);
         }).error(function (data) {
             toastr.error("Server error when saving access control list.", "Error");
         });
     };
 
-    $scope.init();
 }]);

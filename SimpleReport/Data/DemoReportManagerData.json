@@ -9,6 +9,31 @@
       "Id": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Name": "Adventureworks",
       "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
+    },
+    {
+      "Id": "ddcc47a1-f8ab-4deb-a430-e9de0323e96a",
+      "Name": "apa",
+      "ConnectionString": "Testar"
+    },
+    {
+      "Id": "b7fa295f-dc4f-4e04-a5c5-56677e393100",
+      "Name": "Test av ny",
+      "ConnectionString": "Japp detta är en ny"
+    },
+    {
+      "Id": "043c49d3-352b-4cf5-aa47-9bce58bdc29f",
+      "Name": "Ännu en ny",
+      "ConnectionString": "Japp en ny!"
+    },
+    {
+      "Id": "5c6a4b1e-4d34-420c-a42c-0e5ac0369f2a",
+      "Name": "Nu kommer en till!",
+      "ConnectionString": "japp!"
+    },
+    {
+      "Id": "2154f4a9-6cf0-4227-9668-549d9540fddb",
+      "Name": "Test av en till",
+      "ConnectionString": "Japp nu kommer den"
     }
   ],
   "Reports": [
@@ -46,7 +71,7 @@
       ],
       "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Sql": "SELECT TOP 1000 [ProductID],[StartDate],[EndDate],[StandardCost],[ModifiedDate] FROM [Production].[ProductCostHistory] where [StartDate] between @periodstart and @periodend and ModifiedDate > @dateid",
-      "ID": "a70722b1-deb7-4b48-b90b-d3c651459502",
+      "Id": "a70722b1-deb7-4b48-b90b-d3c651459502",
       "Name": "Production Cost History Report",
       "Group": "Cost",
       "Description": "Beskrivning...22",
@@ -69,7 +94,7 @@
       ],
       "ConnectionId": "f7d12d58-300c-4505-a440-a5d30fc78086",
       "Sql": "SELECT TOP 1000 [ProductID],[Name] ,[ProductNumber] from [Production].[Product] where [ProductSubcategoryID] = @subid",
-      "ID": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
+      "Id": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
       "Name": "Product List",
       "Group": "Production",
       "Description": "gets all products from a certain category",
@@ -80,10 +105,37 @@
     {
       "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Sql": "SELECT [ProductSubcategoryID] as id,Name as Name FROM [Production].[ProductSubcategory]",
-      "ID": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a",
+      "Id": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a",
       "Name": "LookupTest",
       "Group": null,
       "Description": "",
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Sql": "select id, name from apa",
+      "Id": "177eef83-684e-4e47-957c-3078d84664c2",
+      "Name": "Hejhopp",
+      "Group": null,
+      "Description": null,
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Sql": "jo",
+      "Id": "aefc809e-21f9-4c87-86e9-d633223566a5",
+      "Name": "Just det",
+      "Group": null,
+      "Description": null,
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Sql": "dhsjdshkj",
+      "Id": "c18d04fa-b258-4521-883b-519a0572b676",
+      "Name": "dropdown",
+      "Group": null,
+      "Description": null,
       "AccessId": "00000000-0000-0000-0000-000000000000"
     }
   ],
@@ -92,10 +144,10 @@
       "Id": "37cc35cc-f1e7-4977-a83c-5a321b8acae4",
       "Name": "Only developers",
       "ADGroup": "utvecklare2"
-    }
+    },
+    null
   ],
   "Settings": {
-    "AdminAccess": "utvecklare2"
+    "AdminAccess": "utvecklare"
   }
 }
-  

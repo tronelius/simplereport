@@ -5,7 +5,7 @@
                 <label class="control-label">Choose connection to edit</label>
                 <select ng-model="connection" class="form-control" ng-options="item as item.Name for item in connections" ng-change="connectionChanged()"></select>
             </div>
-            <button class="btn btn-primary"><i class="fa fa-plus"></i> Add new</button>
+            <button class="btn btn-primary" ng-click="addNewConnection()"><i class="fa fa-plus"></i> Add new</button>
         </div>
     </div>
 </div>

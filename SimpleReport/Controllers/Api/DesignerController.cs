@@ -9,20 +9,11 @@ using SimpleReport.ViewModel;
 
 namespace SimpleReport.Controllers.Api
 {
-    //Todo dynamic acesscontrol needed.
-    public class DesignerController : ApiController
-    {
-        private readonly IStorage _reportStorage;
-        public DesignerController(IStorage reportstorage)
-        {
-            _reportStorage = reportstorage;
-        }
 
-        private void CheckForAdminAccess()
-        {
-            if (!User.IsInRole(_reportStorage.GetSettings().AdminAccess))
-                throw new Exception("Action not allowed");
-        }
+    public class DesignerController : BaseApiController
+    {
+
+        public DesignerController(IStorage reportStorage) : base(reportStorage){ }
 
         [AcceptVerbs("GET")]
         public IHttpActionResult GetViewModel()
@@ -44,8 +35,9 @@ namespace SimpleReport.Controllers.Api
         {
             try {
                 CheckForAdminAccess();
+                HandleNewEntity(reportToSave);
                 _reportStorage.SaveReport(reportToSave);
-                return Ok();
+                return Ok(reportToSave);
             } catch (Exception ex)
             {
                 return InternalServerError();
@@ -58,8 +50,9 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckForAdminAccess();
+                HandleNewEntity(conn);
                 _reportStorage.SaveConnection(conn);
-                return Ok();
+                return Ok(conn);
             }
             catch (Exception ex)
             {
@@ -73,8 +66,9 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckForAdminAccess();
+                HandleNewEntity(lrpt);
                 _reportStorage.SaveLookupReport(lrpt);
-                return Ok();
+                return Ok(lrpt);
             }
             catch (Exception ex)
             {
@@ -88,8 +82,9 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckForAdminAccess();
+                HandleNewEntity(acc);
                 _reportStorage.SaveAccessList(acc);
-                return Ok();
+                return Ok(acc);
             }
             catch (Exception ex)
             {

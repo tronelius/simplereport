@@ -8,7 +8,7 @@
                 <label class="control-label">Choose dropdown parameter to edit</label>
                 <select ng-model="lookupreport" class="form-control" ng-options="item as item.Name for item in lookupReports" ng-change="lookupReportChanged()"></select>
             </div>
-            <button class="btn btn-primary"><i class="fa fa-plus"></i> Add new</button>
+            <button class="btn btn-primary" ng-click="addNewDropdownParameter()"><i class="fa fa-plus"></i> Add new</button>
         </div>
     </div>
 </div>
@@ -46,7 +46,7 @@
                     <div class="form-group">
                         <label class="control-label" title="Sql of dropdown parameter">SQL</label>
                         <div>
-                            <textarea rows="3" ng-model="lookupreport.Sql" class="form-control" placeholder="Give your report a user-friendly description" title="Sql of dropdown parameter" ng-keyup="verifyLookupSql()"></textarea>
+                            <textarea rows="3" ng-model="lookupreport.Sql" class="form-control" title="Sql of dropdown parameter" ng-keyup="verifyLookupSql()"></textarea>
                         </div>
                         <p class="help-block">Sql that describes the Lookup, should select two values, one named 'Id' and one named 'Name'</p>
 

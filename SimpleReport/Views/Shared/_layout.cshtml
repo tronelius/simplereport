@@ -52,7 +52,7 @@
                                 <ul class="treeview-menu">
                                     @foreach (ReportInfo reportInfo in reportGroup)
                                     {
-                                        <li class="@if (Model.Report != null && Model.Report.ID == reportInfo.ID){@Html.Raw("active")}"><a href="@Url.Action("Report", "Home", new {reportId = reportInfo.ID})"><i class="fa fa-circle-o"></i>@reportInfo.Name</a></li>
+                                        <li class="@if (Model.Report != null && Model.Report.Id == reportInfo.Id){@Html.Raw("active")}"><a href="@Url.Action("Report", "Home", new {reportId = reportInfo.Id})"><i class="fa fa-circle-o"></i>@reportInfo.Name</a></li>
                                     }
                                 </ul>
                             </li>
