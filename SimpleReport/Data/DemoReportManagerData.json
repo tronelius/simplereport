@@ -8,7 +8,7 @@
     {
       "Id": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Name": "Adventureworks",
-      "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;per=true"
+      "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
     }
   ],
   "Reports": [
@@ -96,5 +96,7 @@
   ],
   "Settings": {
     "AdminAccess": "utvecklare"
+  }
+}
   }
 }

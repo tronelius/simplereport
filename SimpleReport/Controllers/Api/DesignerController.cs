@@ -72,5 +72,19 @@ namespace SimpleReport.Controllers.Api
                 return InternalServerError();
             }
         }
+
+        [AcceptVerbs("POST")]
+        public IHttpActionResult SaveAccessList([FromBody]Access acc)
+        {
+            try
+            {
+                _reportStorage.SaveAccessList(acc);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
     }
 }

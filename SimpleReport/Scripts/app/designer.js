@@ -34,7 +34,8 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
         }
     };
-    $scope.connectionChanged = function() {};
+    $scope.connectionChanged = function () { };
+    $scope.accessListChanged = function () {};
     $scope.lookupReportChanged = function () {};
 
     $scope.analyzeSQL = function () {
@@ -100,9 +101,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             processData: false,
             contentType: 'application/json; charset=utf-8'
         }).success(function (data) {
-            toastr.success("Report Saved","Saved");
+            toastr.success("Report saved","Saved");
         }).error(function (data) {
-            toastr.error("Server error when saving report, please try again later.","Error");
+            toastr.error("Server error when saving report.","Error");
         });
     };
     $scope.saveConnection = function () {
@@ -113,9 +114,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             processData: false,
             contentType: 'application/json; charset=utf-8'
         }).success(function (data) {
-            toastr.success("Connection Saved", "Saved");
+            toastr.success("Connection saved", "Saved");
         }).error(function (data) {
-            toastr.error("Server error when saving connection, please try again later.", "Error");
+            toastr.error("Server error when saving connection.", "Error");
         });
     };
     $scope.saveDropdownParameter = function () {
@@ -126,9 +127,22 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             processData: false,
             contentType: 'application/json; charset=utf-8'
         }).success(function (data) {
-            toastr.success("Dropdown parameter Saved", "Saved");
+            toastr.success("Dropdown parameter saved", "Saved");
         }).error(function (data) {
-            toastr.error("Server error when saving dropdown parameter, please try again later.", "Error");
+            toastr.error("Server error when saving dropdown parameter.", "Error");
+        });
+    };
+    $scope.saveAccesList = function () {
+        $.ajax({
+            type: 'post',
+            url: 'api/Designer/SaveAccessList',
+            data: JSON.stringify($scope.accessList),
+            processData: false,
+            contentType: 'application/json; charset=utf-8'
+        }).success(function (data) {
+            toastr.success("Access control list saved", "Saved");
+        }).error(function (data) {
+            toastr.error("Server error when saving access control list.", "Error");
         });
     };
 
