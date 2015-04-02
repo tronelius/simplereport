@@ -1,2 +1,76 @@
 ﻿
 
+
+<div class="row content-text" ng-hide="!lookupReports">
+    <div class="col-xs-12">
+        <div class="form-inline">
+            <div class="form-group">
+                <label class="control-label">Choose dropdown parameter to edit</label>
+                <select ng-model="lookupreport" class="form-control" ng-options="item as item.Name for item in lookupReports" ng-change="lookupReportChanged()"></select>
+            </div>
+            <button class="btn btn-primary"><i class="fa fa-plus"></i> Add new</button>
+        </div>
+    </div>
+</div>
+
+<form role="form" ng-hide="!lookupreport">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label" title="Give your dropdown parameter a name">Name</label>
+                                <div>
+                                    <input type="text" ng-model="lookupreport.Name" class="form-control" title="Give your dropdown parameter a name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label" title="All reports are grouped in the navigation menu by this group name.">Connection</label>
+                                <div>
+                                    <select ng-model="lookupreport.ConnectionId" ng-options="item.Id as item.Name for item in connections" class="form-control"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="control-label" title="Sql of dropdown parameter">SQL</label>
+                        <div>
+                            <textarea rows="3" ng-model="lookupreport.Sql" class="form-control" placeholder="Give your report a user-friendly description" title="Sql of dropdown parameter" ng-keyup="verifyLookupSql()"></textarea>
+                        </div>
+                        <p class="help-block">Sql that describes the Lookup, should select two values, one named 'Id' and one named 'Name'</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="alert alert-error alert-dismissable" ng-hide="!lookupreport.SqlOk">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-warning"></i> Warning!</h4>
+                It's best practise to name the columns selected by a dropdown parameter to "Id" and "Name". <br />
+                for example: "select PersonId as 'id', Firstname+Lastname as 'name' from person"<br />
+                If named columns is not found, the dropdown will take the first column as id and the second as name.
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box-footer">
+                <button type="button" class="btn btn-success" ng-click="saveDropdownParameter()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</form>

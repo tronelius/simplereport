@@ -1,1 +1,49 @@
-﻿
+﻿<div class="row content-text" ng-hide="!connections">
+    <div class="col-xs-12">
+        <div class="form-inline">
+            <div class="form-group">
+                <label class="control-label">Choose connection to edit</label>
+                <select ng-model="connection" class="form-control" ng-options="item as item.Name for item in connections" ng-change="connectionChanged()"></select>
+            </div>
+            <button class="btn btn-primary"><i class="fa fa-plus"></i>Add new</button>
+        </div>
+    </div>
+</div>
+
+
+<form role="form" ng-hide="!connection">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label" title="Give your connectionstring a name, it will show up in dropdownmenus when you choose connectionstring.">Name</label>
+                                <div>
+                                    <input type="text" ng-model="connection.Name" class="form-control" title="Give your connectionstring a name, it will show up in dropdownmenus when you choose connectionstring.">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label" title="The connectionstring to use for reports">Connectionstring</label>
+                                <div>
+                                    <textarea ng-model="connection.ConnectionString" cols="5" class="form-control" title="The connectionstring to use for reports"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box-footer">
+                <button type="button" class="btn btn-success" ng-click="saveConnection()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,14 +1,14 @@
 {
   "Connections": [
     {
-      "Id": "4f4fe880-d557-4350-ad7e-4fdb53968698",
-      "Name": "Adventureworks",
-      "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
-    },
-    {
       "Id": "f7d12d58-300c-4505-a440-a5d30fc78086",
       "Name": "Adventureworks Test",
       "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
+    },
+    {
+      "Id": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Name": "Adventureworks",
+      "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;per=true"
     }
   ],
   "Reports": [

@@ -3,7 +3,7 @@
 angular.module('designer').controller('designerController', ['$scope', '$http', function ($scope, $http) {
     $scope.activeTab = 'report';
     $scope.parameterPositionHash = [];
-
+    
     $scope.init = function() {
         $scope.activeTab = 'report';
         $http.get('api/Designer/GetViewModel').
@@ -34,6 +34,8 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
         }
     };
+    $scope.connectionChanged = function() {};
+    $scope.lookupReportChanged = function () {};
 
     $scope.analyzeSQL = function () {
         var currentSQL = $scope.report.Sql;
@@ -80,18 +82,55 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: '', InputType: 0, Mandatory: false, Label: '', HelpText: '' });
     };
 
-    $scope.save = function () {
+    $scope.verifyLookupSql = function () {
+        var re = /((\bid\b).+(\bname\b))|((\bname\b).+(\bid\b))/i;
+        var match;
+        if ((match = re.exec($scope.lookupreport.Sql)) !== null) {
+            $scope.lookupreport.SqlOk = false;
+        } else {
+            $scope.lookupreport.SqlOk = true;
+        }
+    }
+
+    $scope.saveReport = function () {
         $.ajax({
             type: 'post',
-            url: '../api/Designer/SaveReport',
+            url: 'api/Designer/SaveReport',
             data: JSON.stringify($scope.report),
             processData: false,
             contentType: 'application/json; charset=utf-8'
         }).success(function (data) {
             toastr.success("Report Saved","Saved");
         }).error(function (data) {
-            toastr.error("Server error when saveing report, please try again later.","Error");
+            toastr.error("Server error when saving report, please try again later.","Error");
         });
     };
+    $scope.saveConnection = function () {
+        $.ajax({
+            type: 'post',
+            url: 'api/Designer/SaveConnection',
+            data: JSON.stringify($scope.connection),
+            processData: false,
+            contentType: 'application/json; charset=utf-8'
+        }).success(function (data) {
+            toastr.success("Connection Saved", "Saved");
+        }).error(function (data) {
+            toastr.error("Server error when saving connection, please try again later.", "Error");
+        });
+    };
+    $scope.saveDropdownParameter = function () {
+        $.ajax({
+            type: 'post',
+            url: 'api/Designer/SaveLookupReport',
+            data: JSON.stringify($scope.lookupreport),
+            processData: false,
+            contentType: 'application/json; charset=utf-8'
+        }).success(function (data) {
+            toastr.success("Dropdown parameter Saved", "Saved");
+        }).error(function (data) {
+            toastr.error("Server error when saving dropdown parameter, please try again later.", "Error");
+        });
+    };
+
     $scope.init();
 }]);

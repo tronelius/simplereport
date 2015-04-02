@@ -74,9 +74,19 @@ namespace SimpleReport.Model
 
             DataTable result = ADO.GetResults<dynamic>(Connection, Sql,null);
             Dictionary<string, string> collection = new Dictionary<string, string>();
-            foreach (DataRow row in result.Rows)
+            if (result.Columns.Contains("id") && result.Columns.Contains("name"))
             {
-                collection.Add(row[0].ToString(),row[1].ToString());
+                foreach (DataRow row in result.Rows)
+                {
+                    collection.Add(row["id"].ToString(), row["name"].ToString());
+                }
+            }
+            else if (result.Columns.Count >=2)
+            {
+                foreach (DataRow row in result.Rows)
+                {
+                    collection.Add(row[0].ToString(), row[1].ToString());
+                }
             }
             return collection;
         }
