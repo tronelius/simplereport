@@ -64,6 +64,9 @@
     <Compile Include="ErrorInfo.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
+    <Compile Include="IEntity.cs" />
+    <Compile Include="LookupReport.cs" />
+    <Compile Include="ReportInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Storage\FileStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />

@@ -1,0 +1,48 @@
+﻿<div class="row content-text" ng-hide="!accessLists">
+    <div class="col-xs-12">
+        <div class="form-inline">
+            <div class="form-group">
+                <label class="control-label">Choose access control list to edit</label>
+                <select ng-model="access" class="form-control" ng-options="item as item.Name for item in accessLists | filter:{ Id : '!00000000-0000-0000-0000-000000000000' }" ng-change="accessListChanged()"></select>
+            </div>
+            <button class="btn btn-primary" ng-click="addNewAccessList()"><i class="fa fa-plus"></i> Add new</button>
+        </div>
+    </div>
+</div>
+
+<form role="form" ng-hide="!access">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" title="Give your access control list a name">Name</label>
+                                <div>
+                                    <input type="text" ng-model="access.Name" class="form-control" title="Give your access control list a name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label" title="">AD groups allowed to see reports</label>
+                                <div>
+                                    <input type="text" ng-model="access.ADGroup" class="form-control" title="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box-footer">
+                <button type="button" class="btn btn-success" ng-click="saveAccesList()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</form>

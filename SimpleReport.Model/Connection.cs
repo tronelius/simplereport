@@ -4,8 +4,8 @@ using System.Runtime.Serialization;
 
 namespace SimpleReport.Model
 {
-    
-    public class Connection
+
+    public class Connection : IEntity
     {
         public Guid Id { get; set; }
         [Required]
@@ -22,7 +22,7 @@ namespace SimpleReport.Model
 
         public Connection()
         {
-            Id = new Guid();
+            Id = Guid.NewGuid();
         }
     }
 }

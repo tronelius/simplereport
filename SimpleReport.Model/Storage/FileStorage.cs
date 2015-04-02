@@ -63,7 +63,7 @@ namespace SimpleReport.Model.Storage
 
         public Report GetReport(Guid id)
         {
-            var report =_dataModel.Reports.FirstOrDefault(r => r.ID == id);
+            var report =_dataModel.Reports.FirstOrDefault(r => r.Id == id);
             if (report == null)
                 throw new EntityNotFoundException("Report not found");
             LoadAndSetConnection(report);
@@ -87,7 +87,7 @@ namespace SimpleReport.Model.Storage
 
         public bool SaveReport(Report report)
         {
-            Report existingReport = _dataModel.Reports.FirstOrDefault(r => r.ID == report.ID);
+            Report existingReport = _dataModel.Reports.FirstOrDefault(r => r.Id == report.Id);
             if (existingReport != null)
                 _dataModel.Reports.Remove(existingReport);
             _dataModel.Reports.Add(report);
@@ -122,7 +122,7 @@ namespace SimpleReport.Model.Storage
 
         public LookupReport GetLookupReport(Guid id)
         {
-            var report =  _dataModel.LookupReports.FirstOrDefault(c => c.ID == id);
+            var report =  _dataModel.LookupReports.FirstOrDefault(c => c.Id == id);
             if (report == null)
                 throw new EntityNotFoundException("Lookup report not found");
             LoadAndSetConnection(report);
@@ -131,7 +131,7 @@ namespace SimpleReport.Model.Storage
 
         public bool SaveLookupReport(LookupReport lookupReport)
         {
-            LookupReport existing = _dataModel.LookupReports.FirstOrDefault(r => r.ID == lookupReport.ID);
+            LookupReport existing = _dataModel.LookupReports.FirstOrDefault(r => r.Id == lookupReport.Id);
             if (existing != null)
                 _dataModel.LookupReports.Remove(existing);
             _dataModel.LookupReports.Add(lookupReport);
