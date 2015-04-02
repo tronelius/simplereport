@@ -82,6 +82,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }
         $scope.reportDataChanged();
     };
+    $scope.addNewReport = function () {
+        $scope.report = { Id: null };
+    }
     $scope.addNewParameter = function (keyOfParameter) {
         //console.debug('new parameter');
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
@@ -120,7 +123,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         });
     };
     $scope.addNewConnection = function() {
-        $scope.connection = {Id:null,Name:"",ConnectionString:""};
+        $scope.connection = {Id:null};
     }
 
     //Dropdown parameters
@@ -135,7 +138,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }
     }
     $scope.addNewDropdownParameter = function () {
-        $scope.lookupreport = { Id: null, Name: "", ConnectionId:null, Sql:"" };
+        $scope.lookupreport = { Id: null };
     }
     $scope.saveDropdownParameter = function () {
         $.ajax({

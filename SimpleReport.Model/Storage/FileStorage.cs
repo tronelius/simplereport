@@ -156,7 +156,7 @@ namespace SimpleReport.Model.Storage
             Access existing = _dataModel.AccessLists.FirstOrDefault(r => r.Id == accesslist.Id);
             if (existing != null)
                 _dataModel.AccessLists.Remove(existing);
-            _dataModel.AccessLists.Add(existing);
+            _dataModel.AccessLists.Add(accesslist);
             SaveModel(_dataModel);
             return true;      
         }

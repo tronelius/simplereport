@@ -9,31 +9,6 @@
       "Id": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Name": "Adventureworks",
       "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
-    },
-    {
-      "Id": "ddcc47a1-f8ab-4deb-a430-e9de0323e96a",
-      "Name": "apa",
-      "ConnectionString": "Testar"
-    },
-    {
-      "Id": "b7fa295f-dc4f-4e04-a5c5-56677e393100",
-      "Name": "Test av ny",
-      "ConnectionString": "Japp detta är en ny"
-    },
-    {
-      "Id": "043c49d3-352b-4cf5-aa47-9bce58bdc29f",
-      "Name": "Ännu en ny",
-      "ConnectionString": "Japp en ny!"
-    },
-    {
-      "Id": "5c6a4b1e-4d34-420c-a42c-0e5ac0369f2a",
-      "Name": "Nu kommer en till!",
-      "ConnectionString": "japp!"
-    },
-    {
-      "Id": "2154f4a9-6cf0-4227-9668-549d9540fddb",
-      "Name": "Test av en till",
-      "ConnectionString": "Japp nu kommer den"
     }
   ],
   "Reports": [
@@ -99,6 +74,17 @@
       "Group": "Production",
       "Description": "gets all products from a certain category",
       "AccessId": "37cc35cc-f1e7-4977-a83c-5a321b8acae4"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Sql": "Select * from Person.Address",
+      "Id": "c6208355-9124-458e-b1c5-c9e2981fbc18",
+      "Name": "Ny rapport",
+      "Group": "Pers grupp",
+      "Description": "Kör denna när ni har ett rapportbehov!",
+      "AccessId": "00000000-0000-0000-0000-000000000000"
     }
   ],
   "LookupReports": [
@@ -110,33 +96,6 @@
       "Group": null,
       "Description": "",
       "AccessId": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
-      "Sql": "select id, name from apa",
-      "Id": "177eef83-684e-4e47-957c-3078d84664c2",
-      "Name": "Hejhopp",
-      "Group": null,
-      "Description": null,
-      "AccessId": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
-      "Sql": "jo",
-      "Id": "aefc809e-21f9-4c87-86e9-d633223566a5",
-      "Name": "Just det",
-      "Group": null,
-      "Description": null,
-      "AccessId": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
-      "Sql": "dhsjdshkj",
-      "Id": "c18d04fa-b258-4521-883b-519a0572b676",
-      "Name": "dropdown",
-      "Group": null,
-      "Description": null,
-      "AccessId": "00000000-0000-0000-0000-000000000000"
     }
   ],
   "AccessLists": [
@@ -145,7 +104,11 @@
       "Name": "Only developers",
       "ADGroup": "utvecklare2"
     },
-    null
+    {
+      "Id": "2bfdc97a-c71e-4679-881a-15214895756b",
+      "Name": "Sales",
+      "ADGroup": "Sales"
+    }
   ],
   "Settings": {
     "AdminAccess": "utvecklare"
