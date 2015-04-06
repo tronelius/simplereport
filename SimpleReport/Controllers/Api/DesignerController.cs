@@ -4,6 +4,7 @@ using System.Security.Principal;
 using System.Web.Http;
 using System.Web.Http.Results;
 using SimpleReport.Model;
+using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
 using SimpleReport.ViewModel;
 
@@ -13,7 +14,7 @@ namespace SimpleReport.Controllers.Api
     public class DesignerController : BaseApiController
     {
 
-        public DesignerController(IStorage reportStorage) : base(reportStorage){ }
+        public DesignerController(IStorage reportStorage, ILogger logger) : base(reportStorage, logger){ }
 
         [AcceptVerbs("GET")]
         public IHttpActionResult GetViewModel()

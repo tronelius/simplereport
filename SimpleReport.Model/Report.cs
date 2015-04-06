@@ -47,7 +47,7 @@ namespace SimpleReport.Model
 
         public bool IsAvailableForMe(IPrincipal user, string adminAccessRole)
         {
-            return (Access == null || user.IsInRole(Access.ADGroup) || user.IsInRole(adminAccessRole));
+            return (Access == null || user.IsInRole(Access.ADGroup) || (user.IsInRole(adminAccessRole) || adminAccessRole == null));
         }
 
         public void ReadParameters(NameValueCollection queryString)

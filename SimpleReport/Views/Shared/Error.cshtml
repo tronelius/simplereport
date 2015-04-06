@@ -1,0 +1,21 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+<section class="content-header">
+    <h1>
+        Oups! <small>That didn't quite work out as expected.</small>
+    </h1>
+</section>
+
+<section class="content">
+    <div class="col-md-9 col-xs-12">
+        <div class="alert alert-danger">
+            <h4><i class="icon fa fa-warning"></i> Error!</h4>
+            <p>The error has been logged.</p>
+            <p>You should notify the administrator of the site that this error occured at @DateTime.Now.ToString()</p>
+        </div>
+    </div>
+</section>
+

@@ -6,40 +6,55 @@ using System.Linq;
 using System.Security.Principal;
 using Newtonsoft.Json;
 using SimpleReport.Model.Exceptions;
+using SimpleReport.Model.Logging;
 
 namespace SimpleReport.Model.Storage
 {
     public class FileStorage :IStorage
     {
+        private readonly ILogger _logger;
         private string _filename;
         private ReportDataModel _dataModel;
 
         //instanciate once every request, keep the model in memory during the request.
-        public FileStorage()
+        public FileStorage(ILogger logger)
         {
-            _filename = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["datastorefilename"];
-            _dataModel = LoadModel();
+            _logger = logger;
+            _filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "datamodel.json");
+            try {
+                _dataModel = LoadModel();
+            }
+            catch (FileNotFoundException fex)
+            {
+                //autoinitialize storage
+                logger.Warn("filestorage not initialized, file not found at:"+fex.FileName);
+                InitializeStorage();
+                _dataModel = LoadModel();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not read Reports from file!", ex);
+            }
         }
-        
+
+        public void InitializeStorage()
+        {
+            ReportDataModel model = new ReportDataModel();
+            SaveModel(model);
+        }
+
         public ReportDataModel LoadModel()
         {
-            using (FileStream fs = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (FileStream fs = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                try
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    //serializer.TypeNameHandling = TypeNameHandling.Objects;
-
-                    TextReader treader = new StreamReader(fs);
-                    JsonReader reader = new JsonTextReader(treader);
-                    ReportDataModel data = serializer.Deserialize<ReportDataModel>(reader);
-                    return data;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Could not read Reports from file!", ex);
-                }
-            }
+                JsonSerializer serializer = new JsonSerializer();
+                //serializer.TypeNameHandling = TypeNameHandling.Objects;
+                TextReader treader = new StreamReader(fs);
+                JsonReader reader = new JsonTextReader(treader);
+                ReportDataModel data = serializer.Deserialize<ReportDataModel>(reader);
+                //todo handle empty file...
+                return data;
+            }   
         }
 
         public void SaveModel(ReportDataModel data)

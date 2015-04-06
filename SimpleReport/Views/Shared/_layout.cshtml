@@ -1,6 +1,7 @@
 ﻿@using System.Web.Optimization
 @using SimpleReport.Model
-@model SimpleReport.ViewModel.ReportViewModel
+@using SimpleReport.ViewModel
+@*@model SimpleReport.ViewModel.ReportViewModel*@
 <!doctype html>
 <html lang="en">
 <head>
@@ -24,17 +25,21 @@
                 <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                     <span class="sr-only">Toggle navigation</span>
                 </a>
-                @if (User.IsInRole(Model.AdminRole)) {
-                    <div class="navbar-custom-menu">
-                        <ul class="nav navbar-nav">
-                            <li>
-                                <a href="@Url.Action("Index", "Designer")">
-                                    <i class="fa fa-gear"></i> <span>Admin</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                }
+                    @if (Model != null && Model is ReportViewModel)
+                    {
+                        if (Model.AdminRole == null || User.IsInRole(Model.AdminRole))
+                         {
+                             <div class="navbar-custom-menu">
+                                 <ul class="nav navbar-nav">
+                                     <li>
+                                         <a href="@Url.Action("Index", "Designer")">
+                                             <i class="fa fa-gear"></i> <span>Admin</span>
+                                         </a>
+                                     </li>
+                                 </ul>
+                             </div>
+                         }
+                    }
             </nav>
         </header>
         <aside class="main-sidebar">
@@ -43,21 +48,23 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
                     <li class="header">REPORTS</li>
-                        @foreach (IGrouping<string, ReportInfo> reportGroup in Model.ReportGroups)
-                        {
+                   @if (Model != null && Model is ReportViewModel)
+                   {
+                       foreach (IGrouping<string, ReportInfo> reportGroup in Model.ReportGroups)
+                       {
                             <li class="treeview @if(Model.Report !=null && Model.Report.Group == reportGroup.Key){@Html.Raw("active")}">
                                 <a href="#">
                                     <i class="fa fa-table"></i><span>@reportGroup.Key</span> <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
                                     @foreach (ReportInfo reportInfo in reportGroup)
-                                    {
+                                        {
                                         <li class="@if (Model.Report != null && Model.Report.Id == reportInfo.Id){@Html.Raw("active")}"><a href="@Url.Action("Report", "Home", new {reportId = reportInfo.Id})"><i class="fa fa-circle-o"></i>@reportInfo.Name</a></li>
-                                    }
+                                        }
                                 </ul>
                             </li>
-                        }
-                    @*<li class="header">HELP</li>*@
+                            }
+                    }
                 </ul>
             </section>
             <!-- /.sidebar -->

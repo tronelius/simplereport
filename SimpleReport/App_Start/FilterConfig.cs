@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using SimpleReport.Helpers;
 
 namespace SimpleReport
 {
@@ -7,7 +8,7 @@ namespace SimpleReport
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            
         }
     }
 }

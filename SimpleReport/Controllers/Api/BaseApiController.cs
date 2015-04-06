@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using SimpleReport.Model;
+using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
 
 namespace SimpleReport.Controllers.Api
@@ -9,9 +10,12 @@ namespace SimpleReport.Controllers.Api
     {
 
         protected readonly IStorage _reportStorage;
-        public BaseApiController(IStorage reportstorage)
+        protected readonly ILogger _logger;
+
+        public BaseApiController(IStorage reportstorage, ILogger logger)
         {
             _reportStorage = reportstorage;
+            _logger = logger;
         }
 
         protected void CheckForAdminAccess()

@@ -8,9 +8,12 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Ninject;
 using Ninject.Web.Common;
+using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi;
 using SimpleReport.App_Start;
+using SimpleReport.Helpers;
 using SimpleReport.Model;
+using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
 
 namespace SimpleReport
@@ -34,6 +37,8 @@ namespace SimpleReport
         {
             var kernel = new StandardKernel();
             kernel.Bind<IStorage>().To<FileStorage>().InRequestScope();
+            kernel.Bind<ILogger>().To<Nlogger>();
+            kernel.BindFilter<HandleMyOwnErrorAttribute>(FilterScope.Controller, 0);
             kernel.Bind<ReportResolver>().ToSelf();
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
             return kernel;
