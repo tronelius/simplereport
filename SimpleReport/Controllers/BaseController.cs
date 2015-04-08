@@ -25,8 +25,8 @@ namespace SimpleReport.Controllers
         protected void HasAdminAccess()
         {
             var adminaccess = _reportStorage.GetSettings().AdminAccess;
-            if (!User.IsInRole(adminaccess) && !string.IsNullOrWhiteSpace(adminaccess))
-            Redirect("~");
+            if (!string.IsNullOrWhiteSpace(adminaccess) && !User.IsInRole(adminaccess))
+            Response.Redirect("~",true);
         }
 
 

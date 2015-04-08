@@ -1,0 +1,38 @@
+﻿<div class="row content-text">
+    <div class="col-xs-12">
+         <label class="control-label">Settings</label>
+    </div>
+</div>
+
+<form role="form" ng-hide="!settings">
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <div class="form-group">
+                                <label class="control-label" title="Access rights to admin pages">Access to admin pages</label>
+                                <div>
+                                    <input type="text" ng-model="settings.AdminAccess" class="form-control" title="Access rights to admin pages">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box-footer">
+                <button type="button" class="btn btn-success" ng-click="saveSettings()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</form>

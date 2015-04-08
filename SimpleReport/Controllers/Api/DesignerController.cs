@@ -107,5 +107,21 @@ namespace SimpleReport.Controllers.Api
                 return InternalServerError();
             }
         }
+
+        [AcceptVerbs("POST")]
+        public IHttpActionResult SaveSettings([FromBody]Settings settings)
+        {
+            try
+            {
+                CheckForAdminAccess();
+                _reportStorage.SaveSettings(settings);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
+
     }
 }

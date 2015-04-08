@@ -4,6 +4,6 @@
   "LookupReports": [],
   "AccessLists": [],
   "Settings": {
-    "AdminAccess": null
+    "AdminAccess": "utvecklare"
   }
 }

@@ -240,6 +240,7 @@
     <Content Include="Views\Designer\_Connections.cshtml" />
     <Content Include="Views\Designer\_AccessLists.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Designer\_Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

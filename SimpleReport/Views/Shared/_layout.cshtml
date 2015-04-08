@@ -27,7 +27,7 @@
                 </a>
                     @if (Model != null && Model is ReportViewModel)
                     {
-                        if (Model.AdminRole == null || User.IsInRole(Model.AdminRole))
+                       if (Model.HasAdminAccess(User))
                          {
                              <div class="navbar-custom-menu">
                                  <ul class="nav navbar-nav">

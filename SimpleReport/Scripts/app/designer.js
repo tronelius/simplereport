@@ -12,6 +12,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.connections = data.Connections;
                 $scope.lookupReports = data.LookupReports;
                 $scope.accessLists = data.AccessLists;
+                $scope.settings = data.Settings;
             }).
             error(function (data) {
                 toastr.error("Couldn't get list of reports from server.","Error");
@@ -106,7 +107,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     };
 
     //Connections
-    $scope.connectionChanged = function () { };
+    $scope.connectionChanged = function (){};
     $scope.saveConnection = function () {
         $.ajax({
             type: 'post',
@@ -146,7 +147,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     };
 
     //Dropdown parameters
-    $scope.lookupReportChanged = function () {};
+    $scope.lookupReportChanged = function (){};
     $scope.verifyLookupSql = function () {
         var re = /((\bid\b).+(\bname\b))|((\bname\b).+(\bid\b))/i;
         var match;
@@ -176,7 +177,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     };
 
     //Access Lists
-    $scope.accessListChanged = function () { };
+    $scope.accessListChanged = function (){};
     $scope.addNewAccessList = function() {
         $scope.access = { Id: null };
     };
@@ -193,6 +194,21 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             updateCollection($scope.accessLists, $scope.access);
         }).error(function (data) {
             toastr.error("Server error when saving access control list.", "Error");
+        });
+    };
+
+    //Settings
+    $scope.saveSettings = function() {
+        $.ajax({
+            type: 'post',
+            url: 'api/Designer/SaveSettings',
+            data: JSON.stringify($scope.settings),
+            processData: false,
+            contentType: 'application/json; charset=utf-8'
+        }).success(function (data) {
+            toastr.success("Settings saved", "Saved");
+        }).error(function (data) {
+            toastr.error("Server error when saving settings.", "Error");
         });
     };
 

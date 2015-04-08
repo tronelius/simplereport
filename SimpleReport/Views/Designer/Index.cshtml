@@ -16,6 +16,7 @@
             <li ng-class="{active: activeTab == 'lookup'}"><a data-toggle="tab" href="#tab_2" aria-expanded="false">Dropdown parameters</a></li>
             <li ng-class="{active: activeTab == 'connection'}"><a data-toggle="tab" href="#tab_3" aria-expanded="false">Connections</a></li>
             <li ng-class="{active: activeTab == 'accesslists'}"><a data-toggle="tab" href="#tab_4" aria-expanded="false">Access control lists</a></li>
+            <li ng-class="{active: activeTab == 'settings'}"><a data-toggle="tab" href="#tab_5" aria-expanded="false">Settings</a></li>
         </ul>
     </div>
 
@@ -31,6 +32,9 @@
             </div>
             <div class="tab-pane" id="tab_4">
                 @Html.Partial("_AccessLists")
+            </div>
+            <div class="tab-pane" id="tab_5">
+                @Html.Partial("_Settings")
             </div>
         </div>
 

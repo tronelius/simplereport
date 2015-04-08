@@ -18,6 +18,7 @@ namespace SimpleReport.ViewModel
         public IEnumerable<Connection> Connections { get; set; }
         public IEnumerable<LookupReport> LookupReports { get; set; }
         public List<Access> AccessLists { get; set; }
+        public Settings Settings { get; set; }
 
         public DesignerViewModel(IStorage reportStorage, IPrincipal user)
         {
@@ -28,7 +29,7 @@ namespace SimpleReport.ViewModel
             ParameterInputType types = new ParameterInputType();
             InputTypes = types.ToKeyValues();
             AccessLists.Insert(0,new Access(Guid.Empty,"Free for all",""));
-            
+            Settings = reportStorage.GetSettings();
         }
     }
 }
