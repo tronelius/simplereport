@@ -21,7 +21,10 @@ namespace SimpleReport.Model
         public bool CanExecute() { return Errors.Count(e => e.Level == ErrorLevel.Fatal)> 0;}
         public bool IsValid(){ return Errors.Count(e => e.Level > ErrorLevel.Warning) > 0;}*/
 
-        public ReportInfo(){}
+        public ReportInfo()
+        {
+            Id = Guid.NewGuid();
+        }
         public ReportInfo(Guid id, string name, string description, string group)
         {
             if (string.IsNullOrWhiteSpace(name))

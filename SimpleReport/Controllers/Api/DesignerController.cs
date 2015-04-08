@@ -62,6 +62,21 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
+        public IHttpActionResult VerifyConnection([FromBody]Connection conn)
+        {
+            try
+            {
+                CheckForAdminAccess();
+                var result = conn.VerifyConnectionstring();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
         public IHttpActionResult SaveLookupReport([FromBody]LookupReport lrpt)
         {
             try

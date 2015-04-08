@@ -22,6 +22,14 @@ namespace SimpleReport.Controllers
             _logger = logger;
         }
 
+        protected void HasAdminAccess()
+        {
+            var adminaccess = _reportStorage.GetSettings().AdminAccess;
+            if (!User.IsInRole(adminaccess) && !string.IsNullOrWhiteSpace(adminaccess))
+            Redirect("~");
+        }
+
+
         protected ReportViewModel GetReportViewModel()
         {
             ReportViewModel vm = new ReportViewModel();

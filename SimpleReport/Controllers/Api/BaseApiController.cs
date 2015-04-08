@@ -20,7 +20,8 @@ namespace SimpleReport.Controllers.Api
 
         protected void CheckForAdminAccess()
         {
-            if (!User.IsInRole(_reportStorage.GetSettings().AdminAccess))
+            var adminaccess = _reportStorage.GetSettings().AdminAccess;
+            if (!User.IsInRole(adminaccess) && !string.IsNullOrWhiteSpace(adminaccess))
                 throw new Exception("Action not allowed");
         }
 

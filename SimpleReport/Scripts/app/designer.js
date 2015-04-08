@@ -82,9 +82,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }
         $scope.reportDataChanged();
     };
-    $scope.addNewReport = function () {
+    $scope.addNewReport = function() {
         $scope.report = { Id: null };
-    }
+    };
     $scope.addNewParameter = function (keyOfParameter) {
         //console.debug('new parameter');
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
@@ -123,8 +123,27 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         });
     };
     $scope.addNewConnection = function() {
-        $scope.connection = {Id:null};
-    }
+        $scope.connection = { Id: null };
+    };
+    $scope.verifyConnection = function() {
+        $.ajax({
+            type: 'post',
+            url: 'api/Designer/VerifyConnection',
+            data: JSON.stringify($scope.connection),
+            processData: false,
+            contentType: 'application/json; charset=utf-8'
+        }).success(function (data) {
+            $scope.connection.Verified = data.Success;
+            $scope.$apply();
+            if (data.Success) {
+                toastr.success("Connection verified", "OK!");
+            } else {
+                toastr.error("Connectionstring is not valid, and vill not work", "Not OK!");
+            }
+        }).error(function (data) {
+            toastr.error("Server error when verifing the connection.", "Error");
+        });
+    };
 
     //Dropdown parameters
     $scope.lookupReportChanged = function () {};
@@ -137,9 +156,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             $scope.lookupreport.SqlOk = true;
         }
     }
-    $scope.addNewDropdownParameter = function () {
+    $scope.addNewDropdownParameter = function() {
         $scope.lookupreport = { Id: null };
-    }
+    };
     $scope.saveDropdownParameter = function () {
         $.ajax({
             type: 'post',
@@ -158,9 +177,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
 
     //Access Lists
     $scope.accessListChanged = function () { };
-    $scope.addNewAccessList = function () {
+    $scope.addNewAccessList = function() {
         $scope.access = { Id: null };
-    }
+    };
     $scope.saveAccesList = function () {
         $.ajax({
             type: 'post',
