@@ -73,6 +73,7 @@
     <Compile Include="LookupReport.cs" />
     <Compile Include="ReportInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Storage\DeleteInfo.cs" />
     <Compile Include="Storage\FileStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />
     <Compile Include="KeyValue.cs" />

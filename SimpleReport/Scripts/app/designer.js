@@ -23,18 +23,23 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     //Globals and help functions
     var regExParameterMatch = /(@\w+)/g;
     var parameterPositionHash = [];
-    function updateCollection(collection, updatedEntity) {
+    function updateCollection(collection, updatedEntity, deleted) {
         var index = collection.indexOf(_.find(collection, function (entity) { return entity.Id === updatedEntity.Id }));
-        if (index !== -1) {
-            collection.splice(index, 1, updatedEntity);
-        } else {
-            collection.push(updatedEntity);
+
+        if (deleted) {
+            collection.splice(index, 1);
+        } else {    
+            if (index !== -1) {
+                collection.splice(index, 1, updatedEntity);
+            } else {
+                collection.push(updatedEntity);
+            }
         }
+        $scope.$apply();
     }
 
     //Reports
     $scope.reportDataChanged = function () {
-        console.debug('report changed');
         $scope.latestSql = $scope.report.Sql;
         parameterPositionHash = [];
         while (match = regExParameterMatch.exec($scope.latestSql)) {
@@ -43,19 +48,18 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 parameterPositionHash[match.index] = existingparam.SqlKey;
             }
         }
+        
     };
     $scope.analyzeSQL = function () {
         var currentSQL = $scope.report.Sql;
         var match;
         var currentPosition = $('#sqlarea').prop('selectionStart');
         var foundMatches = [];
+
         while (match = regExParameterMatch.exec(currentSQL)) {
-            //console.debug(match[0]);
             var existingparam = _.findWhere($scope.report.Parameters, { SqlKey: match[0] });
             if (existingparam === undefined) {
                 if (currentPosition >= match.index && currentPosition <= match.index + match[0].length) {
-                    //console.debug('updated existing');
-                    //find out what the changed parameter used to be and get a reference to that
                     var nameOfExisting = parameterPositionHash[match.index];
                     existingparam = _.findWhere($scope.report.Parameters, { SqlKey: nameOfExisting });
                     if (existingparam !== undefined) {
@@ -67,24 +71,45 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                     $scope.addNewParameter(match[0]);
                 }
             }
-            //else {
-            //console.debug('existing untouched');
-            //}
             foundMatches.push(match[0]);
+        }
+
+        //transform from and to-parameters to a period-parameter.
+        var periodIsPresentAndValid = false;
+        var periodFrom = _.findWhere($scope.report.Parameters, { SqlKey: '@from' });
+        var periodTo = _.findWhere($scope.report.Parameters, { SqlKey: '@to' });
+        var periodFromAndTo = _.findWhere($scope.report.Parameters, { SqlKey: '@from_@to' });
+        if (periodFrom !== undefined && periodTo !== undefined) {
+            $scope.report.Parameters.splice($scope.report.Parameters.indexOf(periodTo), 1);
+            periodIsPresentAndValid = true;
+            if (periodFromAndTo === undefined) {
+                periodFrom.SqlKey = '@from_@to';
+                periodFrom.InputType = 3;
+            } else { //combined parameter already exists.
+                $scope.report.Parameters.splice($scope.report.Parameters.indexOf(periodFrom), 1);
+            }
         }
 
         //Delete params no longer in the SQL
         var i = $scope.report.Parameters.length;
         while (i--) {
             if (_.indexOf(foundMatches, $scope.report.Parameters[i].SqlKey) === -1) {
-                $scope.report.Parameters.splice(i, 1);
-                //console.debug('deleted orphaned');
+                if ($scope.report.Parameters[i].SqlKey === '@from_@to') {
+                   if (!periodIsPresentAndValid) {
+                       $scope.report.Parameters.splice(i, 1);
+                   }
+                } else {
+                    $scope.report.Parameters.splice(i, 1);
+                }
             }
         }
+
+        
+
         $scope.reportDataChanged();
     };
     $scope.addNewReport = function() {
-        $scope.report = { Id: null };
+        $scope.report = { Id: null, Parameters:[] };
     };
     $scope.addNewParameter = function (keyOfParameter) {
         //console.debug('new parameter');
@@ -103,6 +128,26 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             updateCollection($scope.reportList, $scope.report);
         }).error(function (data) {
             toastr.error("Server error when saving report.", "Error");
+        });
+    };
+    $scope.deleteReport = function () {
+        $.ajax({
+            type: 'post',
+            url: 'api/Designer/DeleteReport',
+            data: JSON.stringify($scope.report),
+            processData: false,
+            contentType: 'application/json; charset=utf-8'
+        }).success(function (data) {
+            if (data.Success) {
+                toastr.success("Report is deleted", "Deleted");
+                updateCollection($scope.reportList, $scope.report, true);
+                $scope.report = null;
+                $scope.$apply();
+            } else {
+                toastr.error(data.FullMessage, "Error");
+            }
+        }).error(function (data) {
+            toastr.error("Server error when deleting report.", "Error");
         });
     };
 
@@ -145,6 +190,26 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             toastr.error("Server error when verifing the connection.", "Error");
         });
     };
+    $scope.deleteConnection = function () {
+        $.ajax({
+            type: 'post',
+            url: 'api/Designer/DeleteConnection',
+            data: JSON.stringify($scope.connection),
+            processData: false,
+            contentType: 'application/json; charset=utf-8'
+        }).success(function (data) {
+            if (data.Success) {
+                toastr.success("Connection is deleted", "Deleted");
+                updateCollection($scope.connections, $scope.connection, true);
+                $scope.connection = null;
+                $scope.$apply();
+            } else {
+                toastr.error(data.FullMessage, "Error");
+            }
+        }).error(function (data) {
+            toastr.error("Server error when deleting connection.", "Error");
+        });
+    };
 
     //Dropdown parameters
     $scope.lookupReportChanged = function (){};
@@ -175,13 +240,33 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             toastr.error("Server error when saving dropdown parameter.", "Error");
         });
     };
+    $scope.deleteDropdownParameter = function () {
+        $.ajax({
+            type: 'post',
+            url: 'api/Designer/DeleteLookupReport',
+            data: JSON.stringify($scope.lookupreport),
+            processData: false,
+            contentType: 'application/json; charset=utf-8'
+        }).success(function (data) {
+            if (data.Success) {
+                toastr.success("Lookup report is deleted", "Deleted");
+                updateCollection($scope.lookupReports, $scope.lookupreport, true);
+                $scope.lookupreport = null;
+                $scope.$apply();
+            } else {
+                toastr.error(data.FullMessage, "Error");
+            }
+        }).error(function (data) {
+            toastr.error("Server error when deleting lookup report.", "Error");
+        });
+    };
 
     //Access Lists
     $scope.accessListChanged = function (){};
     $scope.addNewAccessList = function() {
         $scope.access = { Id: null };
     };
-    $scope.saveAccesList = function () {
+    $scope.saveAccessList = function () {
         $.ajax({
             type: 'post',
             url: 'api/Designer/SaveAccessList',
@@ -194,6 +279,26 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             updateCollection($scope.accessLists, $scope.access);
         }).error(function (data) {
             toastr.error("Server error when saving access control list.", "Error");
+        });
+    };
+    $scope.deleteAccessList = function() {
+        $.ajax({
+            type: 'post',
+            url: 'api/Designer/DeleteAccessList',
+            data: JSON.stringify($scope.access),
+            processData: false,
+            contentType: 'application/json; charset=utf-8'
+        }).success(function (data) {
+            if (data.Success) {
+                toastr.success("Access control list is deleted", "Deleted");
+                updateCollection($scope.accessLists, $scope.access, true);
+                $scope.access = null;
+                $scope.$apply();
+            } else {
+                toastr.error(data.FullMessage, "Error");
+            }
+        }).error(function (data) {
+            toastr.error("Server error when deleting access control list.", "Error");
         });
     };
 

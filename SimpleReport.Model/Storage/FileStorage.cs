@@ -110,6 +110,18 @@ namespace SimpleReport.Model.Storage
             return true;
         }
 
+        public DeleteInfo DeleteReport(Report report)
+        {
+            Report existing = _dataModel.Reports.FirstOrDefault(r => r.Id == report.Id);
+            if (existing == null)
+                return new DeleteInfo(false, "Report doesn't exists");
+
+            _dataModel.Reports.Remove(existing);
+            SaveModel(_dataModel);
+            return new DeleteInfo(true, "Report was deleted");
+        }
+
+
         public IEnumerable<Connection> GetConnections()
         {
             return _dataModel.Connections;
@@ -129,6 +141,22 @@ namespace SimpleReport.Model.Storage
             SaveModel(_dataModel);
             return true;
         }
+
+        public DeleteInfo DeleteConnection(Connection connection)
+        {
+            Connection existing = _dataModel.Connections.FirstOrDefault(r => r.Id == connection.Id);
+            if (existing == null)
+                return new DeleteInfo(false, "Connection doesn't exists");
+
+            IEnumerable<Report> existingreports = _dataModel.Reports.Where(r => r.ConnectionId == connection.Id);
+            if (existingreports.Any())
+                return new DeleteInfo(false, "Connection cannot be deleted, it's used by other reports.", existingreports);
+
+            _dataModel.Connections.Remove(existing);
+            SaveModel(_dataModel);
+            return new DeleteInfo(true, "Connection was deleted");
+        }
+
 
         public IEnumerable<LookupReport> GetLookupReports()
         {
@@ -154,6 +182,21 @@ namespace SimpleReport.Model.Storage
             return true;          
         }
 
+        public DeleteInfo DeleteLookupReport(LookupReport lookupReport)
+        {
+            LookupReport existing = _dataModel.LookupReports.FirstOrDefault(r => r.Id == lookupReport.Id);
+            if (existing == null)
+                return new DeleteInfo(false, "Lookup report don't exists");
+
+            IEnumerable<Report> existingreports = _dataModel.Reports.Where(r => r.Parameters.Any(p => p.LookupReportId == lookupReport.Id));
+            if (existingreports.Any())
+                return new DeleteInfo(false, "Lookup report cannot be deleted, it's used by other reports.", existingreports);
+
+            _dataModel.LookupReports.Remove(existing);
+            SaveModel(_dataModel);
+            return new DeleteInfo(true, "Lookup report was deleted");
+        }
+
 
         public IEnumerable<Access> GetAccessLists()
         {
@@ -174,6 +217,21 @@ namespace SimpleReport.Model.Storage
             _dataModel.AccessLists.Add(accesslist);
             SaveModel(_dataModel);
             return true;      
+        }
+
+        public DeleteInfo DeleteAccessList(Access acc)
+        {
+            var existing = _dataModel.AccessLists.FirstOrDefault(a => a.Id == acc.Id);
+            if (existing == null)
+                return new DeleteInfo(false, "Accesslist don't exists");
+
+            IEnumerable<Report> existingreportsWithAccesslist = _dataModel.Reports.Where(r => r.AccessId == acc.Id);
+            if (existingreportsWithAccesslist.Any())
+                return new DeleteInfo(false, "Accesslist cannot be deleted, it's used by other reports.", existingreportsWithAccesslist);
+            
+            _dataModel.AccessLists.Remove(existing);
+            SaveModel(_dataModel);
+            return new DeleteInfo(true, "Accesslist was deleted");
         }
 
         public Settings GetSettings()

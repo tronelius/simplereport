@@ -34,7 +34,7 @@
           "Value": null,
           "InputType": 3,
           "Mandatory": true,
-          "HelpText": "V�lj period",
+          "HelpText": "Välj period",
           "Key": "periodstart_periodend",
           "Choices": {
             "2013-04-08_2013-04-09": "This Week",
@@ -56,13 +56,25 @@
     },
     {
       "ResultType": 0,
-      "Parameters": [],
+      "Parameters": [
+        {
+          "Label": "Date range",
+          "SqlKey": "@from_@to",
+          "Value": "",
+          "InputType": 3,
+          "Mandatory": false,
+          "HelpText": "",
+          "Key": "from_to",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
       "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
-      "Sql": "Select * from Person.Address",
-      "Id": "c6208355-9124-458e-b1c5-c9e2981fbc18",
-      "Name": "Ny rapport",
-      "Group": "Pers grupp",
-      "Description": "K�r denna n�r ni har ett rapportbehov!",
+      "Sql": "select * from production.product where sellstartdate between @from and @to",
+      "Id": "5e3e3a78-c78b-496d-b4ea-e59cab6549de",
+      "Name": "product with sellstart",
+      "Group": "Production",
+      "Description": null,
       "AccessId": "00000000-0000-0000-0000-000000000000"
     },
     {
@@ -97,7 +109,7 @@
       "Name": "Product List",
       "Group": "Production",
       "Description": "gets all products from a certain category",
-      "AccessId": "37cc35cc-f1e7-4977-a83c-5a321b8acae4"
+      "AccessId": "d8e0e340-42d0-4922-a686-b2d5b574576c"
     }
   ],
   "LookupReports": [
@@ -127,9 +139,36 @@
       "ADGroup": "utvecklare2"
     },
     {
-      "Id": "2bfdc97a-c71e-4679-881a-15214895756b",
-      "Name": "Sales",
-      "ADGroup": "Sales"
+      "Id": "d8e0e340-42d0-4922-a686-b2d5b574576c",
+      "Name": "Test",
+      "ADGroup": "utvecklare"
+    }
+  ],
+  "Settings": {
+    "AdminAccess": "utvecklare"
+  }
+}
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "AccessLists": [
+    {
+      "Id": "37cc35cc-f1e7-4977-a83c-5a321b8acae4",
+      "Name": "Only developers",
+      "ADGroup": "utvecklare2"
+    },
+    {
+      "Id": "d8e0e340-42d0-4922-a686-b2d5b574576c",
+      "Name": "Test",
+      "ADGroup": "utvecklare"
+    }
+  ],
+  "Settings": {
+    "AdminAccess": "utvecklare"
+  }
+}
+}     "Name": "Me only",
+      "ADGroup": "anställda"
     }
   ],
   "Settings": {

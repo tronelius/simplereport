@@ -25,7 +25,13 @@ namespace SimpleReport.Model.Storage
         IEnumerable<Access> GetAccessLists();
         Access GetAccessList(Guid id);
         bool SaveAccessList(Access accesslist);
+        DeleteInfo DeleteAccessList(Access acc);
+
         Settings GetSettings();
         bool SaveSettings(Settings settings);
+
+        DeleteInfo DeleteConnection(Connection connection);
+        DeleteInfo DeleteLookupReport(LookupReport lookupReport);
+        DeleteInfo DeleteReport(Report report);
     }
 }

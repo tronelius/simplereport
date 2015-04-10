@@ -46,6 +46,21 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
+        public IHttpActionResult DeleteReport([FromBody]Report rpt)
+        {
+            try
+            {
+                CheckForAdminAccess();
+                var deleteinfo = _reportStorage.DeleteReport(rpt);
+                return Ok(deleteinfo);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
         public IHttpActionResult SaveConnection([FromBody]Connection conn)
         {
             try
@@ -77,6 +92,21 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
+        public IHttpActionResult DeleteConnection([FromBody]Connection conn)
+        {
+            try
+            {
+                CheckForAdminAccess();
+                var deleteinfo = _reportStorage.DeleteConnection(conn);
+                return Ok(deleteinfo);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
         public IHttpActionResult SaveLookupReport([FromBody]LookupReport lrpt)
         {
             try
@@ -93,14 +123,43 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
+        public IHttpActionResult DeleteLookupReport([FromBody]LookupReport lrpt)
+        {
+            try
+            {
+                CheckForAdminAccess();
+                var deleteinfo = _reportStorage.DeleteLookupReport(lrpt);
+                return Ok(deleteinfo);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
         public IHttpActionResult SaveAccessList([FromBody]Access acc)
         {
             try
             {
                 CheckForAdminAccess();
-                HandleNewEntity(acc);
                 _reportStorage.SaveAccessList(acc);
                 return Ok(acc);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
+        public IHttpActionResult DeleteAccessList([FromBody]Access acc)
+        {
+            try
+            {
+                CheckForAdminAccess();
+                var deleteinfo = _reportStorage.DeleteAccessList(acc);
+                return Ok(deleteinfo);
             }
             catch (Exception ex)
             {

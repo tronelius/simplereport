@@ -39,8 +39,7 @@ namespace SimpleReport.Controllers
 
         public FileResult ExecuteReport(Guid reportId)
         {
-            var vm = GetReportViewModel();
-
+            
             Report report = _reportResolver.GetReport(reportId);
             report.ReadParameters(Request.QueryString);
 
