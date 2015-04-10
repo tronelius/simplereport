@@ -27,6 +27,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in GetviewModel", ex);
                 return InternalServerError();
             }
         }
@@ -41,6 +42,7 @@ namespace SimpleReport.Controllers.Api
                 return Ok(reportToSave);
             } catch (Exception ex)
             {
+                _logger.Error("Exception in SaveReport", ex);
                 return InternalServerError();
             }
         }
@@ -56,6 +58,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in DeleteReport", ex);
                 return InternalServerError();
             }
         }
@@ -72,6 +75,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in SaveConnection", ex);
                 return InternalServerError();
             }
         }
@@ -87,6 +91,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in VerifyConnection", ex);
                 return InternalServerError();
             }
         }
@@ -102,6 +107,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in DeleteConnection", ex);
                 return InternalServerError();
             }
         }
@@ -118,6 +124,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in SaveLookupReport", ex);
                 return InternalServerError();
             }
         }
@@ -133,6 +140,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in DeleteLookupReport", ex);
                 return InternalServerError();
             }
         }
@@ -148,6 +156,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in SaveAccessList", ex);
                 return InternalServerError();
             }
         }
@@ -163,6 +172,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in DeleteAccessList", ex);
                 return InternalServerError();
             }
         }
@@ -178,6 +188,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
+                _logger.Error("Exception in SaveSettings", ex);
                 return InternalServerError();
             }
         }

@@ -41,7 +41,6 @@ namespace SimpleReport.Model
                             ws.Cells["A2"].LoadFromDataTable(Table, true);
                             return pck.GetAsByteArray();
                         }
-                        break;
                     }
                 default:
                     throw new ArgumentOutOfRangeException("Unknown ResultType");

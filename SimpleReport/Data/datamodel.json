@@ -1,12 +1,6 @@
 {
   "Connections": [
     {
-      "Id": "f7d12d58-300c-4505-a440-a5d30fc78086",
-      "Verified": false,
-      "Name": "Adventureworks Test",
-      "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
-    },
-    {
       "Id": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Verified": false,
       "Name": "Adventureworks",
@@ -103,13 +97,36 @@
           "LookupReportId": "4866357e-3c4d-459c-937e-254ffe37f428"
         }
       ],
-      "ConnectionId": "f7d12d58-300c-4505-a440-a5d30fc78086",
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
       "Sql": "SELECT TOP 1000 [ProductID],[Name] ,[ProductNumber] from [Production].[Product] where [ProductSubcategoryID] = @subid or productModelid = @model",
       "Id": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
       "Name": "Product List",
       "Group": "Production",
       "Description": "gets all products from a certain category",
-      "AccessId": "d8e0e340-42d0-4922-a686-b2d5b574576c"
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Between dates",
+          "SqlKey": "@from_@to",
+          "Value": "",
+          "InputType": 3,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "from_to",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Sql": "select * from [Production].[Product] where sellstartDate between @from and @to",
+      "Id": "57a5fac4-53c3-4093-8470-bf1b2948e283",
+      "Name": "Sellstart",
+      "Group": "SellStart",
+      "Description": null,
+      "AccessId": "00000000-0000-0000-0000-000000000000"
     }
   ],
   "LookupReports": [
@@ -137,34 +154,12 @@
       "Id": "37cc35cc-f1e7-4977-a83c-5a321b8acae4",
       "Name": "Only developers",
       "ADGroup": "utvecklare2"
-    },
-    {
-      "Id": "d8e0e340-42d0-4922-a686-b2d5b574576c",
-      "Name": "Test",
-      "ADGroup": "utvecklare"
     }
   ],
   "Settings": {
     "AdminAccess": "utvecklare"
   }
-}
-      "AccessId": "00000000-0000-0000-0000-000000000000"
-    }
-  ],
-  "AccessLists": [
-    {
-      "Id": "37cc35cc-f1e7-4977-a83c-5a321b8acae4",
-      "Name": "Only developers",
-      "ADGroup": "utvecklare2"
-    },
-    {
-      "Id": "d8e0e340-42d0-4922-a686-b2d5b574576c",
-      "Name": "Test",
-      "ADGroup": "utvecklare"
-    }
-  ],
-  "Settings": {
-    "AdminAccess": "utvecklare"
+}ess": "utvecklare"
   }
 }
 }     "Name": "Me only",
