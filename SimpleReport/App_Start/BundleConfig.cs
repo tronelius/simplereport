@@ -29,9 +29,10 @@ namespace SimpleReport.App_Start
                 bundles.Add(new StyleBundle("~/bundles/css").Include(
                           "~/Content/bootstrap.css",
                           "~/Content/custom.css",
-                          "~/Content/css/AdminLTE.css",
+                          "~/Content/css/AdminLTE.min.css",
                           "~/Content/css/skins/_all-skins.css",
-                          "~/Content/toastr.css"));
+                          "~/Content/toastr.min.css",
+                          "~/Content/font-awesome.min.css"));
             }
         }
     }
