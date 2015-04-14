@@ -1,6 +1,21 @@
 ﻿@using System.Web.Optimization
 @using SimpleReport.Model
 @using SimpleReport.ViewModel
+
+@helper Menuhelper(IGrouping<string, ReportInfo> reportGroup)
+{
+    foreach (ReportInfo reportInfo in reportGroup)
+    {
+        <li class="
+        @if (Model.Report != null && Model.Report.Id == reportInfo.Id)
+        {
+            @Html.Raw("active")
+        }">
+            <a href="@Url.Action("Report", "Home", new {reportId = reportInfo.Id})">
+                <i class="fa fa-circle-o"></i>@reportInfo.Name</a>
+        </li>
+    }
+}
 <!doctype html>
 <html lang="en">
 <head>
@@ -49,19 +64,26 @@
                    {
                        foreach (IGrouping<string, ReportInfo> reportGroup in Model.ReportGroups)
                        {
-                            <li class="treeview @if(Model.Report !=null && Model.Report.Group == reportGroup.Key){@Html.Raw("active")}">
-                                <a href="#">
-                                    <i class="fa fa-table"></i><span>@reportGroup.Key</span> <i class="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul class="treeview-menu">
-                                    @foreach (ReportInfo reportInfo in reportGroup)
-                                        {
-                                        <li class="@if (Model.Report != null && Model.Report.Id == reportInfo.Id){@Html.Raw("active")}"><a href="@Url.Action("Report", "Home", new {reportId = reportInfo.Id})"><i class="fa fa-circle-o"></i>@reportInfo.Name</a></li>
-                                        }
-                                </ul>
-                            </li>
-                            }
-                    }
+                           if (!string.IsNullOrWhiteSpace(reportGroup.Key))
+                           {
+                               <li class="treeview @if (Model.Report != null && Model.Report.Group == reportGroup.Key)
+                                                   {
+                                                       @Html.Raw("active")
+                                                   }">
+                                   <a href="#">
+                                       <i class="fa fa-table"></i><span>@reportGroup.Key</span> <i class="fa fa-angle-left pull-right"></i>
+                                   </a>
+                                   <ul class="treeview-menu">
+                                       @Menuhelper(reportGroup)
+                                   </ul>
+                               </li>
+                           }
+                           else
+                           {
+                               @Menuhelper(reportGroup)
+                           }
+                       }
+                   }
                 </ul>
             </section>
             <!-- /.sidebar -->
