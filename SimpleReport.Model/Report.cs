@@ -15,7 +15,7 @@ namespace SimpleReport.Model
 {
     public class Report : LookupReport
     {
-        //private string 
+      
         public ResultType ResultType { get; set; }
         public ParameterList Parameters { get; set; }
 
@@ -23,6 +23,7 @@ namespace SimpleReport.Model
         {
             ResultType= ResultType.SimpleExcel;
             Parameters = new ParameterList();
+           
         } 
 
         public Report(Guid id, string name, string description, Guid connectionId, string sql, List<Parameter> parameters, ResultType resultType, string group) : base(id,name, description,connectionId,sql, group)
@@ -41,7 +42,10 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
             
-            DataTable result = ADO.GetResults<dynamic>(Connection, Sql, Parameters.CreateParameters());
+            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
+            //IEnumerable<dynamic> resultEnumerable = _executor.GetResult(Connection, Sql, Parameters.CreateParameters());
+            //IDataReader reader = ADO.GetDataReaderResults(Connection, Sql, Parameters.CreateParameters());
+            //return new Result(this.ResultType, reader,this);
             return new Result(this.ResultType, result,this);
         }
 

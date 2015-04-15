@@ -10,7 +10,7 @@ namespace SimpleReport.Model
 {
     public static class ADO
     {
-        public static DataTable GetResults<T>(Connection conn, string query, IEnumerable<SqlParameter> param)
+        public static DataTable GetResults(Connection conn, string query, IEnumerable<SqlParameter> param)
         {
             using (SqlConnection cn = GetOpenConnection(conn))
             {
@@ -35,6 +35,26 @@ namespace SimpleReport.Model
                 {
                     cn.Close();
                 }
+            }
+        }
+
+        public static IDataReader GetDataReaderResults(Connection conn, string query, IEnumerable<SqlParameter> param)
+        {
+            SqlConnection cn = GetOpenConnection(conn);
+            try
+            {
+                SqlCommand cmd = null;
+                cmd = cn.CreateCommand();
+                cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
+                cmd.CommandText = query;
+                if (param != null)
+                    cmd.Parameters.AddRange(param.ToArray());
+                return cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            }
+            catch (Exception ex)
+            {
+                cn.Close();
+                throw;
             }
         }
 
