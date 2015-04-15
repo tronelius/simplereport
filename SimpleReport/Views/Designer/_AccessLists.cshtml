@@ -48,7 +48,7 @@
             <div class="alert alert-info alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <h4><i class="icon fa fa-info"></i> AD-groups you belong to!</h4>
-                Thee are the groups the currently logged user (you) belong to:<br />
+                These are the groups the currently logged in user (@User.Identity.Name) belong to:<br />
 
                 @foreach (var group in Request.LogonUserIdentity.Groups)
                 {
