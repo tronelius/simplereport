@@ -1,4 +1,17 @@
-﻿<div class="row content-text" ng-hide="!accessLists">
+﻿@using System.Security.Principal
+
+@helper GetGroupName(IdentityReference @group)
+{
+    try
+    {
+        @Html.Raw(@group.Translate(typeof (System.Security.Principal.NTAccount)).ToString())
+    }
+    catch (Exception ex)
+    {
+        @Html.Raw("Unknown group")
+    }
+}
+<div class="row content-text" ng-hide="!accessLists">
     <div class="col-xs-12">
         <div class="form-inline">
             <div class="form-group">
@@ -52,7 +65,7 @@
 
                 @foreach (var group in Request.LogonUserIdentity.Groups)
                 {
-                    @Html.Raw(group.Translate(typeof(System.Security.Principal.NTAccount)).ToString());<br />
+                    @GetGroupName(@group)<br />
                 }
             </div>
         </div>
