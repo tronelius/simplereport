@@ -41,12 +41,21 @@ namespace SimpleReport.Controllers
         {
             
             Report report = _reportResolver.GetReport(reportId);
-            report.ReadParameters(Request.QueryString);
+            if (report.IsAvailableForMe(User, _reportStorage.GetSettings().AdminAccess)) { 
+                report.ReadParameters(Request.QueryString);
 
-            Result result = report.Execute();
-            return File(result.AsFile(), result.MimeType, result.FileName);
+                Result result = report.Execute();
+                return File(result.AsFile(), result.MimeType, result.FileName);
+            }
+            return File(GetBytes("Not allowed to execute this report"), "text/plain","NotAllowed.txt");
         }
 
-       
+
+        static byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
     }
 }

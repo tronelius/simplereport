@@ -39,6 +39,7 @@ namespace SimpleReport.Model.Storage
 
         public void InitializeStorage()
         {
+            using(var fs= File.Create(_filename));
             ReportDataModel model = new ReportDataModel();
             SaveModel(model);
         }
@@ -59,7 +60,7 @@ namespace SimpleReport.Model.Storage
 
         public void SaveModel(ReportDataModel data)
         {
-            using (FileStream fs = File.Open(_filename, FileMode.OpenOrCreate, FileAccess.Write))
+            using (FileStream fs = File.Open(_filename, FileMode.Truncate, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(fs))
             using (JsonWriter jw = new JsonTextWriter(sw))
             {
