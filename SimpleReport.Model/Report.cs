@@ -23,7 +23,6 @@ namespace SimpleReport.Model
         {
             ResultType= ResultType.SimpleExcel;
             Parameters = new ParameterList();
-           
         } 
 
         public Report(Guid id, string name, string description, Guid connectionId, string sql, List<Parameter> parameters, ResultType resultType, string group) : base(id,name, description,connectionId,sql, group)
@@ -49,10 +48,12 @@ namespace SimpleReport.Model
             return new Result(this.ResultType, result,this);
         }
 
-        public bool IsAvailableForMe(IPrincipal user, string adminAccessRole)
+        public bool IsAvailableForMe(IPrincipal user, Access adminAccess)
         {
-            return (Access == null || user.IsInRole(Access.ADGroup) || (user.IsInRole(adminAccessRole) || adminAccessRole == null));
+            return (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));
         }
+
+      
 
         public void ReadParameters(NameValueCollection queryString)
         {

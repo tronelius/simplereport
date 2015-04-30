@@ -23,11 +23,7 @@ namespace SimpleReport.ViewModel
     public class ReportViewModel : ReportInfoViewModel
     {
         public Report Report { get; set; }
-        public string AdminRole { get; set; }
-
-        public bool HasAdminAccess(IPrincipal User)
-        {
-            return (string.IsNullOrWhiteSpace(AdminRole) || User.IsInRole(AdminRole));
-        }
+        public bool HasAdminAccess { get; set; }
+      
     }
 }

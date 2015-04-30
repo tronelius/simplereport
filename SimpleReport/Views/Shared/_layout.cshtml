@@ -39,7 +39,7 @@
                 </a>
                     @if (Model != null && Model is ReportViewModel)
                     {
-                       if (Model.HasAdminAccess(User))
+                        if (Model.HasAdminAccess)
                          {
                              <div class="navbar-custom-menu">
                                  <ul class="nav navbar-nav">

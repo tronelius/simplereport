@@ -11,18 +11,14 @@ namespace SimpleReport.Controllers.Api
 
         protected readonly IStorage _reportStorage;
         protected readonly ILogger _logger;
+        protected Access _adminAccess;
 
         public BaseApiController(IStorage reportstorage, ILogger logger)
         {
             _reportStorage = reportstorage;
             _logger = logger;
-        }
+            _adminAccess = _reportStorage.GetSettings().AdminAccessChecker();
 
-        protected void CheckForAdminAccess()
-        {
-            var adminaccess = _reportStorage.GetSettings().AdminAccess;
-            if (!string.IsNullOrWhiteSpace(adminaccess) && !User.IsInRole(adminaccess))
-                throw new Exception("Action not allowed");
         }
 
         protected void HandleNewEntity(IEntity entity)

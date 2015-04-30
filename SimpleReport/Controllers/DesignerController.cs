@@ -15,8 +15,12 @@ namespace SimpleReport.Controllers
 
         public ActionResult Index()
         {
-            HasAdminAccess();
-            return View(GetReportViewModel());
+            if (!_adminAccess.IsAvailableForMe(User)) {
+               Response.Redirect("~", true);
+                return new EmptyResult();
+            }
+            else
+                return View(GetReportViewModel());
         }
 
 

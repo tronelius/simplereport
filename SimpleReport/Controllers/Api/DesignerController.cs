@@ -21,7 +21,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 DesignerViewModel vm = new DesignerViewModel(_reportStorage, User);
                 return Ok(vm);
             }
@@ -36,7 +36,7 @@ namespace SimpleReport.Controllers.Api
         public IHttpActionResult SaveReport([FromBody]Report reportToSave)
         {
             try {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 HandleNewEntity(reportToSave);
                 _reportStorage.SaveReport(reportToSave);
                 return Ok(reportToSave);
@@ -52,7 +52,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 var deleteinfo = _reportStorage.DeleteReport(rpt);
                 return Ok(deleteinfo);
             }
@@ -68,7 +68,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 HandleNewEntity(conn);
                 _reportStorage.SaveConnection(conn);
                 return Ok(conn);
@@ -85,7 +85,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 var result = conn.VerifyConnectionstring();
                 return Ok(result);
             }
@@ -101,7 +101,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 var deleteinfo = _reportStorage.DeleteConnection(conn);
                 return Ok(deleteinfo);
             }
@@ -117,7 +117,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 HandleNewEntity(lrpt);
                 _reportStorage.SaveLookupReport(lrpt);
                 return Ok(lrpt);
@@ -134,7 +134,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 var deleteinfo = _reportStorage.DeleteLookupReport(lrpt);
                 return Ok(deleteinfo);
             }
@@ -150,7 +150,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 _reportStorage.SaveAccessList(acc);
                 return Ok(acc);
             }
@@ -166,7 +166,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 var deleteinfo = _reportStorage.DeleteAccessList(acc);
                 return Ok(deleteinfo);
             }
@@ -182,7 +182,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                CheckForAdminAccess();
+                _adminAccess.IsAllowedForMe(User);
                 _reportStorage.SaveSettings(settings);
                 return Ok();
             }

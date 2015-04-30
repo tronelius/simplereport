@@ -25,6 +25,7 @@ namespace SimpleReport.Model
         {
             Id = Guid.NewGuid();
         }
+
         public ReportInfo(Guid id, string name, string description, string group)
         {
             if (string.IsNullOrWhiteSpace(name))

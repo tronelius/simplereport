@@ -15,26 +15,21 @@ namespace SimpleReport.Controllers
     {
         protected readonly IStorage _reportStorage;
         protected readonly ILogger _logger;
+        protected readonly Access _adminAccess;
 
         public BaseController(IStorage reportStorage, ILogger logger)
         {
             _reportStorage = reportStorage;
             _logger = logger;
-        }
+            _adminAccess = _reportStorage.GetSettings().AdminAccessChecker();
 
-        protected void HasAdminAccess()
-        {
-            var adminaccess = _reportStorage.GetSettings().AdminAccess;
-            if (!string.IsNullOrWhiteSpace(adminaccess) && !User.IsInRole(adminaccess))
-            Response.Redirect("~",true);
         }
-
 
         protected ReportViewModel GetReportViewModel()
         {
             ReportViewModel vm = new ReportViewModel();
-            vm.AdminRole = _reportStorage.GetSettings().AdminAccess;
-            vm.Reports = _reportStorage.GetAllReports().Where(a => a.IsAvailableForMe(User, _reportStorage.GetSettings().AdminAccess));
+            vm.HasAdminAccess = _reportStorage.GetSettings().AdminAccessChecker().IsAvailableForMe(User);
+            vm.Reports = _reportStorage.GetAllReports().Where(a => a.IsAvailableForMe(User, _adminAccess));
             return vm;
         }
         

@@ -30,7 +30,7 @@ namespace SimpleReport.Controllers
         {
             var vm = GetReportViewModel();
             var report = _reportResolver.GetReport(reportId);
-            if (!report.IsAvailableForMe(User, _reportStorage.GetSettings().AdminAccess))
+            if (!report.IsAvailableForMe(User, _adminAccess))
                 ModelState.AddModelError("AccessControl","You don't have access to view this report!");
             else
                 vm.Report = report;
@@ -41,7 +41,7 @@ namespace SimpleReport.Controllers
         {
             
             Report report = _reportResolver.GetReport(reportId);
-            if (report.IsAvailableForMe(User, _reportStorage.GetSettings().AdminAccess)) { 
+            if (report.IsAvailableForMe(User, _adminAccess)) { 
                 report.ReadParameters(Request.QueryString);
 
                 Result result = report.Execute();
