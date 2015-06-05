@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Principal;
+using System.Web;
 
 namespace SimpleReport.Model.Storage
 {
@@ -33,5 +34,7 @@ namespace SimpleReport.Model.Storage
         DeleteInfo DeleteConnection(Connection connection);
         DeleteInfo DeleteLookupReport(LookupReport lookupReport);
         DeleteInfo DeleteReport(Report report);
+        void SaveTemplate(HttpPostedFileBase file, Guid reportId);
+        Template GetTemplate(Guid reportId);
     }
 }

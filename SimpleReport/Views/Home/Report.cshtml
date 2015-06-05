@@ -36,57 +36,89 @@
             @using (Html.BeginForm("ExecuteReport", "Home", FormMethod.Get, new { role = "form" }))
             {
                 <input type="hidden" name="reportId" value="@Model.Report.Id" class="form-control">
-                
-                    <div class="box box-primary" data-ng-if="viewModel.Report.Parameters.length">
-                        <div class="box-header">
-                            <h3 class="box-title">Parameters</h3>
-                        </div>
 
-                        <div class="box-body">
-                            <div class="row">
+                <div class="box box-primary" data-ng-if="viewModel.Report.Parameters.length">
+                    <div class="box-header">
+                        <h3 class="box-title">Parameters</h3>
+                    </div>
 
-                                
-                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" data-ng-repeat="par in viewModel.Report.Parameters track by par.Key">
-                                        <div class="form-group">
-                                            <label class="control-label" for="{{par.Key}}">{{par.Label}}</label>
+                    <div class="box-body">
+                        <div class="row">
 
-                                            <div data-ng-switch="par.InputType">
-                                                <input data-ng-switch-when="@((int) ParameterInputType.Integer)" data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" value="{{par.Value}}" placeholder="Integer" class="numeric form-control">
 
-                                                <div data-ng-switch-when="@((int) ParameterInputType.Date)"  class="input-group">
-                                                    <div class="input-group-addon">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </div>
-                                                    <input type="text" name="{{par.Key}}" value="{{par.Value}}" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right">
-                                                </div>
+                            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" data-ng-repeat="par in viewModel.Report.Parameters track by par.Key">
+                                <div class="form-group">
+                                    <label class="control-label" for="{{par.Key}}">{{par.Label}}</label>
 
-                                                <select data-ng-switch-when="@((int) ParameterInputType.Period)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control">
-                                                    <option value="">[Please Choose...]</option>
-                                                    <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
-                                                </select>
+                                    <div data-ng-switch="par.InputType">
+                                        <input data-ng-switch-when="@((int) ParameterInputType.Integer)" data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" value="{{par.Value}}" placeholder="Integer" class="numeric form-control">
 
-                                                <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control">
-                                                    <option value="">[Please Choose...]</option>
-                                                    <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
-                                                </select>
-
-                                                <input data-ng-switch-default type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" value="{{par.Value}}" class="form-control" placeholder="String">
+                                        <div data-ng-switch-when="@((int) ParameterInputType.Date)" class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
                                             </div>
-
-                                            <span class="help-block">{{par.HelpText}}</span>
-                                            <label for="{{par.Key}}" generated="true" class="help-block error"></label>
+                                            <input type="text" name="{{par.Key}}" value="{{par.Value}}" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right">
                                         </div>
+
+                                        <select data-ng-switch-when="@((int) ParameterInputType.Period)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control">
+                                            <option value="">[Please Choose...]</option>
+                                            <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
+                                        </select>
+
+                                        <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control">
+                                            <option value="">[Please Choose...]</option>
+                                            <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
+                                        </select>
+
+                                        <input data-ng-switch-default type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" value="{{par.Value}}" class="form-control" placeholder="String">
                                     </div>
 
+                                    <span class="help-block">{{par.HelpText}}</span>
+                                    <label for="{{par.Key}}" generated="true" class="help-block error"></label>
+                                </div>
                             </div>
+
                         </div>
                     </div>
-                
-                    <p data-ng-if="!viewModel.Report.Parameters.length">This report has no parameters, just click on execute.</p>
-                
-                <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Execute</button>
                 </div>
+
+                <p data-ng-if="!viewModel.Report.Parameters.length">This report has no parameters, just click on execute.</p>
+
+                <div class="box-footer row">
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">Execute</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'onScreen'">On screen</button>
+                    </div>
+
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'subscribe'">Subscribe</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editSubscriptions'">Edit subscriptions</button>
+                    </div>
+
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editTemplate'">Edit template</button>
+                    </div>
+
+                </div>
+
+                <div data-ng-show="selectedAction" data-ng-switch="selectedAction" class="box box-actions" style="margin-top: 20px;">
+                    <div data-ng-switch-when="onScreen">
+                        <div>On screen is not available yet</div>
+                    </div>
+
+                    <div data-ng-switch-when="subscribe">
+                        <div>Subscribe is not available yet</div>
+                    </div>
+
+                    <div data-ng-switch-when="editSubscriptions">
+                        <div>Editing subscriptions is not available yet</div>
+                    </div>
+
+                    <div data-ng-switch-when="editTemplate">
+                        <div data-template-upload data-reportid="{{viewModel.Report.Id}}"></div>
+                    </div>
+                </div>
+                
             }
         </section>
     }

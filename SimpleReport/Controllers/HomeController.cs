@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Web;
 using System.Web.Mvc;
 using SimpleReport.Model;
 using SimpleReport.Model.Logging;
-using SimpleReport.ViewModel;
 
 namespace SimpleReport.Controllers
 {
@@ -50,11 +45,31 @@ namespace SimpleReport.Controllers
             return File(GetBytes("Not allowed to execute this report"), "text/plain","NotAllowed.txt");
         }
 
+        public ActionResult UploadTemplate(Guid reportId)
+        {
+            if (Request.Files.Count > 0)
+            {
+                var file = Request.Files[0];
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    _reportResolver.Storage.SaveTemplate(file, reportId);
+                }
+            }
+
+            return Json(new {status = "ok"});
+        }
+
+        public ActionResult DownloadTemplate(Guid reportId)
+        {
+            var template = _reportResolver.Storage.GetTemplate(reportId);
+            return File(template.Bytes, template.Mime, template.Filename);
+        }
 
         static byte[] GetBytes(string str)
         {
             byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }
     }

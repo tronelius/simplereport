@@ -45,3 +45,11 @@
     margin: 0;
   }
 }*/
+
+.box-footer {
+  margin: 0;
+}
+
+.box-actions {
+    padding: 20px;
+}

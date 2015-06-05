@@ -1,0 +1,12 @@
+﻿<div>
+    Template
+    <div class="row">
+        <div class="button col-md-3" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+            Select File
+            <div class="progress" data-ng-show="progress">
+                <div class="progress-bar" role="progressbar" ng-style="{ 'width': progress + '%' }"></div>
+            </div>
+        </div>
+        <a href="{{downloadLink}}" class="button">Download</a>        
+    </div>
+</div>

@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Web;
 using Newtonsoft.Json;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
@@ -68,6 +69,19 @@ namespace SimpleReport.Model.Storage
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(jw, data);
             }
+        }
+
+        public void SaveTemplate(HttpPostedFileBase file, Guid reportId)
+        {
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", reportId + ".xlsx");
+            file.SaveAs(filepath);
+        }
+
+        public Template GetTemplate(Guid reportId)
+        {
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", reportId + ".xlsx");
+            var bytes = File.ReadAllBytes(filepath);
+            return new Template {Bytes = bytes, Mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel", Filename = reportId + ".xlsx"};
         }
 
         public IEnumerable<Report> GetAllReports()
