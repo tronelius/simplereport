@@ -1,111 +1,93 @@
-﻿@using SimpleReport.Model
+﻿@using Newtonsoft.Json
+@using SimpleReport.Model
 @model SimpleReport.ViewModel.ReportViewModel
 @{
     ViewBag.Title = "View Report";
 }
-  @if (!ViewData.ModelState.IsValid)
-  {
-      <section class="content-header">
-          <h1>
-              Errors in request
-          </h1>
-      </section>
-    <section class="content">
-        @Html.ValidationSummary(false)
-    </section>
-  }
-  else
-  {
-    <script>
-        $(function () {
-            $("form").validate(
+<script type="text/javascript">
+    @{
+        //NOTE: reuse model to avoid getting data again. temporary during conversion.
+    }
+    angular.module("report").value("reportViewModel", @Html.Raw(JsonConvert.SerializeObject(Model)));
+</script>
+
+<div ng-cloak ng-app="report" ng-controller="reportController">
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <section class="content-header">
+            <h1>
+                Errors in request
+            </h1>
+        </section>
+        <section class="content">
+            @Html.ValidationSummary(false)
+        </section>
+    }
+    else
+    {
+        <section class="content-header">
+            <h1>
+                {{:: viewModel.Report.Name }}
+            </h1>
+        </section>
+        <section class="content">
+            <p class="lead">{{:: viewModel.Report.Description}}</p>
+            @using (Html.BeginForm("ExecuteReport", "Home", FormMethod.Get, new { role = "form" }))
             {
-                rules: {
-                    @String.Join(",", Model.Report.Parameters.Where(r => r.Mandatory).Select(par => Html.Raw(par.Key + ": {required:true}")))
-                },
-                highlight: function (label) {
-                    $(label).closest('.control-group').removeClass('success').addClass('error');
-                },
-                success: function (label) {
-                    label.html('&nbsp;').closest('.control-group').removeClass('error').addClass('success');
-                }
-            });
-            $(".numeric").numeric();
-            $(".datepicker").datepicker();
-        });
-    </script>
-<section class="content-header">
-    <h1>
-        @Model.Report.Name
-    </h1>
-</section>
-    <section class="content">
-        <p class="lead">@Model.Report.Description</p>
-        @using (Html.BeginForm("ExecuteReport", "Home", FormMethod.Get, new {role = "form"}))
-        {
-            <input type="hidden" name="reportId" value="@Model.Report.Id" class="form-control">
+                <input type="hidden" name="reportId" value="@Model.Report.Id" class="form-control">
+                
+                    <div class="box box-primary" data-ng-if="viewModel.Report.Parameters.length">
+                        <div class="box-header">
+                            <h3 class="box-title">Parameters</h3>
+                        </div>
 
-            if (Model.Report.Parameters.Count > 0)
-            {
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">Parameters</h3>
-                    </div>
+                        <div class="box-body">
+                            <div class="row">
 
-                    <div class="box-body">
-                        <div class="row">
+                                
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" data-ng-repeat="par in viewModel.Report.Parameters track by par.Key">
+                                        <div class="form-group">
+                                            <label class="control-label" for="{{par.Key}}">{{par.Label}}</label>
 
-                            @foreach (Parameter par in Model.Report.Parameters)
-                            {
-                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                    <div class="form-group">
-                                        <label class="control-label" for="@par.Key">@par.Label</label>
+                                            <div data-ng-switch="par.InputType">
+                                                <input data-ng-switch-when="@((int) ParameterInputType.Integer)" data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" value="{{par.Value}}" placeholder="Integer" class="numeric form-control">
 
-                                        @switch (par.InputType)
-                                        {
-                                            case ParameterInputType.Integer:
-                                                <input type="text" name="@par.Key" value="@par.Value" placeholder="Integer" class="numeric form-control">
-                                                break;
-                                            case ParameterInputType.Date:
-                                                <div class="input-group">
+                                                <div data-ng-switch-when="@((int) ParameterInputType.Date)"  class="input-group">
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
-                                                    <input type="text" name="@par.Key" value="@par.Value" class="form-control datepicker pull-right">
+                                                    <input type="text" name="{{par.Key}}" value="{{par.Value}}" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right">
                                                 </div>
-                                                break;
-                                            case ParameterInputType.Period:
-                                            case ParameterInputType.Lookup:
-                                                <select name="@par.Key" class="form-control">
+
+                                                <select data-ng-switch-when="@((int) ParameterInputType.Period)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control">
                                                     <option value="">[Please Choose...]</option>
-                                                    @foreach (KeyValuePair<string, string> p in par.Choices)
-                                                    {
-                                                        <option value="@p.Key">@p.Value</option>
-                                                    }
+                                                    <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
                                                 </select>
-                                                break;
-                                            default:
-                                                <input type="text" name="@par.Key" value="@par.Value" class="form-control" placeholder="String">
-                                                break;
-                                        }
 
-                                        <span class="help-block">@par.HelpText</span>
-                                        <label for="@par.Key" generated="true" class="help-block error"></label>
+                                                <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control">
+                                                    <option value="">[Please Choose...]</option>
+                                                    <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
+                                                </select>
+
+                                                <input data-ng-switch-default type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" value="{{par.Value}}" class="form-control" placeholder="String">
+                                            </div>
+
+                                            <span class="help-block">{{par.HelpText}}</span>
+                                            <label for="{{par.Key}}" generated="true" class="help-block error"></label>
+                                        </div>
                                     </div>
-                                </div>
-                            }
 
+                            </div>
                         </div>
                     </div>
+                
+                    <p data-ng-if="!viewModel.Report.Parameters.length">This report has no parameters, just click on execute.</p>
+                
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Execute</button>
                 </div>
             }
-            else
-            {
-                <p>This report has no parameters, just click on execute.</p>
-            }
-            <div class="box-footer">              
-                 <button type="submit" class="btn btn-primary">Execute</button>
-            </div>
-        }
-    </section>
-  }
+        </section>
+    }
+</div>

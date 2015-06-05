@@ -11,8 +11,8 @@ namespace SimpleReport.App_Start
             // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
             public static void RegisterBundles(BundleCollection bundles)
             {
-                bundles.Add(new ScriptBundle("~/bundles/designer").Include(
-                    "~/Scripts/app/designer.js"));
+                bundles.Add(new ScriptBundle("~/bundles/app").Include(
+                    "~/Scripts/app/*.js"));
 
                 bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                           "~/Scripts/jquery-{version}.js",
