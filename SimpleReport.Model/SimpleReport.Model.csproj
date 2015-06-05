@@ -84,6 +84,7 @@
     <Compile Include="ReportDataModel.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Exceptions\StorageNotInitializedException.cs" />
+    <Compile Include="Template.cs" />
     <Compile Include="ValidatableEntity.cs" />
   </ItemGroup>
   <ItemGroup>
