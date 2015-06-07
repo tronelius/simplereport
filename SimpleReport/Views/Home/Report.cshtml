@@ -84,21 +84,22 @@
 
                 <p data-ng-if="!viewModel.Report.Parameters.length">This report has no parameters, just click on execute.</p>
 
-                <div class="box-footer row">
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-primary">Execute</button>
-                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'onScreen'">On screen</button>
-                    </div>
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary">Execute</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'onScreen'">On screen</button>
+                        </div>
 
-                    <div class="col-md-3">
-                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'subscribe'">Subscribe</button>
-                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editSubscriptions'">Edit subscriptions</button>
-                    </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'subscribe'">Subscribe</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editSubscriptions'">Edit subscriptions</button>
+                        </div>
 
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editTemplate'">Edit template</button>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editTemplate'">Edit template</button>
+                        </div>
                     </div>
-
                 </div>
 
                 <div data-ng-show="selectedAction" data-ng-switch="selectedAction" class="box box-actions" style="margin-top: 20px;">
