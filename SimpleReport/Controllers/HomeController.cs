@@ -33,6 +33,9 @@ namespace SimpleReport.Controllers
                 ModelState.AddModelError("AccessControl","You don't have access to view this report!");
             else
                 vm.Report = report;
+
+            vm.CanEditTemplate = report.IsAllowedToEditTemplate(User, _adminAccess);
+
             return View(vm);
         }
 
