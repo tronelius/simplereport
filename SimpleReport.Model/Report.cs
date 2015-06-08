@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using OfficeOpenXml;
 
 namespace SimpleReport.Model
 {
@@ -69,6 +63,29 @@ namespace SimpleReport.Model
 
             return false;
         }
-    }
 
+        public RawReportResult ExecuteAsRawData()
+        {
+            if (Connection == null)
+                throw new Exception("Missing Connection in report");
+
+            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
+
+            var raw = new RawReportResult
+            {
+                Headers = result.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray(),
+                Rows = result.Rows.Cast<DataRow>().Select(x => x.ItemArray.Select(Stringify).ToArray()).ToArray()
+            };
+
+            return raw;
+        }
+
+        private string Stringify(object obj)
+        {
+            if (obj is DateTime)
+                return ((DateTime)obj).ToString("yyyy-MM-dd HH:mm:ss");
+
+            return obj.ToString();
+        }
+    }
 }

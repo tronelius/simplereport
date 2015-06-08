@@ -1,0 +1,14 @@
+﻿<div data-ng-if="data">
+    <table class="table table-condensed table-bordered">
+        <thead>
+        <tr>
+            <td data-ng-repeat="header in ::data.Headers">{{header}}</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="row in ::data.Rows">
+            <td data-ng-repeat="val in ::row track by $index">{{val}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

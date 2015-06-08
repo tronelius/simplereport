@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
-using System.Security;
-using System.Web.Http.Results;
 using System.Web.Mvc;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
@@ -53,6 +50,20 @@ namespace SimpleReport.Controllers
                 return File(result.AsFile(), result.MimeType, result.FileName);
             }
             return File(GetBytes("Not allowed to execute this report"), "text/plain","NotAllowed.txt");
+        }
+
+        public ActionResult ExecuteOnScreenReport(Guid reportId)
+        {
+            Report report = _reportResolver.GetReport(reportId);
+            if (report.IsAvailableForMe(User, _adminAccess))
+            {
+                report.ReadParameters(Request.QueryString);
+                
+                var data = report.ExecuteAsRawData();
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { error = "Not Authorized" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult UploadTemplate(Guid reportId)

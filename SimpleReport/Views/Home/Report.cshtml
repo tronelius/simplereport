@@ -51,26 +51,26 @@
                                     <label class="control-label" for="{{par.Key}}">{{par.Label}}</label>
 
                                     <div data-ng-switch="par.InputType">
-                                        <input data-ng-switch-when="@((int) ParameterInputType.Integer)" data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" value="{{par.Value}}" placeholder="Integer" class="numeric form-control">
+                                        <input data-ng-switch-when="@((int) ParameterInputType.Integer)" data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" data-ng-model="par.Value" placeholder="Integer" class="numeric form-control">
 
                                         <div data-ng-switch-when="@((int) ParameterInputType.Date)" class="input-group">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" name="{{par.Key}}" value="{{par.Value}}" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right">
+                                            <input type="text" name="{{par.Key}}" data-ng-model="par.Value" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right">
                                         </div>
 
-                                        <select data-ng-switch-when="@((int) ParameterInputType.Period)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control">
+                                        <select data-ng-switch-when="@((int) ParameterInputType.Period)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.Value">
                                             <option value="">[Please Choose...]</option>
                                             <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
                                         </select>
 
-                                        <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control">
+                                        <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.Value">
                                             <option value="">[Please Choose...]</option>
                                             <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
                                         </select>
 
-                                        <input data-ng-switch-default type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" value="{{par.Value}}" class="form-control" placeholder="String">
+                                        <input data-ng-switch-default type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="String">
                                     </div>
 
                                     <span class="help-block">{{par.HelpText}}</span>
@@ -88,7 +88,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <button type="submit" class="btn btn-primary">Execute</button>
-                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'onScreen'" data-ng-show="viewModel.Report.OnScreenFormatAllowed">On screen</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="triggerOnScreen()" data-ng-show="viewModel.Report.OnScreenFormatAllowed">On screen</button>
                         </div>
 
                         <div class="col-md-3">
@@ -104,7 +104,7 @@
 
                 <div data-ng-show="selectedAction" data-ng-switch="selectedAction" class="box box-actions" style="margin-top: 20px;">
                     <div data-ng-switch-when="onScreen">
-                        <div>On screen is not available yet</div>
+                        <div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters"></div>
                     </div>
 
                     <div data-ng-switch-when="subscribe">

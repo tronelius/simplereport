@@ -23,8 +23,16 @@ angular.module('report')
 
                 $timeout(registerJqueryStuff, 500);
 
+                $scope.triggerOnScreen = triggerOnScreen;
             };
             $scope.init();
+
+            function triggerOnScreen() {
+                if ($scope.selectedAction !== 'onScreen')
+                    $scope.selectedAction = 'onScreen';
+                else
+                    $scope.$broadcast('refreshOnScreen');
+            }
 
             function registerJqueryStuff() {
                 $(".numeric").numeric();
