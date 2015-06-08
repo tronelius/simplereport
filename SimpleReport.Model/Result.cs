@@ -15,6 +15,7 @@ namespace SimpleReport.Model
         private ResultType Type { get; set; }
         private DataTable Table { get; set; }
         private Report Report { get; set; }
+        private byte[] TemplateData { get; set; }
         public string FileName { get { return Report.Name + "_created@" + DateTime.Now.ToString() + getFileExtension(); } }
         public string MimeType { get { return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; }}
 
@@ -24,11 +25,12 @@ namespace SimpleReport.Model
             return ".xlsx";
         }
 
-        public Result(ResultType type, DataTable table, Report report)
+        public Result(ResultType type, DataTable table, Report report, byte[] templateData)
         {
             Type = type;
             Table = table;
             Report = report;
+            TemplateData = templateData;
         }
 
         public Result(ResultType type, IDataReader dataReader, Report report)
@@ -73,7 +75,20 @@ namespace SimpleReport.Model
                     {
                         using (ExcelPackage pck = new ExcelPackage())
                         {
-                            ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Result");
+                            ExcelWorksheet ws;
+
+                            if (TemplateData != null)
+                            {
+                                using (MemoryStream memStream = new MemoryStream(TemplateData))
+                                {
+                                    pck.Load(memStream);
+                                }
+
+                                ws = pck.Workbook.Worksheets["Data"];
+                            }
+                            else
+                                ws = pck.Workbook.Worksheets.Add("Data");
+
                             if (_dataReader != null)
                             {
                                 

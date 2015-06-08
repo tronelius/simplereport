@@ -42,7 +42,11 @@ namespace SimpleReport.Controllers
             if (report.IsAvailableForMe(User, _adminAccess)) { 
                 report.ReadParameters(Request.QueryString);
 
-                Result result = report.Execute();
+                byte[] templateData = null;
+                if (report.HasTemplate)
+                    templateData = _reportResolver.Storage.GetTemplate(reportId).Bytes;
+
+                Result result = report.ExecuteWithTemplate(templateData);
                 return File(result.AsFile(), result.MimeType, result.FileName);
             }
             return File(GetBytes("Not allowed to execute this report"), "text/plain","NotAllowed.txt");

@@ -37,13 +37,13 @@ namespace SimpleReport.Model
             return Parameters.All(p => p.IsValid());
         }
 
-        public new Result Execute()
+        public Result ExecuteWithTemplate(byte[] templateData)
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
             
             DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
-            return new Result(this.ResultType, result,this);
+            return new Result(this.ResultType, result,this, templateData);
         }
 
         public bool IsAvailableForMe(IPrincipal user, Access adminAccess)
