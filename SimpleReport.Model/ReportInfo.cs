@@ -17,9 +17,14 @@ namespace SimpleReport.Model
         public Guid AccessId { get; set; }
         [NonSerialized]
         public Access Access;
-        /*public List<ErrorInfo> Errors { get; private set; } 
-        public bool CanExecute() { return Errors.Count(e => e.Level == ErrorLevel.Fatal)> 0;}
-        public bool IsValid(){ return Errors.Count(e => e.Level > ErrorLevel.Warning) > 0;}*/
+        
+        //who can fiddle with the template
+        public Guid TemplateAccessId { get; set; }
+        [NonSerialized]
+        public Access TemplateAccess;
+
+        public bool OnScreenFormatAllowed { get; set; }
+        public TemplateEditor TemplateEditor { get; set; }
 
         public ReportInfo()
         {
@@ -37,5 +42,12 @@ namespace SimpleReport.Model
             //Errors = new List<ErrorInfo>();
         }
 
+    }
+
+    public enum TemplateEditor
+    {
+        Anyone,
+        ReportOwner,
+        Administrators
     }
 }

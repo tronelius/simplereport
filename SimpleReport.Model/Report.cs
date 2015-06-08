@@ -51,11 +51,23 @@ namespace SimpleReport.Model
             return (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));
         }
 
-      
-
         public void ReadParameters(NameValueCollection queryString)
         {
             Parameters.ReadParameters(queryString);
+        }
+
+        public bool IsAllowedToEditTemplate(IPrincipal user, Access adminAccess)
+        {
+            if (TemplateEditor == TemplateEditor.Anyone)
+                return true;
+
+            if (adminAccess.IsAvailableForMe(user))
+                return true;
+
+            if (TemplateEditor == TemplateEditor.ReportOwner)
+                return TemplateAccess != null && TemplateAccess.IsAvailableForMe(user);
+
+            return false;
         }
     }
 

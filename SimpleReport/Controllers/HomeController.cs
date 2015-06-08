@@ -55,7 +55,7 @@ namespace SimpleReport.Controllers
         public ActionResult UploadTemplate(Guid reportId)
         {
             Report report = _reportResolver.GetReport(reportId);
-            if (!report.IsAvailableForMe(User, _adminAccess))
+            if (!report.IsAllowedToEditTemplate(User, _adminAccess))
                 return Json(new { error = "Not Authorized" });
             
             if (Request.Files.Count > 0)

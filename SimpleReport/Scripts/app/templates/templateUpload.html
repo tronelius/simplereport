@@ -1,7 +1,7 @@
 ﻿<div>
-    Template
+    <label>Template</label>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-11">
             <button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">Upload file</button>
             <div>
                 <div class="progress" data-ng-show="progress">
@@ -9,6 +9,6 @@
                 </div>
             </div>
         </div>
-        <a href="{{downloadLink}}" ng-show="{{hasReportTemplate}}">Download</a>
+        <a href="{{downloadLink}}" ng-show="hasReportTemplate">Download</a>
     </div>
 </div>

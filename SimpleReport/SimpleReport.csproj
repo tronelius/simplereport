@@ -215,6 +215,7 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\app\report.js" />
     <Content Include="Scripts\app\designer.js" />
+    <Content Include="Scripts\app\shared.js" />
     <Content Include="Scripts\app\templates\templateUpload.html" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-inputmask.js" />

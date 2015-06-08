@@ -119,6 +119,9 @@ namespace SimpleReport.Model.Storage
         {
             var access = GetAccessList(report.AccessId);
             report.Access = access;
+
+            var taccess = GetAccessList(report.TemplateAccessId);
+            report.TemplateAccess = taccess;
         }
 
         public bool SaveReport(Report report)

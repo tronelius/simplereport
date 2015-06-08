@@ -1,4 +1,4 @@
-﻿angular.module('designer', []);
+﻿angular.module('designer', ['shared']);
 
 angular.module('designer').controller('designerController', ['$scope', '$http', function ($scope, $http) {
     $scope.activeTab = 'report';
@@ -12,7 +12,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.connections = data.Connections;
                 $scope.lookupReports = data.LookupReports;
                 $scope.accessLists = data.AccessLists;
+                $scope.templateAccessLists = data.TemplateAccessLists;
                 $scope.settings = data.Settings;
+                $scope.potentialTemplateEditors = data.PotentialTemplateEditors;
             }).
             error(function (data) {
                 toastr.error("Couldn't get list of reports from server.","Error");
