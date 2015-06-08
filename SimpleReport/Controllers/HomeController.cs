@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Security;
 using System.Web.Http.Results;
 using System.Web.Mvc;
+using SimpleReport.Helpers;
 using SimpleReport.Model;
 using SimpleReport.Model.Logging;
 
@@ -51,8 +52,8 @@ namespace SimpleReport.Controllers
         {
             Report report = _reportResolver.GetReport(reportId);
             if (!report.IsAvailableForMe(User, _adminAccess))
-                throw new Exception("Not authorized");
-
+                return Json(new { error = "Not Authorized" });
+            
             if (Request.Files.Count > 0)
             {
                 var file = Request.Files[0];
@@ -60,6 +61,13 @@ namespace SimpleReport.Controllers
                 if (file != null && file.ContentLength > 0)
                 {
                     _reportResolver.Storage.SaveTemplate(file, reportId);
+
+                    if (!ExcelValidator.Validate(_reportResolver.Storage.GetTemplate(reportId)))
+                    {
+                        _reportResolver.Storage.DeleteTemplate(reportId);
+                        return Json(new {error = "The template must have a tab called Data"});
+                    }
+
                     report.HasTemplate = true;
                     _reportResolver.Storage.SaveReport(report);
                 }

@@ -36,5 +36,6 @@ namespace SimpleReport.Model.Storage
         DeleteInfo DeleteReport(Report report);
         void SaveTemplate(HttpPostedFileBase file, Guid reportId);
         Template GetTemplate(Guid reportId);
+        void DeleteTemplate(Guid reportId);
     }
 }

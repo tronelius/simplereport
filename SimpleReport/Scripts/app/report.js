@@ -55,12 +55,15 @@ angular.module('report')
                                 file: file
                             }).progress(function (evt) {
                                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                $scope.log = 'progress: ' + progressPercentage + '% ' + evt.config.file.name + '\n' + $scope.log;
                                 $scope.progress = progressPercentage;
                             }).success(function (data, status, headers, config) {
-                                $scope.log = 'file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-                                $scope.hasReportTemplate = true;
-                                $scope.downloadLink = baseDownloadUrl + $scope.reportid;
+                                if (!data.error) {
+                                    $scope.hasReportTemplate = true;
+                                    $scope.downloadLink = baseDownloadUrl + $scope.reportid;
+                                } else {
+                                    $scope.progress = 0;
+                                    toastr.error(data.error);
+                                }
                             }).error(function() {
                                 $scope.progress = null;
                                 toastr.error("Couldn't upload the file, please try again.", "Error");

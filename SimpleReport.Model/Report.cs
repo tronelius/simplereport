@@ -43,9 +43,6 @@ namespace SimpleReport.Model
                 throw new Exception("Missing Connection in report");
             
             DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
-            //IEnumerable<dynamic> resultEnumerable = _executor.GetResult(Connection, Sql, Parameters.CreateParameters());
-            //IDataReader reader = ADO.GetDataReaderResults(Connection, Sql, Parameters.CreateParameters());
-            //return new Result(this.ResultType, reader,this);
             return new Result(this.ResultType, result,this);
         }
 

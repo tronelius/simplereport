@@ -84,6 +84,12 @@ namespace SimpleReport.Model.Storage
             return new Template {Bytes = bytes, Mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel", Filename = reportId + ".xlsx"};
         }
 
+        public void DeleteTemplate(Guid reportId)
+        {
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", reportId + ".xlsx");
+            File.Delete(filepath);
+        }
+
         public IEnumerable<Report> GetAllReports()
         {
             var reports = _dataModel.Reports;
