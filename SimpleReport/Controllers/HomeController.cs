@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Security;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 using SimpleReport.Model;
 using SimpleReport.Model.Logging;
@@ -34,7 +37,6 @@ namespace SimpleReport.Controllers
 
         public FileResult ExecuteReport(Guid reportId)
         {
-            
             Report report = _reportResolver.GetReport(reportId);
             if (report.IsAvailableForMe(User, _adminAccess)) { 
                 report.ReadParameters(Request.QueryString);
@@ -47,6 +49,10 @@ namespace SimpleReport.Controllers
 
         public ActionResult UploadTemplate(Guid reportId)
         {
+            Report report = _reportResolver.GetReport(reportId);
+            if (!report.IsAvailableForMe(User, _adminAccess))
+                throw new Exception("Not authorized");
+
             if (Request.Files.Count > 0)
             {
                 var file = Request.Files[0];
@@ -54,6 +60,8 @@ namespace SimpleReport.Controllers
                 if (file != null && file.ContentLength > 0)
                 {
                     _reportResolver.Storage.SaveTemplate(file, reportId);
+                    report.HasTemplate = true;
+                    _reportResolver.Storage.SaveReport(report);
                 }
             }
 

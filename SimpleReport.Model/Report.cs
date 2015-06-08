@@ -18,6 +18,7 @@ namespace SimpleReport.Model
       
         public ResultType ResultType { get; set; }
         public ParameterList Parameters { get; set; }
+        public bool HasTemplate { get; set; }
 
         public Report()
         {

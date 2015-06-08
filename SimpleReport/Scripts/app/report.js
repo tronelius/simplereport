@@ -36,9 +36,12 @@ angular.module('report')
     .directive('templateUpload', function () {
         return {
             templateUrl: 'scripts/app/templates/templateUpload.html',
-            scope: {reportid: '@'},
+            scope: { reportid: '@', hasReportTemplate: '@' },
             controller: ['$scope', 'Upload', function ($scope, upload) {
-                $scope.downloadLink = 'Home/DownloadTemplate?ReportId=' + $scope.reportid;
+                var baseDownloadUrl = 'Home / DownloadTemplate ? ReportId = ';
+
+                if($scope.hasReportTemplate)
+                    $scope.downloadLink = baseDownloadUrl + $scope.reportid;
               
                 $scope.upload = function (files) {
                     if (files && files.length) {
@@ -56,10 +59,11 @@ angular.module('report')
                                 $scope.progress = progressPercentage;
                             }).success(function (data, status, headers, config) {
                                 $scope.log = 'file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data) + '\n' + $scope.log;
+                                $scope.hasReportTemplate = true;
+                                $scope.downloadLink = baseDownloadUrl + $scope.reportid;
                             }).error(function() {
                                 $scope.progress = null;
-                                //TODO: error handling. Do we use toastr for errors?
-                                alert('damnit');
+                                toastr.error("Couldn't upload the file, please try again.", "Error");
                             });
                         }
                     }
