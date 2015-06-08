@@ -34,18 +34,18 @@ namespace SimpleReport.ViewModel
             AccessLists.Insert(0,new Access(Guid.Empty,"Free for all",""));
             TemplateAccessLists.Insert(0, new Access(Guid.Empty, "None selected", ""));
             Settings = reportStorage.GetSettings();
-            PotentialTemplateEditors = Enum.GetValues(typeof(TemplateEditor)).Cast<TemplateEditor>().Select(x => new TemplateEditorViewModel(x, GetTextForTemplateEditor(x)));
+            PotentialTemplateEditors = Enum.GetValues(typeof(TemplateEditorAccessStyle)).Cast<TemplateEditorAccessStyle>().Select(x => new TemplateEditorViewModel(x, GetTextForTemplateEditor(x)));
         }
 
-        private string GetTextForTemplateEditor(TemplateEditor editor)
+        private string GetTextForTemplateEditor(TemplateEditorAccessStyle editor)
         {
             switch (editor)
             {
-                    case TemplateEditor.Administrators:
+                    case TemplateEditorAccessStyle.Administrators:
                         return "Admininstrators";
-                    case  TemplateEditor.Anyone:
+                    case  TemplateEditorAccessStyle.Anyone:
                         return "Anyone with access to the report";
-                case TemplateEditor.ReportOwner:
+                case TemplateEditorAccessStyle.ReportOwner:
                         return "Report owner";
                 default:
                     return editor.ToString();
@@ -55,10 +55,10 @@ namespace SimpleReport.ViewModel
 
     public class TemplateEditorViewModel
     {
-        public TemplateEditor Value { get; set; }
+        public TemplateEditorAccessStyle Value { get; set; }
         public string Text { get; set; }
 
-        public TemplateEditorViewModel(TemplateEditor value, string text)
+        public TemplateEditorViewModel(TemplateEditorAccessStyle value, string text)
         {
             Value = value;
             Text = text;

@@ -58,13 +58,13 @@ namespace SimpleReport.Model
 
         public bool IsAllowedToEditTemplate(IPrincipal user, Access adminAccess)
         {
-            if (TemplateEditor == TemplateEditor.Anyone)
+            if (TemplateEditorAccessStyle == TemplateEditorAccessStyle.Anyone)
                 return true;
 
             if (adminAccess.IsAvailableForMe(user))
                 return true;
 
-            if (TemplateEditor == TemplateEditor.ReportOwner)
+            if (TemplateEditorAccessStyle == TemplateEditorAccessStyle.ReportOwner)
                 return TemplateAccess != null && TemplateAccess.IsAvailableForMe(user);
 
             return false;

@@ -24,7 +24,7 @@ namespace SimpleReport.Model
         public Access TemplateAccess;
 
         public bool OnScreenFormatAllowed { get; set; }
-        public TemplateEditor TemplateEditor { get; set; }
+        public TemplateEditorAccessStyle TemplateEditorAccessStyle { get; set; }
 
         public ReportInfo()
         {
@@ -44,7 +44,7 @@ namespace SimpleReport.Model
 
     }
 
-    public enum TemplateEditor
+    public enum TemplateEditorAccessStyle
     {
         Anyone,
         ReportOwner,
