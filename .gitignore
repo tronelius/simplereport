@@ -184,3 +184,5 @@ FakesAssemblies/
 
 # Json data model files
 SimpleReport/Data/*.json
+#template files
+SimpleReport/Data/*.xlsx
