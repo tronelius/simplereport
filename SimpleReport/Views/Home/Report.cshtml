@@ -51,19 +51,25 @@
                                     <label class="control-label" for="{{par.Key}}">{{par.Label}}</label>
 
                                     <div data-ng-switch="par.InputType">
-                                        <input data-ng-switch-when="@((int) ParameterInputType.Integer)" data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" data-ng-model="par.Value" placeholder="Integer" class="numeric form-control">
+                                        <input data-ng-switch-when="@((int) ParameterInputType.Integer)" data-numeric data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" data-ng-model="par.Value" placeholder="Integer" class="numeric form-control">
 
                                         <div data-ng-switch-when="@((int) ParameterInputType.Date)" class="input-group">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" name="{{par.Key}}" data-ng-model="par.Value" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right">
+                                            <input type="text" name="{{par.Key}}" data-datepicker data-ng-model="par.Value" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right">
                                         </div>
 
-                                        <select data-ng-switch-when="@((int) ParameterInputType.Period)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.Value">
-                                            <option value="">[Please Choose...]</option>
-                                            <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
-                                        </select>
+                                        <div data-ng-switch-when="@((int) ParameterInputType.Period)">
+                                            <select data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
+                                                <option value="">[Please Choose...]</option>
+                                                <option data-ng-repeat="(k,v) in par.Choices track by $index" value="{{k}}">{{v}}</option>
+                                            </select>
+                                            <div data-ng-show="par.EnumValue === '9999'">
+                                                <input type="text" name="from" data-ng-model="par.from" data-datepicker data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" data-ng-change="periodChanged(par)">
+                                                <input type="text" name="to" data-ng-model="par.to" data-datepicker data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" data-ng-change="periodChanged(par)">
+                                            </div>
+                                        </div>
 
                                         <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.Value">
                                             <option value="">[Please Choose...]</option>

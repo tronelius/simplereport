@@ -11,7 +11,7 @@ using SimpleReport.Model.Extensions;
 
 namespace SimpleReport.Model
 {
-    
+
     public class ParameterList : List<Parameter>
     {
         public ParameterList(List<Parameter> parameters)
@@ -29,9 +29,9 @@ namespace SimpleReport.Model
             foreach (Parameter parameter in this)
             {
                 paramList.AddRange(parameter.GetSqlParameter());
-            } 
+            }
             return paramList;
-        } 
+        }
 
         public void ReadParameters(NameValueCollection querystring)
         {
@@ -44,7 +44,7 @@ namespace SimpleReport.Model
     }
 
 
-    
+
     public class Parameter
     {
         public const char SPLITCHAR = '_';
@@ -57,7 +57,7 @@ namespace SimpleReport.Model
         public bool Mandatory { get; set; }
         public string HelpText { get; set; }
         public string Key { get { return SqlKey.Replace("@", ""); } }
-        
+
         public Dictionary<string, string> Choices { get; protected set; }
         public Guid LookupReportId { get; set; }
 
@@ -66,7 +66,8 @@ namespace SimpleReport.Model
             Choices = new Dictionary<string, string>();
         }
 
-        public Parameter(string label, string sqlKey, string value, ParameterInputType inputType, bool mandatory, string helptext) : this()
+        public Parameter(string label, string sqlKey, string value, ParameterInputType inputType, bool mandatory, string helptext)
+            : this()
         {
             //TODO validate
             Label = label;
@@ -82,6 +83,18 @@ namespace SimpleReport.Model
             string[] valueList = Value.Split(SPLITCHAR);
             string[] keyList = SqlKey.Split(SPLITCHAR);
 
+            if (valueList.Length == 1)
+            {
+                ParameterPeriods period;
+                if (Enum.TryParse(valueList[0], out period))
+                {
+                    valueList = GetValueListBasedOnPeriod(period);
+                }
+            } else if (valueList[0].Contains(":"))//this is custom, it starts with the enum value and then the actuall value. ENUM:FROM_TO
+            {
+                valueList = Value.Split(':')[1].Split(SPLITCHAR);
+            }
+
             if (valueList.Length != keyList.Length)
                 throw new Exception(string.Format("ValueList length {0} is different from KeyList length {1}", valueList.Length.ToString(), keyList.Length.ToString()));
 
@@ -91,41 +104,80 @@ namespace SimpleReport.Model
             }
         }
 
+        private string[] GetValueListBasedOnPeriod(ParameterPeriods period)
+        {
+            DateTime now = DateTime.Now;
+            switch (period)
+            {
+                case ParameterPeriods.ThisWeek:
+                    return new[] { now.GetFirstDateOfWeek().ToShortDateString(), DateTime.Today.ToShortDateString() };
+                case ParameterPeriods.LastWeek:
+                    return new[] { now.GetFirstDateOfWeek().AddDays(-7).ToShortDateString(), now.GetLastDateOfWeek().AddDays(-7).ToShortDateString() };
+                case ParameterPeriods.ThisMonth:
+                    return new[] { now.GetFirstDateOfMonth().ToShortDateString(), now.GetLastDateOfMonth().ToShortDateString() };
+                case ParameterPeriods.LastMonth:
+                    return new[] { now.GetFirstDateOfMonth().AddMonths(-1).ToShortDateString(), now.GetLastDateOfMonth().AddMonths(-1).ToShortDateString() };
+                case ParameterPeriods.ThisQuarter:
+                    return new[] { now.GetFirstDayOfQuarter().ToShortDateString(), now.GetLastDayOfQuarter().ToShortDateString() };
+                case ParameterPeriods.LastQuarter:
+                    return new[] { now.GetFirstDayOfLastQuarter().ToShortDateString(), now.GetLastDayOfLastQuarter().ToShortDateString() };
+                case ParameterPeriods.ThisYear:
+                    return new[] { now.GetFirstDayOfYear().ToShortDateString(), now.GetLastDayOfYear().ToShortDateString() };
+                case ParameterPeriods.LastYear:
+                    return new[] { now.GetFirstDayOfLastYear().ToShortDateString(), now.GetLastDayOfLastYear().ToShortDateString() };
+                default:
+                    throw new NotSupportedException("Enum value not supported:" + period);
+            }
+        }
+
         public IEnumerable<SqlParameter> GetSqlParameter()
         {
             if (InputType == ParameterInputType.Period)
                 return GetSqlParameterForPeriod();
-            return new List<SqlParameter>() {new SqlParameter(this.SqlKey, this.Value)};
+            return new List<SqlParameter>() { new SqlParameter(this.SqlKey, this.Value) };
         }
 
         public bool IsValid()
         {
             if (Mandatory && string.IsNullOrWhiteSpace(Value))
-                   return false;
+                return false;
             return true;
         }
 
         public void SetDefaultValuesForPeriod()
         {
             Choices = new Dictionary<string, string>();
-            DateTime now = DateTime.Now;
-            Choices.Add(now.GetFirstDateOfWeek().ToShortDateString() + SPLITCHAR + DateTime.Today.ToShortDateString(), "This Week");
-            Choices.Add(now.GetFirstDateOfWeek().AddDays(-7).ToShortDateString() + SPLITCHAR + now.GetLastDateOfWeek().AddDays(-7).ToShortDateString(), "Last Week");
-            Choices.Add(now.GetFirstDateOfMonth().ToShortDateString() + SPLITCHAR + now.GetLastDateOfMonth().ToShortDateString(), "This Month");
-            Choices.Add(now.GetFirstDateOfMonth().AddMonths(-1).ToShortDateString() + SPLITCHAR + now.GetLastDateOfMonth().AddMonths(-1).ToShortDateString(), "Last Month");
-            Choices.Add(now.GetFirstDayOfQuarter().ToShortDateString() + SPLITCHAR + now.GetLastDayOfQuarter().ToShortDateString(), "This Quarter");
-            Choices.Add(now.GetFirstDayOfLastQuarter().ToShortDateString() + SPLITCHAR + now.GetLastDayOfLastQuarter().ToShortDateString(), "Last Quarter");
-            Choices.Add(now.GetFirstDayOfYear().ToShortDateString() + SPLITCHAR + now.GetLastDayOfYear().ToShortDateString(), "This year");
-            Choices.Add(now.GetFirstDayOfLastYear().ToShortDateString() + SPLITCHAR + now.GetLastDayOfLastYear().ToShortDateString(), "Last year");
+            Choices.Add(((int)ParameterPeriods.ThisWeek).ToString(), "This Week");
+            Choices.Add(((int)ParameterPeriods.LastWeek).ToString(), "Last Week");
+            Choices.Add(((int)ParameterPeriods.ThisMonth).ToString(), "This Month");
+            Choices.Add(((int)ParameterPeriods.LastMonth).ToString(), "Last Month");
+            Choices.Add(((int)ParameterPeriods.ThisQuarter).ToString(), "This Quarter");
+            Choices.Add(((int)ParameterPeriods.LastQuarter).ToString(), "Last Quarter");
+            Choices.Add(((int)ParameterPeriods.ThisYear).ToString(), "This Year");
+            Choices.Add(((int)ParameterPeriods.LastYear).ToString(), "Last Year");
+            Choices.Add(((int)ParameterPeriods.Custom).ToString(), "Custom");
         }
     }
 
-  
+    public enum ParameterPeriods
+    {
+        ThisWeek = 1,
+        LastWeek,
+        ThisMonth,
+        LastMonth,
+        ThisQuarter,
+        LastQuarter,
+        ThisYear,
+        LastYear,
+        Custom = 9999
+    }
+
+
     public enum ParameterInputType
     {
         String = 0,
         Integer = 1,
-        Date=2,
+        Date = 2,
         Period = 3,
         Lookup = 4
     }
