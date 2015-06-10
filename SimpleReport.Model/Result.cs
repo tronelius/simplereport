@@ -96,6 +96,8 @@ namespace SimpleReport.Model
                             }
                             else
                                 ws.Cells["A1"].LoadFromDataTable(Table, true);
+
+                            ws.Workbook.Calculate();
                             return pck.GetAsByteArray();
                         }
                     }

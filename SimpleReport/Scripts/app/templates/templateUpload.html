@@ -1,14 +1,16 @@
 ﻿<div data-ng-show="reportid">
     <label>Template</label>
     <div class="row">
-        <div class="col-md-11">
+        <div class="col-md-12">
             <button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">Upload file</button>
-            <div>
-                <div class="progress" data-ng-show="progress">
-                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': progress + '%' }"></div>
-                </div>
+            <a href="{{downloadLink}}" ng-show="hasReportTemplate">Download</a>
+
+        </div>
+        <div class="col-md-12">
+            <div class="progress" data-ng-show="progress">
+                <div class="progress-bar" role="progressbar" ng-style="{ 'width': progress + '%' }"></div>
             </div>
         </div>
-        <a href="{{downloadLink}}" ng-show="hasReportTemplate">Download</a>
+        
     </div>
 </div>

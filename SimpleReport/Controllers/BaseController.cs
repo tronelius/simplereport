@@ -29,7 +29,7 @@ namespace SimpleReport.Controllers
         {
             ReportViewModel vm = new ReportViewModel();
             vm.HasAdminAccess = _reportStorage.GetSettings().AdminAccessChecker().IsAvailableForMe(User);
-            vm.Reports = _reportStorage.GetAllReports().Where(a => a.IsAvailableForMe(User, _adminAccess));
+            vm.Reports = _reportStorage.GetAllReports().Where(a => a.IsAvailableForMe(User, _adminAccess)).OrderBy(a => a.Group).ThenBy(b => b.Name);
             return vm;
         }
         
