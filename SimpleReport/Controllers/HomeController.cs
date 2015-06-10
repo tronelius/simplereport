@@ -83,7 +83,7 @@ namespace SimpleReport.Controllers
                     if (!ExcelValidator.Validate(_reportResolver.Storage.GetTemplate(reportId)))
                     {
                         _reportResolver.Storage.DeleteTemplate(reportId);
-                        return Json(new {error = "The template must have a tab called Data"});
+                        return Json(new {error = "The template is not valid."});
                     }
 
                     report.HasTemplate = true;
