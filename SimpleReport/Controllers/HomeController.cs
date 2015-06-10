@@ -3,6 +3,7 @@ using System.IO;
 using System.Web.Mvc;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
+using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
 
 namespace SimpleReport.Controllers
@@ -90,11 +91,14 @@ namespace SimpleReport.Controllers
                         }
                         data = memoryStream.ToArray();
                     }
-
-                    if (!ExcelValidator.Validate(data))
+                    try
                     {
-                        return Json(new { error = "The template is not valid." });
+                        ExcelValidator.Validate(data);
                     }
+                    catch (ValidationException vex)
+                    {
+                        return Json(new { error = vex.Message });
+                    } 
                     
                     _reportResolver.Storage.SaveTemplate(data, reportId);
 

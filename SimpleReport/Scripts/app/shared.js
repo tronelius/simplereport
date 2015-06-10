@@ -36,6 +36,8 @@ angular.module('shared')
                                     if (!data.error) {
                                         $scope.hasReportTemplate = true;
                                         $scope.downloadLink = baseDownloadUrl + $scope.reportid;
+                                        toastr.success("Template file uploaded");
+                                        $scope.progress = null;
                                     } else {
                                         $scope.progress = 0;
                                         toastr.error(data.error);

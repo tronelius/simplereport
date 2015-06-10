@@ -63,6 +63,7 @@
     <Compile Include="Access.cs" />
     <Compile Include="Ado.cs" />
     <Compile Include="Connection.cs" />
+    <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="ErrorInfo.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />

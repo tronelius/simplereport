@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using OfficeOpenXml;
+using SimpleReport.Model.Exceptions;
 
 namespace SimpleReport.Helpers
 {
@@ -12,7 +13,7 @@ namespace SimpleReport.Helpers
             using (ExcelPackage pck = new ExcelPackage(memStream))
             {
                 if (!pck.Workbook.Worksheets.Any(x => x.Name == "Data"))
-                    return false;
+                    throw new ValidationException("The uploaded template must contain an empty sheet named 'Data'");
                 
                 var sheet = pck.Workbook.Worksheets["Data"];
                 if (sheet.Dimension != null)
@@ -20,7 +21,7 @@ namespace SimpleReport.Helpers
                     for (var i = 1; i <= sheet.Dimension.Rows; i++)
                     {
                         if (sheet.Cells["A" + i].Value != null)
-                            return false;
+                            throw new ValidationException("The uploaded templates data-sheet is not empty");
                     }
                 }
 
