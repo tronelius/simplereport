@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Web;
 using OfficeOpenXml;
-using SimpleReport.Model;
 
 namespace SimpleReport.Helpers
 {
     public static class ExcelValidator
     {
-        public static bool Validate(Template template)
+        public static bool Validate(byte[] data)
         {
-            using (MemoryStream memStream = new MemoryStream(template.Bytes))
+            using (MemoryStream memStream = new MemoryStream(data))
             using (ExcelPackage pck = new ExcelPackage(memStream))
             {
                 if (!pck.Workbook.Worksheets.Any(x => x.Name == "Data"))

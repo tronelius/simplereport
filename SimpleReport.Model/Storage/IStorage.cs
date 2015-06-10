@@ -34,7 +34,7 @@ namespace SimpleReport.Model.Storage
         DeleteInfo DeleteConnection(Connection connection);
         DeleteInfo DeleteLookupReport(LookupReport lookupReport);
         DeleteInfo DeleteReport(Report report);
-        void SaveTemplate(HttpPostedFileBase file, Guid reportId);
+        void SaveTemplate(byte[] file, Guid reportId);
         Template GetTemplate(Guid reportId);
         void DeleteTemplate(Guid reportId);
     }

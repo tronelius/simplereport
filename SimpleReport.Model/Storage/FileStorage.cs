@@ -71,10 +71,10 @@ namespace SimpleReport.Model.Storage
             }
         }
 
-        public void SaveTemplate(HttpPostedFileBase file, Guid reportId)
+        public void SaveTemplate(byte[] data, Guid reportId)
         {
             var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", reportId + ".xlsx");
-            file.SaveAs(filepath);
+            File.WriteAllBytes(filepath, data);
         }
 
         public Template GetTemplate(Guid reportId)
