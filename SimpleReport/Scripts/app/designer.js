@@ -111,7 +111,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.reportDataChanged();
     };
     $scope.addNewReport = function() {
-        $scope.report = { Id: null, Parameters:[] };
+        $scope.report = { Id: null, Parameters:[],TemplateEditorAccessStyle : 0 };
     };
     $scope.addNewParameter = function (keyOfParameter) {
         //console.debug('new parameter');

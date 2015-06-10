@@ -5,7 +5,6 @@ angular.module('report')
         '$scope', '$http', 'reportViewModel', '$filter', function ($scope, $http, viewModel, $filter) {
 
             $scope.init = function () {
-                
                 viewModel.Report.Parameters.forEach(function (param) {
                     //periods of type custom comes on the format Enum:from_to
                     if (param.InputType === 3) { //period

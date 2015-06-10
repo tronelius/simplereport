@@ -42,7 +42,7 @@ namespace SimpleReport.Model
 
         public bool IsAvailableForMe(IPrincipal user, Access adminAccess)
         {
-            return (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));
+            return (TemplateAccess != null && TemplateAccess.IsAvailableForMe(user)) ||  (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));
         }
 
         public void ReadParameters(NameValueCollection queryString)

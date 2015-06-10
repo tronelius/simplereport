@@ -46,8 +46,8 @@ namespace SimpleReport.Model
 
     public enum TemplateEditorAccessStyle
     {
-        Anyone,
+        Administrators,
         ReportOwner,
-        Administrators
+        Anyone
     }
 }
