@@ -142,6 +142,10 @@ namespace SimpleReport.Model.Storage
 
             _dataModel.Reports.Remove(existing);
             SaveModel(_dataModel);
+
+            if(report.HasTemplate)
+                DeleteTemplate(report.Id);
+
             return new DeleteInfo(true, "Report was deleted");
         }
 

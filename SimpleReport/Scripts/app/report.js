@@ -46,7 +46,7 @@ angular.module('report')
                     if (parameter.from && parameter.to) {
                         var format = 'yyyy-MM-dd';
                         var from = $filter('date')(parameter.from, format);
-                        var to = $filter('date')(parameter.from, format);
+                        var to = $filter('date')(parameter.to, format);
                         text += ': ' + from + ' - ' + to;
                     }
                     parameter.Choices['9999'] = text;
