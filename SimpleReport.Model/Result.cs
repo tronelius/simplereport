@@ -95,7 +95,7 @@ namespace SimpleReport.Model
                                 //ws.Cells["A2"].LoadFromDataReader(_dataReader, true);
                             }
                             else
-                                ws.Cells["A2"].LoadFromDataTable(Table, true);
+                                ws.Cells["A1"].LoadFromDataTable(Table, true);
                             return pck.GetAsByteArray();
                         }
                     }
