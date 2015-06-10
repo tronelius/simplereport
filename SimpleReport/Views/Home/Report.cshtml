@@ -46,7 +46,7 @@
                         <div class="row">
 
 
-                            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" data-ng-repeat="par in viewModel.Report.Parameters track by par.Key">
+                            <div data-ng-repeat="par in viewModel.Report.Parameters track by par.Key" data-ng-class="{ 'col-xs-12 col-sm-6 col-md-4 col-lg-3' : par.InputType != @((int)ParameterInputType.Period), 'col-xs-12 col-sm-12 col-md-8 col-lg-6' : par.InputType == @((int)ParameterInputType.Period)}">
                                 <div class="form-group">
                                     <label class="control-label" for="{{par.Key}}">{{par.Label}}</label>
 
@@ -61,7 +61,8 @@
                                         </div>
 
                                         <div data-ng-switch-when="@((int) ParameterInputType.Period)">
-                                            <select data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
+                                            <input type="hidden" value="{{par.Value}}" name="{{par.Key}}" />
+                                            <select data-ng-required="{{par.Mandatory}}" class="form-control" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
                                                 <option value="">[Please Choose...]</option>
                                                 <option data-ng-repeat="(k,v) in par.Choices track by $index" value="{{k}}">{{v}}</option>
                                             </select>

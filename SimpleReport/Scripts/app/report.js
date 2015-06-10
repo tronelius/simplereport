@@ -40,15 +40,13 @@ angular.module('report')
                     if (!parameter.to)
                         parameter.to = new Date();
 
-                    parameter.Value = parameter.EnumValue + ':' + parameter.from + '_' + parameter.to;
+                    var format = 'yyyy-MM-dd';
+                    var from = $filter('date')(parameter.from, format);
+                    var to = $filter('date')(parameter.to, format);
+
+                    parameter.Value = parameter.EnumValue + ':' + from + '_' + to;
                     
-                    var text = parameter.Choices['9999'].split(':')[0];
-                    if (parameter.from && parameter.to) {
-                        var format = 'yyyy-MM-dd';
-                        var from = $filter('date')(parameter.from, format);
-                        var to = $filter('date')(parameter.to, format);
-                        text += ': ' + from + ' - ' + to;
-                    }
+                    var text = parameter.Choices['9999'].split(':')[0] + ': ' + from + ' - ' + to;
                     parameter.Choices['9999'] = text;
                 } else
                     parameter.Value = parameter.EnumValue;
