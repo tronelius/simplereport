@@ -68,6 +68,7 @@ angular.module('shared')
                     $scope.$on('refreshOnScreen', fetchData);
 
                     function fetchData() {
+                        $scope.data = null;
                         var parsedParameters = {};
                         $scope.parameters.forEach(function(param) {
                             parsedParameters[param.Key] = param.Value;
