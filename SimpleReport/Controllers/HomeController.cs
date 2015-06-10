@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Web.Mvc;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
@@ -78,13 +79,24 @@ namespace SimpleReport.Controllers
 
                 if (file != null && file.ContentLength > 0)
                 {
-                    _reportResolver.Storage.SaveTemplate(file, reportId);
-
-                    if (!ExcelValidator.Validate(_reportResolver.Storage.GetTemplate(reportId)))
+                    byte[] data;
+                    using (Stream inputStream = file.InputStream)
                     {
-                        _reportResolver.Storage.DeleteTemplate(reportId);
-                        return Json(new {error = "The template must have a tab called Data"});
+                        MemoryStream memoryStream = inputStream as MemoryStream;
+                        if (memoryStream == null)
+                        {
+                            memoryStream = new MemoryStream();
+                            inputStream.CopyTo(memoryStream);
+                        }
+                        data = memoryStream.ToArray();
                     }
+
+                    if (!ExcelValidator.Validate(data))
+                    {
+                        return Json(new { error = "The template is not valid." });
+                    }
+                    
+                    _reportResolver.Storage.SaveTemplate(data, reportId);
 
                     report.HasTemplate = true;
                     _reportResolver.Storage.SaveReport(report);
