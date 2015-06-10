@@ -1,8 +1,8 @@
-﻿angular.module('report', ['shared']);
+﻿angular.module('report', ['shared', 'ui.bootstrap']);
 
 angular.module('report')
     .controller('reportController', [
-        '$scope', '$http', 'reportViewModel', '$timeout', function ($scope, $http, viewModel, $timeout) {
+        '$scope', '$http', 'reportViewModel', '$filter', function ($scope, $http, viewModel, $filter) {
 
             $scope.init = function () {
                 
@@ -36,11 +36,19 @@ angular.module('report')
             function periodChanged(parameter) {
                 //9999 is custom..
                 if (parameter.EnumValue === '9999') {
+                    if (!parameter.from)
+                        parameter.from = new Date();
+                    if (!parameter.to)
+                        parameter.to = new Date();
+
                     parameter.Value = parameter.EnumValue + ':' + parameter.from + '_' + parameter.to;
                     
                     var text = parameter.Choices['9999'].split(':')[0];
                     if (parameter.from && parameter.to) {
-                        text += ': ' + parameter.from + ' - ' + parameter.to;
+                        var format = 'yyyy-MM-dd';
+                        var from = $filter('date')(parameter.from, format);
+                        var to = $filter('date')(parameter.from, format);
+                        text += ': ' + from + ' - ' + to;
                     }
                     parameter.Choices['9999'] = text;
                 } else

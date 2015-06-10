@@ -21,6 +21,7 @@ namespace SimpleReport.App_Start
                 "~/Scripts/bootstrap-datepicker.js",
                 "~/Scripts/underscore.min.js",
                 "~/scripts/angular.js",
+                "~/scripts/ui-bootstrap-tpls-0.13.0.min.js",
                 "~/scripts/toastr.js",
                 "~/scripts/ng-file-upload-all.min.js",
                 "~/Content/js/app.js"));

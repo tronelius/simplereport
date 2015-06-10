@@ -66,8 +66,8 @@
                                                 <option data-ng-repeat="(k,v) in par.Choices track by $index" value="{{k}}">{{v}}</option>
                                             </select>
                                             <div data-ng-show="par.EnumValue === '9999'">
-                                                <input type="text" name="from" data-ng-model="par.from" data-datepicker data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" data-ng-change="periodChanged(par)">
-                                                <input type="text" name="to" data-ng-model="par.to" data-datepicker data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" data-ng-change="periodChanged(par)">
+                                                <datepicker class="pull-left" ng-model="par.from" max-date="par.to" show-weeks="true" data-ng-change="periodChanged(par)"></datepicker>
+                                                <datepicker class="pull-left" ng-model="par.to" min-date="par.from" show-weeks="true" data-ng-change="periodChanged(par)"></datepicker>
                                             </div>
                                         </div>
 
