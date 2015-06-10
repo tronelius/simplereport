@@ -13,7 +13,12 @@ namespace SimpleReport.Model
 
         public string[] SplittedAdGroups
         {
-            get { return ADGroup.Split(new char[] {';'}, StringSplitOptions.RemoveEmptyEntries); } 
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(ADGroup))
+                    return ADGroup.Split(new char[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                return new string[0];
+            } 
         }
 
         public bool IsAvailableForMe(IPrincipal user)
