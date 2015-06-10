@@ -9,7 +9,7 @@ angular.module('report')
                 viewModel.Report.Parameters.forEach(function (param) {
                     //periods of type custom comes on the format Enum:from_to
                     if (param.InputType === 3) { //period
-                        if (~param.Value.indexOf(':')) {
+                        if (param.Value && ~param.Value.indexOf(':')) {
                             var temp = param.Value.split(':');
                             var enumValue = temp[0];
 
