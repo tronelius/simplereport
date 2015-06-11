@@ -86,7 +86,7 @@ angular.module('shared')
             ]
         };
     })
-.directive('datepicker', function () {
+.directive('datepickerBootstrap', function () {
     return {
         restrict: 'A',
         require: 'ngModel',

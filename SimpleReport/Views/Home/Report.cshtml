@@ -57,7 +57,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" name="{{par.Key}}" data-datepicker data-ng-model="par.Value" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right">
+                                            <input type="text" name="{{par.Key}}" datepicker-popup data-ng-model="par.Value" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.open" ng-focus="par.open=true">
                                         </div>
 
                                         <div data-ng-switch-when="@((int) ParameterInputType.Period)">
