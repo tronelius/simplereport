@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using Topshelf;
+using Worker.Common.Migrations;
 
 namespace WorkerHost
 {
@@ -12,6 +8,9 @@ namespace WorkerHost
     {
         static void Main(string[] args)
         {
+            var migration = new Migrator(ConfigurationManager.ConnectionStrings["db"].ConnectionString);
+            migration.Up();
+
             HostFactory.Run(x =>
             {
                 x.Service<SubscriptionWorker>(s =>

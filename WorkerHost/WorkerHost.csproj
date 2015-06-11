@@ -117,6 +117,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Worker.Common\Worker.Common.csproj">
+      <Project>{D4A0D1AA-7691-43CE-B200-78ACD671D32D}</Project>
+      <Name>Worker.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WorkerWebApi\WorkerWebApi.csproj">
       <Project>{8103753c-3a6b-4e1a-8ada-fa2714ba8806}</Project>
       <Name>WorkerWebApi</Name>

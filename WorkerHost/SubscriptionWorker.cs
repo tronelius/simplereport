@@ -46,7 +46,7 @@ namespace WorkerHost
 
         private void StartAPI()
         {
-            _webApplication = WebApp.Start<WebPipeline>("http://localhost:5000");
+            _webApplication = WebApp.Start<WebPipeline>(System.Configuration.ConfigurationManager.AppSettings["HostUrl"]);
         }
 
         public void Stop()
