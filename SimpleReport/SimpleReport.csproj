@@ -217,6 +217,7 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\app\subscriptions.js" />
     <Content Include="Scripts\app\report.js" />
     <Content Include="Scripts\app\designer.js" />
     <Content Include="Scripts\app\shared.js" />
