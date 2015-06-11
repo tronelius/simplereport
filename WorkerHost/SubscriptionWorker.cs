@@ -28,7 +28,6 @@ namespace WorkerHost
             // Create a scheduler and give it the Ninject job factory created earlier
             _scheduler = new StdSchedulerFactory().GetScheduler();
             _scheduler.JobFactory = new NinjectJobFactory(kernel);
-            //_scheduler = StdSchedulerFactory.GetDefaultScheduler();
             _scheduler.Start();
 
             IJobDetail job = JobBuilder.Create<SubscriptionJob>().Build();
