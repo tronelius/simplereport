@@ -6,6 +6,7 @@ using Quartz.Impl;
 using WorkerHost.Config;
 using WorkerHost.Jobs;
 using WorkerWebApi.Config;
+using IoCConfig = WorkerHost.Config.IoCConfig;
 
 namespace WorkerHost
 {

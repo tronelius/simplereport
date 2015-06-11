@@ -1,7 +1,7 @@
 ﻿using System;
 using NLog;
 
-namespace WorkerHost
+namespace Worker.Common.Common
 {
     public class Logger : ILogger
     {
