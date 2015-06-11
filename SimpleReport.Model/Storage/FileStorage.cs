@@ -73,20 +73,20 @@ namespace SimpleReport.Model.Storage
 
         public void SaveTemplate(byte[] data, Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", reportId + ".xlsx");
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
             File.WriteAllBytes(filepath, data);
         }
 
         public Template GetTemplate(Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", reportId + ".xlsx");
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
             var bytes = File.ReadAllBytes(filepath);
             return new Template {Bytes = bytes, Mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel", Filename = reportId + ".xlsx"};
         }
 
         public void DeleteTemplate(Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", reportId + ".xlsx");
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
             File.Delete(filepath);
         }
 
