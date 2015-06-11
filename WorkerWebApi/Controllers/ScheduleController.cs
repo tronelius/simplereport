@@ -1,23 +1,23 @@
-﻿using System.ServiceModel;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Worker.Common.Common;
 using Worker.Common.Model;
 using Worker.Common.Repository;
 
 namespace WorkerWebApi.Controllers
 {
-    public class TestController : ApiController
+    [RoutePrefix("api/schedule/")]
+    public class ScheduleController : ApiController
     {
         private readonly ILogger _logger;
         private readonly IScheduleRepository _scheduleRepository;
 
-        public TestController(ILogger logger, IScheduleRepository scheduleRepository)
+        public ScheduleController(ILogger logger, IScheduleRepository scheduleRepository)
         {
             _logger = logger;
             _scheduleRepository = scheduleRepository;
         }
 
-        [Route("api/test")]
+        [Route("test")]
         [HttpGet]
         public IHttpActionResult Test(string message)
         {
@@ -25,7 +25,7 @@ namespace WorkerWebApi.Controllers
             return Json(new { Msg = "Hello " + message });
         }
 
-        [Route("api/create")]
+        [Route("create")]
         [HttpGet]
         public IHttpActionResult Create()
         {

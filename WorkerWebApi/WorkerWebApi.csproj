@@ -100,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\IoCConfig.cs" />
-    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Config\WebPipeline.cs" />
   </ItemGroup>

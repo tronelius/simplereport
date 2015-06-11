@@ -1,0 +1,35 @@
+@model SimpleReport.ViewModel.ReportViewModel
+@{
+    ViewBag.Title = "Subscriptions";
+}
+<section class="content-header">
+    <h1>
+        Subscriptions <small>Here you can edit existing subscriptions or create new ones.</small>
+    </h1>
+</section>
+<section class="content" ng-cloak ng-app="subscriptions" ng-controller="subscriptionController">
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li ng-class="{active: activeTab == 'all'}"><a data-toggle="tab" href="#tab_1" aria-expanded="true">List of all active</a></li>
+            <li ng-class="{active: activeTab == 'failed'}"><a data-toggle="tab" href="#tab_2" aria-expanded="false">Failed</a></li>
+            <li ng-class="{active: activeTab == 'schedules'}"><a data-toggle="tab" href="#tab_3" aria-expanded="false">Schedules</a></li>
+            <li ng-class="{active: activeTab == 'settings'}"><a data-toggle="tab" href="#tab_4" aria-expanded="false">Settings</a></li>
+        </ul>
+    </div>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+                Not done
+            </div>
+            <div class="tab-pane" id="tab_2">
+                Not done
+            </div>
+            <div class="tab-pane" id="tab_3">
+                Hello.
+            </div>
+            <div class="tab-pane" id="tab_4">
+                Not done
+            </div>
+        </div>
+
+</section>
