@@ -45,7 +45,7 @@ angular.module('report')
                     var to = $filter('date')(parameter.to, format);
 
                     parameter.Value = parameter.EnumValue + ':' + from + '_' + to;
-                    
+
                     var text = parameter.Choices['9999'].split(':')[0] + ': ' + from + ' - ' + to;
                     parameter.Choices['9999'] = text;
                 } else
@@ -59,4 +59,55 @@ angular.module('report')
                     $scope.$broadcast('refreshOnScreen');
             }
         }
-    ]);
+    ])
+    .directive('subscriptionEditor', function () {
+        return {
+            templateUrl: 'scripts/app/templates/subscriptionEditor.html',
+            scope: { reportId: '=', reportParameters: '=', subscriptionId: '=' },
+            controller: ['$scope', '$http', function ($scope, $http) {
+
+                function init() {
+                    //if there is no current subscriptionid, then we are creating a new one.  works for now, might change when we have the list.
+                    if (!$scope.subscriptionId) {
+                        $scope.subscription = { To: '', Cc: '', Bcc: '', Schedule: null }
+                    }
+
+                    fetchData();
+
+                    $scope.save = save;
+                }
+                init();
+
+                function save() {
+                    var parsedParameters = { reportId: $scope.reportId };
+                    $scope.reportParameters.forEach(function (param) {
+                        parsedParameters[param.Key] = param.Value;
+                    });
+
+                    var url = 'Home/ExecuteReport?' + serialize(parsedParameters);
+
+                    var data = angular.extend({ ReportId: $scope.reportId, Url: url }, $scope.subscription);
+                    console.log(data);
+                }
+
+                function serialize(obj) {
+                    var str = [];
+                    for (var p in obj)
+                        if (obj.hasOwnProperty(p)) {
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                        }
+                    return str.join("&");
+                }
+
+                function fetchData() {
+                    //TODO: extract to repository.
+                    $http.get("api/schedule/all").success(function (data) {
+                        $scope.schedules = data;
+                    }).error(function () {
+                        toastr.error('Something went wrong when loading schedules, please try again later or contact support');
+                    });
+                }
+            }
+            ]
+        };
+    });
