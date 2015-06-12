@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SimpleReport.Helpers
@@ -41,8 +42,13 @@ namespace SimpleReport.Helpers
 
         private static void SetClientSettings(HttpClient client)
         {
-            //TODO: add credentials.
-            client.BaseAddress = new Uri("http://localhost:5000/");
+            var user = System.Configuration.ConfigurationManager.AppSettings["ApiUserName"];
+            var password = System.Configuration.ConfigurationManager.AppSettings["ApiPassword"];
+            var byteArray = Encoding.ASCII.GetBytes(user +":" + password);
+            var header = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+            client.DefaultRequestHeaders.Authorization = header;
+
+            client.BaseAddress = new Uri(System.Configuration.ConfigurationManager.AppSettings["ApiBaseUrl"]);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }

@@ -51,12 +51,13 @@ angular.module('subscriptions')
 
              function save() {
                  $http.post("api/schedule/save", $scope.schedule).success(function (data) {
-                     console.log('save', data);
                      if (!$scope.schedule.Id) {
                          $scope.schedule.Id = data.Id;
                          $scope.data.push($scope.schedule);
                          $scope.selectedSchedule = $scope.schedule;
                      }
+
+                     toastr.success('Schedule saved');
                  }).error(function () {
                      toastr.error('Something went wrong, please try again later or contact support');
                  });
@@ -71,6 +72,7 @@ angular.module('subscriptions')
                  $http.post("api/schedule/delete", { Id: $scope.schedule.Id }).success(function (data) {
                      $scope.data = data;
                      $scope.schedule = null;
+                     toastr.success('Schedule removed');
                  }).error(function () {
                      toastr.error('Something went wrong, please try again later or contact support');
                  });
