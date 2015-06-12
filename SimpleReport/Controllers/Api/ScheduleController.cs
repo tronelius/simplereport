@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -56,13 +57,13 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
-        public async Task<IHttpActionResult> Delete(dynamic obj)
+        public async Task<IHttpActionResult> Delete(Dictionary<string,object> obj)//this is really {id : int}, but webapi model binding is evil when it comes to simple values, hence we use this.
         {
             try
             {
                 _adminAccess.IsAllowedForMe(User);
 
-                var result = await _apiClient.Post("api/schedule/delete", (object)obj.Id);
+                var result = await _apiClient.Post("api/schedule/delete", obj["Id"]);
                 return Ok(result);
             }
             catch (Exception ex)
