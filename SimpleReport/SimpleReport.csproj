@@ -192,6 +192,9 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\img\boxed-bg.jpg" />
+    <Content Include="Content\img\disk.png" />
+    <Content Include="Content\img\loading.gif" />
+    <Content Include="Content\jquery-cron.css" />
     <Content Include="Content\js\app.js" />
     <Content Include="Content\js\app.min.js" />
     <Content Include="Content\toastr.css" />
@@ -240,6 +243,7 @@
     <Content Include="Scripts\angular.min.js.map" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
+    <Content Include="Scripts\jquery-cron-min.js" />
     <Content Include="Scripts\ui-bootstrap-tpls-0.13.0.min.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
