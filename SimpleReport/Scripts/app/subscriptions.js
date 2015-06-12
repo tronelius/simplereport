@@ -90,7 +90,7 @@ angular.module('subscriptions')
                 var options = {
                     onChange: function () {
                         $timeout(function () {
-                            scope.Value = $(element).cron("value");
+                            ngModelCtrl.$setViewValue(($(element).cron("value")));
                         });
                     },
                     customValues: {
