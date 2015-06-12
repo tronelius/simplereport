@@ -149,6 +149,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
+    <Compile Include="Controllers\Api\ScheduleController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Api\DesignerController.cs" />
     <Compile Include="Controllers\SubscriptionController.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ApiClient.cs" />
     <Compile Include="Helpers\ExcelValidator.cs" />
     <Compile Include="Helpers\HandleMyOwnErrorAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -221,6 +223,7 @@
     <Content Include="Scripts\app\report.js" />
     <Content Include="Scripts\app\designer.js" />
     <Content Include="Scripts\app\shared.js" />
+    <Content Include="Scripts\app\templates\scheduleEditor.html" />
     <Content Include="Scripts\app\templates\onScreenReport.html" />
     <Content Include="Scripts\app\templates\templateUpload.html" />
     <Content Include="Scripts\bootstrap-datepicker.js" />

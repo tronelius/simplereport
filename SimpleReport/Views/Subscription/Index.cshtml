@@ -10,25 +10,24 @@
 <section class="content" ng-cloak ng-app="subscriptions" ng-controller="subscriptionController">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li ng-class="{active: activeTab == 'all'}"><a data-toggle="tab" href="#tab_1" aria-expanded="true">List of all active</a></li>
-            <li ng-class="{active: activeTab == 'failed'}"><a data-toggle="tab" href="#tab_2" aria-expanded="false">Failed</a></li>
-            <li ng-class="{active: activeTab == 'schedules'}"><a data-toggle="tab" href="#tab_3" aria-expanded="false">Schedules</a></li>
-            <li ng-class="{active: activeTab == 'settings'}"><a data-toggle="tab" href="#tab_4" aria-expanded="false">Settings</a></li>
+            <li ng-class="{active: activeTab == 'all'}" data-ng-click="activeTab = 'all'"><a>List of all active</a></li>
+            <li ng-class="{active: activeTab == 'failed'}" data-ng-click="activeTab = 'failed'"><a>Failed</a></li>
+            <li ng-class="{active: activeTab == 'schedules'}" data-ng-click="activeTab = 'schedules'"><a>Schedules</a></li>
+            <li ng-class="{active: activeTab == 'settings'}" data-ng-click="activeTab = 'settings'"><a>Settings</a></li>
         </ul>
     </div>
-
         <div class="tab-content">
-            <div class="tab-pane active" id="tab_1">
-                Not done
+            <div class="tab-pane active" data-ng-if="activeTab == 'all'">
+                Not done : all
             </div>
-            <div class="tab-pane" id="tab_2">
-                Not done
+            <div class="tab-pane active" data-ng-if="activeTab == 'failed'">
+                Not done : failed
             </div>
-            <div class="tab-pane" id="tab_3">
-                Hello.
+            <div class="tab-pane active" data-ng-if="activeTab == 'schedules'">
+                <div data-ng-if="activeTab == 'schedules'" data-schedule-editor></div>
             </div>
-            <div class="tab-pane" id="tab_4">
-                Not done
+            <div class="tab-pane active" data-ng-if="activeTab == 'settings'">
+                Not done : settings
             </div>
         </div>
 

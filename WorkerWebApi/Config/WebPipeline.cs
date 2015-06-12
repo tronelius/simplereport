@@ -14,6 +14,7 @@ namespace WorkerWebApi.Config
             config.MapHttpAttributeRoutes();
 
             application.UseNinjectMiddleware(CreateKernel).UseNinjectWebApi(config);
+            config.EnsureInitialized();
         }
 
         private static StandardKernel CreateKernel()

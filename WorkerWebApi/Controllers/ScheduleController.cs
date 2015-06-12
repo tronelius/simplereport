@@ -1,11 +1,13 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
+using Newtonsoft.Json;
 using Worker.Common.Common;
 using Worker.Common.Model;
 using Worker.Common.Repository;
 
 namespace WorkerWebApi.Controllers
 {
-    [RoutePrefix("api/schedule/")]
+    [RoutePrefix("api/schedule")]
     public class ScheduleController : ApiController
     {
         private readonly ILogger _logger;
@@ -16,28 +18,50 @@ namespace WorkerWebApi.Controllers
             _logger = logger;
             _scheduleRepository = scheduleRepository;
         }
-
-        [Route("test")]
-        [HttpGet]
-        public IHttpActionResult Test(string message)
+        
+        [Route("save")]
+        [HttpPost]
+        public IHttpActionResult Save(Schedule schedule)
         {
-            _logger.Info("Hello, webapi called.");
-            return Json(new { Msg = "Hello " + message });
+            _logger.Info("Creating schedule: " + JsonConvert.SerializeObject(schedule));
+            if (schedule.Id == 0)
+            {
+                var id = _scheduleRepository.Insert(schedule);
+                return Json(new { Id = id });
+            }
+            else
+            {
+                _scheduleRepository.Update(schedule);
+                return Json(new { Id = schedule.Id });
+            }
         }
 
-        [Route("create")]
-        [HttpGet]
-        public IHttpActionResult Create()
+        [Route("delete")]
+        [HttpPost]
+        public IHttpActionResult Delete([FromBody]int id)
         {
-            _logger.Info("Creating schedule");
-            var schedule = new Schedule()
-                           {
-                               Name = "TestSchedule",
-                               Cron = "0 0 0 0 0 0"
+            _logger.Info("Deleting schedule: " + id);
 
-                           };
-            var id = _scheduleRepository.Insert(schedule);
-            return Json(new { Msg = "Created: " + id});
+            _scheduleRepository.Delete(id);
+            var result = _scheduleRepository.List();
+            return Json(result);
+        }
+
+        [Route("all")]
+        [HttpGet]
+        public IHttpActionResult All()
+        {
+            try
+            {
+                _logger.Info("Getting all schedules");
+                var result = _scheduleRepository.List();
+                return Json(result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Schedulecontroller.All", e);
+                throw;
+            }
         }
     }
 }
