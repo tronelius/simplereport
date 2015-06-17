@@ -47,7 +47,7 @@ angular.module('report')
                         parameter.from = new Date();
                     if (!parameter.to)
                         parameter.to = new Date();
-                    
+
                     var from = $filter('date')(parameter.from, $scope.dateFormat);
                     var to = $filter('date')(parameter.to, $scope.dateFormat);
 
@@ -67,6 +67,30 @@ angular.module('report')
             }
         }
     ])
+.directive('emails', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            ctrl.$validators.emails = function(modelValue, viewValue) {
+                if (ctrl.$isEmpty(modelValue)) {
+                    // consider empty models to be valid
+                    return true;
+                }
+
+                var split = modelValue.split(';');
+
+                var valid = true;
+                split.forEach(function (email) {
+                    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+                    if (!re.test(email))
+                        valid = false;
+                });
+
+                return valid;
+            };
+        }
+    };
+})
     .directive('subscriptionEditor', function () {
         return {
             templateUrl: 'scripts/app/templates/subscriptionEditor.html',
@@ -96,7 +120,7 @@ angular.module('report')
                         toastr.warning('To,CC or Bcc needs to be provided.');
                         return;
                     }
-
+                    
                     $scope.reportParameters.forEach(function (param) {
                         if (param.Mandatory && !param.Value) {
                             toastr.warning('You need to provide values for all mandatory parameters.');
@@ -112,14 +136,14 @@ angular.module('report')
                     var url = 'Home/ExecuteReport?' + serialize(parsedParameters);
 
                     var data = angular.extend({ ReportId: $scope.reportId, ReportUrl: url }, $scope.subscription);
-                    subscriptionRepository.save(data).success(function(data) {
+                    subscriptionRepository.save(data).success(function (data) {
                         toastr.success('Subscription saved');
                         $scope.subscription.Id = data.Id;
-                    }).error(function() {
+                    }).error(function () {
                         toastr.error('Something went wrong during save, please try again later or contact support');
                     });
                 }
-
+                
                 function serialize(obj) {
                     var str = [];
                     for (var p in obj)

@@ -18,7 +18,7 @@
                                 <div class="form-group">
                                     <label class="control-label" title="Primary recipient(s). Separate with ;">To</label>
                                     <div>
-                                        <input type="text" ng-model="subscription.To" class="form-control" placeholder="To" title="Primary recipient(s). Separate with ;">
+                                        <input type="text" ng-model="subscription.To" data-emails class="form-control" placeholder="To" title="Primary recipient(s). Separate with ;">
                                     </div>
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                                 <div class="form-group">
                                     <label class="control-label" title="Others that might be interested in this report">Copy to (cc)</label>
                                     <div>
-                                        <input type="text" ng-model="subscription.Cc" class="form-control" placeholder="CC" title="Others that might be interested in this report">
+                                        <input type="text" ng-model="subscription.Cc" data-emails class="form-control" placeholder="CC" title="Others that might be interested in this report">
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                 <div class="form-group">
                                     <label class="control-label" title="Recipients that are hidden">Blind copy (bcc)</label>
                                     <div>
-                                        <input type="text" ng-model="subscription.Bcc" class="form-control" placeholder="BCC" title="Recipients that are hidden">
+                                        <input type="text" ng-model="subscription.Bcc" data-emails class="form-control" placeholder="BCC" title="Recipients that are hidden">
                                     </div>
                                 </div>
                             </div>
