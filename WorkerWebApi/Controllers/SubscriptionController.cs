@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
+using System.Net.Mail;
 using System.Web.Http;
 using NCrontab;
 using Newtonsoft.Json;
@@ -22,14 +24,17 @@ namespace WorkerWebApi.Controllers
             _subscriptionRepository = subscriptionRepository;
             _scheduleRepository = scheduleRepository;
         }
-        
+
         [Route("save")]
         [HttpPost]
         public IHttpActionResult Save(Subscription subscription)
         {
             _logger.Info("Creating schedule: " + JsonConvert.SerializeObject(subscription));
 
-            //TODO: do we need some kind of validation here? how to send the results back to the other api in a nice way?
+            var errorResult = ValidateSubscription(subscription);
+
+            if (errorResult != null)
+                return errorResult;
 
             SetNextSendDate(subscription);
 
@@ -43,6 +48,28 @@ namespace WorkerWebApi.Controllers
                 _subscriptionRepository.Update(subscription);
                 return Json(new { Id = subscription.Id });
             }
+        }
+
+        private IHttpActionResult ValidateSubscription(Subscription subscription)
+        {
+            if (string.IsNullOrWhiteSpace(subscription.To + subscription.Cc + subscription.Bcc))
+                return Json(new { Error = "At least one recipient must be defined" });
+
+            var emails = subscription.To + ";" + subscription.Cc + ";" + subscription.Bcc;
+            string[] allToAddresses = emails.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            foreach (string toAddress in allToAddresses)
+            {
+                try
+                {
+                    new MailAddress(toAddress);
+                }
+                catch (FormatException)
+                {
+                    return Json(new { Error = "Malformed email-recipients" });
+                }
+            }
+
+            return null;
         }
 
         [Route("delete")]
@@ -78,7 +105,7 @@ namespace WorkerWebApi.Controllers
             var schedule = _scheduleRepository.Get(subscription.ScheduleId);
             var crons = schedule.Cron.Split(';'); //we can have composite crons, separated by ;
             var date = crons.Select(CrontabSchedule.Parse).Select(x => x.GetNextOccurrence(DateTime.Now)).Min();
-            
+
             subscription.NextSend = date;
         }
     }
