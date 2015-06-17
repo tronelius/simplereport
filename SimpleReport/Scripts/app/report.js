@@ -23,14 +23,22 @@ angular.module('report')
                             param.EnumValue = param.Value;
                         }
                     }
+
+                    $scope.dateFormat = 'yyyy-MM-dd';
                 });
 
                 $scope.viewModel = viewModel;
 
                 $scope.triggerOnScreen = triggerOnScreen;
                 $scope.periodChanged = periodChanged;
+                $scope.dateChanged = dateChanged;
             };
             $scope.init();
+
+            function dateChanged(parameter) {
+                var date = $filter('date')(parameter.Value, $scope.dateFormat);
+                parameter.Value = date;
+            }
 
             function periodChanged(parameter) {
                 //9999 is custom..
@@ -39,10 +47,9 @@ angular.module('report')
                         parameter.from = new Date();
                     if (!parameter.to)
                         parameter.to = new Date();
-
-                    var format = 'yyyy-MM-dd';
-                    var from = $filter('date')(parameter.from, format);
-                    var to = $filter('date')(parameter.to, format);
+                    
+                    var from = $filter('date')(parameter.from, $scope.dateFormat);
+                    var to = $filter('date')(parameter.to, $scope.dateFormat);
 
                     parameter.Value = parameter.EnumValue + ':' + from + '_' + to;
 
