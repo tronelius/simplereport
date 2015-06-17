@@ -115,4 +115,25 @@ angular.module('subscriptions')
             });
         }
     }
-}]);
+}])
+.directive('subscriptionList', function () {
+    return {
+        templateUrl: 'scripts/app/templates/subscriptionList.html',
+        scope: {},
+        controller: ['$scope', '$http', 'subscriptionRepository', function ($scope, $http, subscriptionRepository) {
+
+            $scope.init = function () {
+                fetchData();
+            };
+            $scope.init();
+
+            function fetchData() {
+                subscriptionRepository.list().success(function (data) {
+                    $scope.subscriptions = data;
+                }).error(function () {
+                    toastr.error('Something went wrong, please try again later or contact support');
+                });
+            }
+        }]
+    };
+});

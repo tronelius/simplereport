@@ -228,6 +228,7 @@
     <Content Include="Scripts\app\report.js" />
     <Content Include="Scripts\app\designer.js" />
     <Content Include="Scripts\app\shared.js" />
+    <Content Include="Scripts\app\templates\subscriptionList.html" />
     <Content Include="Scripts\app\templates\subscriptionEditor.html" />
     <Content Include="Scripts\app\templates\scheduleEditor.html" />
     <Content Include="Scripts\app\templates\onScreenReport.html" />

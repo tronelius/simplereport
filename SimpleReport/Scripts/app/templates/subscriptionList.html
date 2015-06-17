@@ -1,0 +1,57 @@
+﻿<div>
+    <div class="overlay" data-ng-if="!subscriptions">
+        <i class="fa fa-refresh fa-spin"></i>
+    </div>
+
+    <div ng-show="subscriptions" class="">
+        <div class="row">
+            <div>
+                <label>List of all active subscriptions</label>
+            </div>
+            <div class="pull-right">
+                <label class="control-label">Filter</label>
+                <div>
+                    <input type="text" ng-model="searchText" class="form-control" placeholder="Filter">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="table table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Report</th>
+                        <th>Recipients</th>
+                        <th>Status</th>
+                        <th>Latest</th>
+                        <th>Schedule</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="row in subscriptions | filter:searchText | limitTo: 10 track by row.Id">
+                        <td>
+                            {{row.Report}}
+                        </td>
+                        <td>
+                            {{row.Recipients}}
+                        </td>
+                        <td>
+                            {{row.Status}}
+                        </td>
+                        <td>
+                            {{row.LastSent}}
+                        </td>
+                        <td>
+                            {{row.Schedule}}
+                        </td>
+                        <td>
+                            Send Edit Remove
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

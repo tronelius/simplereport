@@ -18,22 +18,39 @@ namespace SimpleReport.Controllers.Api
             _apiClient = apiClient;
         }
 
-        //[AcceptVerbs("GET")]
-        //public async Task<IHttpActionResult> All()
-        //{
-        //    try
-        //    {
-        //        _adminAccess.IsAllowedForMe(User);
-                
-        //        var result = await _apiClient.Get("api/subscription/all");
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.Error("Exception in All", ex);
-        //        return InternalServerError();
-        //    }
-        //}
+        [AcceptVerbs("GET")]
+        public async Task<IHttpActionResult> All()
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+
+                var result = await _apiClient.Get("api/subscription/all");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in All", ex);
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("GET")]
+        public async Task<IHttpActionResult> List()
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+
+                var result = await _apiClient.Get("api/subscription/list");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in List", ex);
+                return InternalServerError();
+            }
+        }
 
         [AcceptVerbs("POST")]
         public async Task<IHttpActionResult> Save(object subscription)
@@ -52,21 +69,21 @@ namespace SimpleReport.Controllers.Api
             }
         }
 
-        //[AcceptVerbs("POST")]
-        //public async Task<IHttpActionResult> Delete(Dictionary<string,object> obj)//this is really {id : int}, but webapi model binding is evil when it comes to simple values, hence we use this.
-        //{
-        //    try
-        //    {
-        //        _adminAccess.IsAllowedForMe(User);
+        [AcceptVerbs("POST")]
+        public async Task<IHttpActionResult> Delete(Dictionary<string, object> obj)//this is really {id : int}, but webapi model binding is evil when it comes to simple values, hence we use this.
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
 
-        //        var result = await _apiClient.Post("api/schedule/subscription", obj["Id"]);
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.Error("Exception in Delete", ex);
-        //        return InternalServerError();
-        //    }
-        //}
+                var result = await _apiClient.Post("api/schedule/subscription", obj["Id"]);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in Delete", ex);
+                return InternalServerError();
+            }
+        }
     }
 }
