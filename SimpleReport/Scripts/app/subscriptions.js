@@ -51,6 +51,11 @@ angular.module('subscriptions')
 
              function save() {
                  scheduleRepository.save($scope.schedule).success(function (data) {
+                     if (data.Error) {
+                         toastr.error(data.Error);
+                         return;
+                     }
+
                      if (!$scope.schedule.Id) {
                          $scope.schedule.Id = data.Id;
                          $scope.data.push($scope.schedule);

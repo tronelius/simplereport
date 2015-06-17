@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mail;
 
 namespace Worker.Common.Model
 {
@@ -17,5 +18,27 @@ namespace Worker.Common.Model
         public DateTime? LastErrorDate { get; set; }
         public int? FailedAttempts { get; set; }
         public int ScheduleId { get; set; }
+
+        public string Validate()
+        {
+            if (string.IsNullOrWhiteSpace(To + Cc + Bcc))
+                return "At least one recipient must be defined";
+
+            var emails = To + ";" + Cc + ";" + Bcc;
+            string[] allToAddresses = emails.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            foreach (string toAddress in allToAddresses)
+            {
+                try
+                {
+                    new MailAddress(toAddress);
+                }
+                catch (FormatException)
+                {
+                    return "Malformed email-recipients";
+                }
+            }
+
+            return null;
+        }
     }
 }

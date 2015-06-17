@@ -137,6 +137,11 @@ angular.module('report')
 
                     var data = angular.extend({ ReportId: $scope.reportId, ReportUrl: url }, $scope.subscription);
                     subscriptionRepository.save(data).success(function (data) {
+                        if (data.Error) {
+                            toastr.error(data.Error);
+                            return;
+                        }
+
                         toastr.success('Subscription saved');
                         $scope.subscription.Id = data.Id;
                     }).error(function () {

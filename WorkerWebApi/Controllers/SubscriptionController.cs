@@ -31,10 +31,10 @@ namespace WorkerWebApi.Controllers
         {
             _logger.Info("Creating schedule: " + JsonConvert.SerializeObject(subscription));
 
-            var errorResult = ValidateSubscription(subscription);
+            var errorResult = subscription.Validate();
 
             if (errorResult != null)
-                return errorResult;
+                return Json(new { Error = errorResult });
 
             SetNextSendDate(subscription);
 
@@ -48,28 +48,6 @@ namespace WorkerWebApi.Controllers
                 _subscriptionRepository.Update(subscription);
                 return Json(new { Id = subscription.Id });
             }
-        }
-
-        private IHttpActionResult ValidateSubscription(Subscription subscription)
-        {
-            if (string.IsNullOrWhiteSpace(subscription.To + subscription.Cc + subscription.Bcc))
-                return Json(new { Error = "At least one recipient must be defined" });
-
-            var emails = subscription.To + ";" + subscription.Cc + ";" + subscription.Bcc;
-            string[] allToAddresses = emails.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            foreach (string toAddress in allToAddresses)
-            {
-                try
-                {
-                    new MailAddress(toAddress);
-                }
-                catch (FormatException)
-                {
-                    return Json(new { Error = "Malformed email-recipients" });
-                }
-            }
-
-            return null;
         }
 
         [Route("delete")]
