@@ -19,10 +19,10 @@ namespace Worker.Common.Migrations
                 .WithColumn("Cc").AsString(1000).Nullable()
                 .WithColumn("Bcc").AsString(1000).Nullable()
                 .WithColumn("Status").AsInt32().NotNullable()
-                .WithColumn("LastSent").AsDate().Nullable()
-                .WithColumn("NextSend").AsDate().NotNullable()
+                .WithColumn("LastSent").AsDateTime().Nullable()
+                .WithColumn("NextSend").AsDateTime().NotNullable()
                 .WithColumn("ErrorMessage").AsString(2000).Nullable()
-                .WithColumn("LastErrorDate").AsDate().Nullable()
+                .WithColumn("LastErrorDate").AsDateTime().Nullable()
                 .WithColumn("FailedAttempts").AsInt32().Nullable()
                 .WithColumn("ScheduleId").AsInt32().ForeignKey("Schedule", "Id")
                 ;
