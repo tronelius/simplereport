@@ -1,4 +1,4 @@
-﻿angular.module('subscriptions', ['shared', 'ui.bootstrap']);
+﻿angular.module('subscriptions', ['shared', 'ui.bootstrap', 'repository']);
 
 angular.module('subscriptions')
     .controller('subscriptionController', ['$scope', '$http', function ($scope, $http) {
@@ -14,7 +14,7 @@ angular.module('subscriptions')
      return {
          templateUrl: 'scripts/app/templates/scheduleEditor.html',
          scope: { },
-         controller: ['$scope', '$http', function ($scope, $http) {
+         controller: ['$scope', '$http', 'scheduleRepository', function ($scope, $http, scheduleRepository) {
 
              $scope.init = function () {
                  $scope.schedule = null;
@@ -33,7 +33,7 @@ angular.module('subscriptions')
              function fetchData() {
                  $scope.data = null;
 
-                 $http.get("api/schedule/all").success(function (data) {
+                 scheduleRepository.getAll().success(function (data) {
                      $scope.data = data;
                  }).error(function () {
                      toastr.error('Something went wrong, please try again later or contact support');
@@ -50,7 +50,7 @@ angular.module('subscriptions')
              }
 
              function save() {
-                 $http.post("api/schedule/save", $scope.schedule).success(function (data) {
+                 scheduleRepository.save($scope.schedule).success(function (data) {
                      if (!$scope.schedule.Id) {
                          $scope.schedule.Id = data.Id;
                          $scope.data.push($scope.schedule);
@@ -69,7 +69,7 @@ angular.module('subscriptions')
                      return;
                  }
 
-                 $http.post("api/schedule/delete", { Id: $scope.schedule.Id }).success(function (data) {
+                 scheduleRepository.delete($scope.schedule.Id).success(function (data) {
                      $scope.data = data;
                      $scope.schedule = null;
                      toastr.success('Schedule removed');
@@ -94,7 +94,7 @@ angular.module('subscriptions')
                         });
                     },
                     customValues: {
-                        "quarter": "0 0 30 6,9;0 0 31 3,12",//two crons in one..
+                        "quarter": "0 0 30 6,9 *;0 0 31 3,12 *",//two crons in one..
                     }
                 }
 

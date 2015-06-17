@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
 using SimpleReport.Helpers;
-using SimpleReport.Model;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
 
@@ -34,7 +30,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
-                _logger.Error("Exception in GetviewModel", ex);
+                _logger.Error("Exception in All", ex);
                 return InternalServerError();
             }
         }
@@ -51,7 +47,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
-                _logger.Error("Exception in SaveReport", ex);
+                _logger.Error("Exception in Save", ex);
                 return InternalServerError();
             }
         }
@@ -68,7 +64,7 @@ namespace SimpleReport.Controllers.Api
             }
             catch (Exception ex)
             {
-                _logger.Error("Exception in DeleteReport", ex);
+                _logger.Error("Exception in Delete", ex);
                 return InternalServerError();
             }
         }

@@ -14,17 +14,17 @@ namespace Worker.Common.Migrations
 
             Create.Table("Subscription").WithColumn("Id").AsInt32().Identity().PrimaryKey()
                 .WithColumn("ReportId").AsGuid().NotNullable()
-                .WithColumn("ReportUrl").AsString().NotNullable()
+                .WithColumn("ReportUrl").AsString(2000).NotNullable()
                 .WithColumn("To").AsString(1000).NotNullable()
                 .WithColumn("Cc").AsString(1000).Nullable()
                 .WithColumn("Bcc").AsString(1000).Nullable()
                 .WithColumn("Status").AsInt32().NotNullable()
                 .WithColumn("LastSent").AsDate().Nullable()
                 .WithColumn("NextSend").AsDate().NotNullable()
-                .WithColumn("ErrorMessage").AsString().Nullable()
-                .WithColumn("LastErrorDate").AsString(2000).Nullable()
+                .WithColumn("ErrorMessage").AsString(2000).Nullable()
+                .WithColumn("LastErrorDate").AsDate().Nullable()
                 .WithColumn("FailedAttempts").AsInt32().Nullable()
-                .WithColumn("Schedule").AsInt32().ForeignKey("Schedule", "Id")
+                .WithColumn("ScheduleId").AsInt32().ForeignKey("Schedule", "Id")
                 ;
         }
 

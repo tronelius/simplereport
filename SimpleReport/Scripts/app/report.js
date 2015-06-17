@@ -1,4 +1,4 @@
-﻿angular.module('report', ['shared', 'ui.bootstrap']);
+﻿angular.module('report', ['shared', 'ui.bootstrap', 'repository']);
 
 angular.module('report')
     .controller('reportController', [
@@ -64,12 +64,12 @@ angular.module('report')
         return {
             templateUrl: 'scripts/app/templates/subscriptionEditor.html',
             scope: { reportId: '=', reportParameters: '=', subscriptionId: '=' },
-            controller: ['$scope', '$http', function ($scope, $http) {
+            controller: ['$scope', '$http', 'scheduleRepository', 'subscriptionRepository', function ($scope, $http, scheduleRepository, subscriptionRepository) {
 
                 function init() {
                     //if there is no current subscriptionid, then we are creating a new one.  works for now, might change when we have the list.
                     if (!$scope.subscriptionId) {
-                        $scope.subscription = { To: '', Cc: '', Bcc: '', Schedule: null }
+                        $scope.subscription = { To: '', Cc: '', Bcc: '', ScheduleId: null }
                     }
 
                     fetchData();
@@ -79,6 +79,24 @@ angular.module('report')
                 init();
 
                 function save() {
+
+                    if ($scope.form.$invalid) {
+                        toastr.warning('Please fill in required fields');
+                        return;
+                    }
+
+                    if (!($scope.subscription.To || $scope.subscription.Cc || $scope.subscription.Bcc)) {
+                        toastr.warning('To,CC or Bcc needs to be provided.');
+                        return;
+                    }
+
+                    $scope.reportParameters.forEach(function (param) {
+                        if (param.Mandatory && !param.Value) {
+                            toastr.warning('You need to provide values for all mandatory parameters.');
+                            return;
+                        }
+                    });
+
                     var parsedParameters = { reportId: $scope.reportId };
                     $scope.reportParameters.forEach(function (param) {
                         parsedParameters[param.Key] = param.Value;
@@ -86,8 +104,13 @@ angular.module('report')
 
                     var url = 'Home/ExecuteReport?' + serialize(parsedParameters);
 
-                    var data = angular.extend({ ReportId: $scope.reportId, Url: url }, $scope.subscription);
-                    console.log(data);
+                    var data = angular.extend({ ReportId: $scope.reportId, ReportUrl: url }, $scope.subscription);
+                    subscriptionRepository.save(data).success(function(data) {
+                        toastr.success('Subscription saved');
+                        $scope.subscription.Id = data.Id;
+                    }).error(function() {
+                        toastr.error('Something went wrong during save, please try again later or contact support');
+                    });
                 }
 
                 function serialize(obj) {
@@ -100,8 +123,7 @@ angular.module('report')
                 }
 
                 function fetchData() {
-                    //TODO: extract to repository.
-                    $http.get("api/schedule/all").success(function (data) {
+                    scheduleRepository.getAll().success(function (data) {
                         $scope.schedules = data;
                     }).error(function () {
                         toastr.error('Something went wrong when loading schedules, please try again later or contact support');

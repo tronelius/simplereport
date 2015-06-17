@@ -149,6 +149,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
+    <Compile Include="Controllers\Api\SubscriptionController.cs" />
     <Compile Include="Controllers\Api\ScheduleController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Api\DesignerController.cs" />
@@ -222,6 +223,7 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\app\repository.js" />
     <Content Include="Scripts\app\subscriptions.js" />
     <Content Include="Scripts\app\report.js" />
     <Content Include="Scripts\app\designer.js" />
