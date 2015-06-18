@@ -7,12 +7,30 @@ using System.Security.Principal;
 
 namespace SimpleReport.Model
 {
+
+    public enum AccessStyle
+    {
+        Administrators,
+        ReportOwner,
+        Anyone
+    }
+
     public class Report : LookupReport
     {
-      
         public ResultType ResultType { get; set; }
         public ParameterList Parameters { get; set; }
         public bool HasTemplate { get; set; }
+        public string MailSubject { get; set; }
+        public string MailText { get; set; }
+        
+        //who can fiddle with the template
+        public Guid TemplateAccessId { get; set; }
+        [NonSerialized]
+        public Access TemplateAccess; //TODO rename to reportowner
+
+        public bool OnScreenFormatAllowed { get; set; }
+        public AccessStyle TemplateEditorAccessStyle { get; set; }
+        public AccessStyle SubscriptionAccessStyle { get; set; }
 
         public Report()
         {
@@ -52,13 +70,13 @@ namespace SimpleReport.Model
 
         public bool IsAllowedToEditTemplate(IPrincipal user, Access adminAccess)
         {
-            if (TemplateEditorAccessStyle == TemplateEditorAccessStyle.Anyone)
+            if (TemplateEditorAccessStyle == AccessStyle.Anyone)
                 return true;
 
             if (adminAccess.IsAvailableForMe(user))
                 return true;
 
-            if (TemplateEditorAccessStyle == TemplateEditorAccessStyle.ReportOwner)
+            if (TemplateEditorAccessStyle == AccessStyle.ReportOwner)
                 return TemplateAccess != null && TemplateAccess.IsAvailableForMe(user);
 
             return false;

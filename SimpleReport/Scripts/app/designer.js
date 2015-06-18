@@ -14,7 +14,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.accessLists = data.AccessLists;
                 $scope.templateAccessLists = data.TemplateAccessLists;
                 $scope.settings = data.Settings;
-                $scope.potentialTemplateEditors = data.PotentialTemplateEditors;
+                $scope.accessEditorViewModel = data.AccessEditorViewModel;
             }).
             error(function (data) {
                 toastr.error("Couldn't get list of reports from server.","Error");

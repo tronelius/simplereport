@@ -20,7 +20,8 @@ namespace SimpleReport.ViewModel
         public List<Access> AccessLists { get; set; }
         public List<Access> TemplateAccessLists { get; set; }
         public Settings Settings { get; set; }
-        public IEnumerable<TemplateEditorViewModel> PotentialTemplateEditors { get; set; }
+        public IEnumerable<AccessEditorViewModel> AccessEditorViewModel { get; set; }
+
 
         public DesignerViewModel(IStorage reportStorage, IPrincipal user)
         {
@@ -34,18 +35,18 @@ namespace SimpleReport.ViewModel
             AccessLists.Insert(0,new Access(Guid.Empty,"Free for all",""));
             TemplateAccessLists.Insert(0, new Access(Guid.Empty, "None selected", ""));
             Settings = reportStorage.GetSettings();
-            PotentialTemplateEditors = Enum.GetValues(typeof(TemplateEditorAccessStyle)).Cast<TemplateEditorAccessStyle>().Select(x => new TemplateEditorViewModel(x, GetTextForTemplateEditor(x)));
+            AccessEditorViewModel = Enum.GetValues(typeof(AccessStyle)).Cast<AccessStyle>().Select(x => new AccessEditorViewModel(x, GetTextForTemplateEditor(x)));
         }
 
-        private string GetTextForTemplateEditor(TemplateEditorAccessStyle editor)
+        private string GetTextForTemplateEditor(AccessStyle editor)
         {
             switch (editor)
             {
-                    case TemplateEditorAccessStyle.Administrators:
-                        return "Admininstrators";
-                    case  TemplateEditorAccessStyle.Anyone:
-                        return "Anyone with access to the report";
-                case TemplateEditorAccessStyle.ReportOwner:
+                case AccessStyle.Administrators:
+                    return "Admininstrators";
+                case  AccessStyle.Anyone:
+                    return "Anyone with report access";
+                case AccessStyle.ReportOwner:
                         return "Report owner";
                 default:
                     return editor.ToString();
@@ -53,12 +54,12 @@ namespace SimpleReport.ViewModel
         }
     }
 
-    public class TemplateEditorViewModel
+    public class AccessEditorViewModel
     {
-        public TemplateEditorAccessStyle Value { get; set; }
+        public AccessStyle Value { get; set; }
         public string Text { get; set; }
 
-        public TemplateEditorViewModel(TemplateEditorAccessStyle value, string text)
+        public AccessEditorViewModel(AccessStyle value, string text)
         {
             Value = value;
             Text = text;

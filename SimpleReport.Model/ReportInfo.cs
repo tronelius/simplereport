@@ -17,14 +17,7 @@ namespace SimpleReport.Model
         public Guid AccessId { get; set; }
         [NonSerialized]
         public Access Access;
-        
-        //who can fiddle with the template
-        public Guid TemplateAccessId { get; set; }
-        [NonSerialized]
-        public Access TemplateAccess;
-
-        public bool OnScreenFormatAllowed { get; set; }
-        public TemplateEditorAccessStyle TemplateEditorAccessStyle { get; set; }
+       
 
         public ReportInfo()
         {
@@ -44,10 +37,4 @@ namespace SimpleReport.Model
 
     }
 
-    public enum TemplateEditorAccessStyle
-    {
-        Administrators,
-        ReportOwner,
-        Anyone
-    }
 }
