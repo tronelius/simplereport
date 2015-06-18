@@ -4,34 +4,64 @@
     </div>
 
     <div ng-show="subscriptions" class="">
-        <div class="row">
-            <div>
+        <div class="form-inline row">
+            <div class="col-md-6">
                 <label>List of all active subscriptions</label>
             </div>
-            <div class="pull-right">
-                <label class="control-label">Filter</label>
-                <div>
-                    <input type="text" ng-model="searchText" class="form-control" placeholder="Filter">
+            <div class="col-md-6" style="margin-bottom: 10px; text-align: right;">
+                <div class="form-group">
+                    <label style="margin-right: 10px;">Filter</label>
+                    <input type="text" class="form-control" ng-model="searchText" placeholder="Filter">
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="">
             <table class="table table-condensed table-striped">
                 <thead>
                     <tr>
-                        <th data-ng-if="showReportName">Report</th>
-                        <th>Recipients</th>
-                        <th>Status</th>
-                        <th>Latest</th>
-                        <th>Schedule</th>
+                        <th data-ng-show="showReportName">
+                            <a ng-click="sortType = 'ReportName'; sortReverse = !sortReverse">
+                                Report
+                                <span ng-show="sortType == 'ReportName' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'ReportName' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'Recipients'; sortReverse = !sortReverse">
+                                Recipients
+                                <span ng-show="sortType == 'Recipients' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Recipients' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'Status'; sortReverse = !sortReverse">
+                                Status
+                                <span ng-show="sortType == 'Status' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Status' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'LastSent'; sortReverse = !sortReverse">
+                                LastSent
+                                <span ng-show="sortType == 'LastSent' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'LastSent' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'Schedule'; sortReverse = !sortReverse">
+                                Schedule
+                                <span ng-show="sortType == 'Schedule' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Schedule' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
                         <th>ErrorMessage</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-ng-repeat="row in subscriptions | filter:searchText | limitTo: 10 track by row.Id">
-                        <td data-ng-if="showReportName">
+                    <tr data-ng-repeat="row in subscriptions | orderBy:sortType:sortReverse | filter:searchText | limitTo: 10 track by row.Id">
+                        <td data-ng-show="showReportName">
                             {{row.ReportName}}
                         </td>
                         <td>
