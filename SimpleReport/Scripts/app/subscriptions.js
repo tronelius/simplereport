@@ -165,6 +165,7 @@ angular.module('subscriptions')
 
                 function editSubscription(id) {
                     //TODO: make this work.. some kind of redirect based on sub url?
+
                 }
 
                 function deleteSubscription(id) {

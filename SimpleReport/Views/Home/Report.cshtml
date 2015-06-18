@@ -61,10 +61,9 @@
                                         </div>
 
                                         <div data-ng-switch-when="@((int) ParameterInputType.Period)">
-                                            <input type="hidden" value="{{par.Value}}" name="{{par.Key}}" />
-                                            <select data-ng-required="{{par.Mandatory}}" class="form-control" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
+                                            <input type="hidden" value="{{par.Value}}" name="{{par.Key}}"/>
+                                            <select data-ng-required="{{par.Mandatory}}" class="form-control" data-ng-options="k as v for (k,v) in par.Choices" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
                                                 <option value="">[Please Choose...]</option>
-                                                <option data-ng-repeat="(k,v) in par.Choices track by $index" value="{{k}}">{{v}}</option>
                                             </select>
                                             <div data-ng-show="par.EnumValue === '9999'">
                                                 <datepicker class="pull-left" ng-model="par.from" max-date="par.to" show-weeks="true" data-ng-change="periodChanged(par)"></datepicker>
