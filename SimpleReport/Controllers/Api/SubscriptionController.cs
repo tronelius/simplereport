@@ -76,12 +76,29 @@ namespace SimpleReport.Controllers.Api
             {
                 _adminAccess.IsAllowedForMe(User);
 
-                var result = await _apiClient.Post("api/schedule/subscription", obj["Id"]);
+                var result = await _apiClient.Post("api/subscription/delete", obj["Id"]);
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 _logger.Error("Exception in Delete", ex);
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
+        public async Task<IHttpActionResult> Send(Dictionary<string, object> obj)
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+
+                var result = await _apiClient.Post("api/subscription/send", obj["Id"]);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in Send", ex);
                 return InternalServerError();
             }
         }

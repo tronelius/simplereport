@@ -126,6 +126,10 @@ angular.module('subscriptions')
                 $scope.init = function () {
                     $scope.showReportName = $scope.showReportName === 'true';
                     fetchData();
+
+                    $scope.sendSubscription = sendSubscription;
+                    $scope.editSubscription = editSubscription;
+                    $scope.deleteSubscription = deleteSubscription;
                 };
                 $scope.init();
 
@@ -151,6 +155,24 @@ angular.module('subscriptions')
 
                         $scope.subscriptions = data.subscriptions.data;
                     }).catch(function () {
+                        toastr.error('Something went wrong, please try again later or contact support');
+                    });
+                }
+
+                function sendSubscription(id) {
+                    subscriptionRepository.send(id);
+                }
+
+                function editSubscription(id) {
+                    //TODO: make this work.. some kind of redirect based on sub url?
+                }
+
+                function deleteSubscription(id) {
+                    subscriptionRepository.delete(id).success(function() {
+                        $scope.subscriptions = $scope.subscriptions.filter(function(s) {
+                            return s.Id !== id;
+                        });
+                    }).error(function() {
                         toastr.error('Something went wrong, please try again later or contact support');
                     });
                 }

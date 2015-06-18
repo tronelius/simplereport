@@ -44,6 +44,10 @@ angular.module('repository').factory('scheduleRepository', ['$http', function ($
         return $http.post(urlBase + 'delete', { Id: id });
     };
 
+    repo.send = function (id) {
+        return $http.post(urlBase + 'send', {Id : id });
+    };
+
     return repo;
 }])
 .factory('reportRepository', ['$http', function ($http) {

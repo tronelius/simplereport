@@ -60,6 +60,17 @@ namespace WorkerWebApi.Controllers
             return Json(result);
         }
 
+        [Route("send")]
+        [HttpPost]
+        public IHttpActionResult Send([FromBody]int id)
+        {
+            _logger.Info("Set send on subscription: " + id);
+
+            _subscriptionRepository.SendNow(id);
+            var result = _subscriptionRepository.List();
+            return Json(result);
+        }
+
         [Route("all")]
         [HttpGet]
         public IHttpActionResult All()

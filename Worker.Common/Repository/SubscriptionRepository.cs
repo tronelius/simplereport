@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Dapper;
 using DapperExtensions;
 using Worker.Common.Model;
 
@@ -13,6 +15,7 @@ namespace Worker.Common.Repository
         List<Subscription> List();
         void Update(Subscription schedule);
         void Delete(int id);
+        void SendNow(int id);
     }
 
     public class SubscriptionRepository : ISubscriptionRepository
@@ -76,6 +79,16 @@ namespace Worker.Common.Repository
             {
                 cn.Open();
                 cn.Delete<Subscription>(new { Id = id });
+                cn.Close();
+            }
+        }
+
+        public void SendNow(int id)
+        {
+            using (SqlConnection cn = new SqlConnection(_connectionString))
+            {
+                cn.Open();
+                cn.Execute("Update Subscription set NextSend = @date where Id = @Id", new { Date = DateTime.Now, Id = id});
                 cn.Close();
             }
         }

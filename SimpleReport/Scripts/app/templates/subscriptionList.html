@@ -84,7 +84,9 @@
                             {{row.ErrorMessage}}
                         </td>
                         <td>
-                            Send Edit Remove
+                            <a ng-click="sendSubscription(row.Id)">Send</a>
+                            <a ng-click="editSubscription(row.Id)">Edit</a>
+                            <a ng-click="deleteSubscription(row.Id)">Remove</a>
                         </td>
                     </tr>
                 </tbody>
