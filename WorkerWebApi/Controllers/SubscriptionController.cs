@@ -118,7 +118,7 @@ namespace WorkerWebApi.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error("SubscriptionController.All", e);
+                _logger.Error("SubscriptionController.UpdateTemplate", e);
                 throw;
             }
 
