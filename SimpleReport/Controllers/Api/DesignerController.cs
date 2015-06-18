@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
+using SimpleReport.Helpers;
 using SimpleReport.Model;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
@@ -13,8 +15,12 @@ namespace SimpleReport.Controllers.Api
 
     public class DesignerController : BaseApiController
     {
+        private readonly IApiClient _apiClient;
 
-        public DesignerController(IStorage reportStorage, ILogger logger) : base(reportStorage, logger){ }
+        public DesignerController(IStorage reportStorage, ILogger logger, IApiClient apiClient) : base(reportStorage, logger)
+        {
+            _apiClient = apiClient;
+        }
 
         [AcceptVerbs("GET")]
         public IHttpActionResult GetViewModel()
@@ -33,11 +39,17 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
-        public IHttpActionResult SaveReport([FromBody]Report reportToSave)
+        public async Task<IHttpActionResult> SaveReport([FromBody]Report reportToSave)
         {
             try {
                 _adminAccess.IsAllowedForMe(User);
-                HandleNewEntity(reportToSave);
+                Report currentReport = _reportStorage.GetReport(reportToSave.Id);
+                
+                //TODO check for subscription enabled
+                if (currentReport != null && currentReport.HasMailTemplateChanged(reportToSave)) {
+                    var result = await _apiClient.Post("api/subscription/updatetemplate", new {reportguid = reportToSave.Id, subject = reportToSave.MailSubject, text = reportToSave.MailText});
+                }
+
                 _reportStorage.SaveReport(reportToSave);
                 return Ok(reportToSave);
             } catch (Exception ex)
@@ -69,7 +81,6 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 _adminAccess.IsAllowedForMe(User);
-                HandleNewEntity(conn);
                 _reportStorage.SaveConnection(conn);
                 return Ok(conn);
             }
@@ -118,7 +129,6 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 _adminAccess.IsAllowedForMe(User);
-                HandleNewEntity(lrpt);
                 _reportStorage.SaveLookupReport(lrpt);
                 return Ok(lrpt);
             }

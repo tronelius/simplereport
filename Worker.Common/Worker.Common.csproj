@@ -63,10 +63,13 @@
     <Compile Include="IoCConfig.cs" />
     <Compile Include="Migrations\2015-06-18\RenameReportUrlToReportParams.cs" />
     <Compile Include="Migrations\2015-06-11\AddInitialTables.cs" />
+    <Compile Include="Migrations\2015-06-18\AddInitialTables.cs" />
     <Compile Include="Migrations\Migrator.cs" />
     <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\Schedule.cs" />
+    <Compile Include="Model\UpdateTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\SubscriptionRepository.cs" />
     <Compile Include="Repository\ScheduleRepository.cs" />
   </ItemGroup>

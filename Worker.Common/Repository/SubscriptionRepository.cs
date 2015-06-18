@@ -15,81 +15,70 @@ namespace Worker.Common.Repository
         List<Subscription> List();
         void Update(Subscription schedule);
         void Delete(int id);
+        void UpdateTemplateText(UpdateTemplateText updateTemplateText);
         void SendNow(int id);
     }
 
-    public class SubscriptionRepository : ISubscriptionRepository
+    public class SubscriptionRepository : BaseRepository, ISubscriptionRepository
     {
-        private readonly string _connectionString;
-
-        public SubscriptionRepository(string connectionstring)
-        {
-            _connectionString = connectionstring;
-        }
-
+        public SubscriptionRepository(string connectionstring) : base(connectionstring){}
+      
         public Subscription Get(int id)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 var schedule = cn.Get<Subscription>(id);
-                cn.Close();
-
                 return schedule;
             }
         }
 
         public int Insert(Subscription schedule)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 var id = cn.Insert(schedule);
-                cn.Close();
-
                 return id;
             }
         }
 
         public List<Subscription> List()
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 var list = cn.GetList<Subscription>();
-                cn.Close();
-
                 return list.ToList();
             }
         }
 
         public void Update(Subscription schedule)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 cn.Update(schedule);
-                cn.Close();
             }
         }
 
         public void Delete(int id)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 cn.Delete<Subscription>(new { Id = id });
-                cn.Close();
+            }
+        }
+
+        public void UpdateTemplateText(UpdateTemplateText updateTemplateText)
+        {
+            using (SqlConnection cn = EnsureOpenConnection())
+            {
+                cn.Execute("Update Subscription set Mailsubject=@mailsubject, MailText=@MailText where reportid=@reportid",new {mailsubject=updateTemplateText.Subject, mailtext =updateTemplateText.Text, reportid=updateTemplateText.ReportGuid});
             }
         }
 
         public void SendNow(int id)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 cn.Execute("Update Subscription set NextSend = @date where Id = @Id", new { Date = DateTime.Now, Id = id});
-                cn.Close();
             }
         }
     }

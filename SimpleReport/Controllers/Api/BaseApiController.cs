@@ -21,10 +21,5 @@ namespace SimpleReport.Controllers.Api
 
         }
 
-        protected void HandleNewEntity(IEntity entity)
-        {
-            if (entity.Id == null || entity.Id == Guid.Empty)
-                entity.Id = Guid.NewGuid();
-        }
     }
 }

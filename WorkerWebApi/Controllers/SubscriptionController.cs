@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Results;
 using NCrontab;
 using Newtonsoft.Json;
 using Worker.Common.Common;
@@ -105,6 +106,24 @@ namespace WorkerWebApi.Controllers
             }
         }
 
+        [Route("updatetemplate")]
+        [HttpPost]
+        public IHttpActionResult UpdateTemplate([FromBody]UpdateTemplateText updateTemplateText)
+        {
+            try
+            {
+                _logger.Info("Update template text for all subscription to report");
+                 _subscriptionRepository.UpdateTemplateText(updateTemplateText);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.Error("SubscriptionController.All", e);
+                throw;
+            }
+
+        }
+
         [Route("list")]
         [HttpGet]
         public IHttpActionResult List(string filter, string reportId)
@@ -163,4 +182,6 @@ namespace WorkerWebApi.Controllers
             subscription.NextSend = date;
         }
     }
+
+  
 }
