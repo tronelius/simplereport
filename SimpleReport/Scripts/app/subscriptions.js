@@ -116,24 +116,42 @@ angular.module('subscriptions')
         }
     }
 }])
-.directive('subscriptionList', function () {
+.directive('subscriptionList', function() {
     return {
         templateUrl: 'scripts/app/templates/subscriptionList.html',
-        scope: {},
-        controller: ['$scope', '$http', 'subscriptionRepository', function ($scope, $http, subscriptionRepository) {
+        scope: { showReportName: '@' },
+        controller: [
+            '$scope', '$http', 'subscriptionRepository', 'reportRepository' ,'$q', function($scope, $http, subscriptionRepository, reportRepository, $q) {
 
-            $scope.init = function () {
-                fetchData();
-            };
-            $scope.init();
+                $scope.init = function () {
+                    $scope.showReportName = $scope.showReportName === 'true';
+                    fetchData();
+                };
+                $scope.init();
 
-            function fetchData() {
-                subscriptionRepository.list().success(function (data) {
-                    $scope.subscriptions = data;
-                }).error(function () {
-                    toastr.error('Something went wrong, please try again later or contact support');
-                });
+                function fetchData() {
+                    var promises = {};
+                    if ($scope.showReportName)
+                        promises.reports = reportRepository.getIdToNameMappings();
+
+                    promises.subscriptions = subscriptionRepository.list();
+
+                    $q.all(promises).then(function (data) {
+                        if (data.reports) {//add the reportnames to subs based on reportid.
+                            data.subscriptions.data.forEach(function(s) {
+                                data.reports.data.forEach(function(r) {
+                                    if (r.Id === s.ReportId)
+                                        s.ReportName = r.Name;
+                                });
+                            });
+                        }
+
+                        $scope.subscriptions = data.subscriptions.data;
+                    }).catch(function () {
+                        toastr.error('Something went wrong, please try again later or contact support');
+                    });
+                }
             }
-        }]
-    };
+        ]
+    }
 });

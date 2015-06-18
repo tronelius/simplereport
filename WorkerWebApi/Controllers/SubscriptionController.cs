@@ -88,7 +88,7 @@ namespace WorkerWebApi.Controllers
                 var scheds = _scheduleRepository.List();
 
                 //we dont have report name here...
-                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), x.Status, x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name}).ToArray();
+                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), x.Status, x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name, x.ErrorMessage}).ToArray();
 
                 return Json(result);
             }

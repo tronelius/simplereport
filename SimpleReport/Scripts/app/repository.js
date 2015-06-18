@@ -41,4 +41,15 @@ angular.module('repository').factory('scheduleRepository', ['$http', function ($
     };
 
     return repo;
+}])
+.factory('reportRepository', ['$http', function ($http) {
+
+    var urlBase = 'api/report/';
+    var repo = {};
+
+    repo.getIdToNameMappings = function() {
+        return $http.get(urlBase + 'idToNameMappings');
+    }
+
+    return repo;
 }]);

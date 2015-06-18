@@ -20,18 +20,19 @@
             <table class="table table-condensed table-striped">
                 <thead>
                     <tr>
-                        <th>Report</th>
+                        <th data-ng-if="showReportName">Report</th>
                         <th>Recipients</th>
                         <th>Status</th>
                         <th>Latest</th>
                         <th>Schedule</th>
+                        <th>ErrorMessage</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr data-ng-repeat="row in subscriptions | filter:searchText | limitTo: 10 track by row.Id">
-                        <td>
-                            {{row.Report}}
+                        <td data-ng-if="showReportName">
+                            {{row.ReportName}}
                         </td>
                         <td>
                             {{row.Recipients}}
@@ -44,6 +45,9 @@
                         </td>
                         <td>
                             {{row.Schedule}}
+                        </td>
+                        <td>
+                            {{row.ErrorMessage}}
                         </td>
                         <td>
                             Send Edit Remove
