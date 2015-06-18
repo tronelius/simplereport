@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Web.Http;
 using NCrontab;
 using Newtonsoft.Json;
@@ -76,6 +75,44 @@ namespace WorkerWebApi.Controllers
                 _logger.Error("SubscriptionController.All", e);
                 throw;
             }
+        }
+
+        [Route("list")]
+        [HttpGet]
+        public IHttpActionResult List()
+        {
+            try
+            {
+                _logger.Info("Getting all subscriptions for listing");
+                var subs = _subscriptionRepository.List();
+                var scheds = _scheduleRepository.List();
+
+                //we dont have report name here...
+                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), x.Status, x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name}).ToArray();
+
+                return Json(result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("SubscriptionController.All", e);
+                throw;
+            }
+        }
+
+        private static string GetRecipients(Subscription x)
+        {
+            var recipients = new List<string>();
+
+            if(!string.IsNullOrWhiteSpace(x.To))
+                recipients.Add(x.To);
+
+            if (!string.IsNullOrWhiteSpace(x.Cc))
+                recipients.Add(x.Cc);
+
+            if (!string.IsNullOrWhiteSpace(x.Bcc))
+                recipients.Add(x.Bcc);
+
+            return string.Join(";", recipients);
         }
 
         private void SetNextSendDate(Subscription subscription)

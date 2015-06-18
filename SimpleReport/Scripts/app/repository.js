@@ -24,19 +24,21 @@ angular.module('repository').factory('scheduleRepository', ['$http', function ($
     var urlBase = 'api/subscription/';
     var repo = {};
 
-    //not implemented
-    //repo.getAll = function () {
-    //    return $http.get(urlBase + 'all');
-    //};
+    repo.getAll = function () {
+        return $http.get(urlBase + 'all');
+    };
+
+    repo.list = function () {
+        return $http.get(urlBase + 'list');
+    };
 
     repo.save = function (subscription) {
         return $http.post(urlBase + 'save', subscription);
     };
 
-    //not implemented
-    //repo.delete = function (id) {
-    //    return $http.post(urlBase + 'delete', { Id: id });
-    //};
+    repo.delete = function (id) {
+        return $http.post(urlBase + 'delete', { Id: id });
+    };
 
     return repo;
 }]);
