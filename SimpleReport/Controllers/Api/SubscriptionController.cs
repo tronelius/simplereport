@@ -9,6 +9,12 @@ using SimpleReport.Model.Storage;
 namespace SimpleReport.Controllers.Api
 {
 
+    public class ReportIdWrapper
+    {
+        public string ReportId { get; set; }
+        public object Data { get; set; }
+    }
+
     public class SubscriptionController : BaseApiController
     {
         private readonly IApiClient _apiClient;
@@ -19,11 +25,11 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("GET")]
-        public async Task<IHttpActionResult> Get(int id)
+        public async Task<IHttpActionResult> Get(string reportId, int id)
         {
             try
             {
-                _adminAccess.IsAllowedForMe(User);
+                CheckAccess(reportId);
 
                 var result = await _apiClient.Get("api/subscription/get?id=" + id);
                 return Ok(result);
@@ -40,7 +46,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                _adminAccess.IsAllowedForMe(User);
+                CheckAccess(null);
 
                 var result = await _apiClient.Get("api/subscription/all");
                 return Ok(result);
@@ -53,11 +59,11 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("GET")]
-        public async Task<IHttpActionResult> List(string filter = null, string reportId = null)
+        public async Task<IHttpActionResult> List(string reportId = null, string filter = null)
         {
             try
             {
-                _adminAccess.IsAllowedForMe(User);
+                CheckAccess(reportId);
 
                 var result = await _apiClient.Get("api/subscription/list?filter=" + filter + "&reportId=" + reportId);
                 return Ok(result);
@@ -70,13 +76,13 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
-        public async Task<IHttpActionResult> Save(object subscription)
+        public async Task<IHttpActionResult> Save(ReportIdWrapper reportIdWrapper)
         {
             try
             {
-                _adminAccess.IsAllowedForMe(User);
+                CheckAccess(reportIdWrapper.ReportId);
 
-                var result = await _apiClient.Post("api/subscription/save", subscription);
+                var result = await _apiClient.Post("api/subscription/save", reportIdWrapper.Data);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -87,13 +93,13 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
-        public async Task<IHttpActionResult> Delete(Dictionary<string, object> obj)//this is really {id : int}, but webapi model binding is evil when it comes to simple values, hence we use this.
+        public async Task<IHttpActionResult> Delete(ReportIdWrapper reportIdWrapper)
         {
             try
             {
-                _adminAccess.IsAllowedForMe(User);
+                CheckAccess(reportIdWrapper.ReportId);
 
-                var result = await _apiClient.Post("api/subscription/delete", obj["Id"]);
+                var result = await _apiClient.Post("api/subscription/delete", reportIdWrapper.Data);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -104,19 +110,32 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
-        public async Task<IHttpActionResult> Send(Dictionary<string, object> obj)
+        public async Task<IHttpActionResult> Send(ReportIdWrapper reportIdWrapper)
         {
             try
             {
-                _adminAccess.IsAllowedForMe(User);
+                CheckAccess(reportIdWrapper.ReportId);
 
-                var result = await _apiClient.Post("api/subscription/send", obj["Id"]);
+                var result = await _apiClient.Post("api/subscription/send", reportIdWrapper.Data);
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 _logger.Error("Exception in Send", ex);
                 return InternalServerError();
+            }
+        }
+
+        private void CheckAccess(string reportId)
+        {
+            if (!string.IsNullOrEmpty(reportId))
+            {
+                var report = _reportStorage.GetReport(Guid.Parse(reportId));
+                report.IsAllowedToEditSubscriptions(User, _adminAccess);
+            }
+            else
+            {
+                _adminAccess.IsAllowedForMe(User);
             }
         }
     }

@@ -23,8 +23,6 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                _adminAccess.IsAllowedForMe(User);
-                
                 var result = await _apiClient.Get("api/schedule/all");
                 return Ok(result);
             }

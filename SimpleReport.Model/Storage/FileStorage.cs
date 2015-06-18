@@ -34,13 +34,14 @@ namespace SimpleReport.Model.Storage
             }
             catch (Exception ex)
             {
+                logger.Error("Error deserializing file from disk" + ex);
                 throw new Exception("Could not read Reports from file!", ex);
             }
         }
 
         public void InitializeStorage()
         {
-            using(var fs= File.Create(_filename));
+            using (File.Create(_filename));
             ReportDataModel model = new ReportDataModel();
             SaveModel(model);
         }
@@ -120,8 +121,8 @@ namespace SimpleReport.Model.Storage
             var access = GetAccessList(report.AccessId);
             report.Access = access;
 
-            var taccess = GetAccessList(report.TemplateAccessId);
-            report.TemplateAccess = taccess;
+            var taccess = GetAccessList(report.ReportOwnerId);
+            report.ReportOwnerAccess = taccess;
         }
 
         public bool SaveReport(Report report)

@@ -114,7 +114,7 @@ angular.module('report')
                     if (!$scope.subscriptionId) {
                         $scope.subscription = { To: '', Cc: '', Bcc: '', ScheduleId: null }
                     } else {
-                        subscriptionRepository.get($scope.subscriptionId).success(function (data) {
+                        subscriptionRepository.get($scope.reportId, $scope.subscriptionId).success(function (data) {
                             $scope.subscription = data;
                         }).error(function () {
                             toastr.error('Something went wrong, please try again later or contact support');

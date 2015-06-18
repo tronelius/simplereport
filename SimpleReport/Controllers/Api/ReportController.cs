@@ -15,12 +15,11 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("GET")]
-        public async Task<IHttpActionResult> IdToNameMappings()
+        public IHttpActionResult IdToNameMappings()
         {
             try
             {
                 _adminAccess.IsAllowedForMe(User);
-
                 var result = _reportStorage.GetAllReports().Select(x => new { x.Id, x.Name });
                 return Ok(result);
             }

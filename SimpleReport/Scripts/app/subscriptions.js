@@ -139,7 +139,7 @@ angular.module('subscriptions')
                         promises.reports = reportRepository.getIdToNameMappings();
 
                     if(!$scope.reportId)
-                        promises.subscriptions = subscriptionRepository.list($scope.filter);
+                        promises.subscriptions = subscriptionRepository.list($scope.reportId, $scope.filter);
                     else 
                         promises.subscriptions = subscriptionRepository.allForReport($scope.reportId);
 
@@ -160,7 +160,7 @@ angular.module('subscriptions')
                 }
 
                 function sendSubscription(id) {
-                    subscriptionRepository.send(id);
+                    subscriptionRepository.send($scope.reportId, id);
                 }
 
                 function editSubscription(sub) {
@@ -168,7 +168,7 @@ angular.module('subscriptions')
                 }
 
                 function deleteSubscription(id) {
-                    subscriptionRepository.delete(id).success(function() {
+                    subscriptionRepository.delete($scope.reportId, id).success(function () {
                         $scope.subscriptions = $scope.subscriptions.filter(function(s) {
                             return s.Id !== id;
                         });

@@ -63,7 +63,6 @@
     <Compile Include="IoCConfig.cs" />
     <Compile Include="Migrations\2015-06-18\RenameReportUrlToReportParams.cs" />
     <Compile Include="Migrations\2015-06-11\AddInitialTables.cs" />
-    <Compile Include="Migrations\2015-06-18\AddInitialTables.cs" />
     <Compile Include="Migrations\Migrator.cs" />
     <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\Schedule.cs" />

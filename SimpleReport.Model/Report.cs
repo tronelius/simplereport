@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Security.Principal;
+using System.Web.UI.WebControls;
 
 namespace SimpleReport.Model
 {
@@ -14,7 +16,7 @@ namespace SimpleReport.Model
         ReportOwner,
         Anyone
     }
-
+    
     public class Report : LookupReport
     {
         public ResultType ResultType { get; set; }
@@ -24,9 +26,9 @@ namespace SimpleReport.Model
         public string MailText { get; set; }
         
         //who can fiddle with the template
-        public Guid TemplateAccessId { get; set; }
+        public Guid ReportOwnerId { get; set; }
         [NonSerialized]
-        public Access TemplateAccess; //TODO rename to reportowner
+        public Access ReportOwnerAccess; //TODO rename to reportowner
 
         public bool OnScreenFormatAllowed { get; set; }
         public AccessStyle TemplateEditorAccessStyle { get; set; }
@@ -56,7 +58,7 @@ namespace SimpleReport.Model
 
         public bool IsAvailableForMe(IPrincipal user, Access adminAccess)
         {
-            return (TemplateAccess != null && TemplateAccess.IsAvailableForMe(user)) ||  (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));
+            return (ReportOwnerAccess != null && ReportOwnerAccess.IsAvailableForMe(user)) ||  (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));
         }
 
         public void ReadParameters(NameValueCollection queryString)
@@ -64,7 +66,13 @@ namespace SimpleReport.Model
             Parameters.ReadParameters(queryString);
         }
 
-        public bool IsAllowedToEditTemplate(IPrincipal user, Access adminAccess)
+        public void IsAllowedToEditTemplate(IPrincipal user, Access adminAccess)
+        {
+            if (!IsAvailableToEditTemplate(user, adminAccess))
+                throw new Exception("Not allowed to edit template in report");
+        }
+
+        public bool IsAvailableToEditTemplate(IPrincipal user, Access adminAccess)
         {
             if (TemplateEditorAccessStyle == AccessStyle.Anyone)
                 return true;
@@ -73,7 +81,27 @@ namespace SimpleReport.Model
                 return true;
 
             if (TemplateEditorAccessStyle == AccessStyle.ReportOwner)
-                return TemplateAccess != null && TemplateAccess.IsAvailableForMe(user);
+                return ReportOwnerAccess != null && ReportOwnerAccess.IsAvailableForMe(user);
+
+            return false;
+        }
+
+        public void IsAllowedToEditSubscriptions(IPrincipal user, Access adminAccess)
+        {
+            if (!IsAvailbleToEditSubscriptions(user, adminAccess))
+                throw new Exception("Not allowed to edit subscriptions for report");
+        }
+
+        public bool IsAvailbleToEditSubscriptions(IPrincipal user, Access adminAccess)
+        {
+            if (SubscriptionAccessStyle == AccessStyle.Anyone)
+                return true;
+
+            if (adminAccess.IsAvailableForMe(user))
+                return true;
+
+            if (SubscriptionAccessStyle == AccessStyle.ReportOwner)
+                return ReportOwnerAccess != null && ReportOwnerAccess.IsAvailableForMe(user);
 
             return false;
         }
@@ -110,5 +138,7 @@ namespace SimpleReport.Model
 
             return obj.ToString();
         }
+
+       
     }
 }

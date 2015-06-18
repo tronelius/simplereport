@@ -34,8 +34,8 @@ namespace SimpleReport.Controllers
             else
                 vm.Report = report;
 
-            vm.CanEditTemplate = report.IsAllowedToEditTemplate(User, _adminAccess);
-
+            vm.CanEditTemplate = report.IsAvailableToEditTemplate(User, _adminAccess);
+            vm.CanEditSubscriptions = report.IsAvailbleToEditSubscriptions(User, _adminAccess);
             return View(vm);
         }
 
@@ -72,7 +72,7 @@ namespace SimpleReport.Controllers
         public ActionResult UploadTemplate(Guid reportId)
         {
             Report report = _reportResolver.GetReport(reportId);
-            if (!report.IsAllowedToEditTemplate(User, _adminAccess))
+            if (!report.IsAvailableToEditTemplate(User, _adminAccess))
                 return Json(new { error = "Not Authorized" });
             
             if (Request.Files.Count > 0)

@@ -121,7 +121,7 @@
                                         <div class="form-group">
                                             <label class="control-label" title="Who should be able to edit the template of this report?">Report owner</label>
                                             <div>
-                                                <select ng-model="report.TemplateAccessId" ng-options="item.Id as item.Name for item in templateAccessLists" class="form-control"></select>
+                                                <select ng-model="report.ReportOwnerId" ng-options="item.Id as item.Name for item in reportOwnerAccessLists" class="form-control"></select>
                                             </div>
                                         </div>
                                     </div>

@@ -18,7 +18,7 @@ namespace SimpleReport.ViewModel
         public IEnumerable<Connection> Connections { get; set; }
         public IEnumerable<LookupReport> LookupReports { get; set; }
         public List<Access> AccessLists { get; set; }
-        public List<Access> TemplateAccessLists { get; set; }
+        public List<Access> ReportOwnerAccessLists { get; set; }
         public Settings Settings { get; set; }
         public IEnumerable<AccessEditorViewModel> AccessEditorViewModel { get; set; }
 
@@ -29,11 +29,11 @@ namespace SimpleReport.ViewModel
             Connections = reportStorage.GetConnections();
             LookupReports = reportStorage.GetLookupReports();
             AccessLists = reportStorage.GetAccessLists().ToList();
-            TemplateAccessLists = reportStorage.GetAccessLists().ToList();
+            ReportOwnerAccessLists = reportStorage.GetAccessLists().ToList();
             ParameterInputType types = new ParameterInputType();
             InputTypes = types.ToKeyValues();
             AccessLists.Insert(0,new Access(Guid.Empty,"Free for all",""));
-            TemplateAccessLists.Insert(0, new Access(Guid.Empty, "None selected", ""));
+            ReportOwnerAccessLists.Insert(0, new Access(Guid.Empty, "None selected", ""));
             Settings = reportStorage.GetSettings();
             AccessEditorViewModel = Enum.GetValues(typeof(AccessStyle)).Cast<AccessStyle>().Select(x => new AccessEditorViewModel(x, GetTextForTemplateEditor(x)));
         }

@@ -12,9 +12,10 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.connections = data.Connections;
                 $scope.lookupReports = data.LookupReports;
                 $scope.accessLists = data.AccessLists;
-                $scope.templateAccessLists = data.TemplateAccessLists;
+                $scope.reportOwnerAccessLists = data.ReportOwnerAccessLists;
                 $scope.settings = data.Settings;
                 $scope.accessEditorViewModel = data.AccessEditorViewModel;
+
             }).
             error(function (data) {
                 toastr.error("Couldn't get list of reports from server.","Error");
@@ -279,6 +280,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             toastr.success("Access control list saved", "Saved");
             $scope.access = data;
             updateCollection($scope.accessLists, $scope.access);
+            updateCollection($scope.reportOwnerAccessLists, $scope.access);
         }).error(function (data) {
             toastr.error("Server error when saving access control list.", "Error");
         });
@@ -293,7 +295,8 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }).success(function (data) {
             if (data.Success) {
                 toastr.success("Access control list is deleted", "Deleted");
-                updateCollection($scope.accessLists, $scope.access, true);
+                updateCollection($scope.accessLists, $scope.access, true); 
+                updateCollection($scope.reportOwnerAccessLists, $scope.access, true);
                 $scope.access = null;
                 $scope.$apply();
             } else {
