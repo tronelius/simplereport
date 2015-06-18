@@ -49,13 +49,9 @@ namespace SimpleReport.Model
             return Parameters.All(p => p.IsValid());
         }
 
-        public Result ExecuteWithTemplate(byte[] templateData)
+        public bool HasMailTemplateChanged(Report reportWithPossibleChanges)
         {
-            if (Connection == null)
-                throw new Exception("Missing Connection in report");
-            
-            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
-            return new Result(this.ResultType, result,this, templateData);
+            return !(String.Equals(MailSubject, reportWithPossibleChanges.MailSubject, StringComparison.CurrentCulture) && String.Equals(MailText, reportWithPossibleChanges.MailText, StringComparison.CurrentCulture));
         }
 
         public bool IsAvailableForMe(IPrincipal user, Access adminAccess)
@@ -96,6 +92,15 @@ namespace SimpleReport.Model
             };
 
             return raw;
+        }
+
+        public Result ExecuteWithTemplate(byte[] templateData)
+        {
+            if (Connection == null)
+                throw new Exception("Missing Connection in report");
+
+            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
+            return new Result(this.ResultType, result, this, templateData);
         }
 
         private string Stringify(object obj)

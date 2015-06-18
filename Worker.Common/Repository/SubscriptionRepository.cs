@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Dapper;
 using DapperExtensions;
 using Worker.Common.Model;
 
@@ -13,6 +14,7 @@ namespace Worker.Common.Repository
         List<Subscription> List();
         void Update(Subscription schedule);
         void Delete(int id);
+        void UpdateTemplateText(UpdateTemplateText updateTemplateText);
     }
 
     public class SubscriptionRepository : ISubscriptionRepository
@@ -24,25 +26,26 @@ namespace Worker.Common.Repository
             _connectionString = connectionstring;
         }
 
+
+        private SqlConnection EnsureOpenConnection()
+        {
+            return new SqlConnection(_connectionString);
+        }
+
         public Subscription Get(int id)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 var schedule = cn.Get<Subscription>(id);
-                cn.Close();
-
                 return schedule;
             }
         }
 
         public int Insert(Subscription schedule)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 var id = cn.Insert(schedule);
-                cn.Close();
 
                 return id;
             }
@@ -50,11 +53,9 @@ namespace Worker.Common.Repository
 
         public List<Subscription> List()
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 var list = cn.GetList<Subscription>();
-                cn.Close();
 
                 return list.ToList();
             }
@@ -62,21 +63,25 @@ namespace Worker.Common.Repository
 
         public void Update(Subscription schedule)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 cn.Update(schedule);
-                cn.Close();
             }
         }
 
         public void Delete(int id)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 cn.Delete<Subscription>(new { Id = id });
-                cn.Close();
+            }
+        }
+
+        public void UpdateTemplateText(UpdateTemplateText updateTemplateText)
+        {
+            using (SqlConnection cn = EnsureOpenConnection())
+            {
+                cn.Execute("Update Subscription set Mailsubject=@mailsubject, MailText=@MailText where reportid=@reportid",new {mailsubject=updateTemplateText.Subject, mailtext =updateTemplateText.Text, reportid=updateTemplateText.ReportGuid});
             }
         }
     }
