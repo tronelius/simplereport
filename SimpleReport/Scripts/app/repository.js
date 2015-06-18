@@ -28,8 +28,8 @@ angular.module('repository').factory('scheduleRepository', ['$http', function ($
         return $http.get(urlBase + 'all');
     };
 
-    repo.list = function () {
-        return $http.get(urlBase + 'list');
+    repo.list = function (filter) {
+        return $http.get(urlBase + 'list?filter=' + (filter || ''));
     };
 
     repo.save = function (subscription) {

@@ -4,15 +4,19 @@
     </div>
 
     <div ng-show="subscriptions" class="">
-        <div class="form-inline row">
+        <div class="form-inline row" style="margin-bottom: 10px;">
             <div class="col-md-6">
-                <label>List of all active subscriptions</label>
+                <label data-ng-if="!filter">List of all active subscriptions</label>
+                <label data-ng-if="filter == 'failed'">List of failed subscriptions</label>
             </div>
-            <div class="col-md-6" style="margin-bottom: 10px; text-align: right;">
+            <div class="col-md-6" style="text-align: right;">
                 <div class="form-group">
                     <label style="margin-right: 10px;">Filter</label>
                     <input type="text" class="form-control" ng-model="searchText" placeholder="Filter">
                 </div>
+            </div>
+            <div data-ng-if="filter == 'failed'" class="col-md-12">
+                As soon as a subscription succeeds, it is removed from the failed list. This is only a list of the currently failed subscriptions.
             </div>
         </div>
 

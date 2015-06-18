@@ -79,15 +79,19 @@ namespace WorkerWebApi.Controllers
 
         [Route("list")]
         [HttpGet]
-        public IHttpActionResult List()
+        public IHttpActionResult List(string filter)
         {
             try
             {
-                _logger.Info("Getting all subscriptions for listing");
+                _logger.Info("Getting all subscriptions for listing with filter:" + filter);
                 var subs = _subscriptionRepository.List();
-                var scheds = _scheduleRepository.List();
 
-                //we dont have report name here...
+                if (filter == "failed")
+                {
+                    subs = subs.Where(x => x.Status == SubscriptionStatus.Failed).ToList();
+                }
+
+                var scheds = _scheduleRepository.List();
                 var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), x.Status, x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name, x.ErrorMessage}).ToArray();
 
                 return Json(result);

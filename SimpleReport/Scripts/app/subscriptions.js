@@ -119,7 +119,7 @@ angular.module('subscriptions')
 .directive('subscriptionList', function() {
     return {
         templateUrl: 'scripts/app/templates/subscriptionList.html',
-        scope: { showReportName: '@' },
+        scope: { showReportName: '@', filter: '@' },
         controller: [
             '$scope', '$http', 'subscriptionRepository', 'reportRepository' ,'$q', function($scope, $http, subscriptionRepository, reportRepository, $q) {
 
@@ -134,7 +134,8 @@ angular.module('subscriptions')
                     if ($scope.showReportName)
                         promises.reports = reportRepository.getIdToNameMappings();
 
-                    promises.subscriptions = subscriptionRepository.list();
+                    promises.subscriptions = subscriptionRepository.list($scope.filter);
+                    
 
                     $q.all(promises).then(function (data) {
                         if (data.reports) {//add the reportnames to subs based on reportid.
