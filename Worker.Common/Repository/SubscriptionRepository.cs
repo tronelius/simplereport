@@ -19,21 +19,10 @@ namespace Worker.Common.Repository
         void SendNow(int id);
     }
 
-    public class SubscriptionRepository : ISubscriptionRepository
+    public class SubscriptionRepository : BaseRepository, ISubscriptionRepository
     {
-        private readonly string _connectionString;
-
-        public SubscriptionRepository(string connectionstring)
-        {
-            _connectionString = connectionstring;
-        }
-
-
-        private SqlConnection EnsureOpenConnection()
-        {
-            return new SqlConnection(_connectionString);
-        }
-
+        public SubscriptionRepository(string connectionstring) : base(connectionstring){}
+      
         public Subscription Get(int id)
         {
             using (SqlConnection cn = EnsureOpenConnection())
@@ -48,7 +37,6 @@ namespace Worker.Common.Repository
             using (SqlConnection cn = EnsureOpenConnection())
             {
                 var id = cn.Insert(schedule);
-
                 return id;
             }
         }
@@ -58,7 +46,6 @@ namespace Worker.Common.Repository
             using (SqlConnection cn = EnsureOpenConnection())
             {
                 var list = cn.GetList<Subscription>();
-
                 return list.ToList();
             }
         }
@@ -89,11 +76,9 @@ namespace Worker.Common.Repository
 
         public void SendNow(int id)
         {
-            using (SqlConnection cn = new SqlConnection(_connectionString))
+            using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Open();
                 cn.Execute("Update Subscription set NextSend = @date where Id = @Id", new { Date = DateTime.Now, Id = id});
-                cn.Close();
             }
         }
     }
