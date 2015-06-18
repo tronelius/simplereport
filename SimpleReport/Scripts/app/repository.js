@@ -32,6 +32,10 @@ angular.module('repository').factory('scheduleRepository', ['$http', function ($
         return $http.get(urlBase + 'list?filter=' + (filter || ''));
     };
 
+    repo.allForReport = function (reportid) {
+        return $http.get(urlBase + 'list?reportId=' + reportid);
+    };
+
     repo.save = function (subscription) {
         return $http.post(urlBase + 'save', subscription);
     };

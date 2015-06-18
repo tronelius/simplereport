@@ -79,16 +79,23 @@ namespace WorkerWebApi.Controllers
 
         [Route("list")]
         [HttpGet]
-        public IHttpActionResult List(string filter)
+        public IHttpActionResult List(string filter, string reportId)
         {
             try
             {
                 _logger.Info("Getting all subscriptions for listing with filter:" + filter);
                 var subs = _subscriptionRepository.List();
 
+                //TODO: do we want a more complex filtering? would be nice to merge filter and reportid and have some kind of dsl for it?
                 if (filter == "failed")
                 {
                     subs = subs.Where(x => x.Status == SubscriptionStatus.Failed).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(reportId))
+                {
+                    var id = Guid.Parse(reportId);
+                    subs = subs.Where(x => x.ReportId == id).ToList();
                 }
 
                 var scheds = _scheduleRepository.List();

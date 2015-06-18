@@ -36,13 +36,13 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("GET")]
-        public async Task<IHttpActionResult> List(string filter)
+        public async Task<IHttpActionResult> List(string filter = null, string reportId = null)
         {
             try
             {
                 _adminAccess.IsAllowedForMe(User);
 
-                var result = await _apiClient.Get("api/subscription/list?filter=" + filter);
+                var result = await _apiClient.Get("api/subscription/list?filter=" + filter + "&reportId=" + reportId);
                 return Ok(result);
             }
             catch (Exception ex)
