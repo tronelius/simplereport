@@ -4,34 +4,69 @@
     </div>
 
     <div ng-show="subscriptions" class="">
-        <div class="row">
-            <div>
-                <label>List of all active subscriptions</label>
+        <div class="form-inline row" style="margin-bottom: 10px;">
+            <div class="col-md-6">
+                <label data-ng-if="!filter">List of all active subscriptions</label>
+                <label data-ng-if="filter == 'failed'">List of failed subscriptions</label>
             </div>
-            <div class="pull-right">
-                <label class="control-label">Filter</label>
-                <div>
-                    <input type="text" ng-model="searchText" class="form-control" placeholder="Filter">
+            <div class="col-md-6" style="text-align: right;">
+                <div class="form-group">
+                    <label style="margin-right: 10px;">Filter</label>
+                    <input type="text" class="form-control" ng-model="searchText" placeholder="Filter">
                 </div>
+            </div>
+            <div data-ng-if="filter == 'failed'" class="col-md-12">
+                As soon as a subscription succeeds, it is removed from the failed list. This is only a list of the currently failed subscriptions.
             </div>
         </div>
 
-        <div class="row">
+        <div class="">
             <table class="table table-condensed table-striped">
                 <thead>
                     <tr>
-                        <th>Report</th>
-                        <th>Recipients</th>
-                        <th>Status</th>
-                        <th>Latest</th>
-                        <th>Schedule</th>
+                        <th data-ng-show="showReportName">
+                            <a ng-click="sortType = 'ReportName'; sortReverse = !sortReverse">
+                                Report
+                                <span ng-show="sortType == 'ReportName' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'ReportName' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'Recipients'; sortReverse = !sortReverse">
+                                Recipients
+                                <span ng-show="sortType == 'Recipients' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Recipients' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'Status'; sortReverse = !sortReverse">
+                                Status
+                                <span ng-show="sortType == 'Status' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Status' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'LastSent'; sortReverse = !sortReverse">
+                                LastSent
+                                <span ng-show="sortType == 'LastSent' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'LastSent' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'Schedule'; sortReverse = !sortReverse">
+                                Schedule
+                                <span ng-show="sortType == 'Schedule' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Schedule' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>ErrorMessage</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-ng-repeat="row in subscriptions | filter:searchText | limitTo: 10 track by row.Id">
-                        <td>
-                            {{row.Report}}
+                    <tr data-ng-repeat="row in subscriptions | orderBy:sortType:sortReverse | filter:searchText | limitTo: 10 track by row.Id">
+                        <td data-ng-show="showReportName">
+                            {{row.ReportName}}
                         </td>
                         <td>
                             {{row.Recipients}}
@@ -46,7 +81,12 @@
                             {{row.Schedule}}
                         </td>
                         <td>
-                            Send Edit Remove
+                            {{row.ErrorMessage}}
+                        </td>
+                        <td>
+                            <a ng-click="sendSubscription(row.Id)">Send</a>
+                            <a ng-click="editSubscription(row.Id)">Edit</a>
+                            <a ng-click="deleteSubscription(row.Id)">Remove</a>
                         </td>
                     </tr>
                 </tbody>

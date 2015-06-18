@@ -11,7 +11,7 @@ namespace Worker.Common.Model
         public string To { get; set; }
         public string Cc { get; set; }
         public string Bcc { get; set; }
-        public int Status { get; set; }//not int, should be an enum.
+        public SubscriptionStatus Status { get; set; }//not int, should be an enum.
         public DateTime? LastSent { get; set; }
         public DateTime NextSend { get; set; }
         public string ErrorMessage { get; set; }
@@ -40,5 +40,13 @@ namespace Worker.Common.Model
 
             return null;
         }
+    }
+
+    public enum SubscriptionStatus
+    {
+        NotSet,
+        Success,
+        Ongoing,
+        Failed
     }
 }

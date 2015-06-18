@@ -61,6 +61,17 @@ namespace WorkerWebApi.Controllers
             return Json(result);
         }
 
+        [Route("send")]
+        [HttpPost]
+        public IHttpActionResult Send([FromBody]int id)
+        {
+            _logger.Info("Set send on subscription: " + id);
+
+            _subscriptionRepository.SendNow(id);
+            var result = _subscriptionRepository.List();
+            return Json(result);
+        }
+
         [Route("all")]
         [HttpGet]
         public IHttpActionResult All()
@@ -98,16 +109,27 @@ namespace WorkerWebApi.Controllers
 
         [Route("list")]
         [HttpGet]
-        public IHttpActionResult List()
+        public IHttpActionResult List(string filter, string reportId)
         {
             try
             {
-                _logger.Info("Getting all subscriptions for listing");
+                _logger.Info("Getting all subscriptions for listing with filter:" + filter);
                 var subs = _subscriptionRepository.List();
-                var scheds = _scheduleRepository.List();
 
-                //we dont have report name here...
-                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), x.Status, x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name}).ToArray();
+                //TODO: do we want a more complex filtering? would be nice to merge filter and reportid and have some kind of dsl for it?
+                if (filter == "failed")
+                {
+                    subs = subs.Where(x => x.Status == SubscriptionStatus.Failed).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(reportId))
+                {
+                    var id = Guid.Parse(reportId);
+                    subs = subs.Where(x => x.ReportId == id).ToList();
+                }
+
+                var scheds = _scheduleRepository.List();
+                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), x.Status, x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name, x.ErrorMessage}).ToArray();
 
                 return Json(result);
             }

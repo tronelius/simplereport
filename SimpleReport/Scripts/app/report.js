@@ -1,4 +1,4 @@
-﻿angular.module('report', ['shared', 'ui.bootstrap', 'repository']);
+﻿angular.module('report', ['shared', 'ui.bootstrap', 'repository', 'subscriptions']);
 
 angular.module('report')
     .controller('reportController', [

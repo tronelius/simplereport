@@ -116,24 +116,67 @@ angular.module('subscriptions')
         }
     }
 }])
-.directive('subscriptionList', function () {
+.directive('subscriptionList', function() {
     return {
         templateUrl: 'scripts/app/templates/subscriptionList.html',
-        scope: {},
-        controller: ['$scope', '$http', 'subscriptionRepository', function ($scope, $http, subscriptionRepository) {
+        scope: { showReportName: '@', filter: '@', reportId: '=' },
+        controller: [
+            '$scope', '$http', 'subscriptionRepository', 'reportRepository' ,'$q', function($scope, $http, subscriptionRepository, reportRepository, $q) {
 
-            $scope.init = function () {
-                fetchData();
-            };
-            $scope.init();
+                $scope.init = function () {
+                    $scope.showReportName = $scope.showReportName === 'true';
+                    fetchData();
 
-            function fetchData() {
-                subscriptionRepository.list().success(function (data) {
-                    $scope.subscriptions = data;
-                }).error(function () {
-                    toastr.error('Something went wrong, please try again later or contact support');
-                });
+                    $scope.sendSubscription = sendSubscription;
+                    $scope.editSubscription = editSubscription;
+                    $scope.deleteSubscription = deleteSubscription;
+                };
+                $scope.init();
+
+                function fetchData() {
+                    var promises = {};
+                    if ($scope.showReportName)
+                        promises.reports = reportRepository.getIdToNameMappings();
+
+                    if(!$scope.reportId)
+                        promises.subscriptions = subscriptionRepository.list($scope.filter);
+                    else 
+                        promises.subscriptions = subscriptionRepository.allForReport($scope.reportId);
+
+                    $q.all(promises).then(function (data) {
+                        if (data.reports) {//add the reportnames to subs based on reportid.
+                            data.subscriptions.data.forEach(function(s) {
+                                data.reports.data.forEach(function(r) {
+                                    if (r.Id === s.ReportId)
+                                        s.ReportName = r.Name;
+                                });
+                            });
+                        }
+
+                        $scope.subscriptions = data.subscriptions.data;
+                    }).catch(function () {
+                        toastr.error('Something went wrong, please try again later or contact support');
+                    });
+                }
+
+                function sendSubscription(id) {
+                    subscriptionRepository.send(id);
+                }
+
+                function editSubscription(id) {
+                    //TODO: make this work.. some kind of redirect based on sub url?
+                }
+
+                function deleteSubscription(id) {
+                    subscriptionRepository.delete(id).success(function() {
+                        $scope.subscriptions = $scope.subscriptions.filter(function(s) {
+                            return s.Id !== id;
+                        });
+                    }).error(function() {
+                        toastr.error('Something went wrong, please try again later or contact support');
+                    });
+                }
             }
-        }]
-    };
+        ]
+    }
 });

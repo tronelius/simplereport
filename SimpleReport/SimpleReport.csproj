@@ -149,6 +149,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
+    <Compile Include="Controllers\Api\ReportController.cs" />
     <Compile Include="Controllers\Api\SubscriptionController.cs" />
     <Compile Include="Controllers\Api\ScheduleController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
