@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Common\Logger.cs" />
     <Compile Include="IoCConfig.cs" />
+    <Compile Include="Migrations\2015-06-18\AddTemplateInfo.cs" />
     <Compile Include="Migrations\2015-06-18\RenameReportUrlToReportParams.cs" />
     <Compile Include="Migrations\2015-06-11\AddInitialTables.cs" />
     <Compile Include="Migrations\Migrator.cs" />
