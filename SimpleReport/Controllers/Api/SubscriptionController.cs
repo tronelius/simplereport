@@ -19,6 +19,23 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("GET")]
+        public async Task<IHttpActionResult> Get(int id)
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+
+                var result = await _apiClient.Get("api/subscription/get?id=" + id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in Get", ex);
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("GET")]
         public async Task<IHttpActionResult> All()
         {
             try

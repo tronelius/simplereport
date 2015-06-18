@@ -24,6 +24,10 @@ angular.module('repository').factory('scheduleRepository', ['$http', function ($
     var urlBase = 'api/subscription/';
     var repo = {};
 
+    repo.get = function (id) {
+        return $http.get(urlBase + 'get?id=' + id);
+    };
+
     repo.getAll = function () {
         return $http.get(urlBase + 'all');
     };

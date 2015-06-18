@@ -163,9 +163,8 @@ angular.module('subscriptions')
                     subscriptionRepository.send(id);
                 }
 
-                function editSubscription(id) {
-                    //TODO: make this work.. some kind of redirect based on sub url?
-
+                function editSubscription(sub) {
+                    location.href = 'Home/Report?' + sub.ReportParams + '&subscriptionid=' + sub.Id;
                 }
 
                 function deleteSubscription(id) {

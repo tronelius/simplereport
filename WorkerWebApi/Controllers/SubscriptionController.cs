@@ -88,6 +88,23 @@ namespace WorkerWebApi.Controllers
             }
         }
 
+        [Route("get")]
+        [HttpGet]
+        public IHttpActionResult Get(int id)
+        {
+            try
+            {
+                _logger.Info("Getting subscription:" + id);
+                var result = _subscriptionRepository.Get(id);
+                return Json(result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("SubscriptionController.Get", e);
+                throw;
+            }
+        }
+
         [Route("list")]
         [HttpGet]
         public IHttpActionResult List(string filter, string reportId)
@@ -110,7 +127,7 @@ namespace WorkerWebApi.Controllers
                 }
 
                 var scheds = _scheduleRepository.List();
-                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), x.Status, x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name, x.ErrorMessage}).ToArray();
+                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), x.Status, x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name, x.ErrorMessage, x.ReportParams}).ToArray();
 
                 return Json(result);
             }

@@ -2,7 +2,7 @@
 
 angular.module('report')
     .controller('reportController', [
-        '$scope', '$http', 'reportViewModel', '$filter', function ($scope, $http, viewModel, $filter) {
+        '$scope', '$http', 'reportViewModel', '$filter', 'queryStringParser', function ($scope, $http, viewModel, $filter, queryStringParser) {
 
             $scope.init = function () {
                 viewModel.Report.Parameters.forEach(function (param) {
@@ -27,13 +27,25 @@ angular.module('report')
                     $scope.dateFormat = 'yyyy-MM-dd';
                 });
 
+                var s = queryStringParser.parse(location.search);
+                
+                if (s.subscriptionid) {
+                    $scope.subscriptionId = s.subscriptionid;
+                    $scope.selectedAction = 'subscribe';
+                }
+
                 $scope.viewModel = viewModel;
 
                 $scope.triggerOnScreen = triggerOnScreen;
                 $scope.periodChanged = periodChanged;
                 $scope.dateChanged = dateChanged;
+                $scope.onSubscriptionSaved = onSubscriptionSaved;
             };
             $scope.init();
+
+            function onSubscriptionSaved() {
+                $scope.selectedAction = 'editSubscriptions';
+            }
 
             function dateChanged(parameter) {
                 var date = $filter('date')(parameter.Value, $scope.dateFormat);
@@ -94,13 +106,19 @@ angular.module('report')
     .directive('subscriptionEditor', function () {
         return {
             templateUrl: 'scripts/app/templates/subscriptionEditor.html',
-            scope: { reportId: '=', reportParameters: '=', subscriptionId: '=' },
+            scope: { reportId: '=', reportParameters: '=', subscriptionId: '=', saveCb: '&' },
             controller: ['$scope', '$http', 'scheduleRepository', 'subscriptionRepository', function ($scope, $http, scheduleRepository, subscriptionRepository) {
 
                 function init() {
-                    //if there is no current subscriptionid, then we are creating a new one.  works for now, might change when we have the list.
+                    
                     if (!$scope.subscriptionId) {
                         $scope.subscription = { To: '', Cc: '', Bcc: '', ScheduleId: null }
+                    } else {
+                        subscriptionRepository.get($scope.subscriptionId).success(function (data) {
+                            $scope.subscription = data;
+                        }).error(function () {
+                            toastr.error('Something went wrong, please try again later or contact support');
+                        });
                     }
 
                     fetchData();
@@ -133,9 +151,9 @@ angular.module('report')
                         parsedParameters[param.Key] = param.Value;
                     });
 
-                    var url = 'Home/ExecuteReport?' + serialize(parsedParameters);
+                    var params = serialize(parsedParameters);
 
-                    var data = angular.extend({ ReportId: $scope.reportId, ReportUrl: url }, $scope.subscription);
+                    var data = angular.extend({ ReportId: $scope.reportId, ReportParams: params }, $scope.subscription);
                     subscriptionRepository.save(data).success(function (data) {
                         if (data.Error) {
                             toastr.error(data.Error);
@@ -143,7 +161,11 @@ angular.module('report')
                         }
 
                         toastr.success('Subscription saved');
-                        $scope.subscription.Id = data.Id;
+                        if (!$scope.subscription.Id)
+                            $scope.subscription.Id = data.Id;
+
+                        if ($scope.saveCb)
+                            $scope.saveCb();
                     }).error(function () {
                         toastr.error('Something went wrong during save, please try again later or contact support');
                     });

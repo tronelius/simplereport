@@ -7,7 +7,7 @@ namespace Worker.Common.Model
     {
         public int Id { get; set; }
         public Guid ReportId { get; set; }
-        public string ReportUrl { get; set; }
+        public string ReportParams { get; set; }
         public string To { get; set; }
         public string Cc { get; set; }
         public string Bcc { get; set; }
