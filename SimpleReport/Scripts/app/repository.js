@@ -33,7 +33,7 @@ angular.module('repository').factory('scheduleRepository', ['$http', function ($
     };
 
     repo.list = function (reportId, filter) {
-        return $http.get(urlBase + 'list?filter=' + (filter || '') + '&reportId=' + reportId);
+        return $http.get(urlBase + 'list?filter=' + (filter || '') + '&reportId=' + (reportId || ''));
     };
 
     repo.allForReport = function (reportid) {
