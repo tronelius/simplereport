@@ -18,6 +18,7 @@ namespace Worker.Common.Model
         public DateTime? LastErrorDate { get; set; }
         public int? FailedAttempts { get; set; }
         public int ScheduleId { get; set; }
+        public bool SendEmptyEmails { get; set; }
 
         public string Validate()
         {
