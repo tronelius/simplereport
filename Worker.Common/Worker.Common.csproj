@@ -43,6 +43,9 @@
     <Reference Include="FluentMigrator.Runner">
       <HintPath>..\packages\FluentMigrator.Runner.1.5.1.0\lib\40\FluentMigrator.Runner.dll</HintPath>
     </Reference>
+    <Reference Include="NCrontab">
+      <HintPath>..\packages\ncrontab.2.0.0\lib\net20\NCrontab.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
@@ -52,6 +55,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\WorkerApiClient.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="IoCConfig.cs" />
     <Compile Include="Migrations\2015-06-18\AddTemplateInfo.cs" />
@@ -73,6 +78,7 @@
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\SubscriptionRepository.cs" />
     <Compile Include="Repository\ScheduleRepository.cs" />
+    <Compile Include="Service\MailSender.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

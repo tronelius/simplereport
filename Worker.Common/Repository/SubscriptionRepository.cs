@@ -17,6 +17,7 @@ namespace Worker.Common.Repository
         void Delete(int id);
         void UpdateTemplateText(UpdateTemplateText updateTemplateText);
         void SendNow(int id);
+        List<Subscription> GetSubscriptionsWithSendDateBefore(DateTime now);
     }
 
     public class SubscriptionRepository : BaseRepository, ISubscriptionRepository
@@ -79,6 +80,15 @@ namespace Worker.Common.Repository
             using (SqlConnection cn = EnsureOpenConnection())
             {
                 cn.Execute("Update Subscription set NextSend = @date where Id = @Id", new { Date = DateTime.Now, Id = id});
+            }
+        }
+
+        public List<Subscription> GetSubscriptionsWithSendDateBefore(DateTime now)
+        {
+            using (SqlConnection cn = EnsureOpenConnection())
+            {
+                var list = cn.Query<Subscription>("select * from subscription where NextSend < @nextsend and (FailedAttempts is null or FailedAttempts < @maxFailed)", new {NextSend = now, MaxFailed = 5});
+                return list.ToList();
             }
         }
     }

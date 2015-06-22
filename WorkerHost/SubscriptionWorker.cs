@@ -43,6 +43,7 @@ namespace WorkerHost
                 .Build();
 
             _scheduler.ScheduleJob(job, trigger);
+            _scheduler.TriggerJob(job.Key);//run immediately
         }
 
         private void StartAPI()

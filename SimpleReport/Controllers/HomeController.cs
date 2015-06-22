@@ -39,7 +39,7 @@ namespace SimpleReport.Controllers
             return View(vm);
         }
 
-        public FileResult ExecuteReport(Guid reportId)
+        public ActionResult ExecuteReport(Guid reportId)
         {
             Report report = _reportResolver.GetReport(reportId);
             if (report.IsAvailableForMe(User, _adminAccess)) { 
@@ -50,7 +50,11 @@ namespace SimpleReport.Controllers
                     templateData = _reportResolver.Storage.GetTemplate(reportId).Bytes;
 
                 Result result = report.ExecuteWithTemplate(templateData);
-                return File(result.AsFile(), result.MimeType, result.FileName);
+
+                if (result.HasData())
+                    return File(result.AsFile(), result.MimeType, result.FileName);
+                else
+                    return new HttpStatusCodeResult(204);
             }
             return File(GetBytes("Not allowed to execute this report"), "text/plain","NotAllowed.txt");
         }

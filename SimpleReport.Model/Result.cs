@@ -25,6 +25,11 @@ namespace SimpleReport.Model
             return ".xlsx";
         }
 
+        public bool HasData()
+        {
+            return Table.Rows.Count > 0;
+        }
+
         public Result(ResultType type, DataTable table, Report report, byte[] templateData)
         {
             Type = type;

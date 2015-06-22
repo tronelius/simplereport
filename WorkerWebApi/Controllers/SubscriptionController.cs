@@ -36,7 +36,8 @@ namespace WorkerWebApi.Controllers
             if (errorResult != null)
                 return Json(new { Error = errorResult });
 
-            SetNextSendDate(subscription);
+            var schedule = _scheduleRepository.Get(subscription.ScheduleId);
+            subscription.SetNextSendDate(schedule.Cron);
 
             if (subscription.Id == 0)
             {
@@ -146,7 +147,7 @@ namespace WorkerWebApi.Controllers
                 }
 
                 var scheds = _scheduleRepository.List();
-                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), x.Status, x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name, x.ErrorMessage, x.ReportParams}).ToArray();
+                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), Status = x.Status.ToString(), x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name, x.ErrorMessage, x.ReportParams}).ToArray();
 
                 return Json(result);
             }
@@ -172,16 +173,5 @@ namespace WorkerWebApi.Controllers
 
             return string.Join(";", recipients);
         }
-
-        private void SetNextSendDate(Subscription subscription)
-        {
-            var schedule = _scheduleRepository.Get(subscription.ScheduleId);
-            var crons = schedule.Cron.Split(';'); //we can have composite crons, separated by ;
-            var date = crons.Select(CrontabSchedule.Parse).Select(x => x.GetNextOccurrence(DateTime.Now)).Min();
-
-            subscription.NextSend = date;
-        }
     }
-
-  
 }

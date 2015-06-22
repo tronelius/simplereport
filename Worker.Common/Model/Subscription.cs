@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Mail;
+using NCrontab;
 
 namespace Worker.Common.Model
 {
@@ -19,6 +21,8 @@ namespace Worker.Common.Model
         public int? FailedAttempts { get; set; }
         public int ScheduleId { get; set; }
         public bool SendEmptyEmails { get; set; }
+        public string MailSubject { get; set; }
+        public string MailText { get; set; }
 
         public string Validate()
         {
@@ -40,6 +44,15 @@ namespace Worker.Common.Model
             }
 
             return null;
+        }
+
+
+        public void SetNextSendDate(string schedule)
+        {
+          var crons = schedule.Split(';'); //we can have composite crons, separated by ;
+          var date = crons.Select(CrontabSchedule.Parse).Select(x => x.GetNextOccurrence(DateTime.Now)).Min();
+
+            NextSend = date;
         }
     }
 
