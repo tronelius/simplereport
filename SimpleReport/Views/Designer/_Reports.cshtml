@@ -4,7 +4,7 @@
         <div class="form-inline">
             <div class="form-group">
                 <label class="control-label">Choose report to edit</label>
-                <select ng-model="report" class="form-control" ng-options="item as item.Name for item in reportList" ng-change="reportDataChanged()"></select>
+                <select ng-model="report" class="form-control" ng-options="item as item.Name group by item.Group for item in reportList | orderBy:'Group'" ng-change="reportDataChanged()"></select>
             </div>
             <button class="btn btn-primary" ng-click="addNewReport()"><i class="fa fa-plus"></i> Add new</button>
         </div>
