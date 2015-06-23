@@ -32,6 +32,8 @@ angular.module('report')
                 if (s.subscriptionid) {
                     $scope.subscriptionId = s.subscriptionid;
                     $scope.selectedAction = 'subscribe';
+                } else if (s.selectedAction) {
+                    $scope.selectedAction = s.selectedAction;
                 }
 
                 $scope.viewModel = viewModel;

@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-xs-6">
                             <div class="form-group">
                                 <label class="control-label" title="Who can create/edit subscriptions?">Who can create/edit subscriptions?</label>
                                 <div>
@@ -104,6 +104,11 @@
                                         </li>
                                     </ul>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <a class="btn btn-primary" ng-show="report.SubscriptionCount !== undefined" href="Home/Report?reportId={{report.Id}}&selectedAction=editSubscriptions">View subscriptions ({{report.SubscriptionCount}})</a>
                             </div>
                         </div>
                      </div>

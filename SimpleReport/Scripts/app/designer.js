@@ -1,6 +1,6 @@
-﻿angular.module('designer', ['shared']);
+﻿angular.module('designer', ['shared', 'repository']);
 
-angular.module('designer').controller('designerController', ['$scope', '$http', function ($scope, $http) {
+angular.module('designer').controller('designerController', ['$scope', '$http', 'subscriptionRepository', function ($scope, $http, subscriptionRepository) {
     $scope.activeTab = 'report';
 
     $scope.init = function() {
@@ -43,6 +43,14 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
 
     //Reports
     $scope.reportDataChanged = function () {
+
+        if ($scope.report.SubscriptionCount === undefined) {
+            var report = $scope.report;
+            subscriptionRepository.allForReport(report.Id).success(function (data) {
+                report.SubscriptionCount = data.length;
+            });
+        }
+
         $scope.latestSql = $scope.report.Sql;
         parameterPositionHash = [];
         while (match = regExParameterMatch.exec($scope.latestSql)) {
