@@ -4,6 +4,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Newtonsoft.Json;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
 using SimpleReport.Model.Logging;
@@ -60,11 +61,19 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
-        public IHttpActionResult DeleteReport([FromBody]Report rpt)
+        public async Task<IHttpActionResult> DeleteReport([FromBody]Report rpt)
         {
             try
             {
                 _adminAccess.IsAllowedForMe(User);
+
+                var result = await _apiClient.Get("api/subscription/hasSubscriptions?reportId=" + rpt.Id);
+
+                if ((bool)result)
+                {
+                    return Ok(new DeleteInfo(false, "The report have subscriptions that must be removed first."));    
+                }
+
                 var deleteinfo = _reportStorage.DeleteReport(rpt);
                 return Ok(deleteinfo);
             }

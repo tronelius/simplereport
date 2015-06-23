@@ -158,6 +158,26 @@ namespace WorkerWebApi.Controllers
             }
         }
 
+        [Route("hasSubscriptions")]
+        [HttpGet]
+        public IHttpActionResult List(string reportId)
+        {
+            try
+            {
+                _logger.Info("Checking if report has subscriptions:" + reportId);
+                var subs = _subscriptionRepository.List();
+                var id = Guid.Parse(reportId);
+                var hasSubs = subs.Any(x => x.ReportId == id);
+                
+                return Json(hasSubs);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("SubscriptionController.All", e);
+                throw;
+            }
+        }
+
         private static string GetRecipients(Subscription x)
         {
             var recipients = new List<string>();
