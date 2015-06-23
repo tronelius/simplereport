@@ -50,6 +50,10 @@ angular.module('subscriptions')
              }
 
              function save() {
+                 if (!$scope.schedule.Name || !$scope.schedule.Cron) {
+                     toastr.warn('A Schedule needs both a name and an interval');
+                 }
+
                  scheduleRepository.save($scope.schedule).success(function (data) {
                      if (data.Error) {
                          toastr.error(data.Error);
