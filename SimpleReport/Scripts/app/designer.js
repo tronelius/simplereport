@@ -15,7 +15,6 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.reportOwnerAccessLists = data.ReportOwnerAccessLists;
                 $scope.settings = data.Settings;
                 $scope.accessEditorViewModel = data.AccessEditorViewModel;
-
             }).
             error(function (data) {
                 toastr.error("Couldn't get list of reports from server.","Error");
@@ -43,11 +42,17 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
 
     //Reports
     $scope.reportDataChanged = function () {
+        createOriginalParameterBackup();
 
-        if ($scope.report.SubscriptionCount === undefined) {
+        if (!$scope.report.hasLoadedSubscriptions) {//we dont want this to run on every keyup..
+            $scope.report.hasLoadedSubscriptions = true;
             var report = $scope.report;
+            report.warnForParameterChanges = true;
             subscriptionRepository.allForReport(report.Id).success(function (data) {
                 report.SubscriptionCount = data.length;
+                report.warnForParameterChanges = data.length > 0;
+            }).error(function () {
+                toastr.warning('Could not load subscriptions for the report. Validation will assume there are subscriptions for your safety.');
             });
         }
 
@@ -59,7 +64,6 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 parameterPositionHash[match.index] = existingparam.SqlKey;
             }
         }
-        
     };
     $scope.analyzeSQL = function () {
         var currentSQL = $scope.report.Sql;
@@ -84,7 +88,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
             foundMatches.push(match[0]);
         }
-
+        
         //transform from and to-parameters to a period-parameter.
         var periodIsPresentAndValid = false;
         var periodFrom = _.findWhere($scope.report.Parameters, { SqlKey: '@from' });
@@ -115,10 +119,60 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
         }
 
-        
-
         $scope.reportDataChanged();
     };
+
+    function parameterChecksum(p) {
+        var o = { InputType : p.InputType };
+
+        if (p.Value)
+            o.hasDefaultValue = true;
+
+        return o;
+    }
+
+    function createOriginalParameterBackup(force) {
+        if (!force && $scope.report.parameterChecksums)
+            return;
+
+        var backup = {};
+        $scope.report.Parameters.forEach(function(p) {
+            backup[p.SqlKey] = parameterChecksum(p);
+        });
+
+        $scope.report.parameterChecksums = backup;
+    }
+
+    function isChecksumsMatching(origin, current) {
+        var valid = true;
+        //this works based on the fact that currently we dont care if checksum params are added to current, because the only addition is a default value which will obviously work.
+        Object.keys(origin).forEach(function(k) {
+            if (origin[k] !== current[k]) {
+                valid = false;
+            }
+        });
+
+        return valid;
+    }
+
+    function hasMadeInvalidParameterChanges() {
+        var invalid = false;
+        $scope.report.Parameters.forEach(function (p) {
+            var checksum = $scope.report.parameterChecksums[p.SqlKey];
+            if (checksum) {
+                if (!isChecksumsMatching(checksum, parameterChecksum(p))) {
+                    invalid = true;
+                }
+            } else {
+                if (p.Value === undefined || p.Value === '') {
+                    invalid = true;
+                }
+            }
+        });
+
+        return invalid;
+    }
+
     $scope.addNewReport = function() {
         $scope.report = { Id: null, Parameters:[],TemplateEditorAccessStyle : 0 };
     };
@@ -126,7 +180,16 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         //console.debug('new parameter');
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
     };
-    $scope.saveReport = function () {
+    $scope.saveReport = function (force) {
+        $scope.showSaveConfirmation = false;
+
+        if (!force && $scope.report.warnForParameterChanges) {
+            if (hasMadeInvalidParameterChanges()) {
+                $scope.showSaveConfirmation = true;
+                return;
+            }
+        }
+
         $.ajax({
             type: 'post',
             url: 'api/Designer/SaveReport',
@@ -136,6 +199,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }).success(function (data) {
             toastr.success("Report saved", "Saved");
             $scope.report = data;
+            $scope.reportDataChanged();
             updateCollection($scope.reportList, $scope.report);
         }).error(function (data) {
             toastr.error("Server error when saving report.", "Error");
