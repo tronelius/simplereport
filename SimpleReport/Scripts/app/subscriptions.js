@@ -79,9 +79,13 @@ angular.module('subscriptions')
                  }
 
                  scheduleRepository.delete($scope.schedule.Id).success(function (data) {
-                     $scope.data = data;
-                     $scope.schedule = null;
-                     toastr.success('Schedule removed');
+                     if (!data.error) {
+                         $scope.data = data;
+                         $scope.schedule = null;
+                         toastr.success('Schedule removed');
+                     } else {
+                         toastr.error(data.error);
+                     }
                  }).error(function () {
                      toastr.error('Something went wrong, please try again later or contact support');
                  });

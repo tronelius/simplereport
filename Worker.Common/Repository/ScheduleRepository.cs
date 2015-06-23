@@ -13,6 +13,7 @@ namespace Worker.Common.Repository
         List<Schedule> List();
         void Update(Schedule schedule);
         void Delete(int id);
+        bool IsInUse(int id);
     }
 
     public class ScheduleRepository : BaseRepository, IScheduleRepository
@@ -59,6 +60,15 @@ namespace Worker.Common.Repository
             using (SqlConnection cn = EnsureOpenConnection())
             {
                 cn.Delete<Schedule>(new { Id = id});
+            }
+        }
+
+        public bool IsInUse(int id)
+        {
+            using (SqlConnection cn = EnsureOpenConnection())
+            {
+                var predicate = Predicates.Field<Subscription>(f => f.ScheduleId, Operator.Eq, id);
+                return cn.Count<Subscription>(predicate) > 0;
             }
         }
     }

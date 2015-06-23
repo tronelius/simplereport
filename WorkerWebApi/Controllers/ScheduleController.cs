@@ -42,6 +42,11 @@ namespace WorkerWebApi.Controllers
         {
             _logger.Info("Deleting schedule: " + id);
 
+            if (_scheduleRepository.IsInUse(id))
+            {
+                return Json(new {error = "The schedule is in use in subsciptions and cant be removed."});
+            }
+
             _scheduleRepository.Delete(id);
             var result = _scheduleRepository.List();
             return Json(result);
