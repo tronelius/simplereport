@@ -23,6 +23,7 @@ namespace Worker.Common.Model
         public bool SendEmptyEmails { get; set; }
         public string MailSubject { get; set; }
         public string MailText { get; set; }
+        public DateTime? LastRun { get; set; }
 
         public string Validate()
         {

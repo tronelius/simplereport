@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using Worker.Common.Api;
@@ -31,46 +29,56 @@ namespace WorkerHost.Jobs
 
         public void Execute(IJobExecutionContext context)
         {
-            _logger.Info("Task running now!!");
-            Console.WriteLine("Hello, im running once a minute:"  + DateTime.Now.ToShortTimeString());
-            
-            var subs = _subscriptionRepository.GetSubscriptionsWithSendDateBefore(DateTime.Now).Take(1); //TODO: remove take. used for debugging
+            _logger.Info("SubscriptionJob running now!!");
+
+            var subs = _subscriptionRepository.GetSubscriptionsWithSendDateBefore(DateTime.Now);
 
             Parallel.ForEach(subs, SendSubscription);
         }
 
         private void SendSubscription(Subscription subscription)
         {
-            _logger.Info("Sending sub " + subscription.Id +" on thread " + Thread.CurrentThread.ManagedThreadId);
+            _logger.Info("Sending sub " + subscription.Id);
             try
             {
-                var schedule = _scheduleRepository.Get(subscription.ScheduleId);
+                try
+                {
+                    var schedule = _scheduleRepository.Get(subscription.ScheduleId);
 
-                subscription.Status = SubscriptionStatus.Ongoing;
-                _subscriptionRepository.Update(subscription);
+                    subscription.Status = SubscriptionStatus.Ongoing;
+                    _subscriptionRepository.Update(subscription);
 
-                var reportData = _workerApiClient.GetExcelReport(subscription.ReportParams);
-                _mailSender.Send(subscription.To, subscription.Cc, subscription.Bcc, subscription.MailSubject, subscription.MailText, reportData);
-
-                subscription.Status = SubscriptionStatus.Success;
-                subscription.SetNextSendDate(schedule.Cron);
-                subscription.LastSent = DateTime.Now;
-                subscription.FailedAttempts = null;
+                    var reportData = _workerApiClient.GetExcelReport(subscription.ReportParams);
+                    if (reportData != null && reportData.Length > 0 || subscription.SendEmptyEmails)
+                    {
+                        _mailSender.Send(subscription.To, subscription.Cc, subscription.Bcc, subscription.MailSubject, subscription.MailText, reportData);
+                        subscription.LastSent = DateTime.Now;
+                    }
+                    
+                    subscription.Status = SubscriptionStatus.Success;
+                    subscription.SetNextSendDate(schedule.Cron);
+                    subscription.FailedAttempts = null;
+                }
+                catch (Exception e)
+                {
+                    _logger.Error("Failed to send subscription with id " + subscription.Id, e);
+                    subscription.Status = SubscriptionStatus.Failed;
+                    subscription.ErrorMessage = e.Message;
+                    subscription.LastErrorDate = DateTime.Now;
+                    subscription.FailedAttempts = subscription.FailedAttempts.HasValue ? subscription.FailedAttempts + 1 : 1;
+                }
+                finally
+                {
+                    subscription.LastRun = DateTime.Now;
+                    _subscriptionRepository.Update(subscription);
+                }
             }
             catch (Exception e)
             {
-                _logger.Error("Failed to send subscription with id " + subscription.Id, e);
-                subscription.Status = SubscriptionStatus.Failed;
-                subscription.ErrorMessage = e.Message;
-                subscription.LastErrorDate = DateTime.Now;
-                subscription.FailedAttempts = subscription.FailedAttempts.HasValue ? subscription.FailedAttempts++ : 1;
-            }
-            finally
-            {
-                _subscriptionRepository.Update(subscription);
+                _logger.Error("SendSubscription", e);
             }
 
-            _logger.Info("Finished with sub " + subscription.Id + " on thread " + Thread.CurrentThread.ManagedThreadId);
+            _logger.Info("Finished with sub " + subscription.Id);
         }
     }
 }
