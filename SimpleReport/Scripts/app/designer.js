@@ -44,7 +44,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     $scope.reportDataChanged = function () {
         createOriginalParameterBackup();
 
-        if (!$scope.report.hasLoadedSubscriptions) {//we dont want this to run on every keyup..
+        if (!$scope.report.hasLoadedSubscriptions) {//we dont want this to run on every keyup.. and yes i know we reload subs on every save, but i think that is correct.
             $scope.report.hasLoadedSubscriptions = true;
             var report = $scope.report;
             report.warnForParameterChanges = true;
