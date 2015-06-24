@@ -29,7 +29,7 @@ namespace WorkerHost.Jobs
 
         public void Execute(IJobExecutionContext context)
         {
-            _logger.Info("SubscriptionJob running now!!");
+            _logger.Trace("SubscriptionJob running now!!");
 
             var subs = _subscriptionRepository.GetSubscriptionsWithSendDateBefore(DateTime.Now);
 
@@ -38,7 +38,7 @@ namespace WorkerHost.Jobs
 
         private void SendSubscription(Subscription subscription)
         {
-            _logger.Info("Sending sub " + subscription.Id);
+            _logger.Trace("Sending sub " + subscription.Id);
             try
             {
                 try
@@ -78,7 +78,7 @@ namespace WorkerHost.Jobs
                 _logger.Error("SendSubscription", e);
             }
 
-            _logger.Info("Finished with sub " + subscription.Id);
+            _logger.Trace("Finished with sub " + subscription.Id);
         }
     }
 }

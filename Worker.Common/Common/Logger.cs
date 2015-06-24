@@ -5,6 +5,11 @@ namespace Worker.Common.Common
 {
     public class Logger : ILogger
     {
+        public void Trace(string message)
+        {
+            LogManager.GetCurrentClassLogger().Trace(message);
+        }
+
         public void Info(string message)
         {
             LogManager.GetCurrentClassLogger().Info(message);
@@ -26,6 +31,7 @@ namespace Worker.Common.Common
 
     public interface ILogger
     {
+        void Trace(string message);
         void Info(string message);
         void Warn(string message);
         void Error(string message, Exception ex = null);

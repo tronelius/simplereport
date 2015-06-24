@@ -23,7 +23,7 @@ namespace WorkerWebApi.Controllers
         [HttpPost]
         public IHttpActionResult Save(Schedule schedule)
         {
-            _logger.Info("Creating schedule: " + JsonConvert.SerializeObject(schedule));
+            _logger.Trace("Creating schedule: " + JsonConvert.SerializeObject(schedule));
             if (schedule.Id == 0)
             {
                 var id = _scheduleRepository.Insert(schedule);
@@ -40,7 +40,7 @@ namespace WorkerWebApi.Controllers
         [HttpPost]
         public IHttpActionResult Delete([FromBody]int id)
         {
-            _logger.Info("Deleting schedule: " + id);
+            _logger.Trace("Deleting schedule: " + id);
 
             if (_scheduleRepository.IsInUse(id))
             {
@@ -58,7 +58,7 @@ namespace WorkerWebApi.Controllers
         {
             try
             {
-                _logger.Info("Getting all schedules");
+                _logger.Trace("Getting all schedules");
                 var result = _scheduleRepository.List();
                 return Json(result);
             }

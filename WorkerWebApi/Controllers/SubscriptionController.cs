@@ -29,7 +29,7 @@ namespace WorkerWebApi.Controllers
         [HttpPost]
         public IHttpActionResult Save(Subscription subscription)
         {
-            _logger.Info("Creating schedule: " + JsonConvert.SerializeObject(subscription));
+            _logger.Trace("Creating schedule: " + JsonConvert.SerializeObject(subscription));
 
             var errorResult = subscription.Validate();
 
@@ -55,7 +55,7 @@ namespace WorkerWebApi.Controllers
         [HttpPost]
         public IHttpActionResult Delete([FromBody]int id)
         {
-            _logger.Info("Deleting subscription: " + id);
+            _logger.Trace("Deleting subscription: " + id);
 
             _subscriptionRepository.Delete(id);
             var result = _subscriptionRepository.List();
@@ -66,7 +66,7 @@ namespace WorkerWebApi.Controllers
         [HttpPost]
         public IHttpActionResult Send([FromBody]int id)
         {
-            _logger.Info("Set send on subscription: " + id);
+            _logger.Trace("Set send on subscription: " + id);
 
             _subscriptionRepository.SendNow(id);
             var result = _subscriptionRepository.List();
@@ -79,7 +79,7 @@ namespace WorkerWebApi.Controllers
         {
             try
             {
-                _logger.Info("Getting all subscription");
+                _logger.Trace("Getting all subscription");
                 var result = _subscriptionRepository.List();
                 return Json(result);
             }
@@ -96,7 +96,7 @@ namespace WorkerWebApi.Controllers
         {
             try
             {
-                _logger.Info("Getting subscription:" + id);
+                _logger.Trace("Getting subscription:" + id);
                 var result = _subscriptionRepository.Get(id);
                 return Json(result);
             }
@@ -113,7 +113,7 @@ namespace WorkerWebApi.Controllers
         {
             try
             {
-                _logger.Info("Update template text for all subscription to report");
+                _logger.Trace("Update template text for all subscription to report");
                  _subscriptionRepository.UpdateTemplateText(updateTemplateText);
                 return Ok();
             }
@@ -131,7 +131,7 @@ namespace WorkerWebApi.Controllers
         {
             try
             {
-                _logger.Info("Getting all subscriptions for listing with filter:" + filter);
+                _logger.Trace("Getting all subscriptions for listing with filter:" + filter);
                 var subs = _subscriptionRepository.List();
 
                 //TODO: do we want a more complex filtering? would be nice to merge filter and reportid and have some kind of dsl for it?
@@ -164,7 +164,7 @@ namespace WorkerWebApi.Controllers
         {
             try
             {
-                _logger.Info("Checking if report has subscriptions:" + reportId);
+                _logger.Trace("Checking if report has subscriptions:" + reportId);
                 var subs = _subscriptionRepository.List();
                 var id = Guid.Parse(reportId);
                 var hasSubs = subs.Any(x => x.ReportId == id);
