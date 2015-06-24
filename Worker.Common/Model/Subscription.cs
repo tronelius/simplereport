@@ -18,7 +18,7 @@ namespace Worker.Common.Model
         public DateTime NextSend { get; set; }
         public string ErrorMessage { get; set; }
         public DateTime? LastErrorDate { get; set; }
-        public int? FailedAttempts { get; set; }
+        public int FailedAttempts { get; set; }
         public int ScheduleId { get; set; }
         public bool SendEmptyEmails { get; set; }
         public string MailSubject { get; set; }

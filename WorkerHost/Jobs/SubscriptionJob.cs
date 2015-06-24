@@ -57,7 +57,7 @@ namespace WorkerHost.Jobs
                     
                     subscription.Status = SubscriptionStatus.Success;
                     subscription.SetNextSendDate(schedule.Cron);
-                    subscription.FailedAttempts = null;
+                    subscription.FailedAttempts = 0;
                 }
                 catch (Exception e)
                 {
@@ -65,7 +65,7 @@ namespace WorkerHost.Jobs
                     subscription.Status = SubscriptionStatus.Failed;
                     subscription.ErrorMessage = e.Message;
                     subscription.LastErrorDate = DateTime.Now;
-                    subscription.FailedAttempts = subscription.FailedAttempts.HasValue ? subscription.FailedAttempts + 1 : 1;
+                    subscription.FailedAttempts++;
                 }
                 finally
                 {

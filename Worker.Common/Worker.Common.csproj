@@ -69,6 +69,7 @@
     <Compile Include="Migrations\2015-06-18\AddTemplateInfo.cs" />
     <Compile Include="Migrations\2015-06-18\RenameReportUrlToReportParams.cs" />
     <Compile Include="Migrations\2015-06-11\AddInitialTables.cs" />
+    <Compile Include="Migrations\2015-06-24\MakeFailedAttemptsNonNullable.cs" />
     <Compile Include="Migrations\2015-06-23\AddLastRun.cs" />
     <Compile Include="Migrations\2015-06-22\AddSendEmptyEmails.cs" />
     <Compile Include="Migrations\Migrator.cs" />
