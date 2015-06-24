@@ -97,8 +97,8 @@
                             <button type="button" class="btn btn-primary" data-ng-click="triggerOnScreen()" data-ng-show="viewModel.Report.OnScreenFormatAllowed">On screen</button>
                         </div>
                         <div class="col-xs-4">
-                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'subscribe'" data-ng-show="viewModel.CanEditSubscriptions">Subscribe</button>
-                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editSubscriptions'" data-ng-show="viewModel.CanEditSubscriptions">Edit subscriptions</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'subscribe'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Subscribe</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editSubscriptions'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Edit subscriptions</button>
                         </div>
                         <div class="col-xs-3">
                             <button type="button" class="btn btn-primary pull-right" data-ng-click="selectedAction = 'editTemplate'" data-ng-show="viewModel.CanEditTemplate">Edit template</button>

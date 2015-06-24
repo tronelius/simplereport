@@ -13,6 +13,7 @@
                 $scope.reportOwnerAccessLists = data.ReportOwnerAccessLists;
                 $scope.settings = data.Settings;
                 $scope.accessEditorViewModel = data.AccessEditorViewModel;
+                $scope.SubscriptionEnabled = data.SubscriptionEnabled;
             }).
             error(function (data) {
                 toastr.error("Couldn't get list of reports from server.", "Error");
@@ -40,9 +41,10 @@
 
     //Reports
     $scope.reportDataChanged = function () {
-        createOriginalParameterBackup();
+        if ($scope.SubscriptionEnabled)
+            createOriginalParameterBackup();
 
-        if (!$scope.report.hasLoadedSubscriptions) {//we dont want this to run on every keyup.. and yes i know we reload subs on every save, but i think that is correct.
+        if ($scope.SubscriptionEnabled && !$scope.report.hasLoadedSubscriptions) {//we dont want this to run on every keyup.. and yes i know we reload subs on every save, but i think that is correct.
             $scope.report.hasLoadedSubscriptions = true;
             var report = $scope.report;
             report.warnForParameterChanges = true;
@@ -181,7 +183,7 @@
     $scope.saveReport = function (force) {
         $scope.showSaveConfirmation = false;
 
-        if (!force && $scope.report.warnForParameterChanges) {
+        if ($scope.SubscriptionEnabled && !force && $scope.report.warnForParameterChanges) {
             if (hasMadeInvalidParameterChanges()) {
                 $scope.showSaveConfirmation = true;
                 return;

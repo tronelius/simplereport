@@ -21,9 +21,9 @@ namespace SimpleReport.ViewModel
         public List<Access> ReportOwnerAccessLists { get; set; }
         public Settings Settings { get; set; }
         public IEnumerable<AccessEditorViewModel> AccessEditorViewModel { get; set; }
+        public bool SubscriptionEnabled { get; set; }
 
-
-        public DesignerViewModel(IStorage reportStorage, IPrincipal user)
+        public DesignerViewModel(IStorage reportStorage, IPrincipal user, IApplicationSettings applicationSettings)
         {
             Reports = reportStorage.GetAllReports();
             Connections = reportStorage.GetConnections();
@@ -36,6 +36,7 @@ namespace SimpleReport.ViewModel
             ReportOwnerAccessLists.Insert(0, new Access(Guid.Empty, "None selected", ""));
             Settings = reportStorage.GetSettings();
             AccessEditorViewModel = Enum.GetValues(typeof(AccessStyle)).Cast<AccessStyle>().Select(x => new AccessEditorViewModel(x, GetTextForTemplateEditor(x)));
+            SubscriptionEnabled = applicationSettings.SubscriptionEnabled;
         }
 
         private string GetTextForTemplateEditor(AccessStyle editor)

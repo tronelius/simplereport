@@ -17,10 +17,12 @@ namespace SimpleReport.Controllers.Api
     public class DesignerController : BaseApiController
     {
         private readonly IApiClient _apiClient;
+        private readonly IApplicationSettings _applicationSettings;
 
-        public DesignerController(IStorage reportStorage, ILogger logger, IApiClient apiClient) : base(reportStorage, logger)
+        public DesignerController(IStorage reportStorage, ILogger logger, IApiClient apiClient, IApplicationSettings applicationSettings) : base(reportStorage, logger)
         {
             _apiClient = apiClient;
+            _applicationSettings = applicationSettings;
         }
 
         [AcceptVerbs("GET")]
@@ -29,7 +31,7 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 _adminAccess.IsAllowedForMe(User);
-                DesignerViewModel vm = new DesignerViewModel(_reportStorage, User);
+                DesignerViewModel vm = new DesignerViewModel(_reportStorage, User, _applicationSettings);
                 return Ok(vm);
             }
             catch (Exception ex)
@@ -46,8 +48,7 @@ namespace SimpleReport.Controllers.Api
                 _adminAccess.IsAllowedForMe(User);
                 Report currentReport = _reportStorage.GetReport(reportToSave.Id);
                 
-                //TODO check for subscription enabled
-                if (currentReport != null && currentReport.HasMailTemplateChanged(reportToSave)) {
+                if (_applicationSettings.SubscriptionEnabled && currentReport != null && currentReport.HasMailTemplateChanged(reportToSave)) {
                     var result = await _apiClient.Post("api/subscription/updatetemplate", new {reportguid = reportToSave.Id, subject = reportToSave.MailSubject, text = reportToSave.MailText});
                 }
 
@@ -67,11 +68,14 @@ namespace SimpleReport.Controllers.Api
             {
                 _adminAccess.IsAllowedForMe(User);
 
-                var result = await _apiClient.Get("api/subscription/hasSubscriptions?reportId=" + rpt.Id);
-
-                if ((bool)result)
+                if (_applicationSettings.SubscriptionEnabled)
                 {
-                    return Ok(new DeleteInfo(false, "The report have subscriptions that must be removed first."));    
+                    var result = await _apiClient.Get("api/subscription/hasSubscriptions?reportId=" + rpt.Id);
+
+                    if ((bool) result)
+                    {
+                        return Ok(new DeleteInfo(false, "The report have subscriptions that must be removed first."));
+                    }
                 }
 
                 var deleteinfo = _reportStorage.DeleteReport(rpt);

@@ -26,5 +26,6 @@ namespace SimpleReport.ViewModel
         public bool HasAdminAccess { get; set; }
         public bool CanEditTemplate { get; set; }
         public bool CanEditSubscriptions { get; set; }
+        public bool SubscriptionEnabled { get; set; }
     }
 }
