@@ -221,21 +221,38 @@
     <Content Include="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\angular-mocks.js" />
-    <Content Include="Scripts\angular.js" />
-    <Content Include="Scripts\angular.min.js" />
-    <Content Include="Scripts\app\repository.js" />
-    <Content Include="Scripts\app\subscriptions.js" />
-    <Content Include="Scripts\app\report.js" />
-    <Content Include="Scripts\app\designer.js" />
-    <Content Include="Scripts\app\shared.js" />
+    <Content Include="Scripts\app\data\report-repository.js" />
+    <Content Include="Scripts\app\data\schedule-repository.js" />
+    <Content Include="Scripts\app\data\subscription-repository.js" />
+    <Content Include="Scripts\app\designer\designer-controller.js" />
+    <Content Include="Scripts\app\report\report-controller.js" />
+    <Content Include="Scripts\app\report\subscription-editor.js" />
+    <Content Include="Scripts\app\schedule\module.js" />
+    <Content Include="Scripts\app\shared\directives\on-screen-report.js" />
+    <Content Include="Scripts\app\shared\directives\template-upload.js" />
+    <Content Include="Scripts\app\shared\elements\datepicker-boostrap.js" />
+    <Content Include="Scripts\app\shared\elements\numeric.js" />
+    <Content Include="Scripts\app\shared\helpers\query-string-parser.js" />
+    <Content Include="Scripts\app\shared\validators\emails.js" />
+    <Content Include="Scripts\app\subscription\elements\cron-editor.js" />
+    <Content Include="Scripts\app\schedule\schedule-editor.js" />
+    <Content Include="Scripts\app\subscription\subscription-controller.js" />
+    <Content Include="Scripts\app\subscription\directives\subscription-list.js" />
+    <Content Include="Scripts\lib\angular-mocks.js" />
+    <Content Include="Scripts\lib\angular.js" />
+    <Content Include="Scripts\lib\angular.min.js" />
+    <Content Include="Scripts\app\data\module.js" />
+    <Content Include="Scripts\app\subscription\module.js" />
+    <Content Include="Scripts\app\report\module.js" />
+    <Content Include="Scripts\app\designer\module.js" />
+    <Content Include="Scripts\app\shared\module.js" />
     <Content Include="Scripts\app\templates\subscriptionList.html" />
     <Content Include="Scripts\app\templates\subscriptionEditor.html" />
     <Content Include="Scripts\app\templates\scheduleEditor.html" />
     <Content Include="Scripts\app\templates\onScreenReport.html" />
     <Content Include="Scripts\app\templates\templateUpload.html" />
-    <Content Include="Scripts\bootstrap-datepicker.js" />
-    <Content Include="Scripts\bootstrap-inputmask.js" />
+    <Content Include="Scripts\lib\bootstrap-datepicker.js" />
+    <Content Include="Scripts\lib\bootstrap-inputmask.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -243,23 +260,23 @@
     <Content Include="Content\js\app.min.js.map">
       <DependentUpon>app.min.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="Scripts\lib\bootstrap.js" />
+    <Content Include="Scripts\lib\bootstrap.min.js" />
+    <Content Include="Scripts\lib\angular.min.js.map" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
-    <None Include="Scripts\jquery-2.1.3.intellisense.js" />
-    <Content Include="Scripts\jquery-cron-min.js" />
-    <Content Include="Scripts\ui-bootstrap-tpls-0.13.0.min.js" />
-    <Content Include="Scripts\jquery-2.1.3.js" />
-    <Content Include="Scripts\jquery-2.1.3.min.js" />
-    <Content Include="Scripts\jquery.numeric.js" />
-    <Content Include="Scripts\jquery-2.1.3.min.map" />
-    <Content Include="Scripts\ng-file-upload-all.min.js" />
-    <Content Include="Scripts\npm.js" />
-    <Content Include="Scripts\toastr.js" />
-    <Content Include="Scripts\toastr.min.js" />
-    <Content Include="Scripts\underscore.js" />
-    <Content Include="Scripts\underscore.min.js" />
+    <None Include="Scripts\lib\jquery-2.1.3.intellisense.js" />
+    <Content Include="Scripts\lib\jquery-cron-min.js" />
+    <Content Include="Scripts\lib\ui-bootstrap-tpls-0.13.0.min.js" />
+    <Content Include="Scripts\lib\jquery-2.1.3.js" />
+    <Content Include="Scripts\lib\jquery-2.1.3.min.js" />
+    <Content Include="Scripts\lib\jquery.numeric.js" />
+    <Content Include="Scripts\lib\jquery-2.1.3.min.map" />
+    <Content Include="Scripts\lib\ng-file-upload-all.min.js" />
+    <Content Include="Scripts\lib\npm.js" />
+    <Content Include="Scripts\lib\toastr.js" />
+    <Content Include="Scripts\lib\toastr.min.js" />
+    <Content Include="Scripts\lib\underscore.js" />
+    <Content Include="Scripts\lib\underscore.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -272,7 +289,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Report.cshtml" />
     <Content Include="Views\Designer\Index.cshtml" />
-    <Content Include="Scripts\underscore.min.map" />
+    <Content Include="Scripts\lib\underscore.min.map" />
     <Content Include="Views\Designer\_Reports.cshtml" />
     <Content Include="Views\Designer\_LookupReports.cshtml" />
     <Content Include="Views\Designer\_Connections.cshtml" />

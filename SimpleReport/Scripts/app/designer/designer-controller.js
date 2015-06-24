@@ -1,9 +1,7 @@
-﻿angular.module('designer', ['shared', 'repository']);
-
-angular.module('designer').controller('designerController', ['$scope', '$http', 'subscriptionRepository', function ($scope, $http, subscriptionRepository) {
+﻿angular.module('designer').controller('designerController', ['$scope', '$http', 'subscriptionRepository', function ($scope, $http, subscriptionRepository) {
     $scope.activeTab = 'report';
 
-    $scope.init = function() {
+    $scope.init = function () {
         $scope.activeTab = 'report';
         $http.get('api/Designer/GetViewModel').
             success(function (data) {
@@ -17,7 +15,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.accessEditorViewModel = data.AccessEditorViewModel;
             }).
             error(function (data) {
-                toastr.error("Couldn't get list of reports from server.","Error");
+                toastr.error("Couldn't get list of reports from server.", "Error");
             });
     };
     $scope.init();
@@ -30,7 +28,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
 
         if (deleted) {
             collection.splice(index, 1);
-        } else {    
+        } else {
             if (index !== -1) {
                 collection.splice(index, 1, updatedEntity);
             } else {
@@ -88,7 +86,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
             foundMatches.push(match[0]);
         }
-        
+
         //transform from and to-parameters to a period-parameter.
         var periodIsPresentAndValid = false;
         var periodFrom = _.findWhere($scope.report.Parameters, { SqlKey: '@from' });
@@ -110,9 +108,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         while (i--) {
             if (_.indexOf(foundMatches, $scope.report.Parameters[i].SqlKey) === -1) {
                 if ($scope.report.Parameters[i].SqlKey === '@from_@to') {
-                   if (!periodIsPresentAndValid) {
-                       $scope.report.Parameters.splice(i, 1);
-                   }
+                    if (!periodIsPresentAndValid) {
+                        $scope.report.Parameters.splice(i, 1);
+                    }
                 } else {
                     $scope.report.Parameters.splice(i, 1);
                 }
@@ -123,7 +121,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     };
 
     function parameterChecksum(p) {
-        var o = { InputType : p.InputType };
+        var o = { InputType: p.InputType };
 
         if (p.Value)
             o.hasDefaultValue = true;
@@ -136,7 +134,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             return;
 
         var backup = {};
-        $scope.report.Parameters.forEach(function(p) {
+        $scope.report.Parameters.forEach(function (p) {
             backup[p.SqlKey] = parameterChecksum(p);
         });
 
@@ -146,7 +144,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     function isChecksumsMatching(origin, current) {
         var valid = true;
         //this works based on the fact that currently we dont care if checksum params are added to current, because the only addition is a default value which will obviously work.
-        Object.keys(origin).forEach(function(k) {
+        Object.keys(origin).forEach(function (k) {
             if (origin[k] !== current[k]) {
                 valid = false;
             }
@@ -173,8 +171,8 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         return invalid;
     }
 
-    $scope.addNewReport = function() {
-        $scope.report = { Id: null, Parameters:[],TemplateEditorAccessStyle : 0 };
+    $scope.addNewReport = function () {
+        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0 };
     };
     $scope.addNewParameter = function (keyOfParameter) {
         //console.debug('new parameter');
@@ -227,7 +225,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     };
 
     //Connections
-    $scope.connectionChanged = function (){};
+    $scope.connectionChanged = function () { };
     $scope.saveConnection = function () {
         $.ajax({
             type: 'post',
@@ -243,10 +241,10 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             toastr.error("Server error when saving connection.", "Error");
         });
     };
-    $scope.addNewConnection = function() {
+    $scope.addNewConnection = function () {
         $scope.connection = { Id: null };
     };
-    $scope.verifyConnection = function() {
+    $scope.verifyConnection = function () {
         $.ajax({
             type: 'post',
             url: 'api/Designer/VerifyConnection',
@@ -287,7 +285,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     };
 
     //Dropdown parameters
-    $scope.lookupReportChanged = function (){};
+    $scope.lookupReportChanged = function () { };
     $scope.verifyLookupSql = function () {
         var re = /((\bid\b).+(\bname\b))|((\bname\b).+(\bid\b))/i;
         var match;
@@ -297,7 +295,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             $scope.lookupreport.SqlOk = true;
         }
     }
-    $scope.addNewDropdownParameter = function() {
+    $scope.addNewDropdownParameter = function () {
         $scope.lookupreport = { Id: null };
     };
     $scope.saveDropdownParameter = function () {
@@ -337,8 +335,8 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     };
 
     //Access Lists
-    $scope.accessListChanged = function (){};
-    $scope.addNewAccessList = function() {
+    $scope.accessListChanged = function () { };
+    $scope.addNewAccessList = function () {
         $scope.access = { Id: null };
     };
     $scope.saveAccessList = function () {
@@ -357,7 +355,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             toastr.error("Server error when saving access control list.", "Error");
         });
     };
-    $scope.deleteAccessList = function() {
+    $scope.deleteAccessList = function () {
         $.ajax({
             type: 'post',
             url: 'api/Designer/DeleteAccessList',
@@ -367,7 +365,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }).success(function (data) {
             if (data.Success) {
                 toastr.success("Access control list is deleted", "Deleted");
-                updateCollection($scope.accessLists, $scope.access, true); 
+                updateCollection($scope.accessLists, $scope.access, true);
                 updateCollection($scope.reportOwnerAccessLists, $scope.access, true);
                 $scope.access = null;
                 $scope.$apply();
@@ -380,7 +378,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     };
 
     //Settings
-    $scope.saveSettings = function() {
+    $scope.saveSettings = function () {
         $.ajax({
             type: 'post',
             url: 'api/Designer/SaveSettings',

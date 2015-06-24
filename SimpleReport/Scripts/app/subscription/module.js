@@ -1,0 +1,1 @@
+﻿angular.module('subscriptions', ['shared', 'ui.bootstrap', 'repository', 'schedule']);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Optimization;
 
 namespace SimpleReport.App_Start
@@ -11,20 +10,21 @@ namespace SimpleReport.App_Start
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/app").Include(
-                "~/Scripts/app/*.js"));
+            var appbundle = new ScriptBundle("~/bundles/app").IncludeDirectory("~/Scripts/app", "*.js", true);
+            appbundle.Orderer = new ModuleFirstBundleOrderer();
+            bundles.Add(appbundle);
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
-                "~/Scripts/jquery-{version}.js",
-                "~/Scripts/jquery.numeric.js",
-                "~/Scripts/bootstrap.js",
-                "~/Scripts/bootstrap-datepicker.js",
-                "~/Scripts/underscore.min.js",
-                "~/scripts/angular.js",
-                "~/scripts/ui-bootstrap-tpls-0.13.0.min.js",
-                "~/scripts/toastr.js",
-                "~/scripts/ng-file-upload-all.min.js",
-                "~/scripts/jquery-cron-min.js",
+                "~/Scripts/lib/jquery-{version}.js",
+                "~/Scripts/lib/jquery.numeric.js",
+                "~/Scripts/lib/bootstrap.js",
+                "~/Scripts/lib/bootstrap-datepicker.js",
+                "~/Scripts/lib/underscore.min.js",
+                "~/Scripts/lib/angular.js",
+                "~/Scripts/lib/ui-bootstrap-tpls-0.13.0.min.js",
+                "~/Scripts/lib/toastr.js",
+                "~/Scripts/lib/ng-file-upload-all.min.js",
+                "~/Scripts/lib/jquery-cron-min.js",
                 "~/Content/js/app.js"));
 
             bundles.Add(new StyleBundle("~/bundles/css").Include(
@@ -35,6 +35,14 @@ namespace SimpleReport.App_Start
                       "~/Content/toastr.min.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/jquery-cron.css"));
+        }
+    }
+
+    public class ModuleFirstBundleOrderer : IBundleOrderer
+    {
+        public IEnumerable<BundleFile> OrderFiles(BundleContext context, IEnumerable<BundleFile> files)
+        {
+            return files.OrderByDescending(x => x.VirtualFile.Name == "module.js");
         }
     }
 }
