@@ -66,6 +66,8 @@ namespace WorkerHost.Jobs
                     subscription.ErrorMessage = e.Message;
                     subscription.LastErrorDate = DateTime.Now;
                     subscription.FailedAttempts++;
+                    if(subscription.FailedAttempts == 5)
+                        subscription.Status = SubscriptionStatus.Suspended;
                 }
                 finally
                 {

@@ -62,6 +62,7 @@ namespace Worker.Common.Model
         NotSet,
         Success,
         Ongoing,
-        Failed
+        Failed,
+        Suspended
     }
 }
