@@ -174,7 +174,7 @@
     }
 
     $scope.addNewReport = function () {
-        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0 };
+        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id };
     };
     $scope.addNewParameter = function (keyOfParameter) {
         //console.debug('new parameter');
