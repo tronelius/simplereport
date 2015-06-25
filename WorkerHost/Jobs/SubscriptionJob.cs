@@ -52,7 +52,7 @@ namespace WorkerHost.Jobs
         private void SendFailedSubscriptionEmail(Subscription[] justFailed)
         {
             var body = "The following subscriptions just failed:" + Environment.NewLine;
-            body += string.Join(Environment.NewLine, justFailed.Select(x => "Subscription " + x.Id + " for report " + x.ReportId + " failed due to: " + x.ErrorMessage));
+            body += string.Join(Environment.NewLine, justFailed.Select(x => "Subscription " +   x.Id + " with subject " + x.MailSubject + " failed due to: " + x.ErrorMessage));
 
             _mailSender.Send("Failed subscriptions", body, _applicationSettings.ErrorMailRecipient);
         }
