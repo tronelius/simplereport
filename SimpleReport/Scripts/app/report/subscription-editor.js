@@ -6,15 +6,17 @@
 
                 function init() {
 
-                    if (!$scope.subscriptionId) {
-                        $scope.subscription = { To: '', Cc: '', Bcc: '', ScheduleId: null }
-                    } else {
-                        subscriptionRepository.get($scope.reportId, $scope.subscriptionId).success(function (data) {
-                            $scope.subscription = data;
-                        }).error(function () {
-                            toastr.error('Something went wrong, please try again later or contact support');
+                    $scope.$watch('subscriptionId', function() {
+                        if (!$scope.subscriptionId) {
+                            $scope.subscription = { To: '', Cc: '', Bcc: '', ScheduleId: null }
+                        } else {
+                            subscriptionRepository.get($scope.reportId, $scope.subscriptionId).success(function (data) {
+                                $scope.subscription = data;
+                            }).error(function () {
+                                toastr.error('Something went wrong, please try again later or contact support');
                         });
-                    }
+                        }
+                    });
 
                     fetchData();
 

@@ -102,7 +102,7 @@
 
                     </div>
                     <div class="col-xs-4">
-                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'subscribe'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Subscribe</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="triggerSubscribe()" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Subscribe</button>
                         <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editSubscriptions'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Edit subscriptions</button>
                     </div>
                     <div class="col-xs-3">

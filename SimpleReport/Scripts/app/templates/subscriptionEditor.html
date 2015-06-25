@@ -6,7 +6,8 @@
     <form role="form" name="form" novalidate ng-show="subscription" class="">
         <div class="row">
             <div class="col-xs-12">
-                <label>Edit Subscription</label>
+                <label data-ng-show="subscriptionId">Edit Subscription</label>
+                <label data-ng-show="!subscriptionId">Create Subscription</label>
             </div>
         </div>
         <div class="row">
