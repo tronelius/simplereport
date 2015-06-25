@@ -43,6 +43,7 @@
 
                 function sendSubscription(id) {
                     subscriptionRepository.send($scope.reportId, id);
+                    toastr.success("Subscription is schedule for resend, can take up to 1 minute before send is complete.");
                 }
 
                 function editSubscription(sub) {
@@ -54,6 +55,7 @@
                         $scope.subscriptions = $scope.subscriptions.filter(function (s) {
                             return s.Id !== id;
                         });
+                        toastr.success("Subscription deleted");
                     }).error(function () {
                         toastr.error('Something went wrong, please try again later or contact support');
                     });
