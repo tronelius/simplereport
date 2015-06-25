@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using SimpleReport.Helpers;
+using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
 
@@ -131,6 +132,9 @@ namespace SimpleReport.Controllers.Api
             if (!string.IsNullOrEmpty(reportId))
             {
                 var report = _reportStorage.GetReport(Guid.Parse(reportId));
+                if (report == null)
+                    throw new EntityNotFoundException("Report not found");
+
                 report.IsAllowedToEditSubscriptions(User, _adminAccess);
             }
             else

@@ -102,7 +102,8 @@ namespace SimpleReport.Model.Storage
         {
             var report =_dataModel.Reports.FirstOrDefault(r => r.Id == id);
             if (report == null)
-                throw new EntityNotFoundException("Report not found");
+                return null; //throw new EntityNotFoundException("Report not found");
+
             LoadAndSetConnection(report);
             LoadAndSetAccess(report);
             return report;
