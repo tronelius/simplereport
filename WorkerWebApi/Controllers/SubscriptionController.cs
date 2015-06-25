@@ -46,6 +46,12 @@ namespace WorkerWebApi.Controllers
             }
             else
             {
+                if (subscription.Status == SubscriptionStatus.Suspended)
+                {
+                    subscription.FailedAttempts = 0;
+                    subscription.Status = SubscriptionStatus.NotSet;
+                }
+
                 _subscriptionRepository.Update(subscription);
                 return Json(new { Id = subscription.Id });
             }
