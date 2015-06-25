@@ -35,6 +35,7 @@
                 $scope.viewModel = viewModel;
 
                 $scope.triggerOnScreen = triggerOnScreen;
+                $scope.triggerBookmark = triggerBookmark;
                 $scope.periodChanged = periodChanged;
                 $scope.dateChanged = dateChanged;
                 $scope.onSubscriptionSaved = onSubscriptionSaved;
@@ -74,6 +75,10 @@
                     $scope.selectedAction = 'onScreen';
                 else
                     $scope.$broadcast('refreshOnScreen');
+            }
+
+            function triggerBookmark() {
+        
             }
         }
     ])
