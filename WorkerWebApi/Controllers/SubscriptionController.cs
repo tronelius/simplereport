@@ -143,7 +143,7 @@ namespace WorkerWebApi.Controllers
                 //TODO: do we want a more complex filtering? would be nice to merge filter and reportid and have some kind of dsl for it?
                 if (filter == "failed")
                 {
-                    subs = subs.Where(x => x.Status == SubscriptionStatus.Failed).ToList();
+                    subs = subs.Where(x => x.Status == SubscriptionStatus.Failed || x.Status == SubscriptionStatus.Suspended).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(reportId))
