@@ -2,7 +2,7 @@
         return {
             templateUrl: 'scripts/app/templates/subscriptionEditor.html',
             scope: { reportId: '=', reportParameters: '=', subscriptionId: '=', saveCb: '&' },
-            controller: ['$scope', '$http', 'scheduleRepository', 'subscriptionRepository', function ($scope, $http, scheduleRepository, subscriptionRepository) {
+            controller: ['$scope', '$http', 'scheduleRepository', 'subscriptionRepository', 'reportUrlHelper', function ($scope, $http, scheduleRepository, subscriptionRepository, reportUrlHelper) {
 
                 function init() {
 
@@ -41,12 +41,7 @@
                         }
                     });
 
-                    var parsedParameters = { reportId: $scope.reportId };
-                    $scope.reportParameters.forEach(function (param) {
-                        parsedParameters[param.Key] = param.Value;
-                    });
-
-                    var params = serialize(parsedParameters);
+                    var params = reportUrlHelper.toUrlByIdAndParams($scope.reportId, $scope.reportParameters);
 
                     var data = angular.extend({ ReportId: $scope.reportId, ReportParams: params }, $scope.subscription);
                     subscriptionRepository.save(data).success(function (data) {
@@ -64,15 +59,6 @@
                     }).error(function () {
                         toastr.error('Something went wrong during save, please try again later or contact support');
                     });
-                }
-
-                function serialize(obj) {
-                    var str = [];
-                    for (var p in obj)
-                        if (obj.hasOwnProperty(p)) {
-                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                        }
-                    return str.join("&");
                 }
 
                 function fetchData() {
