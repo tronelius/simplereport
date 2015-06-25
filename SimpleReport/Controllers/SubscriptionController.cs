@@ -6,7 +6,7 @@ namespace SimpleReport.Controllers
 {
     public class SubscriptionController : BaseController
     {
-        public SubscriptionController(ReportResolver reportResolver, ILogger logger) : base(reportResolver.Storage, logger) { }
+        public SubscriptionController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings) : base(reportResolver.Storage, logger, applicationSettings) { }
 
         public ActionResult Index()
         {
