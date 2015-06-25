@@ -123,9 +123,9 @@
     };
 
     function parameterChecksum(p) {
-        var o = { InputType: p.InputType };
+        var o = { InputType: p.InputType, LookupReportId: p.LookupReportId };
 
-        if (p.Value)
+        if (p.Mandatory && p.Value)
             o.hasDefaultValue = true;
 
         return o;
