@@ -24,6 +24,15 @@
                 }
                 init();
 
+                function hasInvalidParameters() {
+                    return $scope.reportParameters.some(function(param) {
+                        if (param.Mandatory && !param.Value) {
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+
                 function save() {
 
                     if ($scope.form.$invalid) {
@@ -36,12 +45,10 @@
                         return;
                     }
 
-                    $scope.reportParameters.forEach(function (param) {
-                        if (param.Mandatory && !param.Value) {
-                            toastr.warning('You need to provide values for all mandatory parameters.');
-                            return;
-                        }
-                    });
+                    if (hasInvalidParameters()) {
+                        toastr.warning('You need to provide values for all mandatory parameters.');
+                        return;
+                    }
 
                     var params = reportUrlHelper.toUrlByIdAndParams($scope.reportId, $scope.reportParameters);
 
