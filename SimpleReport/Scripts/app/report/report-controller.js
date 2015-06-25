@@ -39,6 +39,7 @@
                 $scope.periodChanged = periodChanged;
                 $scope.dateChanged = dateChanged;
                 $scope.onSubscriptionSaved = onSubscriptionSaved;
+                $scope.hasValidParameters = hasValidParameters;
             };
             $scope.init();
 
@@ -82,6 +83,17 @@
                 url += '&selectedAction=onScreen';
 
                 location.href = 'Home/Report?' + url;
+            }
+
+            function hasValidParameters() {
+                var valid = true;
+                $scope.viewModel.Report.Parameters.forEach(function (param) {
+                    if (param.Mandatory && !param.Value) {
+                        valid = false;
+                    }
+                });
+
+                return valid;
             }
         }
     ])

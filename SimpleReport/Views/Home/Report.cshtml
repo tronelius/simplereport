@@ -93,11 +93,11 @@
             <div class="box-footer">
                 <div class="row">
                     <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary "><i class="fa fa-fw fa-file-excel-o"></i>Excel</button>
+                        <button type="submit" class="btn btn-primary" data-ng-disabled="!hasValidParameters()"><i class="fa fa-fw fa-file-excel-o"></i>Excel</button>
 
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" data-ng-click="triggerOnScreen()" data-ng-show="viewModel.Report.OnScreenFormatAllowed">On screen</button>
-                            <button type="button" class="btn btn-primary" data-ng-click="triggerBookmark()" data-ng-show="viewModel.Report.OnScreenFormatAllowed"><i class="fa fa-bookmark"></i></button>
+                            <button type="button" class="btn btn-primary" data-ng-click="triggerOnScreen()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()">On screen</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="triggerBookmark()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()"><i class="fa fa-bookmark"></i></button>
                         </div>
 
                     </div>
