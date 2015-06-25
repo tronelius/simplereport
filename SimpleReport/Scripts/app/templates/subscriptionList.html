@@ -69,7 +69,9 @@
                             {{row.ReportName}}
                         </td>
                         <td>
-                            {{row.Recipients}}
+                            <div data-ng-show="row.To">{{row.To}}</div>
+                            <div data-ng-show="row.Cc">Cc: {{row.Cc}}</div>
+                            <div data-ng-show="row.Bcc">Bcc: {{row.Bcc}}</div>
                         </td>
                         <td>
                             {{row.Status}}

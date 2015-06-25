@@ -147,7 +147,7 @@ namespace WorkerWebApi.Controllers
                 }
 
                 var scheds = _scheduleRepository.List();
-                var result = subs.Select(x => new {x.Id,  x.ReportId, Recipients = GetRecipients(x), Status = x.Status.ToString(), x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name, x.ErrorMessage, x.ReportParams}).ToArray();
+                var result = subs.Select(x => new {x.Id,  x.ReportId, x.To, x.Cc,x.Bcc, Status = x.Status.ToString(), x.LastSent, Schedule = scheds.First(y => y.Id == x.ScheduleId).Name, x.ErrorMessage, x.ReportParams}).ToArray();
 
                 return Json(result);
             }
@@ -176,22 +176,6 @@ namespace WorkerWebApi.Controllers
                 _logger.Error("SubscriptionController.All", e);
                 throw;
             }
-        }
-
-        private static string GetRecipients(Subscription x)
-        {
-            var recipients = new List<string>();
-
-            if(!string.IsNullOrWhiteSpace(x.To))
-                recipients.Add(x.To);
-
-            if (!string.IsNullOrWhiteSpace(x.Cc))
-                recipients.Add(x.Cc);
-
-            if (!string.IsNullOrWhiteSpace(x.Bcc))
-                recipients.Add(x.Bcc);
-
-            return string.Join(";", recipients);
         }
     }
 }
