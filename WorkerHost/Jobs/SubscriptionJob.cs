@@ -17,6 +17,7 @@ namespace WorkerHost.Jobs
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IWorkerApiClient _workerApiClient;
         private readonly IMailSender _mailSender;
+        private const int MaxFailedAttempts = 5;
 
         public SubscriptionJob(ILogger logger, ISubscriptionRepository subscriptionRepository, IScheduleRepository scheduleRepository, IWorkerApiClient workerApiClient, IMailSender mailSender)
         {
@@ -31,7 +32,7 @@ namespace WorkerHost.Jobs
         {
             _logger.Trace("SubscriptionJob running now!!");
 
-            var subs = _subscriptionRepository.GetSubscriptionsWithSendDateBefore(DateTime.Now);
+            var subs = _subscriptionRepository.GetSubscriptionsWithSendDateBefore(DateTime.Now, MaxFailedAttempts);
 
             Parallel.ForEach(subs, SendSubscription);
         }
@@ -66,7 +67,7 @@ namespace WorkerHost.Jobs
                     subscription.ErrorMessage = e.Message;
                     subscription.LastErrorDate = DateTime.Now;
                     subscription.FailedAttempts++;
-                    if(subscription.FailedAttempts == 5)
+                    if (subscription.FailedAttempts == MaxFailedAttempts)
                         subscription.Status = SubscriptionStatus.Suspended;
                 }
                 finally

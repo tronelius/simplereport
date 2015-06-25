@@ -17,7 +17,7 @@ namespace Worker.Common.Repository
         void Delete(int id);
         void UpdateTemplateText(UpdateTemplateText updateTemplateText);
         void SendNow(int id);
-        List<Subscription> GetSubscriptionsWithSendDateBefore(DateTime now);
+        List<Subscription> GetSubscriptionsWithSendDateBefore(DateTime now, int maxFailed);
     }
 
     public class SubscriptionRepository : BaseRepository, ISubscriptionRepository
@@ -83,11 +83,11 @@ namespace Worker.Common.Repository
             }
         }
 
-        public List<Subscription> GetSubscriptionsWithSendDateBefore(DateTime now)
+        public List<Subscription> GetSubscriptionsWithSendDateBefore(DateTime now, int maxFailed)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
-                var list = cn.Query<Subscription>("select * from subscription where NextSend < @nextsend and (FailedAttempts is null or FailedAttempts < @maxFailed)", new {NextSend = now, MaxFailed = 5});
+                var list = cn.Query<Subscription>("select * from subscription where NextSend < @nextsend and (FailedAttempts is null or FailedAttempts < @maxFailed)", new { NextSend = now, MaxFailed = maxFailed });
                 return list.ToList();
             }
         }
