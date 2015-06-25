@@ -15,12 +15,14 @@ namespace SimpleReport.Controllers
     {
         protected readonly IStorage _reportStorage;
         protected readonly ILogger _logger;
+        private readonly IApplicationSettings _applicationSettings;
         protected readonly Access _adminAccess;
 
-        public BaseController(IStorage reportStorage, ILogger logger)
+        public BaseController(IStorage reportStorage, ILogger logger, IApplicationSettings applicationSettings)
         {
             _reportStorage = reportStorage;
             _logger = logger;
+            _applicationSettings = applicationSettings;
             _adminAccess = _reportStorage.GetSettings().AdminAccessChecker();
 
         }
@@ -28,6 +30,7 @@ namespace SimpleReport.Controllers
         protected ReportViewModel GetReportViewModel()
         {
             ReportViewModel vm = new ReportViewModel();
+            vm.SubscriptionEnabled = _applicationSettings.SubscriptionEnabled;
             vm.HasAdminAccess = _reportStorage.GetSettings().AdminAccessChecker().IsAvailableForMe(User);
             vm.Reports = _reportStorage.GetAllReports().Where(a => a.IsAvailableForMe(User, _adminAccess)).OrderBy(a => string.IsNullOrWhiteSpace(a.Group)).ThenBy(a => a.Group).ThenBy(b => b.Name);
             return vm;

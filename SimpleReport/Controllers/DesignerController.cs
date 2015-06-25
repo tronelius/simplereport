@@ -11,7 +11,7 @@ namespace SimpleReport.Controllers
 {
     public class DesignerController : BaseController
     {
-        public DesignerController(ReportResolver reportResolver, ILogger logger) : base(reportResolver.Storage, logger){}
+        public DesignerController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings) : base(reportResolver.Storage, logger, applicationSettings) { }
 
         public ActionResult Index()
         {

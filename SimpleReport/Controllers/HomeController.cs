@@ -11,12 +11,10 @@ namespace SimpleReport.Controllers
     public class HomeController : BaseController
     {
         private readonly ReportResolver _reportResolver;
-        private readonly IApplicationSettings _applicationSettings;
 
-        public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings) : base(reportResolver.Storage, logger)
+        public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings): base(reportResolver.Storage, logger, applicationSettings)
         {
             _reportResolver = reportResolver;
-            _applicationSettings = applicationSettings;
         }
 
         public ActionResult Index()
@@ -39,7 +37,6 @@ namespace SimpleReport.Controllers
 
             vm.CanEditTemplate = report.IsAvailableToEditTemplate(User, _adminAccess);
             vm.CanEditSubscriptions = report.IsAvailbleToEditSubscriptions(User, _adminAccess);
-            vm.SubscriptionEnabled = _applicationSettings.SubscriptionEnabled;
 
             return View(vm);
         }
