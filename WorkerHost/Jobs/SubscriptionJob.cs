@@ -34,18 +34,25 @@ namespace WorkerHost.Jobs
 
         public void Execute(IJobExecutionContext context)
         {
-            _logger.Trace("SubscriptionJob running now!!");
-
-            var subs = _subscriptionRepository.GetSubscriptionsWithSendDateBefore(DateTime.Now, MaxFailedAttempts);
-
-            var alreadyFailed = subs.Where(IsFailed).ToArray();
-            Parallel.ForEach(subs, SendSubscription);
-            var justFailed = subs.Where(IsFailed).Except(alreadyFailed).ToArray();
-
-            if (justFailed.Any())
+            try
             {
-                _logger.Warn("The following new subscriptions failed:"+ string.Join(",", justFailed.Select(x => x.Id)));
-                SendFailedSubscriptionEmail(justFailed);
+                _logger.Trace("SubscriptionJob running now!!");
+
+                var subs = _subscriptionRepository.GetSubscriptionsWithSendDateBefore(DateTime.Now, MaxFailedAttempts);
+
+                var alreadyFailed = subs.Where(IsFailed).ToArray();
+                Parallel.ForEach(subs, SendSubscription);
+                var justFailed = subs.Where(IsFailed).Except(alreadyFailed).ToArray();
+
+                if (justFailed.Any())
+                {
+                    _logger.Warn("The following new subscriptions failed:"+ string.Join(",", justFailed.Select(x => x.Id)));
+                    SendFailedSubscriptionEmail(justFailed);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Could not execute subscription job", ex);
             }
         }
 

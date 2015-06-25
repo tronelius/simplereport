@@ -44,17 +44,15 @@ namespace WorkerWebApi.Controllers
                 var id = _subscriptionRepository.Insert(subscription);
                 return Json(new { Id = id });
             }
-            else
+            
+            if (subscription.Status == SubscriptionStatus.Suspended)
             {
-                if (subscription.Status == SubscriptionStatus.Suspended)
-                {
-                    subscription.FailedAttempts = 0;
-                    subscription.Status = SubscriptionStatus.NotSet;
-                }
-
-                _subscriptionRepository.Update(subscription);
-                return Json(new { Id = subscription.Id });
+                subscription.FailedAttempts = 0;
+                subscription.Status = SubscriptionStatus.NotSet;
             }
+
+            _subscriptionRepository.Update(subscription);
+            return Json(new { Id = subscription.Id });
         }
 
         [Route("delete")]
