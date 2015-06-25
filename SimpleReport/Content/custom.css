@@ -30,3 +30,7 @@ input.ng-invalid, select.ng-invalid {
 a {
     cursor: pointer;
 }
+
+.boxheight {
+    min-height: 360px;
+}
