@@ -232,6 +232,7 @@
     <Content Include="Scripts\app\shared\directives\template-upload.js" />
     <Content Include="Scripts\app\shared\elements\datepicker-boostrap.js" />
     <Content Include="Scripts\app\shared\elements\numeric.js" />
+    <Content Include="Scripts\app\shared\helpers\report-url-helper.js" />
     <Content Include="Scripts\app\shared\helpers\query-string-parser.js" />
     <Content Include="Scripts\app\shared\validators\emails.js" />
     <Content Include="Scripts\app\subscription\elements\cron-editor.js" />

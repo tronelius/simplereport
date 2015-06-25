@@ -1,4 +1,4 @@
-﻿angular.module('report').controller('reportController', ['$scope', '$http', 'reportViewModel', '$filter', 'queryStringParser', function ($scope, $http, viewModel, $filter, queryStringParser) {
+﻿angular.module('report').controller('reportController', ['$scope', '$http', 'reportViewModel', '$filter', 'queryStringParser', 'reportUrlHelper', function ($scope, $http, viewModel, $filter, queryStringParser, reportUrlHelper) {
 
             $scope.init = function () {
                 viewModel.Report.Parameters.forEach(function (param) {
@@ -78,7 +78,10 @@
             }
 
             function triggerBookmark() {
-        
+                var url = reportUrlHelper.toUrl($scope.viewModel.Report);
+                url += '&selectedAction=onScreen';
+
+                location.href = 'Home/Report?' + url;
             }
         }
     ])
