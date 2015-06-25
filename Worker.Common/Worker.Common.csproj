@@ -73,6 +73,7 @@
     <Compile Include="Migrations\2015-06-23\AddLastRun.cs" />
     <Compile Include="Migrations\2015-06-22\AddSendEmptyEmails.cs" />
     <Compile Include="Migrations\Migrator.cs" />
+    <Compile Include="Model\ApplicationSettings.cs" />
     <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\Schedule.cs" />
     <Compile Include="Model\UpdateTemplate.cs" />

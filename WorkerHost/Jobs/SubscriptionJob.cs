@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
 using Worker.Common.Api;
@@ -17,15 +19,17 @@ namespace WorkerHost.Jobs
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IWorkerApiClient _workerApiClient;
         private readonly IMailSender _mailSender;
+        private readonly IApplicationSettings _applicationSettings;
         private const int MaxFailedAttempts = 5;
 
-        public SubscriptionJob(ILogger logger, ISubscriptionRepository subscriptionRepository, IScheduleRepository scheduleRepository, IWorkerApiClient workerApiClient, IMailSender mailSender)
+        public SubscriptionJob(ILogger logger, ISubscriptionRepository subscriptionRepository, IScheduleRepository scheduleRepository, IWorkerApiClient workerApiClient, IMailSender mailSender, IApplicationSettings applicationSettings)
         {
             _logger = logger;
             _subscriptionRepository = subscriptionRepository;
             _scheduleRepository = scheduleRepository;
             _workerApiClient = workerApiClient;
             _mailSender = mailSender;
+            _applicationSettings = applicationSettings;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -34,7 +38,28 @@ namespace WorkerHost.Jobs
 
             var subs = _subscriptionRepository.GetSubscriptionsWithSendDateBefore(DateTime.Now, MaxFailedAttempts);
 
+            var alreadyFailed = subs.Where(IsFailed).ToArray();
             Parallel.ForEach(subs, SendSubscription);
+            var justFailed = subs.Where(IsFailed).Except(alreadyFailed).ToArray();
+
+            if (justFailed.Any())
+            {
+                _logger.Warn("The following new subscriptions failed:"+ string.Join(",", justFailed.Select(x => x.Id)));
+                SendFailedSubscriptionEmail(justFailed);
+            }
+        }
+
+        private void SendFailedSubscriptionEmail(Subscription[] justFailed)
+        {
+            var body = "The following subscriptions just failed:" + Environment.NewLine;
+            body += string.Join(Environment.NewLine, justFailed.Select(x => "Subscription " + x.Id + " for report " + x.ReportId + " failed due to: " + x.ErrorMessage));
+
+            _mailSender.Send("Failed subscriptions", body, _applicationSettings.ErrorMailRecipient);
+        }
+
+        private static bool IsFailed(Subscription sub)
+        {
+            return sub.Status == SubscriptionStatus.Failed || sub.Status == SubscriptionStatus.Suspended;
         }
 
         private void SendSubscription(Subscription subscription)
@@ -52,7 +77,7 @@ namespace WorkerHost.Jobs
                     var reportData = _workerApiClient.GetExcelReport(subscription.ReportParams);
                     if (reportData != null && reportData.Length > 0 || subscription.SendEmptyEmails)
                     {
-                        _mailSender.Send(subscription.To, subscription.Cc, subscription.Bcc, subscription.MailSubject, subscription.MailText, reportData);
+                        _mailSender.Send(subscription.MailSubject, subscription.MailText, subscription.To, subscription.Cc, subscription.Bcc, reportData);
                         subscription.LastSent = DateTime.Now;
                     }
                     

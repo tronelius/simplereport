@@ -2,22 +2,30 @@
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using Worker.Common.Model;
 
 namespace Worker.Common.Service
 {
     public interface IMailSender
     {
-        void Send(string to, string cc, string bcc, string mailSubject, string mailText, byte[] reportData);
+        void Send(string mailSubject, string mailText, string to = null, string cc = null, string bcc = null, byte[] data = null);
     }
 
     public class MailSender : IMailSender
     {
-        public void Send(string to, string cc, string bcc, string mailSubject, string mailText, byte[] data)
+        private readonly IApplicationSettings _applicationSettings;
+
+        public MailSender(IApplicationSettings applicationSettings)
+        {
+            _applicationSettings = applicationSettings;
+        }
+
+        public void Send(string mailSubject, string mailText, string to = null, string cc = null, string bcc = null, byte[] data = null)
         {
             var client = GetClient();
 
             MailMessage mail = new MailMessage();
-            mail.From = new MailAddress("Test@test.se");
+            mail.From = new MailAddress(_applicationSettings.EmailFromAddress);
 
             AddRecipients(to, mail.To.Add);
             AddRecipients(cc, mail.CC.Add);
@@ -44,6 +52,9 @@ namespace Worker.Common.Service
         {
             var addresses = ConvertToAddresses(r);
 
+            if (addresses == null)
+                return;
+
             foreach (var mailAddress in addresses)
             {
                 action(mailAddress);
@@ -55,7 +66,7 @@ namespace Worker.Common.Service
             if (string.IsNullOrWhiteSpace(addresses))
                 return null;
 
-            var addrs = addresses.Split(',', ';');//TODO: setting?
+            var addrs = addresses.Split(',', ';');
             return addrs.Select(x => new MailAddress(x)).ToArray();
         }
 
