@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleReport.Model
 {
@@ -18,7 +16,7 @@ namespace SimpleReport.Model
                 {
                     SqlCommand cmd = null;
                     DataTable table = new DataTable();
-                    cmd = cn.CreateCommand();
+                    cmd = CreateCommand(cn);
                     cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure ;
                     cmd.CommandText = query;
                     if (param != null)
@@ -44,7 +42,7 @@ namespace SimpleReport.Model
             try
             {
                 SqlCommand cmd = null;
-                cmd = cn.CreateCommand();
+                cmd = CreateCommand(cn);
                 cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
                 cmd.CommandText = query;
                 if (param != null)
@@ -56,6 +54,13 @@ namespace SimpleReport.Model
                 cn.Close();
                 throw;
             }
+        }
+
+        private static SqlCommand CreateCommand(SqlConnection cn)
+        {
+            var cmd= cn.CreateCommand();
+            cmd.CommandTimeout = 60;
+            return cmd;
         }
 
         private static SqlConnection GetOpenConnection(Connection conn)
