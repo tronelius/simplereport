@@ -2,13 +2,13 @@
         return {
             templateUrl: 'scripts/app/templates/subscriptionEditor.html',
             scope: { reportId: '=', reportParameters: '=', subscriptionId: '=', saveCb: '&' },
-            controller: ['$scope', '$http', 'scheduleRepository', 'subscriptionRepository', 'reportUrlHelper', function ($scope, $http, scheduleRepository, subscriptionRepository, reportUrlHelper) {
+            controller: ['$scope', '$http', 'reportViewModel','scheduleRepository', 'subscriptionRepository', 'reportUrlHelper', function ($scope, $http, viewModel, scheduleRepository, subscriptionRepository, reportUrlHelper) {
 
                 function init() {
 
                     $scope.$watch('subscriptionId', function() {
                         if (!$scope.subscriptionId) {
-                            $scope.subscription = { To: '', Cc: '', Bcc: '', ScheduleId: null }
+                            $scope.subscription = { To: '', Cc: '', Bcc: '', ScheduleId: null, MailSubject: viewModel.Report.MailSubject, MailText: viewModel.Report.MailText }
                         } else {
                             subscriptionRepository.get($scope.reportId, $scope.subscriptionId).success(function (data) {
                                 $scope.subscription = data;

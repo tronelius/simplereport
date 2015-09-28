@@ -83,6 +83,7 @@
     <Compile Include="Repository\ISubscriptionRepository.cs" />
     <Compile Include="Repository\SubscriptionRepository.cs" />
     <Compile Include="Repository\ScheduleRepository.cs" />
+    <Compile Include="Service\IMailSender.cs" />
     <Compile Include="Service\MailSender.cs" />
   </ItemGroup>
   <ItemGroup>
