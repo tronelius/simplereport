@@ -23,7 +23,7 @@ namespace Worker.Common.Common
         public void Error(string message, Exception ex = null)
         {
             if (ex != null)
-                LogManager.GetCurrentClassLogger().ErrorException(message, ex);
+                LogManager.GetCurrentClassLogger().Error(ex,message, null);
             else
                 LogManager.GetCurrentClassLogger().Error(message);
         }
