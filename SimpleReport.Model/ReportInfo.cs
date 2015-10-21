@@ -14,7 +14,7 @@ namespace SimpleReport.Model
         public string Description { get; set; }
         
         ///AccessId=null=>Free for all!
-        public Guid AccessId { get; set; }
+        public Guid? AccessId { get; set; }
         [NonSerialized]
         public Access Access;
        

@@ -26,7 +26,7 @@ namespace SimpleReport.Model
         public string MailText { get; set; }
         
         //who can fiddle with the template
-        public Guid ReportOwnerId { get; set; }
+        public Guid ReportOwnerAccessId { get; set; } 
         [NonSerialized]
         public Access ReportOwnerAccess; //TODO rename to reportowner
 
@@ -40,11 +40,6 @@ namespace SimpleReport.Model
             Parameters = new ParameterList();
         } 
 
-        public Report(Guid id, string name, string description, Guid connectionId, string sql, List<Parameter> parameters, ResultType resultType, string group) : base(id,name, description,connectionId,sql, group)
-        {
-            Parameters = new ParameterList(parameters);
-            ResultType = resultType;
-        }
 
         public bool IsParameterValueValid()
         {

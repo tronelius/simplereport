@@ -122,7 +122,7 @@ namespace SimpleReport.Model.Storage
             var access = GetAccessList(report.AccessId);
             report.Access = access;
 
-            var taccess = GetAccessList(report.ReportOwnerId);
+            var taccess = GetAccessList(report.ReportOwnerAccessId);
             report.ReportOwnerAccess = taccess;
         }
 
@@ -233,7 +233,7 @@ namespace SimpleReport.Model.Storage
             return _dataModel.AccessLists;
         }
 
-        public Access GetAccessList(Guid id)
+        public Access GetAccessList(Guid? id)
         {
             var accesslist = _dataModel.AccessLists.FirstOrDefault(c => c.Id == id);
             return accesslist;

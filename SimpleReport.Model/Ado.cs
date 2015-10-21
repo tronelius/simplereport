@@ -49,7 +49,7 @@ namespace SimpleReport.Model
                     cmd.Parameters.AddRange(param.ToArray());
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 cn.Close();
                 throw;

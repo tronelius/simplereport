@@ -259,7 +259,7 @@
             if (data.Success) {
                 toastr.success("Connection verified", "OK!");
             } else {
-                toastr.error("Connectionstring is not valid, and vill not work", "Not OK!");
+                toastr.error("Connectionstring is not valid and wont work", "Not OK!");
             }
         }).error(function (data) {
             toastr.error("Server error when verifing the connection.", "Error");

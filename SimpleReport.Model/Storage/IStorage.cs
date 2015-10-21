@@ -24,7 +24,7 @@ namespace SimpleReport.Model.Storage
         bool SaveLookupReport(LookupReport lookupReport);
 
         IEnumerable<Access> GetAccessLists();
-        Access GetAccessList(Guid id);
+        Access GetAccessList(Guid? id);
         bool SaveAccessList(Access accesslist);
         DeleteInfo DeleteAccessList(Access acc);
 
