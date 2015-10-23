@@ -33,6 +33,7 @@ namespace SimpleReport.Model
         public bool OnScreenFormatAllowed { get; set; }
         public AccessStyle TemplateEditorAccessStyle { get; set; }
         public AccessStyle SubscriptionAccessStyle { get; set; }
+        public bool HasWordTemplate { get; set; }
 
         public Report()
         {

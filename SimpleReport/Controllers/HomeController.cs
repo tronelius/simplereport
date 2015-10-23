@@ -50,7 +50,7 @@ namespace SimpleReport.Controllers
                 report.ReadParameters(Request.QueryString);
 
                 byte[] templateData = null;
-                if (report.HasTemplate)
+                if (report.HasTemplate && !report.HasWordTemplate)
                     templateData = _reportResolver.Storage.GetTemplate(reportId).Bytes;
 
                 Result result = report.ExecuteWithTemplate(templateData);
@@ -138,6 +138,7 @@ namespace SimpleReport.Controllers
         {
             _reportResolver.Storage.SaveTemplate(data, ".docx", reportId);
             report.HasTemplate = true;
+            report.HasWordTemplate = true;
             _reportResolver.Storage.SaveReport(report);
         }
 
