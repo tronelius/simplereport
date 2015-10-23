@@ -72,23 +72,32 @@ namespace SimpleReport.Model.Storage
             }
         }
 
-        public void SaveTemplate(byte[] data, Guid reportId)
+        public void SaveTemplate(byte[] data, string fileEnding, Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            if (!fileEnding.StartsWith("."))
+                fileEnding = "." + fileEnding;
+
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + fileEnding);
             File.WriteAllBytes(filepath, data);
         }
 
         public Template GetTemplate(Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            var filepath = GetFilePath(reportId);
             var bytes = File.ReadAllBytes(filepath);
-            return new Template {Bytes = bytes, Mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel", Filename = reportId + ".xlsx"};
+            return new Template {Bytes = bytes, Filename = Path.GetFileName(filepath)};
         }
 
         public void DeleteTemplate(Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            var filepath = GetFilePath(reportId);
             File.Delete(filepath);
+        }
+
+        private string GetFilePath(Guid reportId)
+        {
+            var id = reportId.ToString();
+            return Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates")).First(x => Path.GetFileNameWithoutExtension(x) == id);
         }
 
         public IEnumerable<Report> GetAllReports()

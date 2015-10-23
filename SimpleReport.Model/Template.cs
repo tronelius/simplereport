@@ -8,7 +8,6 @@ namespace SimpleReport.Model
     public class Template
     {
         public byte[] Bytes { get; set; }
-        public string Mime { get; set; }
         public string Filename { get; set; }
     }
 }

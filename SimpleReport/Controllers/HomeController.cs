@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
@@ -12,17 +13,17 @@ namespace SimpleReport.Controllers
     {
         private readonly ReportResolver _reportResolver;
 
-        public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings): base(reportResolver.Storage, logger, applicationSettings)
+        public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings) : base(reportResolver.Storage, logger, applicationSettings)
         {
             _reportResolver = reportResolver;
         }
 
         public ActionResult Index()
         {
-           
+
             var vm = GetReportViewModel();
             return View(vm);
-           
+
         }
 
         public ActionResult Report(Guid reportId)
@@ -31,7 +32,7 @@ namespace SimpleReport.Controllers
             var report = _reportResolver.GetReport(reportId);
             report.ReadParameters(Request.QueryString);
             if (!report.IsAvailableForMe(User, _adminAccess))
-                ModelState.AddModelError("AccessControl","You don't have access to view this report!");
+                ModelState.AddModelError("AccessControl", "You don't have access to view this report!");
             else
                 vm.Report = report;
 
@@ -44,7 +45,8 @@ namespace SimpleReport.Controllers
         public ActionResult ExecuteReport(Guid reportId)
         {
             Report report = _reportResolver.GetReport(reportId);
-            if (report.IsAvailableForMe(User, _adminAccess)) { 
+            if (report.IsAvailableForMe(User, _adminAccess))
+            {
                 report.ReadParameters(Request.QueryString);
 
                 byte[] templateData = null;
@@ -58,7 +60,7 @@ namespace SimpleReport.Controllers
                 else
                     return new HttpStatusCodeResult(204);
             }
-            return File(GetBytes("Not allowed to execute this report"), "text/plain","NotAllowed.txt");
+            return File(GetBytes("Not allowed to execute this report"), "text/plain", "NotAllowed.txt");
         }
 
         public ActionResult ExecuteOnScreenReport(Guid reportId)
@@ -67,7 +69,7 @@ namespace SimpleReport.Controllers
             if (report.IsAvailableForMe(User, _adminAccess))
             {
                 report.ReadParameters(Request.QueryString);
-                
+
                 var data = report.ExecuteAsRawData();
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
@@ -80,7 +82,7 @@ namespace SimpleReport.Controllers
             Report report = _reportResolver.GetReport(reportId);
             if (!report.IsAvailableToEditTemplate(User, _adminAccess))
                 return Json(new { error = "Not Authorized" });
-            
+
             if (Request.Files.Count > 0)
             {
                 var file = Request.Files[0];
@@ -98,29 +100,51 @@ namespace SimpleReport.Controllers
                         }
                         data = memoryStream.ToArray();
                     }
+
+                    var mimeType = MimeMapping.GetMimeMapping(file.FileName);
+
                     try
                     {
-                        ExcelValidator.Validate(data);
+                        if (MimeTypeHelper.IsWord(mimeType))
+                        {
+                            HandleWord(report, reportId, data);
+                        }
+                        else
+                        {
+                            HandleExcel(report, reportId, data);
+                        }
                     }
                     catch (ValidationException vex)
                     {
                         return Json(new { error = vex.Message });
-                    } 
-                    
-                    _reportResolver.Storage.SaveTemplate(data, reportId);
-
-                    report.HasTemplate = true;
-                    _reportResolver.Storage.SaveReport(report);
+                    }
                 }
             }
 
-            return Json(new {status = "ok"});
+            return Json(new { status = "ok" });
+        }
+
+        private void HandleExcel(Report report, Guid reportId, byte[] data)
+        {
+            ExcelValidator.Validate(data);//throws on invalid;
+
+            _reportResolver.Storage.SaveTemplate(data, ".xlsx", reportId);
+
+            report.HasTemplate = true;
+            _reportResolver.Storage.SaveReport(report);
+        }
+
+        private void HandleWord(Report report, Guid reportId, byte[] data)
+        {
+            _reportResolver.Storage.SaveTemplate(data, ".docx", reportId);
+            report.HasTemplate = true;
+            _reportResolver.Storage.SaveReport(report);
         }
 
         public ActionResult DownloadTemplate(Guid reportId)
         {
             var template = _reportResolver.Storage.GetTemplate(reportId);
-            return File(template.Bytes, template.Mime, template.Filename);
+            return File(template.Bytes, MimeMapping.GetMimeMapping(template.Filename) , template.Filename);
         }
 
         static byte[] GetBytes(string str)
