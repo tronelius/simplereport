@@ -179,6 +179,7 @@ namespace SimpleReport.Model
         Integer = 1,
         Date = 2,
         Period = 3,
-        Lookup = 4
+        Lookup = 4,
+        SyncedDate = 5
     }
 }

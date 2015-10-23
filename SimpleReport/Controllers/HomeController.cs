@@ -50,10 +50,15 @@ namespace SimpleReport.Controllers
                 report.ReadParameters(Request.QueryString);
 
                 byte[] templateData = null;
-                if (report.HasTemplate && !report.HasWordTemplate)
+                if (report.HasTemplate)
                     templateData = _reportResolver.Storage.GetTemplate(reportId).Bytes;
 
-                Result result = report.ExecuteWithTemplate(templateData);
+                Result result;
+
+                if (!report.HasWordTemplate)
+                    result = report.ExecuteWithTemplate(templateData);
+                else
+                    result = report.ExecuteWithWordTemplate(templateData);
 
                 if (result.HasData())
                     return File(result.AsFile(), result.MimeType, result.FileName);

@@ -81,7 +81,13 @@ namespace WorkerHost.Jobs
                     subscription.Status = SubscriptionStatus.Ongoing;
                     _subscriptionRepository.Update(subscription);
 
-                    var reportData = _workerApiClient.GetExcelReport(subscription.ReportParams);
+                    var newSyncedDate = DateTime.Now;
+                    var oldSyncedDate = subscription.SyncedDate ?? DateTime.Now;
+                    var reportParams = subscription.ReportParams;
+
+                    reportParams = reportParams.Replace("=SyncedDate", "=" + oldSyncedDate);
+
+                    var reportData = _workerApiClient.GetReport(reportParams);
                     if (reportData != null && reportData.Length > 0 || subscription.SendEmptyEmails)
                     {
                         _mailSender.Send(subscription.MailSubject, subscription.MailText, subscription.To, subscription.Cc, subscription.Bcc, reportData);
@@ -89,6 +95,7 @@ namespace WorkerHost.Jobs
                     }
                     
                     subscription.Status = SubscriptionStatus.Success;
+                    subscription.SyncedDate = newSyncedDate; //TODO: get synced date from the actual worker? how foolproof do we want this to be?
                     subscription.SetNextSendDate(schedule.Cron);
                     subscription.FailedAttempts = 0;
                 }

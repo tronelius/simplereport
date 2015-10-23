@@ -19,7 +19,6 @@ namespace SimpleReport.Model
     
     public class Report : LookupReport
     {
-        public ResultType ResultType { get; set; }
         public ParameterList Parameters { get; set; }
         public bool HasTemplate { get; set; }
         public string MailSubject { get; set; }
@@ -37,14 +36,12 @@ namespace SimpleReport.Model
 
         public Report()
         {
-            ResultType= ResultType.SimpleExcel;
             Parameters = new ParameterList();
         } 
 
-        public Report(Guid id, string name, string description, Guid connectionId, string sql, List<Parameter> parameters, ResultType resultType, string group) : base(id,name, description,connectionId,sql, group)
+        public Report(Guid id, string name, string description, Guid connectionId, string sql, List<Parameter> parameters, string group) : base(id,name, description,connectionId,sql, group)
         {
             Parameters = new ParameterList(parameters);
-            ResultType = resultType;
         }
 
         public bool IsParameterValueValid()
@@ -129,7 +126,7 @@ namespace SimpleReport.Model
                 throw new Exception("Missing Connection in report");
 
             DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
-            return new Result(this.ResultType, result, this, templateData);
+            return new Result(ResultType.SimpleExcel, result, this, templateData);
         }
 
         private string Stringify(object obj)
@@ -140,6 +137,12 @@ namespace SimpleReport.Model
             return obj.ToString();
         }
 
-       
+
+        public Result ExecuteWithWordTemplate(byte[] templateData)
+        {
+            //TODO: implement!!
+            //TODO: Right now, we only send syncdate as a from date, we also need a bundled to-date. Group them like from and to are grouped.
+            
+        }
     }
 }

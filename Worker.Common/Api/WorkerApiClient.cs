@@ -6,12 +6,12 @@ namespace Worker.Common.Api
 {
     public interface IWorkerApiClient
     {
-        byte[] GetExcelReport(string url);
+        byte[] GetReport(string url);
     }
 
     public class WorkerApiClient : IWorkerApiClient
     {
-        public byte[] GetExcelReport(string parameters)
+        public byte[] GetReport(string parameters)
         {
             using (var client = new WebClient())
             {

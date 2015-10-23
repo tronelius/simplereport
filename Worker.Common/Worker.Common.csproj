@@ -72,7 +72,9 @@
     <Compile Include="Migrations\2015-06-24\MakeFailedAttemptsNonNullable.cs" />
     <Compile Include="Migrations\2015-06-23\AddLastRun.cs" />
     <Compile Include="Migrations\2015-06-22\AddSendEmptyEmails.cs" />
+    <Compile Include="Migrations\2015-10-23\AddSyncedDateToSubscription.cs" />
     <Compile Include="Migrations\Migrator.cs" />
+    <Compile Include="Migrations\Tables.cs" />
     <Compile Include="Model\ApplicationSettings.cs" />
     <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\Schedule.cs" />
