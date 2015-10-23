@@ -129,8 +129,8 @@ namespace SimpleReport.Controllers
             ExcelValidator.Validate(data);//throws on invalid;
 
             _reportResolver.Storage.SaveTemplate(data, ".xlsx", reportId);
-
             report.HasTemplate = true;
+            report.HasWordTemplate = false;
             _reportResolver.Storage.SaveReport(report);
         }
 
