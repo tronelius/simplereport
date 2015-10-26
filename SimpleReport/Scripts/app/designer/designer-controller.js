@@ -183,6 +183,9 @@
     $scope.saveReport = function (force) {
         $scope.showSaveConfirmation = false;
 
+        if (!$scope.report.ConnectionId)
+            return;
+
         if ($scope.SubscriptionEnabled && !force && $scope.report.warnForParameterChanges) {
             if (hasMadeInvalidParameterChanges()) {
                 $scope.showSaveConfirmation = true;
