@@ -20,16 +20,23 @@ namespace SimpleReport.Model
         
         public override byte[] AsFile()
         {
-
             using (var ms = new MemoryStream(TemplateData))
             using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
             {
                 foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
                 {
-                    var textElement = new Text("BOOKMARK");
-                    var runElement = new Run(textElement);
+                    var reportBookmark = new ReportBookmark(bookmarkStart.Name);
 
-                    bookmarkStart.InsertAfterSelf(runElement);
+                    if (Table.Columns.Contains(reportBookmark.Name))
+                    {
+                        var value = Table.Rows[0][reportBookmark.Name];
+
+                        //TODO: add formatting of values? like dates.. already use that in one of the controllers. reuse?
+                        var textElement = new Text(value.ToString());
+                        var runElement = new Run(textElement);
+
+                        bookmarkStart.InsertAfterSelf(runElement);
+                    }
                 }
 
                 doc.MainDocumentPart.Document.Save();
@@ -44,5 +51,32 @@ namespace SimpleReport.Model
         public WordResult(IDataReader dataReader, Report report) : base(dataReader, report)
         {
         }
+    }
+
+    public class ReportBookmark
+    {
+        public ReportBookmark(string bookmarkName)
+        {
+            var list = bookmarkName.Split('_');
+
+            if (list.Length == 1)
+            {
+                Name = list[0];
+            } else if (list.Length == 2)
+            {
+                Type = list[0];
+                Name = list[1];
+            }
+            else if (list.Length == 3)
+            {
+                Type = list[0];
+                Name = list[1];
+                Number = int.Parse(list[2]);
+            }
+        }
+
+        public string Type { get; set; }
+        public string Name { get; set; }
+        public int Number { get; set; }
     }
 }
