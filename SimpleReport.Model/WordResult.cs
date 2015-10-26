@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using OpenXmlPowerTools;
@@ -49,40 +47,15 @@ namespace SimpleReport.Model
 
                             if (reportBookmark.Type == "TBL")//tables are special
                             {
-                                var table = Tables[reportBookmark.Number];
-                                var wt = bookmarkStart.Parent.NextSibling<Table>();
-                                var dtRow = wt.GetFirstChild<TableRow>();
-                                var cellCount = dtRow.Descendants<TableCell>().Count();
-
-                                foreach (DataRow subRow in table.Rows)
-                                {
-                                    if (!subRow["merge_id"].ToString().Equals(row["merge_id"]))
-                                        continue;
-
-                                    TableRow rowCopy = new TableRow();
-                                    
-                                    for (int i = 0; i < cellCount; i++)
-                                    {
-                                        var cell = new TableCell();
-                                        var runElement = GetRunElementForValue(subRow[i]);
-                                        cell.AppendChild(new Paragraph(runElement));
-                                        rowCopy.AppendChild(cell);
-                                    }
-
-                                    dtRow.InsertAfterSelf(rowCopy);
-                                }
+                                HandleTable(reportBookmark, bookmarkStart, row);
                             }
                             else if (Table.Columns.Contains(reportBookmark.Name))
                             {
-                                var value = row[reportBookmark.Name];
-                                var runElement = GetRunElementForValue(value);
-
-                                bookmarkStart.InsertAfterSelf(runElement);
+                                HandleText(row, reportBookmark, bookmarkStart);
                             }
                         }
 
-                        var pageBreak = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
-                        doc.MainDocumentPart.Document.Descendants<Paragraph>().Last().InsertAfterSelf(pageBreak);
+                        AddPageBreak(doc);
 
                         doc.MainDocumentPart.Document.Save();
                         sources.Add(new Source(new WmlDocument(new OpenXmlPowerToolsDocument(ms.ToArray()))));
@@ -90,14 +63,58 @@ namespace SimpleReport.Model
                 }
             }
             
+            return MergeSources(sources);
+        }
+
+        private static byte[] MergeSources(List<Source> sources)
+        {
             var merged = DocumentBuilder.BuildDocument(sources);
             var path = Path.GetTempFileName();
             merged.SaveAs(path);
 
             var bytes = File.ReadAllBytes(path);
             File.Delete(path);
-
             return bytes;
+        }
+
+        private static void AddPageBreak(WordprocessingDocument doc)
+        {
+            var pageBreak = new Paragraph(new Run(new Break() {Type = BreakValues.Page}));
+            doc.MainDocumentPart.Document.Descendants<Paragraph>().Last().InsertAfterSelf(pageBreak);
+        }
+
+        private static void HandleText(DataRow row, ReportBookmark reportBookmark, BookmarkStart bookmarkStart)
+        {
+            var value = row[reportBookmark.Name];
+            var runElement = GetRunElementForValue(value);
+
+            bookmarkStart.InsertAfterSelf(runElement);
+        }
+
+        private void HandleTable(ReportBookmark reportBookmark, BookmarkStart bookmarkStart, DataRow row)
+        {
+            var dataTable = Tables[reportBookmark.Number];
+            var wordTable = bookmarkStart.Parent.NextSibling<Table>();
+            var firstTableRow = wordTable.GetFirstChild<TableRow>();
+            var cellCount = firstTableRow.Descendants<TableCell>().Count();
+
+            foreach (DataRow subRow in dataTable.Rows)
+            {
+                if (!subRow["merge_id"].ToString().Equals(row["merge_id"]))//merge_id is currently the magic string that we use to merge.
+                    continue;
+
+                TableRow rowCopy = new TableRow();
+
+                for (int i = 0; i < cellCount; i++)
+                {
+                    var cell = new TableCell();
+                    var runElement = GetRunElementForValue(subRow[i]);
+                    cell.AppendChild(new Paragraph(runElement));
+                    rowCopy.AppendChild(cell);
+                }
+
+                firstTableRow.InsertAfterSelf(rowCopy);
+            }
         }
 
         private static Run GetRunElementForValue(object value)

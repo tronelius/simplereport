@@ -56,34 +56,11 @@ namespace SimpleReport.Model
                     //havnt got a clue on how to get multiple datatables in a better way..
                     while (reader.HasRows)
                     {
-                        DataTable schemaTable = reader.GetSchemaTable();
-                        DataTable data = new DataTable();
-                        var takenColumns = new Dictionary<string,int>();
-                        foreach (DataRow row in schemaTable.Rows)
-                        {
-                            string colName = row.Field<string>("ColumnName");
+                        var data = GetDataTable(reader);
 
-                            //append a number to the column in case there are duplications
-                            if(!takenColumns.ContainsKey(colName))
-                                takenColumns.Add(colName, 0);
-                            else
-                            {
-                                takenColumns[colName]++;
-                                colName = colName + takenColumns[colName];
-                            }
-
-                            Type t = row.Field<Type>("DataType");
-                            data.Columns.Add(colName, t);
-                            
-                        }
                         while (reader.Read())
                         {
-                            var newRow = data.Rows.Add();
-
-                            for (int i = 0; i < data.Columns.Count; i++)
-                            {
-                                newRow[i] = reader[i];
-                            }
+                            AddRowWithData(data, reader);
                         }
 
                         tables.Add(data);
@@ -97,6 +74,40 @@ namespace SimpleReport.Model
                 }
             }
             return tables;
+        }
+
+        private static void AddRowWithData(DataTable data, SqlDataReader reader)
+        {
+            var newRow = data.Rows.Add();
+
+            for (int i = 0; i < data.Columns.Count; i++)
+            {
+                newRow[i] = reader[i];
+            }
+        }
+
+        private static DataTable GetDataTable(SqlDataReader reader)
+        {
+            DataTable schemaTable = reader.GetSchemaTable();
+            DataTable data = new DataTable();
+            var takenColumns = new Dictionary<string, int>();
+            foreach (DataRow row in schemaTable.Rows)
+            {
+                string colName = row.Field<string>("ColumnName");
+
+                //append a number to the column in case there are duplicates. The table gets sad otherwise.
+                if (!takenColumns.ContainsKey(colName))
+                    takenColumns.Add(colName, 0);
+                else
+                {
+                    takenColumns[colName]++;
+                    colName = colName + takenColumns[colName];
+                }
+
+                Type t = row.Field<Type>("DataType");
+                data.Columns.Add(colName, t);
+            }
+            return data;
         }
 
         private static SqlCommand CreateCommand(SqlConnection cn)
@@ -117,8 +128,7 @@ namespace SimpleReport.Model
             catch (Exception ex)
             {
                 throw new Exception(
-                    String.Format("Error when opening connection to Database, Name:{0}, Connectionstring:{1}", conn.Name,
-                                  conn.ConnectionString), ex);
+                    String.Format("Error when opening connection to Database, Name:{0}, Connectionstring:{1}", conn.Name, conn.ConnectionString), ex);
             }
             return cn;
         }
