@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\ReportResult.cs" />
     <Compile Include="Api\WorkerApiClient.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="IoCConfig.cs" />

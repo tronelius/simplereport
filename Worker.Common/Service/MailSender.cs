@@ -15,7 +15,7 @@ namespace Worker.Common.Service
             _applicationSettings = applicationSettings;
         }
 
-        public void Send(string mailSubject, string mailText, string to = null, string cc = null, string bcc = null, byte[] data = null)
+        public void Send(string mailSubject, string mailText, string to = null, string cc = null, string bcc = null, byte[] data = null, string fileName = null)
         {
             var client = GetClient();
 
@@ -33,7 +33,7 @@ namespace Worker.Common.Service
             {
                 using (MemoryStream memStream = new MemoryStream(data))
                 {
-                    mail.Attachments.Add(new Attachment(memStream, "report.xlsx"));
+                    mail.Attachments.Add(new Attachment(memStream, fileName));
                     client.Send(mail);
                 }
             }

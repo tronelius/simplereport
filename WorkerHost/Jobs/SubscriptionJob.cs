@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Owin;
 using Quartz;
 using Worker.Common.Api;
 using Worker.Common.Common;
@@ -86,11 +87,11 @@ namespace WorkerHost.Jobs
                     var reportParams = subscription.ReportParams;
 
                     reportParams = reportParams.Replace("=SyncedDate", "=" + oldSyncedDate);
-
-                    var reportData = _workerApiClient.GetReport(reportParams);
-                    if (reportData != null && reportData.Length > 0 || subscription.SendEmptyEmails)
+                    
+                    var reportResult = _workerApiClient.GetReport(reportParams);
+                    if (reportResult != null && reportResult.Data.Length > 0 || subscription.SendEmptyEmails)
                     {
-                        _mailSender.Send(subscription.MailSubject, subscription.MailText, subscription.To, subscription.Cc, subscription.Bcc, reportData);
+                        _mailSender.Send(subscription.MailSubject, subscription.MailText, subscription.To, subscription.Cc, subscription.Bcc, reportResult.Data, reportResult.FileName);
                         subscription.LastSent = DateTime.Now;
                     }
                     

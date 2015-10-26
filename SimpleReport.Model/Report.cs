@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Security.Principal;
-using System.Web.UI.WebControls;
 
 namespace SimpleReport.Model
 {
@@ -126,7 +124,16 @@ namespace SimpleReport.Model
                 throw new Exception("Missing Connection in report");
 
             DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
-            return new Result(ResultType.SimpleExcel, result, this, templateData);
+            return new ExcelResult(result, this, templateData);
+        }
+
+        public Result ExecuteWithWordTemplate(byte[] templateData)
+        {
+            if (Connection == null)
+                throw new Exception("Missing Connection in report");
+
+            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
+            return new WordResult(result, this, templateData);
         }
 
         private string Stringify(object obj)
@@ -135,14 +142,6 @@ namespace SimpleReport.Model
                 return ((DateTime)obj).ToString("yyyy-MM-dd HH:mm:ss");
 
             return obj.ToString();
-        }
-
-
-        public Result ExecuteWithWordTemplate(byte[] templateData)
-        {
-            //TODO: implement!!
-            //TODO: Right now, we only send syncdate as a from date, we also need a bundled to-date. Group them like from and to are grouped.
-            
         }
     }
 }

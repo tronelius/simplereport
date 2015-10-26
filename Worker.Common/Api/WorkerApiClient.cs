@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Configuration;
 using System.Net;
+using System.Net.Http.Headers;
+using Worker.Common.Model;
 
 namespace Worker.Common.Api
 {
     public interface IWorkerApiClient
     {
-        byte[] GetReport(string url);
+        ReportResult GetReport(string url);
     }
 
     public class WorkerApiClient : IWorkerApiClient
     {
-        public byte[] GetReport(string parameters)
+        public ReportResult GetReport(string parameters)
         {
             using (var client = new WebClient())
             {
                 SetClientSettings(client);
 
                 var result = client.DownloadData(new Uri(client.BaseAddress + "Home/ExecuteReport/?" + parameters));
-
-                return result;
+                var headers = ContentDispositionHeaderValue.Parse(client.ResponseHeaders.Get("Content-Disposition"));
+                
+                return new ReportResult(result, headers.FileName.Replace("\"", ""));
             }
         }
 

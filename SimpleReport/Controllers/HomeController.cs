@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
 using SimpleReport.Model.Exceptions;
+using SimpleReport.Model.Helpers;
 using SimpleReport.Model.Logging;
 
 namespace SimpleReport.Controllers
