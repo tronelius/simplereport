@@ -21,10 +21,8 @@ namespace SimpleReport.Controllers
 
         public ActionResult Index()
         {
-
             var vm = GetReportViewModel();
             return View(vm);
-
         }
 
         public ActionResult Report(Guid reportId)
