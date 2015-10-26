@@ -34,12 +34,6 @@ namespace SimpleReport.Model
             TemplateData = templateData;
         }
 
-        public Result(IDataReader dataReader, Report report)
-        {
-            _dataReader = dataReader;
-            Report = report;
-        }
-
         public abstract byte[] AsFile();
     }
     

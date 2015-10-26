@@ -52,9 +52,5 @@ namespace SimpleReport.Model
         public ExcelResult(DataTable table, Report report, byte[] templateData) : base(table, report, templateData)
         {
         }
-
-        public ExcelResult(IDataReader dataReader, Report report) : base(dataReader, report)
-        {
-        }
     }
 }

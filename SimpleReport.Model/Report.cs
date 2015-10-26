@@ -132,7 +132,7 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
+            var result = ADO.GetMultipleResults(Connection, Sql, Parameters.CreateParameters());
             return new WordResult(result, this, templateData);
         }
 

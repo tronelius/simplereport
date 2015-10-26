@@ -1,16 +1,24 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using OpenXmlPowerTools;
 using SimpleReport.Model.Helpers;
+using Source = OpenXmlPowerTools.Source;
+using TableRow = DocumentFormat.OpenXml.Wordprocessing.TableRow;
+using TableCell = DocumentFormat.OpenXml.Wordprocessing.TableCell;
+using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
 
 namespace SimpleReport.Model
 {
     public class WordResult : Result
     {
+        private List<DataTable> Tables { get; set; } 
+
         protected override string getMimeType()
         {
             return MimeTypeHelper.WordMime;
@@ -39,13 +47,35 @@ namespace SimpleReport.Model
                         {
                             var reportBookmark = new ReportBookmark(bookmarkStart.Name);
 
-                            if (Table.Columns.Contains(reportBookmark.Name))
+                            if (reportBookmark.Type == "TBL")//tables are special
+                            {
+                                var table = Tables[reportBookmark.Number];
+                                var wt = bookmarkStart.Parent.NextSibling<Table>();
+                                var dtRow = wt.GetFirstChild<TableRow>();
+                                var cellCount = dtRow.Descendants<TableCell>().Count();
+
+                                foreach (DataRow subRow in table.Rows)
+                                {
+                                    if (!subRow["merge_id"].ToString().Equals(row["merge_id"]))
+                                        continue;
+
+                                    TableRow rowCopy = new TableRow();
+                                    
+                                    for (int i = 0; i < cellCount; i++)
+                                    {
+                                        var cell = new TableCell();
+                                        var runElement = GetRunElementForValue(subRow[i]);
+                                        cell.AppendChild(new Paragraph(runElement));
+                                        rowCopy.AppendChild(cell);
+                                    }
+
+                                    dtRow.InsertAfterSelf(rowCopy);
+                                }
+                            }
+                            else if (Table.Columns.Contains(reportBookmark.Name))
                             {
                                 var value = row[reportBookmark.Name];
-
-                                //TODO: add formatting of values? like dates.. already use that in one of the controllers. reuse?
-                                var textElement = new Text(value.ToString());
-                                var runElement = new Run(textElement);
+                                var runElement = GetRunElementForValue(value);
 
                                 bookmarkStart.InsertAfterSelf(runElement);
                             }
@@ -70,12 +100,17 @@ namespace SimpleReport.Model
             return bytes;
         }
 
-        public WordResult(DataTable table, Report report, byte[] templateData) : base(table, report, templateData)
+        private static Run GetRunElementForValue(object value)
         {
+            //TODO: add formatting of values? like dates.. already use that in one of the controllers. reuse?
+            var textElement = new Text(value.ToString());
+            var runElement = new Run(textElement);
+            return runElement;
         }
 
-        public WordResult(IDataReader dataReader, Report report) : base(dataReader, report)
+        public WordResult(List<DataTable> tables, Report report, byte[] templateData) : base(tables.First(), report, templateData)
         {
+            Tables = tables;
         }
     }
 

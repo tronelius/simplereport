@@ -17,16 +17,17 @@ namespace SimpleReport.Model
                     SqlCommand cmd = null;
                     DataTable table = new DataTable();
                     cmd = CreateCommand(cn);
-                    cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure ;
+                    cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
                     cmd.CommandText = query;
                     if (param != null)
                         cmd.Parameters.AddRange(param.ToArray());
-                    
+
                     SqlDataAdapter da = null;
                     using (da = new SqlDataAdapter(cmd))
                     {
                         da.Fill(table);
                     }
+
                     return table;
                 }
                 finally
@@ -36,24 +37,66 @@ namespace SimpleReport.Model
             }
         }
 
-        public static IDataReader GetDataReaderResults(Connection conn, string query, IEnumerable<SqlParameter> param)
+        public static List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<SqlParameter> param)
         {
-            SqlConnection cn = GetOpenConnection(conn);
-            try
+            var tables = new List<DataTable>();
+            using (SqlConnection cn = GetOpenConnection(conn))
             {
-                SqlCommand cmd = null;
-                cmd = CreateCommand(cn);
-                cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
-                cmd.CommandText = query;
-                if (param != null)
-                    cmd.Parameters.AddRange(param.ToArray());
-                return cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                try
+                {
+                    SqlCommand cmd = null;
+                    cmd = CreateCommand(cn);
+                    cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
+                    cmd.CommandText = query;
+                    if (param != null)
+                        cmd.Parameters.AddRange(param.ToArray());
+
+                    var reader = cmd.ExecuteReader();
+
+                    //havnt got a clue on how to get multiple datatables in a better way..
+                    while (reader.HasRows)
+                    {
+                        DataTable schemaTable = reader.GetSchemaTable();
+                        DataTable data = new DataTable();
+                        var takenColumns = new Dictionary<string,int>();
+                        foreach (DataRow row in schemaTable.Rows)
+                        {
+                            string colName = row.Field<string>("ColumnName");
+
+                            //append a number to the column in case there are duplications
+                            if(!takenColumns.ContainsKey(colName))
+                                takenColumns.Add(colName, 0);
+                            else
+                            {
+                                takenColumns[colName]++;
+                                colName = colName + takenColumns[colName];
+                            }
+
+                            Type t = row.Field<Type>("DataType");
+                            data.Columns.Add(colName, t);
+                            
+                        }
+                        while (reader.Read())
+                        {
+                            var newRow = data.Rows.Add();
+
+                            for (int i = 0; i < data.Columns.Count; i++)
+                            {
+                                newRow[i] = reader[i];
+                            }
+                        }
+
+                        tables.Add(data);
+                        reader.NextResult();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    cn.Close();
+                    throw;
+                }
             }
-            catch (Exception ex)
-            {
-                cn.Close();
-                throw;
-            }
+            return tables;
         }
 
         private static SqlCommand CreateCommand(SqlConnection cn)
