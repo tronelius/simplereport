@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using OpenXmlPowerTools;
 using SimpleReport.Model.Helpers;
 
 namespace SimpleReport.Model
@@ -17,31 +20,54 @@ namespace SimpleReport.Model
         {
             return ".docx";
         }
-        
+
         public override byte[] AsFile()
         {
-            using (var ms = new MemoryStream(TemplateData))
-            using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
+            var sources = new List<Source>();
+
+            foreach (DataRow row in Table.Rows)
             {
-                foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
+                using (var tdata = new MemoryStream(TemplateData))
+                using (var ms = new MemoryStream())
                 {
-                    var reportBookmark = new ReportBookmark(bookmarkStart.Name);
+                    tdata.CopyTo(ms); //we need a new template for every row.
+                    ms.Position = 0;
 
-                    if (Table.Columns.Contains(reportBookmark.Name))
+                    using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
                     {
-                        var value = Table.Rows[0][reportBookmark.Name];
+                        foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
+                        {
+                            var reportBookmark = new ReportBookmark(bookmarkStart.Name);
 
-                        //TODO: add formatting of values? like dates.. already use that in one of the controllers. reuse?
-                        var textElement = new Text(value.ToString());
-                        var runElement = new Run(textElement);
+                            if (Table.Columns.Contains(reportBookmark.Name))
+                            {
+                                var value = row[reportBookmark.Name];
 
-                        bookmarkStart.InsertAfterSelf(runElement);
+                                //TODO: add formatting of values? like dates.. already use that in one of the controllers. reuse?
+                                var textElement = new Text(value.ToString());
+                                var runElement = new Run(textElement);
+
+                                bookmarkStart.InsertAfterSelf(runElement);
+                            }
+                        }
+
+                        var pageBreak = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                        doc.MainDocumentPart.Document.Descendants<Paragraph>().Last().InsertAfterSelf(pageBreak);
+
+                        doc.MainDocumentPart.Document.Save();
+                        sources.Add(new Source(new WmlDocument(new OpenXmlPowerToolsDocument(ms.ToArray()))));
                     }
                 }
-
-                doc.MainDocumentPart.Document.Save();
-                return ms.ToArray();
             }
+            
+            var merged = DocumentBuilder.BuildDocument(sources);
+            var path = Path.GetTempFileName();
+            merged.SaveAs(path);
+
+            var bytes = File.ReadAllBytes(path);
+            File.Delete(path);
+
+            return bytes;
         }
 
         public WordResult(DataTable table, Report report, byte[] templateData) : base(table, report, templateData)
@@ -62,7 +88,8 @@ namespace SimpleReport.Model
             if (list.Length == 1)
             {
                 Name = list[0];
-            } else if (list.Length == 2)
+            }
+            else if (list.Length == 2)
             {
                 Type = list[0];
                 Name = list[1];
