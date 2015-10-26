@@ -18,13 +18,6 @@ namespace SimpleReport.Model
         {
         }
 
-        public LookupReport(Guid id, string name, string description, Guid connectionId,string sql, string group) : base(id, name, description, group)
-        {
-            if (string.IsNullOrWhiteSpace(sql))
-                throw new Exception(string.Format("Missing SQL in report with Name:{0}", name));
-            ConnectionId = connectionId;
-            Sql = sql;
-        }
 
         public Dictionary<string, string> Execute()
         {

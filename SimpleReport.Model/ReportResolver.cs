@@ -31,11 +31,13 @@ namespace SimpleReport.Model
             IEnumerable<Parameter> lookupParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Lookup);
             foreach (Parameter lookupParameter in lookupParameters)
             {
-                LookupReport rpt = Storage.GetLookupReport(lookupParameter.LookupReportId);
-                if (rpt != null) {
-                    if (lookupParameter.Choices != null)
-                        lookupParameter.Choices.Clear();
-                    rpt.Execute().ToList().ForEach(rp => lookupParameter.Choices.Add(rp.Key,rp.Value));
+                if (lookupParameter.LookupReportId.HasValue) { 
+                    LookupReport rpt = Storage.GetLookupReport(lookupParameter.LookupReportId.Value);
+                    if (rpt != null) {
+                        if (lookupParameter.Choices != null)
+                            lookupParameter.Choices.Clear();
+                        rpt.Execute().ToList().ForEach(rp => lookupParameter.Choices.Add(rp.Key,rp.Value));
+                    }
                 }
             }
 

@@ -14,12 +14,11 @@ namespace SimpleReport.Model
 
     public class ParameterList : List<Parameter>
     {
-        public ParameterList(List<Parameter> parameters)
+        public ParameterList()
         {
-            this.AddRange(parameters);
         }
 
-        public ParameterList()
+        public ParameterList(IEnumerable<Parameter> collection) : base(collection)
         {
         }
 
@@ -59,24 +58,13 @@ namespace SimpleReport.Model
         public string Key { get { return SqlKey.Replace("@", ""); } }
 
         public Dictionary<string, string> Choices { get; protected set; }
-        public Guid LookupReportId { get; set; }
-
+        public Guid? LookupReportId { get; set; }
+        public Guid ReportId { get; set; }
         public Parameter()
         {
             Choices = new Dictionary<string, string>();
         }
 
-        public Parameter(string label, string sqlKey, string value, ParameterInputType inputType, bool mandatory, string helptext)
-            : this()
-        {
-            //TODO validate
-            Label = label;
-            SqlKey = sqlKey;
-            Value = value;
-            InputType = inputType;
-            Mandatory = mandatory;
-            HelpText = helptext;
-        }
 
         public IEnumerable<SqlParameter> GetSqlParameterForPeriod()
         {

@@ -24,17 +24,6 @@ namespace SimpleReport.Model
             Id = Guid.NewGuid();
         }
 
-        public ReportInfo(Guid id, string name, string description, string group)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new Exception(string.Format("Missing name in report"));
-            Id = id;
-            Name = name;
-            Description = description;
-            Group = @group;
-            //Errors = new List<ErrorInfo>();
-        }
-
     }
 
 }

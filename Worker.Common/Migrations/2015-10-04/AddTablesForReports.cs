@@ -34,15 +34,16 @@ namespace Worker.Common.Migrations
                .WithColumn("TemplateEditorAccessStyle").AsInt32().NotNullable()
                .WithColumn("SubscriptionAccessStyle").AsInt32().NotNullable();
 
-            Create.Table("Parameter").WithColumn("SqlKey").AsString(255).NotNullable().PrimaryKey()
+            Create.Table("Parameter")
+                .WithColumn("SqlKey").AsString(255).NotNullable().PrimaryKey()
+                .WithColumn("ReportId").AsGuid().NotNullable().ForeignKey("Report", "Id").PrimaryKey()
                 .WithColumn("Label").AsString(500).NotNullable()
                 .WithColumn("Value").AsString(1000).Nullable()
                 .WithColumn("InputType").AsInt32().NotNullable()
                 .WithColumn("Mandatory").AsBoolean().NotNullable()
                 .WithColumn("HelpText").AsString(2000).NotNullable()
-                .WithColumn("LookupReportId").AsGuid().ForeignKey("LookupReport", "Id")
-                .WithColumn("ReportId").AsGuid().NotNullable().ForeignKey("Report", "Id");
-
+                .WithColumn("LookupReportId").AsGuid().Nullable().ForeignKey("LookupReport", "Id");
+                
             Create.Table("Access").WithColumn("Id").AsGuid().PrimaryKey().NotNullable()
                 .WithColumn("Name").AsString(1000).NotNullable()
                 .WithColumn("ADGroup").AsString(3000).NotNullable();

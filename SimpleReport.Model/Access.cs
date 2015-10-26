@@ -1,14 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
+using System.Xml.Schema;
 
 namespace SimpleReport.Model
 {
     public class Access : IEntity
     {
         public Guid Id { get; set; }
+
+        [Required][StringLength(1000)]
         public string Name { get; set; }
+        [Required][StringLength(3000)]
         public string ADGroup { get; set; }
 
         public string[] SplittedAdGroups

@@ -85,8 +85,9 @@
     <Compile Include="RawReportResult.cs" />
     <Compile Include="ReportInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Storage\BaseDapperRepo.cs" />
-    <Compile Include="Storage\DapperMappings.cs" />
+    <Compile Include="Storage\SQL\BaseDapperRepo.cs" />
+    <Compile Include="Storage\SQL\DapperExtension.cs" />
+    <Compile Include="Storage\SQL\DapperMappings.cs" />
     <Compile Include="Storage\DeleteInfo.cs" />
     <Compile Include="Storage\FileStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />
@@ -98,7 +99,7 @@
     <Compile Include="ReportDataModel.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Exceptions\StorageNotInitializedException.cs" />
-    <Compile Include="Storage\SQLStorage.cs" />
+    <Compile Include="Storage\SQL\SQLStorage.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="ValidatableEntity.cs" />
   </ItemGroup>
