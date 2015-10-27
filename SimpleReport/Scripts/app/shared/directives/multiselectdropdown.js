@@ -26,7 +26,8 @@
                         $timeout(function() {
                             $scope.value = selected.join(',');
                         });
-                    }
+                    },
+                    enableFiltering: true
                 });
                 element.multiselect('dataprovider', options);
 
