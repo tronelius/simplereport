@@ -8,10 +8,11 @@ using System.Web;
 using Newtonsoft.Json;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
+using SimpleReport.Model.Storage.JsonConverters;
 
 namespace SimpleReport.Model.Storage
 {
-    public class FileStorage :IStorage
+    public class FileStorage : IStorage
     {
         private readonly ILogger _logger;
         private string _filename;
@@ -22,13 +23,14 @@ namespace SimpleReport.Model.Storage
         {
             _logger = logger;
             _filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "datamodel.json");
-            try {
+            try
+            {
                 _dataModel = LoadModel();
             }
             catch (FileNotFoundException fex)
             {
                 //autoinitialize storage
-                logger.Warn("filestorage not initialized, file not found at:"+fex.FileName);
+                logger.Warn("filestorage not initialized, file not found at:" + fex.FileName);
                 InitializeStorage();
                 _dataModel = LoadModel();
             }
@@ -41,7 +43,7 @@ namespace SimpleReport.Model.Storage
 
         public void InitializeStorage()
         {
-            using (File.Create(_filename));
+            using (File.Create(_filename)) ;
             ReportDataModel model = new ReportDataModel();
             SaveModel(model);
         }
@@ -50,14 +52,20 @@ namespace SimpleReport.Model.Storage
         {
             using (FileStream fs = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                //serializer.TypeNameHandling = TypeNameHandling.Objects;
+                var serializer = GetJsonSerializer();
                 TextReader treader = new StreamReader(fs);
                 JsonReader reader = new JsonTextReader(treader);
                 ReportDataModel data = serializer.Deserialize<ReportDataModel>(reader);
                 //todo handle empty file...
                 return data;
-            }   
+            }
+        }
+
+        private static JsonSerializer GetJsonSerializer()
+        {
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.Converters.Add(new ParameterJsonConverter());
+            return serializer;
         }
 
         public void SaveModel(ReportDataModel data)
@@ -67,7 +75,7 @@ namespace SimpleReport.Model.Storage
             using (JsonWriter jw = new JsonTextWriter(sw))
             {
                 jw.Formatting = Formatting.Indented;
-                JsonSerializer serializer = new JsonSerializer();
+                var serializer = GetJsonSerializer();
                 serializer.Serialize(jw, data);
             }
         }
@@ -85,7 +93,7 @@ namespace SimpleReport.Model.Storage
         {
             var filepath = GetFilePath(reportId);
             var bytes = File.ReadAllBytes(filepath);
-            return new Template {Bytes = bytes, Filename = Path.GetFileName(filepath)};
+            return new Template { Bytes = bytes, Filename = Path.GetFileName(filepath) };
         }
 
         public void DeleteTemplate(Guid reportId)
@@ -109,7 +117,7 @@ namespace SimpleReport.Model.Storage
 
         public Report GetReport(Guid id)
         {
-            var report =_dataModel.Reports.FirstOrDefault(r => r.Id == id);
+            var report = _dataModel.Reports.FirstOrDefault(r => r.Id == id);
             if (report == null)
                 return null; //throw new EntityNotFoundException("Report not found");
 
@@ -154,7 +162,7 @@ namespace SimpleReport.Model.Storage
             _dataModel.Reports.Remove(existing);
             SaveModel(_dataModel);
 
-            if(report.HasTemplate)
+            if (report.HasTemplate)
                 DeleteTemplate(report.Id);
 
             return new DeleteInfo(true, "Report was deleted");
@@ -204,7 +212,7 @@ namespace SimpleReport.Model.Storage
 
         public LookupReport GetLookupReport(Guid id)
         {
-            var report =  _dataModel.LookupReports.FirstOrDefault(c => c.Id == id);
+            var report = _dataModel.LookupReports.FirstOrDefault(c => c.Id == id);
             if (report == null)
                 throw new EntityNotFoundException("Lookup report not found");
             LoadAndSetConnection(report);
@@ -218,7 +226,7 @@ namespace SimpleReport.Model.Storage
                 _dataModel.LookupReports.Remove(existing);
             _dataModel.LookupReports.Add(lookupReport);
             SaveModel(_dataModel);
-            return true;          
+            return true;
         }
 
         public DeleteInfo DeleteLookupReport(LookupReport lookupReport)
@@ -255,7 +263,7 @@ namespace SimpleReport.Model.Storage
                 _dataModel.AccessLists.Remove(existing);
             _dataModel.AccessLists.Add(accesslist);
             SaveModel(_dataModel);
-            return true;      
+            return true;
         }
 
         public DeleteInfo DeleteAccessList(Access acc)
@@ -267,7 +275,7 @@ namespace SimpleReport.Model.Storage
             IEnumerable<Report> existingreportsWithAccesslist = _dataModel.Reports.Where(r => r.AccessId == acc.Id);
             if (existingreportsWithAccesslist.Any())
                 return new DeleteInfo(false, "Accesslist cannot be deleted, it's used by other reports.", existingreportsWithAccesslist);
-            
+
             _dataModel.AccessLists.Remove(existing);
             SaveModel(_dataModel);
             return new DeleteInfo(true, "Accesslist was deleted");

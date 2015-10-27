@@ -35,7 +35,7 @@ namespace SimpleReport.Model
                 if (rpt != null) {
                     if (lookupParameter.Choices != null)
                         lookupParameter.Choices.Clear();
-                    rpt.Execute().ToList().ForEach(rp => lookupParameter.Choices.Add(rp.Key,rp.Value));
+                    rpt.Execute().ToList().ForEach(rp => lookupParameter.Choices.Add(new KeyValuePair<string, string>(rp.Key,rp.Value)));
                 }
             }
 

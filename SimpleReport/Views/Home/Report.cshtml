@@ -62,7 +62,7 @@
 
                                     <div data-ng-switch-when="@((int) ParameterInputType.Period)">
                                         <input type="hidden" value="{{par.Value}}" name="{{par.Key}}" />
-                                        <select data-ng-required="{{par.Mandatory}}" class="form-control" data-ng-options="k as v for (k,v) in par.Choices" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
+                                        <select data-ng-required="{{par.Mandatory}}" class="form-control" data-ng-options="c.Key as c.Value for c in par.Choices" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
                                             <option value="">[Please Choose...]</option>
                                         </select>
                                         <div data-ng-show="par.EnumValue === '9999'">
@@ -73,7 +73,7 @@
 
                                     <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.Value">
                                         <option value="">[Please Choose...]</option>
-                                        <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
+                                        <option data-ng-repeat="c in par.Choices" value="{{c.Key}}">{{c.Value}}</option>
                                     </select>
 
                                     <div data-ng-switch-when="@((int) ParameterInputType.SyncedDate)">
