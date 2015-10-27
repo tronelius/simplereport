@@ -31,7 +31,7 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = ADO.GetResults(Connection, Sql,null);
+            DataTable result = ADO.GetResults(Connection, Sql, null);
             Dictionary<string, string> collection = new Dictionary<string, string>();
             if (result.Columns.Contains("id") && result.Columns.Contains("name"))
             {

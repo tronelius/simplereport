@@ -25,6 +25,7 @@ namespace SimpleReport.App_Start
                 "~/Scripts/lib/toastr.js",
                 "~/Scripts/lib/ng-file-upload-all.min.js",
                 "~/Scripts/lib/jquery-cron-min.js",
+                "~/Scripts/lib/bootstrap-multiselect.js",
                 "~/Content/js/app.js"));
 
             bundles.Add(new StyleBundle("~/bundles/css").Include(
@@ -34,7 +35,8 @@ namespace SimpleReport.App_Start
                       "~/Content/css/skins/_all-skins.css",
                       "~/Content/toastr.min.css",
                       "~/Content/font-awesome.min.css",
-                      "~/Content/jquery-cron.css"));
+                      "~/Content/jquery-cron.css",
+                      "~/Content/bootstrap-multiselect.css"));
         }
     }
 

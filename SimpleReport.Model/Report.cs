@@ -107,7 +107,8 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
+            DataTable result = ADO.GetResults(Connection, Sql, parameters);
 
             var raw = new RawReportResult
             {
@@ -123,7 +124,8 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
+            DataTable result = ADO.GetResults(Connection, Sql, parameters);
             return new ExcelResult(result, this, templateData);
         }
 
@@ -132,8 +134,15 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            var result = ADO.GetMultipleResults(Connection, Sql, Parameters.CreateParameters());
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
+            var result = ADO.GetMultipleResults(Connection, Sql, parameters);
             return new WordResult(result, this, templateData);
+        }
+
+        public void UpdateSql(string sql)
+        {
+            //some parameters need to modify the sql to work, like when we have an in-clause and need to replace one param with many.
+            Sql = sql;
         }
 
         private string Stringify(object obj)

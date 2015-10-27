@@ -24,12 +24,12 @@ namespace SimpleReport.Model
         {
         }
 
-        public List<SqlParameter> CreateParameters()
+        public List<SqlParameter> CreateParameters(string sql, Action<string> updateSqlAction)
         {
             List<SqlParameter> paramList = new List<SqlParameter>();
             foreach (Parameter parameter in this)
             {
-                paramList.AddRange(parameter.GetSqlParameter());
+                paramList.AddRange(parameter.GetSqlParameter(sql, updateSqlAction));
             }
             return paramList;
         }
@@ -106,6 +106,36 @@ namespace SimpleReport.Model
             }
         }
 
+        public List<SqlParameter> GetSqlParameterForLookup(string query, Action<string> updateSqlAction)
+        {
+            string[] valueList = Value.Split(',');
+
+            var sqlparams = new List<SqlParameter>();
+
+            //We replace @param with @param1,@param2 to handle in-clauses
+            if (valueList.Length > 1)
+            {
+                var newParams = new List<string>();
+                for (int i = 0; i < valueList.Length; i++)
+                {
+                    var np = "@" + Key + i;
+                    newParams.Add(np);
+                    sqlparams.Add(new SqlParameter(np, valueList[i]));
+                }
+
+                var replacement = string.Join(",", newParams);
+
+                var newQuery = query.Replace("@" + Key, replacement);
+                updateSqlAction(newQuery);
+            }
+            else
+            {
+                sqlparams.Add(new SqlParameter(Key, Value));
+            }
+            
+            return sqlparams;
+        }
+
         private string[] GetValueListBasedOnPeriod(ParameterPeriods period)
         {
             DateTime now = DateTime.Now;
@@ -132,10 +162,12 @@ namespace SimpleReport.Model
             }
         }
 
-        public IEnumerable<SqlParameter> GetSqlParameter()
+        public IEnumerable<SqlParameter> GetSqlParameter(string query, Action<string> updateSqlAction)
         {
             if (InputType == ParameterInputType.Period)
                 return GetSqlParameterForPeriod();
+            if (InputType == ParameterInputType.Lookup)
+                return GetSqlParameterForLookup(query, updateSqlAction);
             return new List<SqlParameter>() { new SqlParameter(this.SqlKey, this.Value) };
         }
 
