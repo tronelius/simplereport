@@ -86,8 +86,10 @@ namespace WorkerHost.Jobs
                     var oldSyncedDate = subscription.SyncedDate ?? DateTime.Now;
                     var reportParams = subscription.ReportParams;
 
+                    //there are basically here so that we can run the report with known dates. like, we want everything that happened since last sync to now, where now is a known date so that if we run the query again an hour later, we known exactly where we left off
                     reportParams = reportParams.Replace("=SyncedDate", "=" + oldSyncedDate);
-                    
+                    reportParams = reportParams.Replace("=SyncedRunningDate", "=" + newSyncedDate);
+
                     var reportResult = _workerApiClient.GetReport(reportParams);
                     if (reportResult != null && reportResult.Data.Length > 0 || subscription.SendEmptyEmails)
                     {
@@ -96,7 +98,7 @@ namespace WorkerHost.Jobs
                     }
                     
                     subscription.Status = SubscriptionStatus.Success;
-                    subscription.SyncedDate = newSyncedDate; //TODO: get synced date from the actual worker? how foolproof do we want this to be?
+                    subscription.SyncedDate = newSyncedDate;
                     subscription.SetNextSendDate(schedule.Cron);
                     subscription.FailedAttempts = 0;
                 }

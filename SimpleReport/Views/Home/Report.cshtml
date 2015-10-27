@@ -77,7 +77,10 @@
                                     </select>
 
                                     <div data-ng-switch-when="@((int) ParameterInputType.SyncedDate)">
-                                        <input type="hidden" value="SyncedDate" name="{{par.Key}}" />
+                                        <input type="hidden" value="SyncedDate" name="{{par.Key}}"/>
+                                    </div>
+                                    <div data-ng-switch-when="@((int) ParameterInputType.SyncedRunningDate)">
+                                        <input type="hidden" value="SyncedRunningDate" name="{{par.Key}}" />
                                     </div>
 
                                     <input data-ng-switch-default type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="String">
