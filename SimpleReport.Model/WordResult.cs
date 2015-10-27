@@ -30,6 +30,7 @@ namespace SimpleReport.Model
         public override byte[] AsFile()
         {
             var sources = new List<Source>();
+            var lastRow = Table.Rows[Table.Rows.Count - 1];
 
             foreach (DataRow row in Table.Rows)
             {
@@ -55,7 +56,8 @@ namespace SimpleReport.Model
                             }
                         }
 
-                        AddPageBreak(doc);
+                        if(row != lastRow)
+                            AddPageBreak(doc);
 
                         doc.MainDocumentPart.Document.Save();
                         sources.Add(new Source(new WmlDocument(new OpenXmlPowerToolsDocument(ms.ToArray()))));
