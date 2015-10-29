@@ -35,10 +35,10 @@ namespace SimpleReportTests
         public void StoreModelFromCode()
         {
             Settings settings = GetSettings();
-            Connection conn = GetTestConnection();
+            Connection conn = GetConnection();
             Access acc = GetAccessList();
             LookupReport lrpt = GetLookupReport();
-            Report report = GetTestReport();
+            Report report = GetReport();
 
             sqlStorage.SaveSettings(settings);
             sqlStorage.SaveConnection(conn);
@@ -57,7 +57,7 @@ namespace SimpleReportTests
             return new Settings() {AdminAccess = "utvecklare;developers"};
         }
 
-        private Report GetTestReport()
+        private Report GetReport()
         {
             Report rpt = new Report();
             rpt.Id = _reportguid;
@@ -70,6 +70,7 @@ namespace SimpleReportTests
             rpt.SubscriptionAccessStyle = AccessStyle.Anyone;
             rpt.TemplateEditorAccessStyle = AccessStyle.Anyone;
             rpt.AccessId = _accessId;
+            rpt.Connection = GetConnection();
             rpt.ConnectionId = _connId;
             rpt.Description = "TestDescription";
             rpt.Group = "TestGroup";
@@ -81,7 +82,7 @@ namespace SimpleReportTests
             return rpt;
         }
 
-        private Connection GetTestConnection()
+        private Connection GetConnection()
         {
             return new Connection(_connId, "connection","connectionstring");
         }
