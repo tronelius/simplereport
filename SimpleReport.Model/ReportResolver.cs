@@ -32,7 +32,7 @@ namespace SimpleReport.Model
             foreach (Parameter lookupParameter in lookupParameters)
             {
                 if (lookupParameter.LookupReportId.HasValue) { 
-                    LookupReport rpt = Storage.GetLookupReport(lookupParameter.LookupReportId.Value);
+                    LookupReport rpt = lookupParameter.LookupReport ?? Storage.GetLookupReport(lookupParameter.LookupReportId.Value);
                     if (rpt != null) {
                         if (lookupParameter.Choices != null)
                             lookupParameter.Choices.Clear();
@@ -48,6 +48,8 @@ namespace SimpleReport.Model
             }
             return report;
         }
+
+
     }
 
    

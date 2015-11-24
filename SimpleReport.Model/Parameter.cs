@@ -59,6 +59,7 @@ namespace SimpleReport.Model
 
         public Dictionary<string, string> Choices { get; protected set; }
         public Guid? LookupReportId { get; set; }
+        [NonSerialized] public LookupReport LookupReport;
         public Guid ReportId { get; set; }
         public Parameter()
         {

@@ -21,7 +21,7 @@ namespace SimpleReport.Model.Logging
         public void Error(string message, Exception ex = null)
         {
             if (ex != null)
-                NLog.LogManager.GetCurrentClassLogger().ErrorException(message,ex);
+                NLog.LogManager.GetCurrentClassLogger().Error(ex,message);
             else
                 NLog.LogManager.GetCurrentClassLogger().Error(message);
         }

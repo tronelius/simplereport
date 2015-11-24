@@ -27,6 +27,7 @@ namespace Worker.Common.Migrations
                .WithColumn("SQL").AsString(Int32.MaxValue).NotNullable()
                .WithColumn("ResultType").AsInt32().NotNullable()
                .WithColumn("Template").AsByte().Nullable()
+               .WithColumn("HasTemplate").AsBoolean().NotNullable()
                .WithColumn("MailSubject").AsString(1000).Nullable()
                .WithColumn("MailText").AsString(Int32.MaxValue).Nullable()
                .WithColumn("ReportOwnerAccessId").AsGuid().Nullable()
