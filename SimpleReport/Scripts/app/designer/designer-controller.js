@@ -1,4 +1,5 @@
-﻿angular.module('designer').controller('designerController', ['$scope', '$http', 'subscriptionRepository', function ($scope, $http, subscriptionRepository) {
+﻿//Desperate need for refactoring... but later...
+angular.module('designer').controller('designerController', ['$scope', '$http', 'subscriptionRepository', 'designerRepository','Upload', function ($scope, $http, subscriptionRepository, designerRepository,upload) {
     $scope.activeTab = 'report';
 
     $scope.init = function () {
@@ -393,5 +394,29 @@
             toastr.error("Server error when saving settings.", "Error");
         });
     };
-
+    $scope.exportModel = function () {
+        window.open(designerRepository.exportModelUrl(), '_blank', '');
+    };
+    $scope.importModel = function(files) {
+        if (files && files.length) {
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                upload.upload({
+                    url: 'api/Designer/ImportModel',
+                    file: file
+                }).success(function (data, status, headers, config) {
+                    if (!data.error) {
+                        toastr.success("New Data Model imported!");
+                    } else {
+                        toastr.error(data.error);
+                    }
+                }).error(function () {
+                    toastr.error("Couldn't upload the file, please try again.", "Error");
+                });
+            }
+        }
+    }
+    $scope.clearModel = function () {
+        designerRepository.clearModel();
+    };
 }]);

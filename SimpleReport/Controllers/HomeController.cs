@@ -55,8 +55,7 @@ namespace SimpleReport.Controllers
 
                 if (result.HasData())
                     return File(result.AsFile(), result.MimeType, result.FileName);
-                else
-                    return new HttpStatusCodeResult(204);
+                return new HttpStatusCodeResult(204);
             }
             return File(GetBytes("Not allowed to execute this report"), "text/plain","NotAllowed.txt");
         }
@@ -98,6 +97,7 @@ namespace SimpleReport.Controllers
                         }
                         data = memoryStream.ToArray();
                     }
+
                     try
                     {
                         ExcelValidator.Validate(data);

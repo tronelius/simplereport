@@ -37,6 +37,7 @@ namespace SimpleReport
         protected override IKernel CreateKernel()
         {
             var kernel = new StandardKernel();
+            kernel.Bind<IStorageHelper>().To<StorageHelper>();
             kernel.Bind<IStorage>().To<SQLStorage>().InRequestScope();
             kernel.Bind<ILogger>().To<Nlogger>();
             kernel.Bind<IApiClient>().To<ApiClient>();

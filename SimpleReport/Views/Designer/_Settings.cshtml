@@ -34,7 +34,8 @@
                                 <label class="control-label" title="Export Datamodel">Export the current datamodel</label>
                                 <div>
                                     <button type="button" class="btn btn-primary" ng-click="exportModel()">Export data model</button>
-                                    <button type="button" class="btn btn-primary" ng-click="exportModel()">Export data model</button>
+                                    <button type="button" class="btn btn-warning" ngf-select ngf-change="importModel($files)" accept="application/json">Import data model</button>
+                                    <button type="button" class="btn btn-danger"  ng-click="clearModel()">Clear data model</button>
                                 </div>
                             </div>
                         </div>

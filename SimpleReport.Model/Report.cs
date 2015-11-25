@@ -25,10 +25,7 @@ namespace SimpleReport.Model
         public string MailSubject { get; set; }
         public string MailText { get; set; }
         
-        //who can fiddle with the template
-        public Guid ReportOwnerAccessId { get; set; } 
-        [NonSerialized]
-        public Access ReportOwnerAccess; //TODO rename to reportowner
+      
 
         public bool OnScreenFormatAllowed { get; set; }
         public AccessStyle TemplateEditorAccessStyle { get; set; }
@@ -51,10 +48,7 @@ namespace SimpleReport.Model
             return !(String.Equals(MailSubject, reportWithPossibleChanges.MailSubject, StringComparison.CurrentCulture) && String.Equals(MailText, reportWithPossibleChanges.MailText, StringComparison.CurrentCulture));
         }
 
-        public bool IsAvailableForMe(IPrincipal user, Access adminAccess)
-        {
-            return (ReportOwnerAccess != null && ReportOwnerAccess.IsAvailableForMe(user)) ||  (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));
-        }
+    
 
         public void ReadParameters(NameValueCollection queryString)
         {

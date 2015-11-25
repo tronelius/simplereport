@@ -1,5 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -18,11 +22,13 @@ namespace SimpleReport.Controllers.Api
     {
         private readonly IApiClient _apiClient;
         private readonly IApplicationSettings _applicationSettings;
+        private readonly IStorageHelper _storageHelper;
 
-        public DesignerController(IStorage reportStorage, ILogger logger, IApiClient apiClient, IApplicationSettings applicationSettings) : base(reportStorage, logger)
+        public DesignerController(IStorage reportStorage, ILogger logger, IApiClient apiClient, IApplicationSettings applicationSettings, IStorageHelper storageHelper) : base(reportStorage, logger)
         {
             _apiClient = apiClient;
             _applicationSettings = applicationSettings;
+            _storageHelper = storageHelper;
         }
 
         [AcceptVerbs("GET")]
@@ -212,6 +218,76 @@ namespace SimpleReport.Controllers.Api
             catch (Exception ex)
             {
                 _logger.Error("Exception in SaveSettings", ex);
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("GET")]
+        public HttpResponseMessage ExportModel()
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+                var model = _reportStorage.LoadModel();
+                HttpResponseMessage result = Request.CreateResponse(HttpStatusCode.OK);
+                MemoryStream ms = new MemoryStream();
+                _storageHelper.WriteModelToStream(model, ms);
+                result.Content = new ByteArrayContent(ms.ToArray());
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = "datamodel.json"
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in ExportModel", ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [AcceptVerbs("POST")]
+        public async Task<IHttpActionResult> ImportModel()
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+                if (!Request.Content.IsMimeMultipartContent())
+                    throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+
+                var provider = new MultipartMemoryStreamProvider();
+                await Request.Content.ReadAsMultipartAsync(provider);
+                if (provider.Contents.Count>=1)
+                {
+                    var file = provider.Contents[0];
+                    var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
+                    var buffer = await file.ReadAsStreamAsync();
+                    var importModel = _storageHelper.ReadModelFromStream(buffer);
+                    _reportStorage.SaveModel(importModel);
+                    return Ok();
+                }
+                return InternalServerError();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in ImportModel", ex);
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
+        public IHttpActionResult ClearModel()
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+                _reportStorage.ClearModel();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in ClearModel", ex);
                 return InternalServerError();
             }
         }

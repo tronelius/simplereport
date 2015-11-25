@@ -18,6 +18,7 @@ namespace SimpleReportTests
     {
         string constr = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\LocalTest.mdf;Integrated Security=True;Connect Timeout=30";
         private IStorage sqlStorage;
+        private IStorageHelper _storageHelper = new StorageHelper();
         private Guid _connId = new Guid("4A244400-139F-401E-B82F-532815E77746");
         private Guid _reportguid = new Guid("07E8C99C-4CEF-4A15-A837-5C0F74E1DEBC");
         private Guid _lookupreportguid = new Guid("96DF80D6-60B4-42C1-9ED0-B34923D0E3D9");
@@ -28,7 +29,7 @@ namespace SimpleReportTests
         {
             var migration = new Migrator(constr);
             migration.Up();
-            sqlStorage = new SQLStorage(constr);
+            sqlStorage = new SQLStorage(constr, _storageHelper);
         }
 
         [Test]

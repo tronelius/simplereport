@@ -14,13 +14,15 @@ namespace SimpleReport.Model.Storage
     public class FileStorage :IStorage
     {
         private readonly ILogger _logger;
+        private readonly IStorageHelper _storageHelper;
         private string _filename;
         private ReportDataModel _dataModel;
 
         //instanciate once every request, keep the model in memory during the request.
-        public FileStorage(ILogger logger)
+        public FileStorage(ILogger logger, IStorageHelper storageHelper)
         {
             _logger = logger;
+            _storageHelper = storageHelper;
             _filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "datamodel.json");
             try {
                 _dataModel = LoadModel();
@@ -50,26 +52,24 @@ namespace SimpleReport.Model.Storage
         {
             using (FileStream fs = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                //serializer.TypeNameHandling = TypeNameHandling.Objects;
-                TextReader treader = new StreamReader(fs);
-                JsonReader reader = new JsonTextReader(treader);
-                ReportDataModel data = serializer.Deserialize<ReportDataModel>(reader);
-                //todo handle empty file...
-                return data;
+                return _storageHelper.ReadModelFromStream(fs);
             }   
         }
 
+       
+
         public void SaveModel(ReportDataModel data)
         {
-            using (FileStream fs = File.Open(_filename, FileMode.Truncate, FileAccess.Write))
-            using (StreamWriter sw = new StreamWriter(fs))
-            using (JsonWriter jw = new JsonTextWriter(sw))
-            {
-                jw.Formatting = Formatting.Indented;
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(jw, data);
+            using (FileStream fs = File.Open(_filename, FileMode.Truncate, FileAccess.Write)) {
+                _storageHelper.WriteModelToStream(data, fs);
             }
+        }
+
+       
+
+        public void ClearModel()
+        {
+            SaveModel(null);
         }
 
         public void SaveTemplate(byte[] data, Guid reportId)
@@ -89,6 +89,13 @@ namespace SimpleReport.Model.Storage
         {
             var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
             File.Delete(filepath);
+        }
+
+        public IEnumerable<ReportInfo> GetAllReportInfos()
+        {
+            var reports = _dataModel.Reports;
+            reports.ForEach(LoadAndSetAccess);
+            return reports;
         }
 
         public IEnumerable<Report> GetAllReports()
@@ -117,7 +124,7 @@ namespace SimpleReport.Model.Storage
             report.Connection = connection;
         }
 
-        private void LoadAndSetAccess(Report report)
+        private void LoadAndSetAccess(ReportInfo report)
         {
             var access = GetAccessList(report.AccessId);
             report.Access = access;
@@ -136,7 +143,7 @@ namespace SimpleReport.Model.Storage
             return true;
         }
 
-        public DeleteInfo DeleteReport(Report report)
+        public DeleteInfo DeleteReport(ReportInfo report)
         {
             Report existing = _dataModel.Reports.FirstOrDefault(r => r.Id == report.Id);
             if (existing == null)
@@ -145,7 +152,7 @@ namespace SimpleReport.Model.Storage
             _dataModel.Reports.Remove(existing);
             SaveModel(_dataModel);
 
-            if(report.HasTemplate)
+            if(existing.HasTemplate)
                 DeleteTemplate(report.Id);
 
             return new DeleteInfo(true, "Report was deleted");

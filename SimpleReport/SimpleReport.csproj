@@ -225,6 +225,7 @@
     <Content Include="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\app\data\designer-repository.js" />
     <Content Include="Scripts\app\data\report-repository.js" />
     <Content Include="Scripts\app\data\schedule-repository.js" />
     <Content Include="Scripts\app\data\subscription-repository.js" />
