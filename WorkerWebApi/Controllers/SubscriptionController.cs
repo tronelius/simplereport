@@ -66,6 +66,17 @@ namespace WorkerWebApi.Controllers
             return Json(result);
         }
 
+        [Route("deleteAll")]
+        [HttpPost]
+        public IHttpActionResult DeleteAll()
+        {
+            _logger.Trace("Deleting all subscriptions: ");
+
+            _subscriptionRepository.DeleteAll();
+            var result = _subscriptionRepository.List();
+            return Json(result);
+        }
+
         [Route("send")]
         [HttpPost]
         public IHttpActionResult Send([FromBody]int id)

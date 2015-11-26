@@ -416,7 +416,12 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
         }
     }
-    $scope.clearModel = function () {
-        designerRepository.clearModel();
+    $scope.clearModel = function (force) {
+        if (!force) {
+            $scope.showClearConfirmation = true;
+        } else {
+            designerRepository.clearModel();
+            $scope.showClearConfirmation = false;
+        }
     };
 }]);

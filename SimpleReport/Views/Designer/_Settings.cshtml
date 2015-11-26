@@ -33,9 +33,9 @@
                             <div class="form-group">
                                 <label class="control-label" title="Export Datamodel">Export the current datamodel</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" ng-click="exportModel()">Export data model</button>
-                                    <button type="button" class="btn btn-warning" ngf-select ngf-change="importModel($files)" accept="application/json">Import data model</button>
-                                    <button type="button" class="btn btn-danger"  ng-click="clearModel()">Clear data model</button>
+                                    <button type="button" class="btn btn-primary" style="margin-right: 10px;" ng-click="exportModel()">Export data model</button>
+                                    <button type="button" class="btn btn-warning" style="margin-right: 10px;" ngf-select ngf-change="importModel($files)" accept="application/json">Import data model</button>
+                                    <button type="button" class="btn btn-danger"  ng-click="clearModel(false)">Clear data model</button>
                                 </div>
                             </div>
                         </div>
@@ -49,6 +49,26 @@
         <div class="col-sm-12">
             <div class="box-footer">
                 <button type="button" class="btn btn-success" ng-click="saveSettings()">Save changes</button>
+            </div>
+        </div>
+    </div>
+
+    <div data-ng-show="showClearConfirmation">
+        <div class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-label="Close" data-ng-click="showClearConfirmation = false"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Really clear your model?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>When you clear your model you will delete every report, dropdown paramater, connection and accesslist. Only the Settings is preserved.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" data-ng-click="showClearConfirmation = false">Close</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="clearModel(true)">Clear Model</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
