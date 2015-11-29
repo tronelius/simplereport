@@ -1,0 +1,154 @@
+{
+  "Connections": [
+    {
+      "Id": "f7d12d58-300c-4505-a440-a5d30fc78086",
+      "Verified": false,
+      "Name": "Adventureworks Test",
+      "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
+    },
+    {
+      "Id": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Verified": false,
+      "Name": "Adventureworks",
+      "ConnectionString": "Data Source=Localhost;Initial Catalog=AdventureWorks2012;Integrated Security=SSPI;"
+    }
+  ],
+  "Reports": [
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "HasTemplate": false,
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Sql": "select [AddressID]\n      ,[AddressLine1]\n      ,[AddressLine2]\n      ,[City]\n      ,[StateProvinceID]\n      ,[PostalCode]\n     ,[ModifiedDate]\n from Person.address",
+      "Id": "c6208355-9124-458e-b1c5-c9e2981fbc18",
+      "Name": "Ny rapport2",
+      "Group": "Pers grupp",
+      "Description": "Kör denna när ni har ett rapportbehov!",
+      "AccessId": "00000000-0000-0000-0000-000000000000",
+      "TemplateAccessId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Period!",
+          "SqlKey": "@from_@to",
+          "Value": "",
+          "InputType": 3,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "from_to",
+          "Choices": {
+            "1": "This Week",
+            "2": "Last Week",
+            "3": "This Month",
+            "4": "Last Month",
+            "5": "This Quarter",
+            "6": "Last Quarter",
+            "7": "This Year",
+            "8": "Last Year",
+            "9999": "Custom"
+          },
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": true,
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Sql": "SELECT TOP 1000 [ProductID],[StartDate],[EndDate],[StandardCost],[ModifiedDate] FROM [Production].[ProductCostHistory] where [StartDate] between @from and @to",
+      "Id": "a70722b1-deb7-4b48-b90b-d3c651459502",
+      "Name": "Production Cost History Report",
+      "Group": "Cost",
+      "Description": "Beskrivning...22",
+      "AccessId": "37cc35cc-f1e7-4977-a83c-5a321b8acae4",
+      "TemplateAccessId": "37cc35cc-f1e7-4977-a83c-5a321b8acae4",
+      "OnScreenFormatAllowed": true,
+      "TemplateEditorAccessStyle": 1
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Kategori",
+          "SqlKey": "@category",
+          "Value": "",
+          "InputType": 1,
+          "Mandatory": true,
+          "HelpText": "Välj en kategori då",
+          "Key": "category",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": true,
+      "ConnectionId": "f7d12d58-300c-4505-a440-a5d30fc78086",
+      "Sql": "SELECT TOP 1000 [ProductID],[Name] ,[ProductNumber] from [Production].[Product] where [ProductSubcategoryID] = @category",
+      "Id": "02d2edc4-d7bf-4e45-9baf-a81e35a51199",
+      "Name": "Product List",
+      "Group": "Production",
+      "Description": "gets all products from a certain category",
+      "AccessId": "2bfdc97a-c71e-4679-881a-15214895756b",
+      "TemplateAccessId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": true,
+      "TemplateEditorAccessStyle": 0
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "HasTemplate": false,
+      "ConnectionId": "00000000-0000-0000-0000-000000000000",
+      "Sql": null,
+      "Id": "afa3d69b-6c34-4727-bdb5-ecb6aca0ff86",
+      "Name": "Test report",
+      "Group": null,
+      "Description": null,
+      "AccessId": "00000000-0000-0000-0000-000000000000",
+      "TemplateAccessId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0
+    }
+  ],
+  "LookupReports": [
+    {
+      "ConnectionId": "4f4fe880-d557-4350-ad7e-4fdb53968698",
+      "Sql": "SELECT [ProductSubcategoryID] as id,Name as Name FROM [Production].[ProductSubcategory]",
+      "Id": "6e1909bd-2f66-4a6e-9865-0efd7b3acb7a",
+      "Name": "LookupTest",
+      "Group": null,
+      "Description": "",
+      "AccessId": "00000000-0000-0000-0000-000000000000",
+      "TemplateAccessId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0
+    }
+  ],
+  "AccessLists": [
+    {
+      "Id": "2bfdc97a-c71e-4679-881a-15214895756b",
+      "Name": "Sales",
+      "ADGroup": "Sales",
+      "SplittedAdGroups": [
+        "Sales"
+      ]
+    },
+    {
+      "Id": "37cc35cc-f1e7-4977-a83c-5a321b8acae4",
+      "Name": "Only developers",
+      "ADGroup": "ACTIVE\\henrike;ACTIVE\\utvecklare",
+      "SplittedAdGroups": [
+        "ACTIVE\\henrike",
+        "ACTIVE\\utvecklare"
+      ]
+    },
+    {
+      "Id": "de216421-29c2-46b2-beb6-ea0599f33897",
+      "Name": "Test",
+      "ADGroup": "",
+      "SplittedAdGroups": []
+    }
+  ],
+  "Settings": {
+    "AdminAccess": ""
+  }
+}

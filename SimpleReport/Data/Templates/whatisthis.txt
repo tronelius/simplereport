@@ -1,0 +1,2 @@
+﻿This Folder is used for storing template files.
+The user that the app-pool is associated with needs to have write access to this folder.

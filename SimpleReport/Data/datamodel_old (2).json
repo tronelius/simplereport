@@ -1,0 +1,1706 @@
+{
+  "Connections": [
+    {
+      "Id": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Verified": true,
+      "Name": "MAS",
+      "ConnectionString": "Server=10.130.82.62;Database=SSCMonitordb;User Id=active;\nPassword=active;"
+    },
+    {
+      "Id": "57420f46-8e14-41ef-b6f0-deea7a88e6bd",
+      "Verified": true,
+      "Name": "CHIRON",
+      "ConnectionString": "Server=10.130.82.80;Database=Iris;User Id=chironreport;\nPassword=sMac20;"
+    },
+    {
+      "Id": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Verified": true,
+      "Name": "CallGuide",
+      "ConnectionString": "Server=10.130.68.52;Database=CGINTERFACE;User Id=sa;\nPassword=Sekret123;"
+    }
+  ],
+  "Reports": [
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT count (*) as AntalRyck, '4747101 Hestra' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '4747101' \nUnion \nSELECT count (*) as AntalRyck, '1469401 Helsingland' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1469401' \nUnion \nSELECT count (*) as AntalRyck, '1971901 Tjust' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1971901'  \nUnion \nSELECT count (*) as AntalRyck, '1177901 Bergslagen' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1177901'  \nUnion \nSELECT count (*) as AntalRyck, '1974201 Alingsås' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1974201'  \nUnion \nSELECT count (*) as AntalRyck, '1594101 Västra' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1594101'  \nUnion \nSELECT count (*) as AntalRyck, '1599001 Laholm' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1599001' \nUnion \nSELECT count (*) as AntalRyck, '1548801 Lekeberg' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1548801' \nUnion \nSELECT count (*) as AntalRyck, '1403101 Göinge' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1403101' \nUnion \nSELECT count (*) as AntalRyck, '6858101 Leksand' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '6858101'  \nUnion \nSELECT count (*) as AntalRyck, '9196201 Rekarne' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1916201' \nUnion \nSELECT count (*) as AntalRyck, '1840701 Vimmerby' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1840701' \nUnion \nSELECT count (*) as AntalRyck, '1474301 Härrads' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1474301' \nUnion \nSELECT count (*) as AntalRyck, '1841401 Viserums' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1841401' \nUnion \nSELECT count (*) as AntalRyck, '1936101 Roslagen' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1936101' \nUnion \nSELECT count (*) as AntalRyck, '1571201 Dalsland' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1571201' \nUnion \nSELECT count (*) as AntalRyck, '1821701 Tidaholm' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1821701' \nUnion \nSELECT count (*) as AntalRyck, '1877501 Öland' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1877501' \nUnion \nSELECT count (*) as AntalRyck, '1873601 Ålem' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '1873601' \nUnion \nSELECT count (*) as AntalRyck, '6154801 Bjursås' as Kategori \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND (c.onsite_date IS NOT NULL)\nAND e.corpacct_servco_no = '6154801' \norder by Kategori",
+      "Id": "4c104311-44de-4028-8825-4701d033ddd9",
+      "Name": "Albert Utryckningar",
+      "Group": "Albert",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT   \n\ndistinct  Convert(varchar(20),create_time,120) AS Inkom, \n          Convert(varchar(20),route_req_time,120)  AS 'Till väntelista', \n          Convert(varchar(20),contact_established_time,120)  AS Besvarat, \n          Convert(varchar(20),close_time,120)  AS Avslutat,  \nConvert(varchar(10),DATEADD(second, Datediff(second,route_req_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid,  \nConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid,\n                      source_address AS 'Samtal Från', destination_party AS 'Besvarat av', \n                      errand_desc AS Ingång, cg_hist_contact_log.errand_id, destination_address, \n                      target_domain, release_type \n\nFROM         cg_hist_contact_log INNER JOIN\n                      cg_adm_errand ON cg_hist_contact_log.errand_id = cg_adm_errand.errand_id \nwhere create_time between (@datefrom) and (@dateto)\n\n\nand errand_desc like 'K-%' \nand stop_date is NULL \nand target_domain IS NOT NULL\n\n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #2%' \nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #3%' \nand source_party IS NULL \nOrder by Inkom",
+      "Id": "420dbed4-0c31-42f3-8907-8253fb9af328",
+      "Name": "Calls IN Kundtjänst",
+      "Group": "Telefon",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Nummer",
+          "SqlKey": "@Nummer",
+          "Value": "%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Det går att söka på delar av numret. ex. %104587%",
+          "Key": "Nummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT     Convert(varchar(20),create_time,120) AS Inkom, \n           Convert(varchar(20),route_req_time,120)  AS 'Till anropskö', \n           Convert(varchar(20),contact_established_time,120)  AS Besvarat, \n           Convert(varchar(20),close_time,120) AS Avslutat, source_address AS 'A-nummer', \n           destination_party AS 'Operatör (ink.)',destination_address AS 'B-nummer', \n           target_domain AS Väntelista, release_type AS 'Avsluts Typ', \nConvert(varchar(10),DATEADD(second, Datediff(second,route_req_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid,   \nConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid\nFROM         cg_hist_contact_log\nwhere source_address LIKE @Nummer \nand create_time between (@datefrom) and (@dateto)\nORDER BY create_time DESC",
+      "Id": "cb0a9aba-c311-4e82-b401-f3368e95a9de",
+      "Name": "Sökning på A-nummer",
+      "Group": "Telefon",
+      "Description": "Inkommande nummer",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "B-nummer",
+          "SqlKey": "@Nummer",
+          "Value": "00",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Numret vi ringt. ex. 000104587000 eller delar av numret. ex. %104587%",
+          "Key": "Nummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT     \nConvert(varchar(20),create_time,120) AS Påringt, \nConvert(varchar(20),contact_established_time,120) AS Besvarat, \nConvert(varchar(20),close_time,120) AS Avslutat, \nsource_party AS Operatör, destination_address AS Telefonnummer,  \n                      release_type, \n\nConvert(varchar(10),DATEADD(second, Datediff(second,create_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid, \nConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid\nFROM         cg_hist_contact_log \nwhere destination_address LIKE @Nummer \nand create_time between (@datefrom) and (@dateto)\nORDER BY create_time DESC",
+      "Id": "19f61dc0-9e47-4752-bb21-870c1498d374",
+      "Name": "Sökning på B-nummer",
+      "Group": "Telefon",
+      "Description": "Utgående nummer",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     e.site_name AS Namn, e.site_addr1 AS Adress,e.city_name AS Ort, \n\t   Convert(varchar(20),a.alarm_server_date,120) AS Inkom, \n           Convert(varchar(20),a.first_access_server_date,120) AS Kvitterat, \n           Convert(varchar(20),a.full_clear_server_date,120) AS Avslutat, d.cs_no, \n           Convert(varchar(10),DATEADD(second, Datediff(second,a.alarm_server_date, a.first_access_server_date),'2015-01-01 00:00:00'),108) AS 'Larm till kvitterat',  \n           Convert(varchar(10),DATEADD(second, Datediff(second,a.first_access_server_date, a.full_clear_server_date),'2015-01-01 00:00:00'),108) AS Hanteringstid, \na.full_clear_opactdisp_id AS Orsakskod, operator_action_disposition.descr, a.priority, a.alarminc_no AS INCnr \n                      \nFROM       alarm_incident AS a WITH (nolock) INNER JOIN\n           system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n           site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n           operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id\nWHERE      (a.first_access_server_date > @datefrom) \n            and (a.first_access_server_date < @dateto) \nAND (d.cs_no LIKE 'CE-801648%' OR d.cs_no LIKE 'CE-801637%') \n                 AND (a.full_clear_server_date IS NOT NULL) \nOrder by Inkom ASC",
+      "Id": "77526888-a56d-4629-96d5-8a8753df8ed5",
+      "Name": "DHL",
+      "Group": "MAS",
+      "Description": "Hanteringstid DHL",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT   distinct  \n             Convert(varchar(20),create_time,120) AS Inkom, \n             Convert(varchar(20),route_req_time,120) AS 'Till väntelista', \n                           Convert(varchar(20),contact_established_time,120) AS Besvarat, \n                           Convert(varchar(20),close_time,120) AS Avslutat, \nConvert(varchar(10),DATEADD(second, Datediff(second,route_req_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid,  \nConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid,\n                          source_address AS 'Samtal Från', destination_party AS 'Besvarat av', \n                      errand_desc AS Ingång, cg_hist_contact_log.errand_id, destination_address, \n                      target_domain, release_type \n\nFROM         cg_hist_contact_log INNER JOIN\n                      cg_adm_errand ON cg_hist_contact_log.errand_id = cg_adm_errand.errand_id \nwhere create_time between (@datefrom) and (@dateto)\n\n\nand errand_desc like 'S-%' \nand stop_date is NULL\nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'H-%' \nand stop_date is NULL\nand source_party IS NULL\n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'R- %' \nand stop_date is NULL\nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #1%' \nand stop_date is NULL\nand source_party IS NULL \nOrder by Inkom",
+      "Id": "47c581cc-083b-4356-b719-b549bda35692",
+      "Name": "Calls IN Larmbord",
+      "Group": "Telefon",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "select count (*) as AntalSamtal,'Utgående Larmbord SäkC' as Kategori\t\t\nFROM         cg_hist_contact_log\n   where (create_time > @datefrom) \n    and (create_time < @dateto) \n    and (source_address in ('7171','7172','7173','7174')) \n    Union\n\t   select count (*) as AntalSamtal,'Obesvarade av dessa SäkC' as Kategori\t\t\n\t\tFROM         cg_hist_contact_log\n\t\t\twhere (create_time > @datefrom) \n\t\tand (create_time < @dateto) \n       and (contact_established_time) IS NULL \n\t\tand (source_address in ('7171','7172','7173','7174')) \n\nUnion\nselect count (*) as AntalSamtal,'Utgående Larmbord HSC' as Kategori\t\t\nFROM         cg_hist_contact_log\n   where (create_time > @datefrom) \n    and (create_time < @dateto) \n    and (source_address in ('7175','7176','7177','7178')) \nUnion\n\t\t\tselect count (*) as AntalSamtal, 'Obesvarade av dessa HSC' as Kategori\t\n\t\t\tFROM         cg_hist_contact_log\n\t\t\twhere (create_time > @datefrom) \n\t\t\tand (create_time < @dateto) \n\t\t\t       and (contact_established_time) IS NULL \n\t\t\tand (source_address in ('7175','7176','7177','7178'))  \n    Union\nselect count (*) as AntalSamtal,'Utgående Larmbord Retail' as Kategori\t\t\nFROM         cg_hist_contact_log\n   where (create_time > @datefrom) \n    and (create_time < @dateto) \n    and (source_address in ('7181','7182','7183','7184')) \n    Union\nselect count (*) as AntalSamtal,'Obesvarade av dessa Retail' as Kategori\t\n\t\t\tFROM         cg_hist_contact_log\n\t\t\twhere (create_time > @datefrom) \n\t\t\tand (create_time < @dateto) \n\t\t\tand (contact_established_time) IS NULL \n\t\t\tand (source_address in ('7181','7182','7183','7184'))\n Union\nselect count (*) as AntalSamtal,'Utgående Krisbordet' as Kategori\t\t\nFROM         cg_hist_contact_log\n   where (create_time > @datefrom) \n    and (create_time < @dateto) \n    and (source_address in ('7186')) \n    Union\nselect count (*) as AntalSamtal,'Obesvarade av dessa Krisbordet' as Kategori\t\t\n\t\t\tFROM         cg_hist_contact_log\n\t\t\twhere (create_time > @datefrom) \n\t\t\tand (create_time < @dateto) \n\t\t\tand (contact_established_time) IS NULL \n\t\t\tand (source_address in ('7186'))\nUnion   \nselect count (*) as AntalSamtal,'Utgående Kamerabordet' as Kategori\t\t\nFROM         cg_hist_contact_log\n   where (create_time > @datefrom) \n    and (create_time < @dateto) \n    and (source_address) in ('7185') \n    Union\nselect count (*) as AntalSamtal,'Obesvarade av dessa Kamerabordet' as Kategori\t\t\n\t\t\tFROM         cg_hist_contact_log\n\t\t\twhere (create_time > @datefrom) \n\t\t\tand (create_time < @dateto) \n\t\t\tand (contact_established_time) IS NULL \n\t\t\tand (source_address) in ('7185') \n    Union\nselect count (*) as AntalSamtal,'Utgående Kundtjänst' as Kategori\t\t\nFROM         cg_hist_contact_log\n   where (create_time > @datefrom) \n    and (create_time < @dateto) \n    and (source_address in ('7901','7902','7903','7904','7905','7906','7907','7908',\n\t\t\t\t\t\t\t'7909','7910','7911','7912','7913','7914','7915','7916',\n\t\t\t\t\t\t\t'7917','7918','7919','7920','7921','7922','7923','7924')) \n    Union\nselect count (*) as AntalSamtal,'Obesvarade av dessa Kundtjänst'\tas Kategori\t\n\t\t\tFROM         cg_hist_contact_log\n\t\t\twhere (create_time > @datefrom) \n\t\t\tand (create_time < @dateto) \n\t\t\tand (contact_established_time) IS NULL\n\t\t\tand (source_address in ('7901','7902','7903','7904','7905','7906','7907','7908',\n\t\t\t\t\t\t\t\t\t'7909','7910','7911','7912','7913','7914','7915','7916',\n\t\t\t\t\t\t\t\t\t'7917','7918','7919','7920','7921','7922','7923','7924')) \nUnion \nselect count (*) as AntalSamtal,'Utgående Glasburen' as Kategori\t\t\nFROM         cg_hist_contact_log\n   where (create_time > @datefrom) \n    and (create_time < @dateto) \n    and (source_address in ('7201','7202','7203','7204','7205','7206','7207')) \n    Union\nselect count (*) as AntalSamtal,'Obesvarade av dessa Glasburen' as Kategori\t\t\n\t\t\tFROM         cg_hist_contact_log\n\t\t\twhere (create_time > @datefrom) \n\t\t\tand (create_time < @dateto) \n\t\t\tand (contact_established_time) IS NULL\n\t\t\tand (source_address in ('7201','7202','7203','7204','7205','7206','7207'))",
+      "Id": "bb14d4d2-d8f1-4c42-b652-a988162762c4",
+      "Name": "Calls OUT",
+      "Group": "Telefon",
+      "Description": "Test",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT   \n\ndistinct  Convert(varchar(20),create_time,120) AS Inkom, \n          Convert(varchar(20),route_req_time,120)  AS 'Till väntelista', \n          Convert(varchar(20),contact_established_time,120)  AS Besvarat, \n          Convert(varchar(20),close_time,120)  AS Avslutat,  \nConvert(varchar(10),DATEADD(second, Datediff(second,route_req_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid, \nConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid,\n                      source_address AS 'Samtal Från', destination_party AS 'Besvarat av', \n                      errand_desc AS Ingång, cg_hist_contact_log.errand_id, destination_address, \n                      target_domain, release_type \n\nFROM         cg_hist_contact_log INNER JOIN\n                      cg_adm_errand ON cg_hist_contact_log.errand_id = cg_adm_errand.errand_id \nwhere create_time between (@datefrom) and (@dateto)\n\n\nand errand_desc like 'K-%' \nand stop_date is NULL \nand target_domain IS NOT NULL\n\n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #2%' \nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #3%' \nand source_party IS NULL \nOrder by Inkom",
+      "Id": "5f37c779-2583-4dbe-8841-fe2af435fb62",
+      "Name": "CallsIN KTJ Tove",
+      "Group": "Tove Christiansson",
+      "Description": null,
+      "AccessId": "61b15020-c90c-42ac-8e1b-f334c43770c2"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT   distinct  \n             Convert(varchar(20),create_time,120) AS Inkom, \n             Convert(varchar(20),route_req_time,120) AS 'Till väntelista', \n                           Convert(varchar(20),contact_established_time,120) AS Besvarat, \n                           Convert(varchar(20),close_time,120) AS Avslutat, \nConvert(varchar(10),DATEADD(second, Datediff(second,route_req_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid,\nConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid,\n                          source_address AS 'Samtal Från', destination_party AS 'Besvarat av', \n                      errand_desc AS Ingång, cg_hist_contact_log.errand_id, destination_address, \n                      target_domain, release_type \n\nFROM         cg_hist_contact_log INNER JOIN\n                      cg_adm_errand ON cg_hist_contact_log.errand_id = cg_adm_errand.errand_id \nwhere create_time between (@datefrom) and (@dateto)\n\n\nand errand_desc like 'S-%' \nand stop_date is NULL\nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'H-%' \nand stop_date is NULL\nand source_party IS NULL\n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'R- %' \nand stop_date is NULL\nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #1%' \nand stop_date is NULL\nand source_party IS NULL \nOrder by Inkom",
+      "Id": "33f21e96-2c59-4100-9b5e-82abf3b41cde",
+      "Name": "CallsIN Larmbord Tove",
+      "Group": "Tove Christiansson",
+      "Description": null,
+      "AccessId": "61b15020-c90c-42ac-8e1b-f334c43770c2"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@Kundnr",
+          "Value": "",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Skriv in Kundnummer",
+          "Key": "Kundnr",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     e.site_name AS Objektnamn, e.site_addr1 AS Adress, e.city_name AS Ort, CONVERT(varchar(20), a.alarm_server_date, 120) AS Inkom, \nCONVERT(varchar(20), a.first_access_server_date, 120) AS Kvitterat, \nCONVERT(varchar(20), a.full_clear_server_date, 120) AS Avslutat, \nDATEDIFF(SECOND, a.alarm_server_date, a.first_access_server_date) AS 'Larm till kvitterat (sekunder)', DATEDIFF(minute, a.first_access_server_date, a.full_clear_server_date) AS 'Hanteringstid (minuter)', \n                      operator_action_disposition.descr, site.corpacct_servco_no AS Kundnummer, service_company_1.servco_name AS Kundnamn\nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      site ON d.site_no = site.site_no INNER JOIN\n                      service_company ON a.servco_no = service_company.servco_no INNER JOIN\n                      service_company AS service_company_1 ON site.corpacct_servco_no = service_company_1.servco_no\nWHERE     (a.first_access_server_date > @datefrom) AND (a.first_access_server_date < @dateto) AND (site.corpacct_servco_no = @Kundnr)\nORDER BY Inkom DESC",
+      "Id": "2439013d-2b1b-40b5-8733-0a248de8b917",
+      "Name": "Hanteringstid Kundnummer",
+      "Group": "MAS",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT DISTINCT \nConvert(varchar(20),system_test.effective_date,120) AS 'Lagd i Service', \nConvert(varchar(20),system_test.expire_date, 120) AS 'Tagen ur Service', event_history.event_descr AS Händelse, \n                      test_category.testcat_id AS TestID, test_category.descr AS Testkategori, contact.first_name AS Förnamn, contact.last_name AS Efternamn, \n                      system_test.comment AS kommentar, system.cs_no AS 'Felaktigt Sändarnummer inlagt', site.site_name AS Kund, site.site_addr1 AS Adress, site.city_name AS Ort\nFROM         event_history INNER JOIN\n                      system ON event_history.system_no = system.system_no INNER JOIN\n                      system_test ON event_history.system_no = system_test.system_no INNER JOIN\n                      contact ON system_test.contact_no = contact.contact_no INNER JOIN\n                      site ON system.site_no = site.site_no INNER JOIN\n                      test_category ON system_test.testcat_id = test_category.testcat_id INNER JOIN\n                      contact_link ON contact.contact_no = contact_link.contact_no\nWHERE\t\t\t\t(system_test.effective_date > @datefrom) \n\t\t\t\tand (system_test.effective_date < @dateto) \nAND     (event_history.event_descr LIKE 'Lagd i%') \nAND (system_test.testcat_id = '1') \nAND (system.cs_no NOT like '%-%')\nORDER BY 'Lagd i Service'",
+      "Id": "d3c7069d-a5a7-423f-962c-a974840a8bae",
+      "Name": "MAS-mobile FEL",
+      "Group": "MAS",
+      "Description": "Lista på de som lagt in TELE-sändare i service",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT DISTINCT \nConvert(varchar(20),system_test.effective_date,120) AS 'Lagd i Service', \nConvert(varchar(20),system_test.expire_date, 120) AS 'Tagen ur Service', event_history.event_descr AS Händelse, \n                      test_category.testcat_id AS TestID, test_category.descr AS Testkategori, contact.first_name AS Förnamn, contact.last_name AS Efternamn, \n                      system_test.comment AS kommentar, system.cs_no AS 'Sändarnummer inlagt', site.site_name AS Kund, site.site_addr1 AS Adress, site.city_name AS Ort\nFROM         event_history INNER JOIN\n                      system ON event_history.system_no = system.system_no INNER JOIN\n                      system_test ON event_history.system_no = system_test.system_no INNER JOIN\n                      contact ON system_test.contact_no = contact.contact_no INNER JOIN\n                      site ON system.site_no = site.site_no INNER JOIN\n                      test_category ON system_test.testcat_id = test_category.testcat_id INNER JOIN\n                      contact_link ON contact.contact_no = contact_link.contact_no\nWHERE\t\t\t\t(system_test.effective_date > @datefrom) \n\t\t\t\tand (system_test.effective_date < @dateto) \nAND     (event_history.event_descr LIKE 'Lagd i%') \nAND (system_test.testcat_id = '1') \nAND (system.cs_no like '%-%')\nORDER BY 'Lagd i Service'",
+      "Id": "3ee26dad-fc0b-4307-979b-5a1e879b298d",
+      "Name": "MAS mobile RÄTT",
+      "Group": "MAS",
+      "Description": "De tekniker som lagt anläggningar i service korrekt",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT   \n\ndistinct  Convert(varchar(20),create_time,120) AS Inkom, \n          Convert(varchar(20),route_req_time,120)  AS 'Till väntelista', \n          Convert(varchar(20),contact_established_time,120)  AS Besvarat, \n          Convert(varchar(20),close_time,120)  AS Avslutat, \nConvert(varchar(10),DATEADD(second, Datediff(second,route_req_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid, \nConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid,\n                      source_address AS 'Samtal Från', destination_party AS 'Besvarat av', \n                      errand_desc AS Ingång, cg_hist_contact_log.errand_id, destination_address, \n                      target_domain, release_type \n\nFROM         cg_hist_contact_log INNER JOIN\n                      cg_adm_errand ON cg_hist_contact_log.errand_id = cg_adm_errand.errand_id \nwhere create_time between (@datefrom) and (@dateto)\n\n\nand errand_desc like 'K-%' \nand stop_date is NULL \nand target_domain IS NOT NULL\n\n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #2%' \nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #3%' \nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'S-%' \nand stop_date is NULL\nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'H-%' \nand stop_date is NULL\nand source_party IS NULL\n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'R- %' \nand stop_date is NULL\nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #1%' \nand stop_date is NULL\nand source_party IS NULL \n\nOrder by Inkom",
+      "Id": "67c5d00d-069f-4024-97b4-ce8b47bc927c",
+      "Name": "Calls IN SOC",
+      "Group": "Telefon",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT   \n\ndistinct  Convert(varchar(20),create_time,120) AS Inkom, \n          Convert(varchar(20),route_req_time,120)  AS 'Till väntelista', \n          Convert(varchar(20),contact_established_time,120)  AS Besvarat, \n          Convert(varchar(20),close_time,120)  AS Avslutat, \nConvert(varchar(10),DATEADD(second, Datediff(second,route_req_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid, \nConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid,\n                      source_address AS 'Samtal Från', destination_party AS 'Besvarat av', \n                      errand_desc AS Ingång, cg_hist_contact_log.errand_id, destination_address, \n                      target_domain, release_type \n\nFROM         cg_hist_contact_log INNER JOIN\n                      cg_adm_errand ON cg_hist_contact_log.errand_id = cg_adm_errand.errand_id \nwhere create_time between (@datefrom) and (@dateto)\n\n\nand errand_desc like 'K-%' \nand stop_date is NULL \nand target_domain IS NOT NULL\n\n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #2%' \nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #3%' \nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'S-%' \nand stop_date is NULL\nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'H-%' \nand stop_date is NULL\nand source_party IS NULL\n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'R- %' \nand stop_date is NULL\nand source_party IS NULL \n\nor create_time between (@datefrom) and (@dateto)\nand errand_desc like 'KC #1%' \nand stop_date is NULL\nand source_party IS NULL \n\nOrder by Inkom",
+      "Id": "1439659c-d7d0-444c-8d42-a21092dd00be",
+      "Name": "Calls IN SOC Tove",
+      "Group": "Tove Christiansson",
+      "Description": null,
+      "AccessId": "61b15020-c90c-42ac-8e1b-f334c43770c2"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     operator_action_disposition.opactdisp_id AS Orsakskod, operator_action_disposition.descr AS Kodbeskrivning, operator_action_disposition.opactdtype_id AS Orsaksgrupp, \n                      operator_action_disp_type.descr AS Gruppbeskrivning\nFROM         operator_action_disposition INNER JOIN\n                      operator_action_disp_type ON operator_action_disposition.opactdtype_id = operator_action_disp_type.opactdtype_id \n                      order by Gruppbeskrivning",
+      "Id": "4fd3977f-9647-422b-bd2d-2e61f8e8f500",
+      "Name": "Orsakskoder Tom Vetterlein",
+      "Group": "Tom Vetterlein",
+      "Description": "Koder i 100-serien är i regel orsakskoder. \nKoder över 199 är i regel åtgärdskoder",
+      "AccessId": "7dc64115-1f2a-4d09-9671-84d1afab179d"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     operator_action_disposition.opactdisp_id AS Orsakskod, operator_action_disposition.descr AS Kodbeskrivning, operator_action_disposition.opactdtype_id AS Orsaksgrupp, \n                      operator_action_disp_type.descr AS Gruppbeskrivning\nFROM         operator_action_disposition INNER JOIN\n                      operator_action_disp_type ON operator_action_disposition.opactdtype_id = operator_action_disp_type.opactdtype_id \n                      order by Gruppbeskrivning",
+      "Id": "442292eb-29df-475c-a1db-eb996c581263",
+      "Name": "Orsakskoder",
+      "Group": "MAS",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     site.udf1 AS Avtalsnummer, site.site_name AS Namn, site.site_addr1 AS Adress, site.city_name AS Ort, site.sitestat_id AS Kundstatus, site_status.descr as Beskrivning, \n                      cs_partition.descr AS Segment\nFROM         site INNER JOIN\n                      site_status ON site.sitestat_id = site_status.sitestat_id INNER JOIN\n                      cs_partition ON site.cspart_no = cs_partition.cspart_no\n\nwhere site.cspart_no = 11\nand site.udf1 != 'test' and site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%' \n\n\nor site.cspart_no = 14 --HSC \nand site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%' \n\n\n\nor site.cspart_no = 10\nand site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%'\n\n\nor site.cspart_no = 15\nand site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%'",
+      "Id": "9edec535-4aa8-47b3-85a6-5416e684f635",
+      "Name": "Antal Sites Per Brandorf",
+      "Group": "Per Brandorf",
+      "Description": "Antal anläggningar i alla segment (ögonblicksbild)",
+      "AccessId": "6c22214d-4bf6-4670-bb58-ed815f041775"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Avtalsnummer",
+          "SqlKey": "@Avtalsnummer",
+          "Value": "478601",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Skriv in avtalsnummer",
+          "Key": "Avtalsnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT DISTINCT \n                      site.udf1 AS Avtalsnummer, system.panel_id AS Larmnummer, system.alt_id AS 'Anl.nummer', site.site_name AS Namn, site.site_addr1 AS Adress, site.city_name AS Ort, \n                      site.sitestat_id AS Avtalsstatus, site_status.descr AS Beskrivning, site.cspart_no, cs_partition.descr AS Segment, site.corpacct_servco_no AS Kundnummer, \n                      service_company.servco_name AS Kundnamn\nFROM         site INNER JOIN\n                      system ON site.site_no = system.site_no INNER JOIN\n                      site_status ON site.sitestat_id = site_status.sitestat_id INNER JOIN\n                      cs_partition ON site.cspart_no = cs_partition.cspart_no INNER JOIN\n                      service_company ON site.corpacct_servco_no = service_company.servco_no\nWHERE     (site.udf1 = @Avtalsnummer) \nand system.systype_id != 'TELE'\n\nORDER BY Larmnummer",
+      "Id": "d861405e-7328-40ec-bfd3-0015ae8a736e",
+      "Name": "Anläggningar på Avtalsnummer",
+      "Group": "MAS",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Söksträng",
+          "SqlKey": "@endast",
+          "Value": "%endast%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Använd % före och efter, Default är %endast%, men skriv vad du vill.",
+          "Key": "endast",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Segment",
+          "SqlKey": "@Partition",
+          "Value": "",
+          "InputType": 4,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "Partition",
+          "Choices": {},
+          "LookupReportId": "9a387ba2-7177-4aed-b57f-dc44a75af07d"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     system.panel_id AS Larmnummer, system.cs_no AS Sändarnummer, system.systype_id AS Systemtyp, site.site_name AS Kund, site.site_addr1 AS Adress, \n                      site.site_addr2 AS Adress2, system.descr AS Sändarbeskrivning, site.cspart_no AS Partition, cs_partition.descr AS Segment, site.udf1 AS Avtalsnummer, site.corpacct_servco_no AS Kundnummer\nFROM         system INNER JOIN\n                      site ON system.site_no = site.site_no INNER JOIN\n                      cs_partition ON site.cspart_no = cs_partition.cspart_no \n\n                      where system.descr LIKE @endast \nAND site.cspart_no = @Partition",
+      "Id": "4a3355e6-2d82-4b67-aeed-83593c8e79f5",
+      "Name": "Sändarbeskrivning",
+      "Group": "MAS",
+      "Description": "Leta efter text i Beskrivning på Sändaren",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@Kundnummer",
+          "Value": "510013%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Avsluta med % för huvudkundnummer",
+          "Key": "Kundnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT DISTINCT \n                      e.udf1 AS Avtalsnr, e.site_name AS Namn, e.site_addr1 AS Adress, e.city_name AS Ort, e.corpacct_servco_no AS Kundnr, a.alarminc_no AS INCnr, \n                      CONVERT(varchar(20), b.create_date, 120) AS 'Utryckning beordrad', CONVERT(varchar(20), c.assign_date, 108) AS 'Väktare knutet till uppdrag', CONVERT(varchar(20), \n                      c.onsite_date, 108) AS 'Väktare på plats', CONVERT(varchar(20), c.clear_date, 108) AS 'Väktare lämnar(återrapporterar)', CONVERT(varchar(20), \n                      a.full_clear_server_date, 108) AS 'Ärende avslutat', a.full_clear_opactdisp_id AS Orsakskod, operator_action_disposition.descr AS 'Orsak (Op)', \n                      operator_action_disposition.opactdtype_id AS Orsaksgrupp, operator_action_disp_type.descr AS Gruppbeskrivning, \n                      DATEDIFF(MINUTE, a.first_access_server_date, c.onsite_date) AS 'Beordrad till ankomst (m)', \n                      DATEDIFF(MINUTE, c.onsite_date, c.clear_date) AS 'Väktarnärvaro (m)', \n                      DATEDIFF(MINUTE, a.first_access_server_date, a.full_clear_server_date) AS 'Hanteringstid (m)', e.cspart_no AS 'Segment (partition)', agency.agency_name AS Vaktbolag \n                      \nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no INNER JOIN\n                      operator_action_disp_type ON operator_action_disposition.opactdtype_id = operator_action_disp_type.opactdtype_id\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND e.corpacct_servco_no like @Kundnummer\nOrder by e.udf1",
+      "Id": "833e87ee-b5a7-4306-9363-7db02a993122",
+      "Name": "Utryckningar Kundnummer",
+      "Group": "MAS",
+      "Description": "Utryckningar per kundnummer",
+      "AccessId": "e56211fd-ef51-4204-b678-a76f87a73405"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Avtalsnummer",
+          "SqlKey": "@Avtalsnummer",
+          "Value": "",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "ex. 281583",
+          "Key": "Avtalsnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT DISTINCT \n                      e.udf1 AS Avtalsnr, e.site_name AS Namn, e.site_addr1 AS Adress, e.city_name AS Ort, e.corpacct_servco_no AS Kundnr, a.alarminc_no AS INCnr, \n                      CONVERT(varchar(20), b.create_date, 120) AS 'Utryckning beordrad', CONVERT(varchar(20), c.assign_date, 108) AS 'Väktare knutet till uppdrag', CONVERT(varchar(20), \n                      c.onsite_date, 108) AS 'Väktare på plats', CONVERT(varchar(20), c.clear_date, 108) AS 'Väktare lämnar(återrapporterar)', CONVERT(varchar(20), \n                      a.full_clear_server_date, 108) AS 'Ärende avslutat', operator_action_disposition.opactdisp_id AS Orsakskod, operator_action_disposition.descr AS 'Orsak (Op)', operator_action_disposition.opactdtype_id AS Orsaksgrupp, \n                      operator_action_disp_type.descr AS Gruppbeskrivning, DATEDIFF(MINUTE, a.first_access_server_date, c.onsite_date) AS 'Beordrad till ankomst (m)', \n                      DATEDIFF(MINUTE, c.onsite_date, c.clear_date) AS 'Väktarnärvaro (m)', DATEDIFF(MINUTE, a.first_access_server_date, a.full_clear_server_date) \n                      AS 'Hanteringstid (m)', e.cspart_no AS 'Segment (partition)', agency.agency_name AS Vaktbolag\nFROM         alarm_incident AS a WITH (nolock) INNER JOIN\n                      job_summary AS b WITH (nolock) ON a.job_no = b.job_no INNER JOIN\n                      job_employee_summary AS c WITH (nolock) ON a.job_no = c.job_no INNER JOIN\n                      system AS d WITH (nolock) ON a.system_no = d.system_no INNER JOIN\n                      site AS e WITH (nolock) ON d.site_no = e.site_no INNER JOIN\n                      operator_action_disposition ON a.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disposition AS operator_action_disposition_1 ON b.jobcause_id = operator_action_disposition_1.opactdisp_id INNER JOIN\n                      agency ON a.agency_no = agency.agency_no INNER JOIN\n                      employee ON a.first_emp_no = employee.emp_no INNER JOIN\n                      employee AS employee_1 ON a.full_clear_emp_no = employee_1.emp_no INNER JOIN\n                      operator_action_disp_type ON operator_action_disposition.opactdtype_id = operator_action_disp_type.opactdtype_id\nWHERE     (a.first_access_server_date BETWEEN @datefrom AND @dateto) \nAND e.udf1 = @Avtalsnummer\nOrder by e.udf1",
+      "Id": "ca9858ca-2d49-4d18-9152-23411a0b5c92",
+      "Name": "Utryckningar Avtalsnummer",
+      "Group": "MAS",
+      "Description": null,
+      "AccessId": "e56211fd-ef51-4204-b678-a76f87a73405"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@Kundnummer",
+          "Value": "5100139%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "% måste vara med",
+          "Key": "Kundnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT      site.site_name, site.site_addr1, site.city_name, \n\t\t\tCONVERT(varchar(20),alarm_incident.alarm_server_date,120) AS Larmtid, \n\t\t\talarm_incident.servtype_id AS Larmkategori, service_type.descr AS Kategoribeskrivning, \n                       alarm_incident.full_clear_opactdisp_id AS Orsakskod, \n                      operator_action_disposition.descr AS Orsak, system.cs_no AS Larmnummer, site.udf1 AS Avtalsnr, \n                      alarm_incident.alarm_zone_id, site.corpacct_servco_no AS Kundnummer\nFROM         alarm_incident INNER JOIN\n                      employee ON alarm_incident.first_emp_no = employee.emp_no INNER JOIN\n                      operator_action_disposition ON alarm_incident.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      system ON alarm_incident.system_no = system.system_no INNER JOIN\n                      event ON alarm_incident.event_id = event.event_id INNER JOIN\n                      service_type ON alarm_incident.servtype_id = service_type.servtype_id INNER JOIN\n                      site ON system.site_no = site.site_no\nWHERE     alarm_incident.alarm_server_date BETWEEN @datefrom AND @dateto  and status = 'f' \nand (site.corpacct_servco_no LIKE @Kundnummer) \norder by Kundnummer, Avtalsnr, alarm_server_date",
+      "Id": "94d41fb9-e2a5-4fba-9679-c3f1d9e8cdfa",
+      "Name": "Larmjournal Kundnnummer",
+      "Group": "MAS",
+      "Description": "Larmjournal Kundnummer",
+      "AccessId": "e56211fd-ef51-4204-b678-a76f87a73405"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     COUNT(*) AS 'Antal', alarm_incident.full_clear_opactdisp_id AS Kod, operator_action_disposition.descr AS Orsak, system.panel_id AS Larmnummer, site.site_name AS Namn, site.site_addr1 AS Adress, \n                      site.city_name AS Ort, site.corpacct_servco_no AS Kundnummer, service_company.servco_name AS 'Knr-Namn'\nFROM         alarm_incident WITH (nolock) INNER JOIN\n                      system WITH (nolock) ON alarm_incident.system_no = system.system_no INNER JOIN\n                      site WITH (nolock) ON system.site_no = site.site_no INNER JOIN\n                      employee ON alarm_incident.first_emp_no = employee.emp_no INNER JOIN\n                      operator_action_disposition ON alarm_incident.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      service_company ON site.corpacct_servco_no = service_company.servco_no\nWHERE     (alarm_incident.first_access_server_date > @datefrom) AND (alarm_incident.first_access_server_date < @dateto) AND \n                      (alarm_incident.full_clear_opactdisp_id = '381' OR\n                      alarm_incident.full_clear_opactdisp_id = '382') AND (alarm_incident.first_emp_no IS NOT NULL)\nGROUP BY alarm_incident.full_clear_opactdisp_id, operator_action_disposition.descr, operator_action_disposition.opactdisp_id, site.site_name, site.site_addr1, \n                      site.city_name, system.panel_id, site.corpacct_servco_no, service_company.servco_name\nORDER BY 'Antal' DESC",
+      "Id": "d1675f6a-5e76-412e-ae86-8f4e38add2ed",
+      "Name": "Fjärråtgärder",
+      "Group": "MAS",
+      "Description": "Listar vilka kunder vi gjort fjärråtgärd \n381 - Fjärrsupport \n382 - Fjärradministration",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@Kundnummer",
+          "Value": "510015%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Skriv in kundnummer, (% som suffix kan utgöra huvudkundnummer)",
+          "Key": "Kundnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT DISTINCT \n                      system.panel_id, system.cs_no, site.site_name, site.site_addr1, site.city_name, holiday_schedule.holiday_id, holiday.descr, CONVERT(varchar(20), \n                      holiday_schedule.open_time, 108) AS OpenTime, CONVERT(varchar(20), holiday_schedule.close_time, 108) AS CloseTime, site.corpacct_servco_no, \n                      service_company.servco_name\nFROM         site INNER JOIN\n                      system ON site.site_no = system.site_no INNER JOIN\n                      system_schedule ON system.system_no = system_schedule.system_no INNER JOIN\n                      holiday_schedule ON system.system_no = holiday_schedule.system_no INNER JOIN\n                      holiday ON holiday_schedule.holiday_id = holiday.holiday_id INNER JOIN\n                      service_company ON site.corpacct_servco_no = service_company.servco_no\nwhere site.corpacct_servco_no like @Kundnummer and site.cspart_no = '15'\n\norder by panel_id",
+      "Id": "c641f51e-223e-4f6b-91e7-a458080c5b7d",
+      "Name": "Helgdagar Tom Vetterlein",
+      "Group": "Tom Vetterlein",
+      "Description": null,
+      "AccessId": "7dc64115-1f2a-4d09-9671-84d1afab179d"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Larmnummer",
+          "SqlKey": "@Larmnummer",
+          "Value": "",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "Larmnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     COUNT(*) AS 'Antal', alarm_incident.full_clear_opactdisp_id AS Kod, operator_action_disposition.descr AS Orsak, \n                      operator_action_disposition.opactdtype_id AS Kodgrupp, operator_action_disp_type.descr AS Orsaksgrupp, system.panel_id, site.site_name, site.site_addr1, \n                      site.city_name\nFROM         alarm_incident WITH (nolock) INNER JOIN\n                      system WITH (nolock) ON alarm_incident.system_no = system.system_no INNER JOIN\n                      site WITH (nolock) ON system.site_no = site.site_no INNER JOIN\n                      employee ON alarm_incident.first_emp_no = employee.emp_no INNER JOIN\n                      operator_action_disposition ON alarm_incident.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disp_type ON operator_action_disposition.opactdtype_id = operator_action_disp_type.opactdtype_id\nWHERE     (alarm_incident.first_access_server_date > @datefrom) AND (alarm_incident.first_access_server_date < @dateto) AND (system.panel_id = @Larmnummer) AND \n                      (alarm_incident.first_emp_no IS NOT NULL) AND site.cspart_no = '15'\nGROUP BY alarm_incident.full_clear_opactdisp_id, operator_action_disposition.descr, operator_action_disposition.opactdisp_id, operator_action_disposition.opactdtype_id, \n                      operator_action_disp_type.descr, system.panel_id, site.site_name, site.site_addr1, site.city_name",
+      "Id": "ee6728ae-1465-4e4a-9e25-a5eb3fd0da9c",
+      "Name": "Orsaksstatistik Larmnr.",
+      "Group": "MAS",
+      "Description": "Orsaksstatistik per Larmnummer",
+      "AccessId": "e56211fd-ef51-4204-b678-a76f87a73405"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@Kundnummer",
+          "Value": "5100139%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "% måste finnas med",
+          "Key": "Kundnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Kod",
+          "SqlKey": "@Kod1",
+          "Value": "1%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "% måste finnas med",
+          "Key": "Kod1",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     COUNT(*) AS 'Antal', alarm_incident.full_clear_opactdisp_id AS Kod, operator_action_disposition.descr AS Orsak, \n                      operator_action_disposition.opactdtype_id AS Kodgrupp, operator_action_disp_type.descr AS Orsaksgrupp, site.corpacct_servco_no AS Kundnummer, \n                      service_company.servco_name AS Namn, system.panel_id AS Larmnummer, \nsite.site_name AS Objekt, site.site_addr1 AS Adress, site.city_name AS Ort\nFROM         alarm_incident WITH (nolock) INNER JOIN\n                      system WITH (nolock) ON alarm_incident.system_no = system.system_no INNER JOIN\n                      site WITH (nolock) ON system.site_no = site.site_no INNER JOIN\n                      employee ON alarm_incident.first_emp_no = employee.emp_no INNER JOIN\n                      operator_action_disposition ON alarm_incident.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      operator_action_disp_type ON operator_action_disposition.opactdtype_id = operator_action_disp_type.opactdtype_id INNER JOIN\n                      service_company ON site.corpacct_servco_no = service_company.servco_no\nWHERE     (alarm_incident.first_access_server_date > @datefrom) AND (alarm_incident.first_access_server_date < @dateto) AND (site.corpacct_servco_no LIKE @Kundnummer) \n                      AND (alarm_incident.full_clear_opactdisp_id LIKE @Kod1) AND site.cspart_no = '15'\n\nGROUP BY alarm_incident.full_clear_opactdisp_id, operator_action_disposition.descr, operator_action_disposition.opactdisp_id, operator_action_disposition.opactdtype_id, \n                      operator_action_disp_type.descr, site.corpacct_servco_no, service_company.servco_no, service_company.servco_name, system.panel_id, site.site_addr1, \n                      site.city_name, site.site_name\nORDER BY Kod",
+      "Id": "9ce1734c-4800-4f2e-b047-26554aced9a9",
+      "Name": "MAS Orsaksstatistik Kundnr.",
+      "Group": "MAS",
+      "Description": "Orsaksstatik per kundnummer",
+      "AccessId": "e56211fd-ef51-4204-b678-a76f87a73405"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@Kundnummer",
+          "Value": "5100139%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Ex.51001395",
+          "Key": "Kundnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Larmtyp",
+          "SqlKey": "@Larmtyp",
+          "Value": "BL%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Ex. BL% (Bråklarm) (%måste finnas med)",
+          "Key": "Larmtyp",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT  distinct   system.panel_id AS Larmnummer, system.cs_no AS Sändarnummer, site.site_name AS Kund, site.site_addr1 AS Adress, site.city_name AS Ort, zone.zone_id AS Sektion, processing_rule.event_id AS Larmtyp, event.descr AS Beskrivning, zone.comment AS 'detektor/kommentar', \n                      site.corpacct_servco_no AS Kundnummer\nFROM         system INNER JOIN\n                      site ON system.site_no = site.site_no INNER JOIN\n                      zone ON system.system_no = zone.system_no INNER JOIN\n                      processing_rule ON system.system_no = processing_rule.system_no AND zone.zone_id = processing_rule.zone_id INNER JOIN\n                      event ON processing_rule.event_id = event.event_id\nWHERE     (site.corpacct_servco_no LIKE @Kundnummer)\n                                 and (system.cs_no LIKE '%-%') \n                                 and (processing_rule.event_id LIKE @Larmtyp) \n                                 and site.cspart_no = '15'\n\nOrder  by cs_no",
+      "Id": "491b9489-2cd0-45a6-ae62-83ee83706dbe",
+      "Name": "Sektioner på kund",
+      "Group": "MAS",
+      "Description": "Listar sektioner på kunder, urval på kundnamn + ev. larmtyp",
+      "AccessId": "e56211fd-ef51-4204-b678-a76f87a73405"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@Kundnummer",
+          "Value": "510013913",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "hela kundnumret",
+          "Key": "Kundnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     CONVERT(varchar(20), event_history.event_date, 120) AS Tid, event_history.event_id, event_history.area AS Larmområde, event_history.user_id, \n                      event_history.user_name, event_history.zone_comment AS kommentar, site.site_name AS Namn, site.site_addr1 AS Adress, site.city_name AS Ort, \n                      system.panel_id AS Larmnummer, site.udf1 AS Avtalsnummer, site.corpacct_servco_no, service_company.servco_name\nFROM         event_history INNER JOIN\n                      system ON event_history.system_no = system.system_no INNER JOIN\n                      site ON system.site_no = site.site_no INNER JOIN\n                      service_company ON site.corpacct_servco_no = service_company.servco_no\nwhere     event_history.event_date BETWEEN @datefrom AND @dateto  \nand     (site.corpacct_servco_no = @Kundnummer) \nand (event_history.event_id = 'FR' or event_history.event_id = 'TI') \nand site.cspart_no = '15'\norder by Avtalsnummer, event_date",
+      "Id": "bd2df73c-8f77-4768-9a3b-7cb7582345ee",
+      "Name": "Kundnummer TilloFrån",
+      "Group": "MAS",
+      "Description": "Till och frånkopplingar sorterat på avtal, tid. \nRätt tung rapport, sök inte på längre tid än en månad.",
+      "AccessId": "e56211fd-ef51-4204-b678-a76f87a73405"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "HasTemplate": false,
+      "MailSubject": "ss232131231232323",
+      "MailText": "tt1231231231231231231222323",
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": true,
+      "TemplateEditorAccessStyle": 1,
+      "SubscriptionAccessStyle": 1,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     employee.emp_no, employee.first_name, employee.last_name, \nsec_user.sec_user, sec_user.sec_group, CONVERT(varchar(10),employee.start_date,120) AS Börjat,\nCONVERT(varchar(10),employee.end_date,120) AS Slutat\nFROM      sec_user INNER JOIN\n           employee ON sec_user.change_id = employee.emp_no\n                      order by emp_no",
+      "Id": "2734c599-5e37-4083-84cc-1f878edd9410",
+      "Name": "Användare i MAS",
+      "Group": "MAS",
+      "Description": "Vilka har inloggning i MAS",
+      "AccessId": "e0492c49-8689-4019-baa0-2d32908ef3d3"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "HasTemplate": false,
+      "MailSubject": "aaa",
+      "MailText": "bbbb",
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     site.udf1 AS Avtalsnummer, site.site_name AS Namn, site.site_addr1 AS Adress, site.city_name AS Ort, site.sitestat_id AS Kundstatus, site_status.descr as Beskrivning, \n                      cs_partition.descr AS Segment\nFROM         site INNER JOIN\n                      site_status ON site.sitestat_id = site_status.sitestat_id INNER JOIN\n                      cs_partition ON site.cspart_no = cs_partition.cspart_no\n\nwhere site.cspart_no = 11\nand site.udf1 != 'test' and site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%' \n\n\nor site.cspart_no = 14 --HSC \nand site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%' \n\n\n\nor site.cspart_no = 10\nand site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%'\n\n\nor site.cspart_no = 15\nand site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%'",
+      "Id": "0fa79364-8a08-4aa5-8c71-88b15b8abf14",
+      "Name": "Antal Sites Tove",
+      "Group": "Tove Christiansson",
+      "Description": "Antal anläggningar i alla segment (ögonblicksbild)",
+      "AccessId": "61b15020-c90c-42ac-8e1b-f334c43770c2"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Segment",
+          "SqlKey": "@Partition",
+          "Value": "",
+          "InputType": 4,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "Partition",
+          "Choices": {},
+          "LookupReportId": "9a387ba2-7177-4aed-b57f-dc44a75af07d"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": "Per22",
+      "MailText": "Johan nilsson",
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT  distinct  system.panel_id, system.cs_no, site.udf1 AS Avtal, site.site_name, site.site_addr1, site.city_name, site_general_info.geninfo_id, site.sitestat_id, site_status.descr, site.corpacct_servco_no, \n                      cs_partition.descr AS Segment\nFROM         site INNER JOIN\n                      site_general_info ON site.site_no = site_general_info.site_no INNER JOIN\n                      site_status ON site.sitestat_id = site_status.sitestat_id INNER JOIN\n                      cs_partition ON site.cspart_no = cs_partition.cspart_no INNER JOIN\n                      system ON site.site_no = system.site_no\n                      AND site.cspart_no = @Partition \norder by Avtal",
+      "Id": "88f1519e-3b8f-4338-9591-1d4ecfd65489",
+      "Name": "Centralapparater",
+      "Group": "MAS",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@Kundnummer",
+          "Value": "510015%",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Skriv in kundnummer, (% som suffix kan utgöra huvudkundnummer)",
+          "Key": "Kundnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": "Pert",
+      "MailText": "Mamma",
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT DISTINCT \n                      system.panel_id, system.cs_no, site.site_name, site.site_addr1, site.city_name, holiday_schedule.holiday_id, holiday.descr, CONVERT(varchar(20), \n                      holiday_schedule.open_time, 108) AS OpenTime, CONVERT(varchar(20), holiday_schedule.close_time, 108) AS CloseTime, site.corpacct_servco_no, \n                      service_company.servco_name\nFROM         site INNER JOIN\n                      system ON site.site_no = system.site_no INNER JOIN\n                      system_schedule ON system.system_no = system_schedule.system_no INNER JOIN\n                      holiday_schedule ON system.system_no = holiday_schedule.system_no INNER JOIN\n                      holiday ON holiday_schedule.holiday_id = holiday.holiday_id INNER JOIN\n                      service_company ON site.corpacct_servco_no = service_company.servco_no\nwhere site.corpacct_servco_no like @Kundnummer\n\norder by panel_id",
+      "Id": "a9574e74-6e05-4ca3-821c-6c196a9dc871",
+      "Name": "MAS Helgdagar Kundnummer",
+      "Group": "MAS",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 1,
+      "SubscriptionAccessStyle": 1,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT   Convert(varchar(20),create_time,120) AS Inkom, \n\t\tConvert(varchar(20),route_req_time,120) AS 'Till väntelista', \n\t\tConvert(varchar(20),contact_established_time,120) AS Besvarat, \n\t\tConvert(varchar(20),close_time,120) AS Avslutat, \n\t\tConvert(varchar(10),DATEADD(second, Datediff(second,route_req_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid, \n\t\tConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid,\n\t\tsource_address AS 'Samtal Från', destination_party AS 'Besvarat av', \n\t\terrand_desc AS Ingång, cg_hist_contact_log.errand_id, destination_address, target_domain, release_type  \n\t\t\n\n\nFROM         cg_hist_contact_log INNER JOIN\n                      cg_adm_errand ON cg_hist_contact_log.errand_id = cg_adm_errand.errand_id\n\n\n\nwhere (cg_adm_errand.errand_desc like 'R- ICA%') \nand stop_date is NULL \nand source_party is NULL\nand create_time between (@datefrom) and (@dateto)\n\nORDER BY create_time",
+      "Id": "2348a4e9-8f9a-4a47-88a9-85882f6fddb5",
+      "Name": "ICA",
+      "Group": "Telefon",
+      "Description": null,
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "7683856a-b30c-4e25-8cb4-6227b579ec4a",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 1,
+      "SubscriptionAccessStyle": 1,
+      "ConnectionId": "c87f9bc9-91cb-4db2-9a00-eb3946c70a29",
+      "Sql": "SELECT     \n\t\tConvert(varchar(20),route_req_time,120) AS 'Till väntelista', \n\t\tConvert(varchar(20),contact_established_time,120) AS Besvarat, \n\t\tConvert(varchar(20),close_time,120) AS Avslutat, \n\t\tConvert(varchar(10),DATEADD(second, Datediff(second,route_req_time,contact_established_time),'2015-01-01 00:00:00'),108) AS Svarstid,  \n\t\tConvert(varchar(10),DATEADD(second, Datediff(second,contact_established_time,close_time),'2015-01-01 00:00:00'),108) AS Samtalstid,\n\t\tsource_address AS 'Samtal Från', destination_party AS 'Besvarat av', \n\t\terrand_desc AS Ingång, release_type \n\nFROM         cg_hist_contact_log INNER JOIN\n                      cg_adm_errand ON cg_hist_contact_log.errand_id = cg_adm_errand.errand_id\n\nwhere (cg_hist_contact_log.errand_id = '42') \nand source_party is NULL \nand stop_date is NULL \nand create_time between (@datefrom) and (@dateto)\n\norder by 'Till väntelista'",
+      "Id": "09e8bdbb-2bd9-4365-899f-260c413656f3",
+      "Name": "Swedavia",
+      "Group": "Telefon",
+      "Description": null,
+      "AccessId": "84a139dd-a98a-457c-9309-942e7b7781c3"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "HasTemplate": false,
+      "MailSubject": "Subject",
+      "MailText": "Body",
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": true,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "57420f46-8e14-41ef-b6f0-deea7a88e6bd",
+      "Sql": "SELECT RTRIM(AccountName) as [Account Number],\nRTRIM(Description) as [Description],\nSimCardNumber as [SIM Card ICC],\nDiallerIdentification as [Dialler Model],\nCASE\n      WHEN PollOK = 1 THEN 'Polling'\n      ELSE 'Not Polling'\nEND as [Polling Status]\nFROM [IRIS].[dbo].[SQL_GetDiallerRTD] ()",
+      "Id": "4c745709-f51f-45bc-bcbd-0360d261bc26",
+      "Name": "Diallers",
+      "Group": "Chiron",
+      "Description": "Rapporten visar alla upplagda sändare med ver och SIM samt om den pollar",
+      "AccessId": "e0492c49-8689-4019-baa0-2d32908ef3d3"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Partition/Segment",
+          "SqlKey": "@Partition",
+          "Value": "",
+          "InputType": 4,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "Partition",
+          "Choices": {},
+          "LookupReportId": "9a387ba2-7177-4aed-b57f-dc44a75af07d"
+        },
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "Kl. 00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     event.descr AS Eventbeskrivning, alarm_incident.servtype_id AS Larmkategori, CONVERT(varchar(20), alarm_incident.alarm_server_date, 108) AS Larmtid, \n                      CONVERT(varchar(20), alarm_incident.first_access_server_date, 108) AS Kvitterat, CONVERT(varchar(20), alarm_incident.full_clear_server_date, 108) AS Avslutat, \n                      cs_partition.descr AS Segment\nFROM         alarm_incident INNER JOIN\n                      employee ON alarm_incident.first_emp_no = employee.emp_no INNER JOIN\n                      operator_action_disposition ON alarm_incident.full_clear_opactdisp_id = operator_action_disposition.opactdisp_id INNER JOIN\n                      system ON alarm_incident.system_no = system.system_no INNER JOIN\n                      event ON alarm_incident.event_id = event.event_id INNER JOIN\n                      service_type ON alarm_incident.servtype_id = service_type.servtype_id INNER JOIN\n                      site ON system.site_no = site.site_no INNER JOIN\n                      cs_partition ON site.cspart_no = cs_partition.cspart_no\nWHERE (alarm_server_date > @datefrom) AND  (alarm_server_date < @dateto) and status = 'f' AND site.cspart_no = \n@Partition",
+      "Id": "48cb0b82-b5ce-44ec-8ca6-0d58df9964ee",
+      "Name": "Incidenter (Dutch)",
+      "Group": "",
+      "Description": "Visar alla incidenter som skett under en viss tidperiod",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "00000000-0000-0000-0000-000000000000",
+      "Sql": null,
+      "Id": "cc652587-ba8d-4fb7-9a2e-f4105a597966",
+      "Name": "Test utan sub",
+      "Group": "utan sub",
+      "Description": null,
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "ny par",
+          "SqlKey": "@per",
+          "Value": "",
+          "InputType": 4,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "per",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": "a",
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT     site.udf1 AS Avtalsnummer, site.site_name AS Namn, site.site_addr1 AS Adress, site.city_name AS Ort, site.sitestat_id AS Kundstatus, site_status.descr as Beskrivning, \n                      cs_partition.descr AS Segment\nFROM         site INNER JOIN\n                      site_status ON site.sitestat_id = site_status.sitestat_id INNER JOIN\n                      cs_partition ON site.cspart_no = cs_partition.cspart_no\n\nwhere site.cspart_no = 11\nand site.udf1 != 'test' and site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%' \n\n\nor site.cspart_no = 14 --HSC \nand site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%' \n\n\n\nor site.cspart_no = 10\nand site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%'\n\n\nor site.cspart_no = 15\nand site_name NOT LIKE '%RCVR%' and site_name NOT LIKE '%Test%' and site_name NOT LIKE 'OD%' and site_name NOT LIKE '%Unknow%' \nand site_name NOT LIKE '%Systemlar%' and site_name NOT LIKE '%MAS' and site_name NOT LIKE '%meddelar%' and site_name NOT LIKE '%kollar%' \nand site_name NOT LIKE '%Signal Format%' and site_name NOT LIKE '%processor%' and site_name NOT LIKE '%SRT MALL%' \nand site_name NOT LIKE '%larmsignal%' and site_name NOT LIKE '%jobb till%' and site_name NOT LIKE '%säkerhetscenter%' \nand site_name NOT LIKE '%vakans%' and site_name NOT LIKE '%Kontaktperson%' and site_addr1 NOT LIKE '%ringlista%' \nand site_addr1 NOT LIKE '%ändra%' and site_addr1 NOT LIKE '%LARM Mottagare%' \nand site_name NOT LIKE 'Redundancy%' and site_addr1 NOT LIKE '%do not delete%' \nand site_name NOT LIKE '%Sekundära larm Alert%'\nand site_name NOT LIKE '%Påminnelse%' \nand site_name NOT LIKE '%FOP-rapport%' \nand site_name NOT LIKE '%OKÄNDA SÄNDAR%' \nand site_name NOT LIKE '%MAILKORG%'\nand site_addr1 NOT LIKE '%får ej tagas%' \nand site_name NOT LIKE 'Mottagare via Ale%' \nand site_name NOT LIKE 'System 3 mottaga%'\nand p = @per",
+      "Id": "b1ff873e-0a63-4814-9ec2-05f084e49981",
+      "Name": "Antal Sites",
+      "Group": "MAS",
+      "Description": "Antal anläggningar i alla segment (ögonblicksbild) 222",
+      "AccessId": "5a951e0c-79ad-412b-8dec-4becb049e7bf"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Från",
+          "SqlKey": "@datefrom",
+          "Value": "",
+          "InputType": 1,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "datefrom",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Till",
+          "SqlKey": "@dateto",
+          "Value": "",
+          "InputType": 2,
+          "Mandatory": true,
+          "HelpText": "00:00",
+          "Key": "dateto",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@kundnummer",
+          "Value": "510013901",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "Hela kundnumret ex. 510013901",
+          "Key": "kundnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": false,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT DISTINCT \n                      CONVERT(varchar(20),system_test.effective_date,120) AS 'Lagd i provläge', CONVERT(varchar(20),system_test.expire_date,120) AS 'Tagen ur provläge', event_history.event_descr AS Händelse, \n                      test_category.testcat_id AS TestID, test_category.descr AS Testkategori, contact.first_name AS Förnamn, contact.last_name AS Efternamn, \n                      system_test.comment AS kommentar, system.panel_id AS Larmnummer,site.site_name AS Kund, site.site_addr1 AS Adress, site.city_name AS Ort, \n                      site.corpacct_servco_no AS Kundnummer, service_company.servco_name AS Namn\nFROM         event_history INNER JOIN\n                      system ON event_history.system_no = system.system_no INNER JOIN\n                      system_test ON event_history.system_no = system_test.system_no INNER JOIN\n                      contact ON system_test.contact_no = contact.contact_no INNER JOIN\n                      site ON system.site_no = site.site_no INNER JOIN\n                      test_category ON system_test.testcat_id = test_category.testcat_id INNER JOIN\n                      service_company ON site.corpacct_servco_no = service_company.servco_no\nWHERE     (system_test.effective_date > @datefrom) AND (system_test.effective_date < @dateto) AND (event_history.event_descr LIKE 'Lagd i%') \n  AND (system.cs_no LIKE '%-%') \n  AND (site.corpacct_servco_no = @kundnummer) \nAND site.cspart_no = '15'\nORDER BY 'Larmnummer'",
+      "Id": "e0f1385a-fe0f-4351-83b0-c9cd6452e712",
+      "Name": "Anläggningar i Testläge",
+      "Group": "MAS",
+      "Description": "Vilka anläggningar har lagts i service-, prov-, testläge etc.",
+      "AccessId": "e56211fd-ef51-4204-b678-a76f87a73405"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "Kundnummer",
+          "SqlKey": "@Kundnummer",
+          "Value": "5100139%",
+          "InputType": 1,
+          "Mandatory": true,
+          "HelpText": "Avsluta med %-tecken, fungerar även att söka på huvudkundnummer",
+          "Key": "Kundnummer",
+          "Choices": {},
+          "LookupReportId": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": true,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "SELECT DISTINCT \n                      site.udf1 AS Avtalsnummer, system.panel_id AS Larmnummer, site.site_name AS Namn, site.site_addr1 AS Adress, site.city_name AS Ort, \n                      site.sitestat_id AS Avtalsstatus, site_status.descr AS Beskrivning, site.cspart_no, cs_partition.descr AS Segment, site.corpacct_servco_no AS Kundnummer, \n                      service_company.servco_name AS Kundnamn, site.sitetype_id, site_type.descr\nFROM         site INNER JOIN\n                      system ON site.site_no = system.site_no INNER JOIN \n                      site_status ON site.sitestat_id = site_status.sitestat_id INNER JOIN\n                      cs_partition ON site.cspart_no = cs_partition.cspart_no INNER JOIN\n                      service_company ON site.corpacct_servco_no = service_company.servco_no INNER JOIN\n                      site_type ON site.sitetype_id = site_type.sitetype_id\nWHERE     (site.corpacct_servco_no LIKE @Kundnummer) AND site.cspart_no = '15'\n\nORDER BY Larmnummer",
+      "Id": "a45d092f-accd-41f8-8e6c-b999c7de07b3",
+      "Name": "Anläggningar på Kundnummer",
+      "Group": "MAS",
+      "Description": null,
+      "AccessId": "e56211fd-ef51-4204-b678-a76f87a73405"
+    },
+    {
+      "ResultType": 0,
+      "Parameters": [
+        {
+          "Label": "",
+          "SqlKey": "@per",
+          "Value": "",
+          "InputType": 0,
+          "Mandatory": true,
+          "HelpText": "",
+          "Key": "per",
+          "Choices": {},
+          "LookupReportId": "9a387ba2-7177-4aed-b57f-dc44a75af07d"
+        }
+      ],
+      "HasTemplate": false,
+      "MailSubject": null,
+      "MailText": null,
+      "ReportOwnerId": "00000000-0000-0000-0000-000000000000",
+      "OnScreenFormatAllowed": true,
+      "TemplateEditorAccessStyle": 0,
+      "SubscriptionAccessStyle": 0,
+      "ConnectionId": "57420f46-8e14-41ef-b6f0-deea7a88e6bd",
+      "Sql": "select p =@per",
+      "Id": "3ba95ddf-6082-472b-9f4c-f85e03a15f2b",
+      "Name": "Testrapport",
+      "Group": "Hepp",
+      "Description": null,
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "LookupReports": [
+    {
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "select cspart_no as id, cp.descr as name from [cs_partition] cp where cspart_no in (10,11,15)",
+      "Id": "9a387ba2-7177-4aed-b57f-dc44a75af07d",
+      "Name": "Partition",
+      "Group": null,
+      "Description": null,
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ConnectionId": "a041333b-6e60-44eb-b02a-4ce250062c2e",
+      "Sql": "select apa as id, monkey as name",
+      "Id": "97849309-ab8c-4680-82ad-f3dfff2a2c79",
+      "Name": "Apa",
+      "Group": null,
+      "Description": null,
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ConnectionId": "57420f46-8e14-41ef-b6f0-deea7a88e6bd",
+      "Sql": null,
+      "Id": "e2be2c95-b093-4cd5-9208-846eda289bc8",
+      "Name": "hehehhe",
+      "Group": null,
+      "Description": null,
+      "AccessId": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "AccessLists": [
+    {
+      "Id": "3e857529-f80f-4ac8-99a8-458e91bfc97a",
+      "Name": "Endast sales",
+      "ADGroup": null,
+      "SplittedAdGroups": []
+    },
+    {
+      "Id": "e0492c49-8689-4019-baa0-2d32908ef3d3",
+      "Name": "SUP",
+      "ADGroup": "AMERICAS\\pxl0527a: AMERICAS\\axf0730a",
+      "SplittedAdGroups": [
+        "AMERICAS\\pxl0527a: AMERICAS\\axf0730a"
+      ]
+    },
+    {
+      "Id": "afbe6a3b-09d4-49f1-a750-3f3464d2ad65",
+      "Name": "Erik Lindgren",
+      "ADGroup": "AMERICAS\\esl1225",
+      "SplittedAdGroups": [
+        "AMERICAS\\esl1225"
+      ]
+    },
+    {
+      "Id": "7dc64115-1f2a-4d09-9671-84d1afab179d",
+      "Name": "Tom Vetterlein",
+      "ADGroup": "AMERICAS\\tnv0325",
+      "SplittedAdGroups": [
+        "AMERICAS\\tnv0325"
+      ]
+    },
+    {
+      "Id": "61b15020-c90c-42ac-8e1b-f334c43770c2",
+      "Name": "Tove Christiansson",
+      "ADGroup": "AMERICAS\\tec0828",
+      "SplittedAdGroups": [
+        "AMERICAS\\tec0828"
+      ]
+    },
+    {
+      "Id": "84a139dd-a98a-457c-9309-942e7b7781c3",
+      "Name": "Jennie Johansson",
+      "ADGroup": "AMERICAS\\SE CSC SakerhetsCenter Alla-RW-G;AMERICAS\\jmj0921",
+      "SplittedAdGroups": [
+        "AMERICAS\\SE CSC SakerhetsCenter Alla-RW-G",
+        "AMERICAS\\jmj0921"
+      ]
+    },
+    {
+      "Id": "5a951e0c-79ad-412b-8dec-4becb049e7bf",
+      "Name": "SOC Internt",
+      "ADGroup": "AMERICAS\\SE CSC SakerhetsCenter Alla-RW-G",
+      "SplittedAdGroups": [
+        "AMERICAS\\SE CSC SakerhetsCenter Alla-RW-G"
+      ]
+    },
+    {
+      "Id": "6c22214d-4bf6-4670-bb58-ed815f041775",
+      "Name": "Per Brandorf",
+      "ADGroup": "AMERICAS\\pbb0611",
+      "SplittedAdGroups": [
+        "AMERICAS\\pbb0611"
+      ]
+    },
+    {
+      "Id": "e56211fd-ef51-4204-b678-a76f87a73405",
+      "Name": "Retail Försäljning",
+      "ADGroup": "AMERICAS\\SE CSC SakerhetsCenter Alla-RW-G;AMERICAS\\SE CSC Stockholm Response Forsaljning-RW-G;AMERICAS\\tec0828",
+      "SplittedAdGroups": [
+        "AMERICAS\\SE CSC SakerhetsCenter Alla-RW-G",
+        "AMERICAS\\SE CSC Stockholm Response Forsaljning-RW-G",
+        "AMERICAS\\tec0828"
+      ]
+    }
+  ],
+  "Settings": {
+    "AdminAccess": ""
+  }
+}
