@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Security.Principal;
-using System.Web.UI.WebControls;
 
 namespace SimpleReport.Model
 {
@@ -16,27 +14,43 @@ namespace SimpleReport.Model
         ReportOwner,
         Anyone
     }
+
+    public enum TemplateFormat
+    {
+        Empty=0,
+        Excel=1,
+        Word=2
+    }
     
     public class Report : LookupReport
     {
-        public ResultType ResultType { get; set; }
         public ParameterList Parameters { get; set; }
-        public bool HasTemplate { get; set; }
+
+        public bool HasTemplate
+        {
+            get { return TemplateFormat != TemplateFormat.Empty; }
+        }
+
         public string MailSubject { get; set; }
         public string MailText { get; set; }
         
-      
+
 
         public bool OnScreenFormatAllowed { get; set; }
         public AccessStyle TemplateEditorAccessStyle { get; set; }
         public AccessStyle SubscriptionAccessStyle { get; set; }
+        public TemplateFormat TemplateFormat { get; set; }
 
         public Report()
         {
-            ResultType= ResultType.SimpleExcel;
             Parameters = new ParameterList();
         } 
 
+        //public Report(Guid id, string name, string description, Guid connectionId, string sql, List<Parameter> parameters, ResultType resultType, string group) : base(id,name, description,connectionId,sql, group)
+        //{
+        //    Parameters = new ParameterList(parameters);
+        //    ResultType = resultType;
+        //}
 
         public bool IsParameterValueValid()
         {
@@ -100,7 +114,8 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
+            DataTable result = ADO.GetResults(Connection, Sql, parameters);
 
             var raw = new RawReportResult
             {
@@ -116,8 +131,25 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
-            return new Result(this.ResultType, result, this, templateData);
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
+            DataTable result = ADO.GetResults(Connection, Sql, parameters);
+            return new ExcelResult(result, this, templateData);
+        }
+
+        public Result ExecuteWithWordTemplate(byte[] templateData)
+        {
+            if (Connection == null)
+                throw new Exception("Missing Connection in report");
+
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
+            var result = ADO.GetMultipleResults(Connection, Sql, parameters);
+            return new WordResult(result, this, templateData);
+        }
+
+        public void UpdateSql(string sql)
+        {
+            //some parameters need to modify the sql to work, like when we have an in-clause and need to replace one param with many.
+            Sql = sql;
         }
 
         private string Stringify(object obj)
@@ -127,7 +159,5 @@ namespace SimpleReport.Model
 
             return obj.ToString();
         }
-
-       
     }
 }

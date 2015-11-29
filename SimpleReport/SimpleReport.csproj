@@ -175,6 +175,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Content\bootstrap-multiselect.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\AdminLTE.css" />
@@ -233,6 +234,7 @@
     <Content Include="Scripts\app\report\report-controller.js" />
     <Content Include="Scripts\app\report\subscription-editor.js" />
     <Content Include="Scripts\app\schedule\module.js" />
+    <Content Include="Scripts\app\shared\directives\multiselectdropdown.js" />
     <Content Include="Scripts\app\shared\directives\on-screen-report.js" />
     <Content Include="Scripts\app\shared\directives\template-upload.js" />
     <Content Include="Scripts\app\shared\elements\datepicker-boostrap.js" />
@@ -266,6 +268,7 @@
     <Content Include="Content\js\app.min.js.map">
       <DependentUpon>app.min.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\lib\bootstrap-multiselect.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Scripts\lib\angular.min.js.map" />

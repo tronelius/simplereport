@@ -4,7 +4,7 @@
             scope: { reportid: '=', hasReportTemplate: '=' },
             controller: [
                 '$scope', 'Upload', function ($scope, upload) {
-                    var baseDownloadUrl = 'Home/DownloadTemplate?ReportId = ';
+                    var baseDownloadUrl = 'Home/DownloadTemplate?ReportId=';
 
                     $scope.$watch('hasReportTemplate', function (val) {
                         if (val)

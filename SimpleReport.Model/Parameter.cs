@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -22,12 +23,12 @@ namespace SimpleReport.Model
         {
         }
 
-        public List<SqlParameter> CreateParameters()
+        public List<SqlParameter> CreateParameters(string sql, Action<string> updateSqlAction)
         {
             List<SqlParameter> paramList = new List<SqlParameter>();
             foreach (Parameter parameter in this)
             {
-                paramList.AddRange(parameter.GetSqlParameter());
+                paramList.AddRange(parameter.GetSqlParameter(sql, updateSqlAction));
             }
             return paramList;
         }
@@ -57,13 +58,13 @@ namespace SimpleReport.Model
         public string HelpText { get; set; }
         public string Key { get { return SqlKey.Replace("@", ""); } }
 
-        public Dictionary<string, string> Choices { get; protected set; }
+        public List<KeyValuePair<string, string>> Choices { get; protected set; }
         public Guid? LookupReportId { get; set; }
         [NonSerialized] public LookupReport LookupReport;
         public Guid ReportId { get; set; }
         public Parameter()
         {
-            Choices = new Dictionary<string, string>();
+            Choices = new List<KeyValuePair<string, string>>();
         }
 
 
@@ -79,7 +80,8 @@ namespace SimpleReport.Model
                 {
                     valueList = GetValueListBasedOnPeriod(period);
                 }
-            } else if (valueList[0].Contains(":"))//this is custom, it starts with the enum value and then the actuall value. ENUM:FROM_TO
+            }
+            else if (valueList[0].Contains(":"))//this is custom, it starts with the enum value and then the actuall value. ENUM:FROM_TO
             {
                 valueList = Value.Split(':')[1].Split(SPLITCHAR);
             }
@@ -91,6 +93,36 @@ namespace SimpleReport.Model
             {
                 yield return new SqlParameter(keyList[i], valueList[i]);
             }
+        }
+
+        public List<SqlParameter> GetSqlParameterForLookup(string query, Action<string> updateSqlAction)
+        {
+            string[] valueList = Value.Split(',');
+
+            var sqlparams = new List<SqlParameter>();
+
+            //We replace @param with @param1,@param2 to handle in-clauses
+            if (valueList.Length > 1)
+            {
+                var newParams = new List<string>();
+                for (int i = 0; i < valueList.Length; i++)
+                {
+                    var np = "@" + Key + i;
+                    newParams.Add(np);
+                    sqlparams.Add(new SqlParameter(np, valueList[i]));
+                }
+
+                var replacement = string.Join(",", newParams);
+
+                var newQuery = query.Replace("@" + Key, replacement);
+                updateSqlAction(newQuery);
+            }
+            else
+            {
+                sqlparams.Add(new SqlParameter(Key, Value));
+        }
+
+            return sqlparams;
         }
 
         private string[] GetValueListBasedOnPeriod(ParameterPeriods period)
@@ -119,10 +151,12 @@ namespace SimpleReport.Model
             }
         }
 
-        public IEnumerable<SqlParameter> GetSqlParameter()
+        public IEnumerable<SqlParameter> GetSqlParameter(string query, Action<string> updateSqlAction)
         {
             if (InputType == ParameterInputType.Period)
                 return GetSqlParameterForPeriod();
+            if (InputType == ParameterInputType.Lookup)
+                return GetSqlParameterForLookup(query, updateSqlAction);
             return new List<SqlParameter>() { new SqlParameter(this.SqlKey, this.Value) };
         }
 
@@ -135,16 +169,18 @@ namespace SimpleReport.Model
 
         public void SetDefaultValuesForPeriod()
         {
-            Choices = new Dictionary<string, string>();
-            Choices.Add(((int)ParameterPeriods.ThisWeek).ToString(), "This Week");
-            Choices.Add(((int)ParameterPeriods.LastWeek).ToString(), "Last Week");
-            Choices.Add(((int)ParameterPeriods.ThisMonth).ToString(), "This Month");
-            Choices.Add(((int)ParameterPeriods.LastMonth).ToString(), "Last Month");
-            Choices.Add(((int)ParameterPeriods.ThisQuarter).ToString(), "This Quarter");
-            Choices.Add(((int)ParameterPeriods.LastQuarter).ToString(), "Last Quarter");
-            Choices.Add(((int)ParameterPeriods.ThisYear).ToString(), "This Year");
-            Choices.Add(((int)ParameterPeriods.LastYear).ToString(), "Last Year");
-            Choices.Add(((int)ParameterPeriods.Custom).ToString(), "Custom");
+            var dict = new Dictionary<string, string>();
+            dict.Add(((int)ParameterPeriods.ThisWeek).ToString(), "This Week");
+            dict.Add(((int)ParameterPeriods.LastWeek).ToString(), "Last Week");
+            dict.Add(((int)ParameterPeriods.ThisMonth).ToString(), "This Month");
+            dict.Add(((int)ParameterPeriods.LastMonth).ToString(), "Last Month");
+            dict.Add(((int)ParameterPeriods.ThisQuarter).ToString(), "This Quarter");
+            dict.Add(((int)ParameterPeriods.LastQuarter).ToString(), "Last Quarter");
+            dict.Add(((int)ParameterPeriods.ThisYear).ToString(), "This Year");
+            dict.Add(((int)ParameterPeriods.LastYear).ToString(), "Last Year");
+            dict.Add(((int)ParameterPeriods.Custom).ToString(), "Custom");
+
+            Choices = dict.ToList();
         }
     }
 
@@ -168,6 +204,8 @@ namespace SimpleReport.Model
         Integer = 1,
         Date = 2,
         Period = 3,
-        Lookup = 4
+        Lookup = 4,
+        SyncedDate = 5,
+        SyncedRunningDate = 6
     }
 }

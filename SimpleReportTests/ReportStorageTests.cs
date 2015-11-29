@@ -62,12 +62,12 @@ namespace SimpleReportTests
         {
             Report rpt = new Report();
             rpt.Id = _reportguid;
-            rpt.HasTemplate = false;
+            rpt.TemplateFormat = TemplateFormat.Empty;
             rpt.MailSubject = "Testsubject";
             rpt.MailText = "TestText";
             rpt.OnScreenFormatAllowed = true;
             rpt.ReportOwnerAccessId = Guid.Empty;
-            rpt.ResultType = ResultType.SimpleExcel;
+            //rpt.ResultType = ResultType.SimpleExcel;
             rpt.SubscriptionAccessStyle = AccessStyle.Anyone;
             rpt.TemplateEditorAccessStyle = AccessStyle.Anyone;
             rpt.AccessId = _accessId;

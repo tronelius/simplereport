@@ -8,10 +8,11 @@ using System.Web;
 using Newtonsoft.Json;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
+using SimpleReport.Model.Storage.JsonConverters;
 
 namespace SimpleReport.Model.Storage
 {
-    public class FileStorage :IStorage
+    public class FileStorage : IStorage
     {
         private readonly ILogger _logger;
         private readonly IStorageHelper _storageHelper;
@@ -24,13 +25,14 @@ namespace SimpleReport.Model.Storage
             _logger = logger;
             _storageHelper = storageHelper;
             _filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "datamodel.json");
-            try {
+            try
+            {
                 _dataModel = LoadModel();
             }
             catch (FileNotFoundException fex)
             {
                 //autoinitialize storage
-                logger.Warn("filestorage not initialized, file not found at:"+fex.FileName);
+                logger.Warn("filestorage not initialized, file not found at:" + fex.FileName);
                 InitializeStorage();
                 _dataModel = LoadModel();
             }
@@ -43,7 +45,7 @@ namespace SimpleReport.Model.Storage
 
         public void InitializeStorage()
         {
-            using (File.Create(_filename));
+            using (File.Create(_filename)) ;
             ReportDataModel model = new ReportDataModel();
             SaveModel(model);
         }
@@ -68,27 +70,36 @@ namespace SimpleReport.Model.Storage
        
 
         public void ClearModel()
-        {
+            {
             SaveModel(null);
         }
 
-        public void SaveTemplate(byte[] data, Guid reportId)
+        public void SaveTemplate(byte[] data, string fileEnding, Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            if (!fileEnding.StartsWith("."))
+                fileEnding = "." + fileEnding;
+
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + fileEnding);
             File.WriteAllBytes(filepath, data);
         }
 
         public Template GetTemplate(Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            var filepath = GetFilePath(reportId);
             var bytes = File.ReadAllBytes(filepath);
-            return new Template {Bytes = bytes, Mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel", Filename = reportId + ".xlsx"};
+            return new Template { Bytes = bytes, Filename = Path.GetFileName(filepath) };
         }
 
         public void DeleteTemplate(Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            var filepath = GetFilePath(reportId);
             File.Delete(filepath);
+        }
+
+        private string GetFilePath(Guid reportId)
+        {
+            var id = reportId.ToString();
+            return Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates")).First(x => Path.GetFileNameWithoutExtension(x) == id);
         }
 
         public IEnumerable<ReportInfo> GetAllReportInfos()
@@ -107,7 +118,7 @@ namespace SimpleReport.Model.Storage
 
         public Report GetReport(Guid id)
         {
-            var report =_dataModel.Reports.FirstOrDefault(r => r.Id == id);
+            var report = _dataModel.Reports.FirstOrDefault(r => r.Id == id);
             if (report == null)
                 return null; //throw new EntityNotFoundException("Report not found");
 
@@ -202,7 +213,7 @@ namespace SimpleReport.Model.Storage
 
         public LookupReport GetLookupReport(Guid id)
         {
-            var report =  _dataModel.LookupReports.FirstOrDefault(c => c.Id == id);
+            var report = _dataModel.LookupReports.FirstOrDefault(c => c.Id == id);
             if (report == null)
                 throw new EntityNotFoundException("Lookup report not found");
             LoadAndSetConnection(report);

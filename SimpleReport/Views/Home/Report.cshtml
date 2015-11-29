@@ -49,7 +49,6 @@
                         <div data-ng-repeat="par in viewModel.Report.Parameters track by par.Key" data-ng-class="{ 'col-xs-12 col-sm-6 col-md-4 col-lg-3' : par.InputType != @((int)ParameterInputType.Period), 'col-xs-12 col-sm-12 col-md-8 col-lg-6' : par.InputType == @((int)ParameterInputType.Period)}">
                             <div class="form-group">
                                 <label class="control-label" for="{{par.Key}}">{{par.Label}}</label>
-
                                 <div data-ng-switch="par.InputType">
                                     <input data-ng-switch-when="@((int) ParameterInputType.Integer)" data-numeric data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" data-ng-model="par.Value" placeholder="Integer" class="numeric form-control">
 
@@ -62,7 +61,7 @@
 
                                     <div data-ng-switch-when="@((int) ParameterInputType.Period)">
                                         <input type="hidden" value="{{par.Value}}" name="{{par.Key}}" />
-                                        <select data-ng-required="{{par.Mandatory}}" class="form-control" data-ng-options="k as v for (k,v) in par.Choices" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
+                                        <select data-ng-required="{{par.Mandatory}}" class="form-control" data-ng-options="c.Key as c.Value for c in par.Choices" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
                                             <option value="">[Please Choose...]</option>
                                         </select>
                                         <div data-ng-show="par.EnumValue === '9999'">
@@ -71,10 +70,15 @@
                                         </div>
                                     </div>
 
-                                    <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.Value">
-                                        <option value="">[Please Choose...]</option>
-                                        <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
+                                    <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" multiselect-dropdown data-msd-value="par.Value" data-msd-choices="par.Choices" multiple="multiple">
                                     </select>
+
+                                    <div data-ng-switch-when="@((int) ParameterInputType.SyncedDate)">
+                                        <input type="hidden" value="SyncedDate" name="{{par.Key}}"/>
+                                    </div>
+                                    <div data-ng-switch-when="@((int) ParameterInputType.SyncedRunningDate)">
+                                        <input type="hidden" value="SyncedRunningDate" name="{{par.Key}}" />
+                                    </div>
 
                                     <input data-ng-switch-default type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="String">
                                 </div>

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using SimpleReport.Model.Storage.JsonConverters;
 
 namespace SimpleReport.Model.Storage
 {
@@ -15,20 +16,28 @@ namespace SimpleReport.Model.Storage
             using (JsonWriter jw = new JsonTextWriter(sw))
             {
                 jw.Formatting = Formatting.Indented;
-                JsonSerializer serializer = new JsonSerializer();
+                var serializer = GetJsonSerializer();
                 serializer.Serialize(jw, data);
             }
         }
 
         public ReportDataModel ReadModelFromStream(Stream stream)
         {
-            JsonSerializer serializer = new JsonSerializer();
+            var serializer = GetJsonSerializer();
             TextReader treader = new StreamReader(stream);
             JsonReader reader = new JsonTextReader(treader);
             ReportDataModel data = serializer.Deserialize<ReportDataModel>(reader);
             //todo handle empty file...
             return data;
         }
+        private static JsonSerializer GetJsonSerializer()
+        {
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.Converters.Add(new ParameterJsonConverter());
+            return serializer;
+        }
+
+
     }
 
     public interface IStorageHelper
