@@ -79,5 +79,13 @@ namespace Worker.Common.Repository
                 return list.ToList();
             }
         }
+
+        public void DeleteAll()
+        {
+            using (SqlConnection cn = EnsureOpenConnection())
+            {
+                cn.Execute("Delete from Subscription");
+            }
+        }
     }
 }

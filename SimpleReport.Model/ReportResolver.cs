@@ -31,12 +31,14 @@ namespace SimpleReport.Model
             IEnumerable<Parameter> lookupParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Lookup);
             foreach (Parameter lookupParameter in lookupParameters)
             {
-                LookupReport rpt = Storage.GetLookupReport(lookupParameter.LookupReportId);
+                if (lookupParameter.LookupReportId.HasValue) { 
+                    LookupReport rpt = lookupParameter.LookupReport ?? Storage.GetLookupReport(lookupParameter.LookupReportId.Value);
                 if (rpt != null) {
                     if (lookupParameter.Choices != null)
                         lookupParameter.Choices.Clear();
-                    rpt.Execute().ToList().ForEach(rp => lookupParameter.Choices.Add(rp.Key,rp.Value));
+                    rpt.Execute().ToList().ForEach(rp => lookupParameter.Choices.Add(new KeyValuePair<string, string>(rp.Key,rp.Value)));
                 }
+            }
             }
 
             IEnumerable<Parameter> periodParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Period);
@@ -46,6 +48,8 @@ namespace SimpleReport.Model
             }
             return report;
         }
+
+
     }
 
    

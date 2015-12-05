@@ -44,5 +44,6 @@ namespace Worker.Common.Migrations
         {
             Migrate(x => x.MigrateUp());
         }
+
     }
 }

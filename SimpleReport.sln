@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleReport", "SimpleReport\SimpleReport.csproj", "{922FCA31-5DB3-4C4D-88DE-C8B92D0332C1}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerWebApi", "WorkerWebApi\WorkerWebApi.csproj", "{8103753C-3A6B-4E1A-8ADA-FA2714BA8806}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker.Common", "Worker.Common\Worker.Common.csproj", "{D4A0D1AA-7691-43CE-B200-78ACD671D32D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleReportTests", "SimpleReportTests\SimpleReportTests.csproj", "{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{D4A0D1AA-7691-43CE-B200-78ACD671D32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4A0D1AA-7691-43CE-B200-78ACD671D32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4A0D1AA-7691-43CE-B200-78ACD671D32D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

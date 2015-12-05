@@ -10,8 +10,12 @@ namespace SimpleReport.Model.Storage
         ReportDataModel LoadModel();
         void SaveModel(ReportDataModel data);
 
+        void ClearModel();
+
+        IEnumerable<ReportInfo> GetAllReportInfos();
+
         IEnumerable<Report> GetAllReports();
-        //IEnumerable<Report> GetReportsForMe(IPrincipal user);
+
         Report GetReport(Guid id);
         bool SaveReport(Report report);
 
@@ -24,7 +28,7 @@ namespace SimpleReport.Model.Storage
         bool SaveLookupReport(LookupReport lookupReport);
 
         IEnumerable<Access> GetAccessLists();
-        Access GetAccessList(Guid id);
+        Access GetAccessList(Guid? id);
         bool SaveAccessList(Access accesslist);
         DeleteInfo DeleteAccessList(Access acc);
 
@@ -33,9 +37,10 @@ namespace SimpleReport.Model.Storage
 
         DeleteInfo DeleteConnection(Connection connection);
         DeleteInfo DeleteLookupReport(LookupReport lookupReport);
-        DeleteInfo DeleteReport(Report report);
-        void SaveTemplate(byte[] file, Guid reportId);
+        DeleteInfo DeleteReport(ReportInfo report);
+        void SaveTemplate(byte[] file, string fileEnding, Guid reportId);
         Template GetTemplate(Guid reportId);
         void DeleteTemplate(Guid reportId);
+
     }
 }

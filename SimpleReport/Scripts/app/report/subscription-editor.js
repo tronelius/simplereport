@@ -52,7 +52,7 @@
 
                     var params = reportUrlHelper.toUrlByIdAndParams($scope.reportId, $scope.reportParameters);
 
-                    var data = angular.extend({ ReportId: $scope.reportId, ReportParams: params }, $scope.subscription);
+                    var data = angular.extend($scope.subscription, { ReportId: $scope.reportId, ReportParams: params });
                     subscriptionRepository.save(data).success(function (data) {
                         if (data.Error) {
                             toastr.error(data.Error);

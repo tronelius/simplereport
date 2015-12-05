@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Principal;
 
 namespace SimpleReport.Model
@@ -17,5 +18,21 @@ namespace SimpleReport.Model
         {
             
         }
+
+        public Dictionary<string, string> ToDictionary()
+        {
+            Dictionary<string,string> dict = new Dictionary<string, string>();
+            dict.Add("AdminAccess",AdminAccess);
+            return dict;
+        }
+
+        public static Settings CreateSettingsFromDictionary(Dictionary<string, string> fromDictionary)
+        {
+            Settings settings = new Settings();
+            if (fromDictionary.ContainsKey("AdminAccess"))
+                settings.AdminAccess = fromDictionary["AdminAccess"];
+            return settings;
+        }
+
     }
 }

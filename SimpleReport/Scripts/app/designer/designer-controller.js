@@ -1,4 +1,5 @@
-﻿angular.module('designer').controller('designerController', ['$scope', '$http', 'subscriptionRepository', function ($scope, $http, subscriptionRepository) {
+﻿//Desperate need for refactoring... but later...
+angular.module('designer').controller('designerController', ['$scope', '$http', 'subscriptionRepository', 'designerRepository','Upload', function ($scope, $http, subscriptionRepository, designerRepository,upload) {
     $scope.activeTab = 'report';
 
     $scope.init = function () {
@@ -183,6 +184,9 @@
     $scope.saveReport = function (force) {
         $scope.showSaveConfirmation = false;
 
+        if (!$scope.report.ConnectionId)
+            return;
+
         if ($scope.SubscriptionEnabled && !force && $scope.report.warnForParameterChanges) {
             if (hasMadeInvalidParameterChanges()) {
                 $scope.showSaveConfirmation = true;
@@ -259,7 +263,7 @@
             if (data.Success) {
                 toastr.success("Connection verified", "OK!");
             } else {
-                toastr.error("Connectionstring is not valid, and vill not work", "Not OK!");
+                toastr.error("Connectionstring is not valid and wont work", "Not OK!");
             }
         }).error(function (data) {
             toastr.error("Server error when verifing the connection.", "Error");
@@ -393,5 +397,34 @@
             toastr.error("Server error when saving settings.", "Error");
         });
     };
-
+    $scope.exportModel = function () {
+        window.open(designerRepository.exportModelUrl(), '_blank', '');
+    };
+    $scope.importModel = function(files) {
+        if (files && files.length) {
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                upload.upload({
+                    url: 'api/Designer/ImportModel',
+                    file: file
+                }).success(function (data, status, headers, config) {
+                    if (!data.error) {
+                        toastr.success("New data model imported!");
+                    } else {
+                        toastr.error(data.error);
+                    }
+                }).error(function () {
+                    toastr.error("Couldn't upload the file, please try again.", "Error");
+                });
+            }
+        }
+    }
+    $scope.clearModel = function (force) {
+        if (!force) {
+            $scope.showClearConfirmation = true;
+        } else {
+            designerRepository.clearModel();
+            $scope.showClearConfirmation = false;
+        }
+    };
 }]);

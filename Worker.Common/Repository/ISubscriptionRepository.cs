@@ -14,5 +14,6 @@ namespace Worker.Common.Repository
         void UpdateTemplateText(UpdateTemplateText updateTemplateText);
         void SendNow(int id);
         List<Subscription> GetSubscriptionsWithSendDateBefore(DateTime now, int maxFailed);
+        void DeleteAll();
     }
 }

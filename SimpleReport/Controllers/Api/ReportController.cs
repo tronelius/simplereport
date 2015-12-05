@@ -20,7 +20,7 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 _adminAccess.IsAllowedForMe(User);
-                var result = _reportStorage.GetAllReports().Select(x => new { x.Id, x.Name });
+                var result = _reportStorage.GetAllReportInfos().Select(x => new { x.Id, x.Name });
                 return Ok(result);
             }
             catch (Exception ex)

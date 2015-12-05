@@ -24,6 +24,7 @@ namespace Worker.Common.Model
         public string MailSubject { get; set; }
         public string MailText { get; set; }
         public DateTime? LastRun { get; set; }
+        public DateTime? SyncedDate { get; set; }
 
         public string Validate()
         {

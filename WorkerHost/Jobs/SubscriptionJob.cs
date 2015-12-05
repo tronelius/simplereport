@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Owin;
 using Quartz;
 using Worker.Common.Api;
 using Worker.Common.Common;
@@ -81,14 +82,23 @@ namespace WorkerHost.Jobs
                     subscription.Status = SubscriptionStatus.Ongoing;
                     _subscriptionRepository.Update(subscription);
 
-                    var reportData = _workerApiClient.GetExcelReport(subscription.ReportParams);
-                    if (reportData != null && reportData.Length > 0 || subscription.SendEmptyEmails)
+                    var newSyncedDate = DateTime.Now;
+                    var oldSyncedDate = subscription.SyncedDate ?? DateTime.Now;
+                    var reportParams = subscription.ReportParams;
+
+                    //there are basically here so that we can run the report with known dates. like, we want everything that happened since last sync to now, where now is a known date so that if we run the query again an hour later, we known exactly where we left off
+                    reportParams = reportParams.Replace("=SyncedDate", "=" + oldSyncedDate);
+                    reportParams = reportParams.Replace("=SyncedRunningDate", "=" + newSyncedDate);
+
+                    var reportResult = _workerApiClient.GetReport(reportParams);
+                    if (reportResult != null && reportResult.Data.Length > 0 || subscription.SendEmptyEmails)
                     {
-                        _mailSender.Send(subscription.MailSubject, subscription.MailText, subscription.To, subscription.Cc, subscription.Bcc, reportData);
+                        _mailSender.Send(subscription.MailSubject, subscription.MailText, subscription.To, subscription.Cc, subscription.Bcc, reportResult.Data, reportResult.FileName);
                         subscription.LastSent = DateTime.Now;
                     }
                     
                     subscription.Status = SubscriptionStatus.Success;
+                    subscription.SyncedDate = newSyncedDate;
                     subscription.SetNextSendDate(schedule.Cron);
                     subscription.FailedAttempts = 0;
                 }

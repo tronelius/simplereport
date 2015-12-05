@@ -39,7 +39,7 @@
 
              function save() {
                  if (!$scope.schedule.Name || !$scope.schedule.Cron) {
-                     toastr.warn('A Schedule needs both a name and an interval');
+                     toastr.warn('A schedule needs both a name and an interval');
                  }
 
                  scheduleRepository.save($scope.schedule).success(function (data) {

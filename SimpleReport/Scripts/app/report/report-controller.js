@@ -2,6 +2,11 @@
 
     $scope.init = function () {
         viewModel.Report.Parameters.forEach(function (param) {
+            if (param.InputType === 5) //SyncedDate
+                param.Value = 'SyncedDate';
+            if (param.InputType === 6) //SyncedRunningDate
+                param.Value = 'SyncedRunningDate';
+
             //periods of type custom comes on the format Enum:from_to
             if (param.InputType === 3) { //period
                 if (param.Value && ~param.Value.indexOf(':')) {

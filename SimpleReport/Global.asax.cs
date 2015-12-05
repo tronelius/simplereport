@@ -15,6 +15,7 @@ using SimpleReport.Helpers;
 using SimpleReport.Model;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
+using SimpleReport.Model.Storage.SQL;
 
 namespace SimpleReport
 {
@@ -36,7 +37,8 @@ namespace SimpleReport
         protected override IKernel CreateKernel()
         {
             var kernel = new StandardKernel();
-            kernel.Bind<IStorage>().To<FileStorage>().InRequestScope();
+            kernel.Bind<IStorageHelper>().To<StorageHelper>();
+            kernel.Bind<IStorage>().To<SQLStorage>().InRequestScope();
             kernel.Bind<ILogger>().To<Nlogger>();
             kernel.Bind<IApiClient>().To<ApiClient>();
             kernel.Bind<IApplicationSettings>().To<ApplicationSettings>().InSingletonScope();
