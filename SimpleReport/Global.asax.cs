@@ -38,6 +38,8 @@ namespace SimpleReport
             var kernel = new StandardKernel();
             kernel.Bind<IStorage>().To<FileStorage>().InRequestScope();
             kernel.Bind<ILogger>().To<Nlogger>();
+            kernel.Bind<IApiClient>().To<ApiClient>();
+            kernel.Bind<IApplicationSettings>().To<ApplicationSettings>().InSingletonScope();
             kernel.BindFilter<HandleMyOwnErrorAttribute>(FilterScope.Controller, 0);
             kernel.Bind<ReportResolver>().ToSelf();
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);

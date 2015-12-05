@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleReport.Model
 {
     public static class ADO
     {
-        public static DataTable GetResults<T>(Connection conn, string query, IEnumerable<SqlParameter> param)
+        public static DataTable GetResults(Connection conn, string query, IEnumerable<SqlParameter> param)
         {
             using (SqlConnection cn = GetOpenConnection(conn))
             {
@@ -18,7 +16,7 @@ namespace SimpleReport.Model
                 {
                     SqlCommand cmd = null;
                     DataTable table = new DataTable();
-                    cmd = cn.CreateCommand();
+                    cmd = CreateCommand(cn);
                     cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure ;
                     cmd.CommandText = query;
                     if (param != null)
@@ -36,6 +34,33 @@ namespace SimpleReport.Model
                     cn.Close();
                 }
             }
+        }
+
+        public static IDataReader GetDataReaderResults(Connection conn, string query, IEnumerable<SqlParameter> param)
+        {
+            SqlConnection cn = GetOpenConnection(conn);
+            try
+            {
+                SqlCommand cmd = null;
+                cmd = CreateCommand(cn);
+                cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
+                cmd.CommandText = query;
+                if (param != null)
+                    cmd.Parameters.AddRange(param.ToArray());
+                return cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            }
+            catch (Exception ex)
+            {
+                cn.Close();
+                throw;
+            }
+        }
+
+        private static SqlCommand CreateCommand(SqlConnection cn)
+        {
+            var cmd= cn.CreateCommand();
+            cmd.CommandTimeout = 60;
+            return cmd;
         }
 
         private static SqlConnection GetOpenConnection(Connection conn)

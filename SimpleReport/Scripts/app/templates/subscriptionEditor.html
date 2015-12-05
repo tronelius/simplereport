@@ -1,0 +1,78 @@
+﻿<div>
+    <div class="overlay" data-ng-if="!subscription">
+        <i class="fa fa-refresh fa-spin"></i>
+    </div>
+
+    <form role="form" name="form" novalidate ng-show="subscription" class="">
+        <div class="row">
+            <div class="col-xs-12">
+                <label data-ng-show="subscriptionId">Edit Subscription</label>
+                <label data-ng-show="!subscriptionId">Create Subscription</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-5">
+                <div class="">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <div class="form-group">
+                                    <label class="control-label" title="Primary recipient(s). Separate with ;">To</label>
+                                    <div>
+                                        <input type="text" ng-model="subscription.To" data-emails class="form-control" placeholder="To" title="Primary recipient(s). Separate with ;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="form-group">
+                                    <label class="control-label" title="The name of the schedule">Schedule</label>
+                                    <div>
+                                        <select ng-model="subscription.ScheduleId" class="form-control" placeholder="Schedule" title="The name of the schedule to use for this subscription" ng-options="schedule.Id as schedule.Name for schedule in schedules" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label" title="Others that might be interested in this report">Copy to (cc)</label>
+                                    <div>
+                                        <input type="text" ng-model="subscription.Cc" data-emails class="form-control" placeholder="CC" title="Others that might be interested in this report">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label" title="Recipients that are hidden">Blind copy (bcc)</label>
+                                    <div>
+                                        <input type="text" ng-model="subscription.Bcc" data-emails class="form-control" placeholder="BCC" title="Recipients that are hidden">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label" title="Should reports be sent if they contain no data?">Send empty reports</label>
+                                    <div>
+                                        <input type="checkbox" ng-model="subscription.SendEmptyEmails" title="Should reports be sent if they contain no data?">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-footer">
+                    <button type="button" class="btn btn-success" ng-click="save()">Save</button>
+                    <button type="button" class="btn btn-primary pull-right" ng-click="delete()" data-ng-if="subscriptionId">Delete</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

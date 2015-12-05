@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Storage;
 
 namespace SimpleReport.Model
@@ -24,6 +25,8 @@ namespace SimpleReport.Model
         public Report GetReport(Guid id)
         {
             Report report = Storage.GetReport(id);
+            if (report == null)
+                throw new EntityNotFoundException("Report not found");
 
             IEnumerable<Parameter> lookupParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Lookup);
             foreach (Parameter lookupParameter in lookupParameters)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Principal;
+using System.Web;
 
 namespace SimpleReport.Model.Storage
 {
@@ -25,7 +26,16 @@ namespace SimpleReport.Model.Storage
         IEnumerable<Access> GetAccessLists();
         Access GetAccessList(Guid id);
         bool SaveAccessList(Access accesslist);
+        DeleteInfo DeleteAccessList(Access acc);
+
         Settings GetSettings();
         bool SaveSettings(Settings settings);
+
+        DeleteInfo DeleteConnection(Connection connection);
+        DeleteInfo DeleteLookupReport(LookupReport lookupReport);
+        DeleteInfo DeleteReport(Report report);
+        void SaveTemplate(byte[] file, Guid reportId);
+        Template GetTemplate(Guid reportId);
+        void DeleteTemplate(Guid reportId);
     }
 }

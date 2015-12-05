@@ -4,7 +4,7 @@
         <div class="form-inline">
             <div class="form-group">
                 <label class="control-label">Choose report to edit</label>
-                <select ng-model="report" class="form-control" ng-options="item as item.Name for item in reportList" ng-change="reportDataChanged()"></select>
+                <select ng-model="report" class="form-control" ng-options="item as item.Name group by item.Group for item in reportList | orderBy:['Group','Name']" ng-change="reportDataChanged()"></select>
             </div>
             <button class="btn btn-primary" ng-click="addNewReport()"><i class="fa fa-plus"></i> Add new</button>
         </div>
@@ -13,8 +13,11 @@
 
 <form role="form" ng-hide="!report">
     <div class="row">
-        <div class="col-md-6 col-lg-5">
-            <div class="box box-primary">
+        <div ng-class="SubscriptionEnabled ? 'col-md-6 col-lg-5' :'col-md-6' ">
+            <div class="box box-primary boxheight">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Name and group</h3>
+                </div>
                 <div class="box-body">
                     <div class="row">
                         <div class="col-xs-6">
@@ -53,6 +56,27 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div ng-class="SubscriptionEnabled ? 'col-md-6 col-lg-7' : 'col-md-6'">
+            <div class="box box-primary boxheight">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Settings & template</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label class="control-label" title="Who should be able to edit the template of this report?">Report owner</label>
+                                <div>
+                                    <select ng-model="report.ReportOwnerId" ng-options="item.Id as item.Name for item in reportOwnerAccessLists" class="form-control"></select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label class="control-label" title="Who should be able to look at this report?">Access</label>
@@ -62,25 +86,123 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div data-template-upload data-reportid="report.Id" data-has-report-template="report.HasTemplate"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label class="control-label" title="Who can edit the template.">Who can edit template?</label>
+                                <div>
+                                    <ul class="list-unstyled">
+                                        <li data-ng-repeat="editor in accessEditorViewModel">
+                                            <div class="radio">
+                                                <label>
+                                                    <input value="{{editor.Value}}" type="radio" name="whocanedittemplate" data-ng-model="report.TemplateEditorAccessStyle">
+                                                    {{editor.Text}}
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label class="control-label" title="What formats does this report allow?">Formats</label>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="report.OnScreenFormatAllowed" />
+                                        On screen format allowed
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
-
-        <div class="col-md-6 col-lg-7">
-            <div class="box box-primary">
-                <div class="box-body">
-                    <div class="form-group">
-                        <label class="control-label">SQL statement</label>
-                        <div>
-                            <textarea rows="9" class="form-control" ng-model="report.Sql" ng-keyup="analyzeSQL()" id="sqlarea"></textarea>
-                            <span class="help-block">Write or paste your SQL statement here.</span>
+    </div>
+<div class="row">
+    <div class="col-md-6 col-lg-5" data-ng-show="SubscriptionEnabled">
+        <div class="box box-primary boxheight">
+            <div class="box-header with-border">
+                <h3 class="box-title">Subscriptions</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" title="">Mail subject</label>
+                            <div>
+                                <input type="text" ng-model="report.MailSubject" class="form-control" placeholder="Subject text in subscription email" title="Subject text in subscription email">
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" title="">Mail body text</label>
+                            <div>
+                                <textarea cols="2" ng-model="report.MailText" class="form-control" placeholder="The main body text in subscrition email" title="The main body text in subscrition email"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" title="Who can create/edit subscriptions?">Who can create/edit subscriptions?</label>
+                            <div>
+                                <div class="col-xs-7">
+                                    <ul class="list-unstyled">
+                                        <li data-ng-repeat="editor in accessEditorViewModel">
+                                            <div class="radio">
+                                                <label>
+                                                    <input value="{{editor.Value}}" type="radio" data-ng-model="report.SubscriptionAccessStyle">
+                                                    {{editor.Text}}
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-xs-5">
+                                    <div class="form-group">
+                                        <a class="btn btn-primary pull-right" ng-show="report.SubscriptionCount !== undefined" href="Home/Report?reportId={{report.Id}}&selectedAction=editSubscriptions">Subscriptions ({{report.SubscriptionCount}})</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-class="SubscriptionEnabled ? 'col-md-6 col-lg-7' : 'col-md-12' ">
+        <div class="box box-primary boxheight">
+            <div class="box-header with-border">
+                <h3 class="box-title">SQL statement</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <div>
+                        <textarea rows="11" class="form-control" ng-model="report.Sql" ng-keyup="analyzeSQL()" id="sqlarea"></textarea>
+                        <span class="help-block">Write or paste your SQL statement here.</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+</div>
     <div class="row">
         <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="param in report.Parameters">
             <div class="box box-solid box-primary">
@@ -91,7 +213,9 @@
 
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <div class="col-xs-3"><label class="control-label" title="Label for the parameter">Label</label></div>
+                            <div class="col-xs-3">
+                                <label class="control-label" title="Label for the parameter">Label</label>
+                            </div>
                             <div class="col-xs-9">
                                 <input type="text" name="Label" ng-model="param.Label" class="form-control">
                             </div>
@@ -99,7 +223,8 @@
                     </div>
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <div class="col-xs-3"><label class="control-label" title="Help Text for the parameter">Help</label>
+                            <div class="col-xs-3">
+                                <label class="control-label" title="Help Text for the parameter">Help</label>
                             </div>
                             <div class="col-xs-9">
                                 <input type="text" name="HelpText" ng-model="param.HelpText" class="form-control">
@@ -125,7 +250,8 @@
 
                     <div class="form-horizontal" ng-show="param.InputType<3">
                         <div class="form-group">
-                            <div class="col-xs-3"><label class="control-label">Default</label>
+                            <div class="col-xs-3">
+                                <label class="control-label">Default</label>
                             </div>
                             <div class="col-xs-9">
                                 <input type="text" name="Value" ng-model="param.Value" class="form-control">
@@ -134,7 +260,9 @@
                     </div>
                     <div class="form-horizontal" ng-show="param.InputType==4">
                         <div class="form-group">
-                            <div class="col-xs-3"><label class="control-label">Lookup</label></div>
+                            <div class="col-xs-3">
+                                <label class="control-label">Lookup</label>
+                            </div>
                             <div class="col-xs-9">
                                 <select ng-model="param.LookupReportId" class="form-control" ng-options="item.Id as item.Name for item in lookupReports" ng-change="lookupReportChanged()"></select>
                             </div>
@@ -147,10 +275,32 @@
         </div>
 
     </div>
+
+    <div data-ng-show="showSaveConfirmation">
+        <div class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-label="Close" data-ng-click="showSaveConfirmation = false"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Incompatible parameter changes</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Some of the changes made to the parameters might cause subscriptions depending on them to stop working. Are you really sure?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" data-ng-click="showSaveConfirmation = false">Close</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="saveReport(true)">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="box-footer">
                 <button type="button" class="btn btn-success" ng-click="saveReport()">Save changes</button>
+                <button type="button" class="btn btn-primary pull-right" ng-click="deleteReport()">Delete</button>
             </div>
         </div>
     </div>

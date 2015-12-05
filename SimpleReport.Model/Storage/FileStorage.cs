@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Web;
 using Newtonsoft.Json;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
@@ -33,12 +34,14 @@ namespace SimpleReport.Model.Storage
             }
             catch (Exception ex)
             {
+                logger.Error("Error deserializing file from disk" + ex);
                 throw new Exception("Could not read Reports from file!", ex);
             }
         }
 
         public void InitializeStorage()
         {
+            using (File.Create(_filename));
             ReportDataModel model = new ReportDataModel();
             SaveModel(model);
         }
@@ -59,7 +62,7 @@ namespace SimpleReport.Model.Storage
 
         public void SaveModel(ReportDataModel data)
         {
-            using (FileStream fs = File.Open(_filename, FileMode.OpenOrCreate, FileAccess.Write))
+            using (FileStream fs = File.Open(_filename, FileMode.Truncate, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(fs))
             using (JsonWriter jw = new JsonTextWriter(sw))
             {
@@ -67,6 +70,25 @@ namespace SimpleReport.Model.Storage
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(jw, data);
             }
+        }
+
+        public void SaveTemplate(byte[] data, Guid reportId)
+        {
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            File.WriteAllBytes(filepath, data);
+        }
+
+        public Template GetTemplate(Guid reportId)
+        {
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            var bytes = File.ReadAllBytes(filepath);
+            return new Template {Bytes = bytes, Mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel", Filename = reportId + ".xlsx"};
+        }
+
+        public void DeleteTemplate(Guid reportId)
+        {
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            File.Delete(filepath);
         }
 
         public IEnumerable<Report> GetAllReports()
@@ -80,7 +102,8 @@ namespace SimpleReport.Model.Storage
         {
             var report =_dataModel.Reports.FirstOrDefault(r => r.Id == id);
             if (report == null)
-                throw new EntityNotFoundException("Report not found");
+                return null; //throw new EntityNotFoundException("Report not found");
+
             LoadAndSetConnection(report);
             LoadAndSetAccess(report);
             return report;
@@ -98,6 +121,9 @@ namespace SimpleReport.Model.Storage
         {
             var access = GetAccessList(report.AccessId);
             report.Access = access;
+
+            var taccess = GetAccessList(report.ReportOwnerId);
+            report.ReportOwnerAccess = taccess;
         }
 
         public bool SaveReport(Report report)
@@ -109,6 +135,22 @@ namespace SimpleReport.Model.Storage
             SaveModel(_dataModel);
             return true;
         }
+
+        public DeleteInfo DeleteReport(Report report)
+        {
+            Report existing = _dataModel.Reports.FirstOrDefault(r => r.Id == report.Id);
+            if (existing == null)
+                return new DeleteInfo(false, "Report doesn't exists");
+
+            _dataModel.Reports.Remove(existing);
+            SaveModel(_dataModel);
+
+            if(report.HasTemplate)
+                DeleteTemplate(report.Id);
+
+            return new DeleteInfo(true, "Report was deleted");
+        }
+
 
         public IEnumerable<Connection> GetConnections()
         {
@@ -129,6 +171,22 @@ namespace SimpleReport.Model.Storage
             SaveModel(_dataModel);
             return true;
         }
+
+        public DeleteInfo DeleteConnection(Connection connection)
+        {
+            Connection existing = _dataModel.Connections.FirstOrDefault(r => r.Id == connection.Id);
+            if (existing == null)
+                return new DeleteInfo(false, "Connection doesn't exists");
+
+            IEnumerable<Report> existingreports = _dataModel.Reports.Where(r => r.ConnectionId == connection.Id);
+            if (existingreports.Any())
+                return new DeleteInfo(false, "Connection cannot be deleted, it's used by other reports.", existingreports);
+
+            _dataModel.Connections.Remove(existing);
+            SaveModel(_dataModel);
+            return new DeleteInfo(true, "Connection was deleted");
+        }
+
 
         public IEnumerable<LookupReport> GetLookupReports()
         {
@@ -154,6 +212,21 @@ namespace SimpleReport.Model.Storage
             return true;          
         }
 
+        public DeleteInfo DeleteLookupReport(LookupReport lookupReport)
+        {
+            LookupReport existing = _dataModel.LookupReports.FirstOrDefault(r => r.Id == lookupReport.Id);
+            if (existing == null)
+                return new DeleteInfo(false, "Lookup report don't exists");
+
+            IEnumerable<Report> existingreports = _dataModel.Reports.Where(r => r.Parameters.Any(p => p.LookupReportId == lookupReport.Id));
+            if (existingreports.Any())
+                return new DeleteInfo(false, "Lookup report cannot be deleted, it's used by other reports.", existingreports);
+
+            _dataModel.LookupReports.Remove(existing);
+            SaveModel(_dataModel);
+            return new DeleteInfo(true, "Lookup report was deleted");
+        }
+
 
         public IEnumerable<Access> GetAccessLists()
         {
@@ -174,6 +247,21 @@ namespace SimpleReport.Model.Storage
             _dataModel.AccessLists.Add(accesslist);
             SaveModel(_dataModel);
             return true;      
+        }
+
+        public DeleteInfo DeleteAccessList(Access acc)
+        {
+            var existing = _dataModel.AccessLists.FirstOrDefault(a => a.Id == acc.Id);
+            if (existing == null)
+                return new DeleteInfo(false, "Accesslist don't exists");
+
+            IEnumerable<Report> existingreportsWithAccesslist = _dataModel.Reports.Where(r => r.AccessId == acc.Id);
+            if (existingreportsWithAccesslist.Any())
+                return new DeleteInfo(false, "Accesslist cannot be deleted, it's used by other reports.", existingreportsWithAccesslist);
+            
+            _dataModel.AccessLists.Remove(existing);
+            SaveModel(_dataModel);
+            return new DeleteInfo(true, "Accesslist was deleted");
         }
 
         public Settings GetSettings()

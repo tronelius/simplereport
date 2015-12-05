@@ -1,0 +1,34 @@
+@model SimpleReport.ViewModel.ReportViewModel
+@{
+    ViewBag.Title = "Subscriptions";
+}
+<section class="content-header">
+    <h1>
+        Subscriptions <small>Here you can edit existing subscriptions or create new ones.</small>
+    </h1>
+</section>
+<section class="content" ng-cloak ng-app="subscriptions" ng-controller="subscriptionController">
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li ng-class="{active: activeTab == 'all'}" data-ng-click="activeTab = 'all'"><a>List of all active</a></li>
+            <li ng-class="{active: activeTab == 'failed'}" data-ng-click="activeTab = 'failed'"><a>Failed</a></li>
+            <li ng-class="{active: activeTab == 'schedules'}" data-ng-click="activeTab = 'schedules'"><a>Schedules</a></li>
+            <li ng-class="{active: activeTab == 'settings'}" data-ng-click="activeTab = 'settings'"><a>Settings</a></li>
+        </ul>
+    </div>
+        <div class="tab-content">
+            <div class="tab-pane active" data-ng-if="activeTab == 'all'">
+                <div data-subscription-list data-show-report-name="true"></div>
+            </div>
+            <div class="tab-pane active" data-ng-if="activeTab == 'failed'">
+                <div data-subscription-list data-show-report-name="true" data-filter="failed"></div>
+            </div>
+            <div class="tab-pane active" data-ng-if="activeTab == 'schedules'">
+                <div data-ng-if="activeTab == 'schedules'" data-schedule-editor></div>
+            </div>
+            <div class="tab-pane active" data-ng-if="activeTab == 'settings'">
+                Not done : settings
+            </div>
+        </div>
+
+</section>

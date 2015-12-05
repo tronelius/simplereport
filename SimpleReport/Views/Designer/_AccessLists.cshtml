@@ -1,4 +1,17 @@
-﻿<div class="row content-text" ng-hide="!accessLists">
+﻿@using System.Security.Principal
+
+@helper GetGroupName(IdentityReference @group)
+{
+    try
+    {
+        @Html.Raw(@group.Translate(typeof (System.Security.Principal.NTAccount)).ToString())
+    }
+    catch (Exception ex)
+    {
+        @Html.Raw("Unknown group")
+    }
+}
+<div class="row content-text" ng-hide="!accessLists">
     <div class="col-xs-12">
         <div class="form-inline">
             <div class="form-group">
@@ -33,7 +46,27 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="button" class="btn btn-primary" ng-click="showOwnGroups=!showOwnGroups">Show own groups</button>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="showOwnGroups">
+        <div class="col-xs-12">
+            <div class="alert alert-info alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-info"></i> AD-groups you belong to!</h4>
+                These are the groups the currently logged in user (@User.Identity.Name) belong to:<br />
+
+                @foreach (var group in Request.LogonUserIdentity.Groups)
+                {
+                    @GetGroupName(@group)<br />
+                }
             </div>
         </div>
     </div>
@@ -41,8 +74,11 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="box-footer">
-                <button type="button" class="btn btn-success" ng-click="saveAccesList()">Save changes</button>
+                <button type="button" class="btn btn-success" ng-click="saveAccessList()">Save changes</button>
+                <button type="button" class="btn btn-primary pull-right" ng-click="deleteAccessList()">Delete</button>
             </div>
         </div>
     </div>
+
+    
 </form>

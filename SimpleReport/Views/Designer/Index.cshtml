@@ -1,19 +1,17 @@
-@using System.Web.Optimization
 @model SimpleReport.ViewModel.ReportViewModel
 @{
     ViewBag.Title = "Report Designer";
 }
-@Scripts.Render("~/bundles/designer")
 <section class="content-header">
     <h1>
-        Report Designer <small>Here you can edit existing reports or create new ones.</small>
+        Report designer <small>Here you can edit existing reports or create new ones.</small>
     </h1>
 </section>
 <section class="content" ng-cloak ng-app="designer" ng-controller="designerController">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li ng-class="{active: activeTab == 'report'}"><a data-toggle="tab" href="#tab_1" aria-expanded="true">Reports</a></li>
-            <li ng-class="{active: activeTab == 'lookup'}"><a data-toggle="tab" href="#tab_2" aria-expanded="false">Dropdown parameters</a></li>
+            <li ng-class="{active: activeTab == 'report', disabled: connections.length == 0}"><a data-toggle="tab" href="#tab_1" aria-expanded="true">Reports</a></li>
+            <li ng-class="{active: activeTab == 'lookup', disabled: connections.length == 0}"><a data-toggle="tab" href="#tab_2" aria-expanded="false">Dropdown parameters</a></li>
             <li ng-class="{active: activeTab == 'connection'}"><a data-toggle="tab" href="#tab_3" aria-expanded="false">Connections</a></li>
             <li ng-class="{active: activeTab == 'accesslists'}"><a data-toggle="tab" href="#tab_4" aria-expanded="false">Access control lists</a></li>
             <li ng-class="{active: activeTab == 'settings'}"><a data-toggle="tab" href="#tab_5" aria-expanded="false">Settings</a></li>

@@ -1,20 +1,34 @@
 ﻿@using System.Web.Optimization
 @using SimpleReport.Model
 @using SimpleReport.ViewModel
-@*@model SimpleReport.ViewModel.ReportViewModel*@
+
+@helper Menuhelper(IGrouping<string, ReportInfo> reportGroup)
+{
+    foreach (ReportInfo reportInfo in reportGroup)
+    {
+        <li class="
+        @if (Model.Report != null && Model.Report.Id == reportInfo.Id)
+        {
+            @Html.Raw("active")
+        }">
+            <a href="@Url.Action("Report", "Home", new {reportId = reportInfo.Id})">
+                <i class="fa fa-circle-o"></i>@reportInfo.Name</a>
+        </li>
+    }
+}
 <!doctype html>
 <html lang="en">
 <head>
     <base href="@Url.Content("~")" />
     <meta charset="utf-8">
     <title>Simple Report Tool: @ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="">
     <meta name="author" content="">
     @Styles.Render("~/bundles/css")
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css">
     @Scripts.Render("~/bundles/scripts")
+    @Scripts.Render("~/bundles/app")
 </head>
 <body class="skin-blue">
     <div class="wrapper">
@@ -27,14 +41,36 @@
                 </a>
                     @if (Model != null && Model is ReportViewModel)
                     {
-                       if (Model.HasAdminAccess(User))
+                        if (Model.HasAdminAccess)
                          {
                              <div class="navbar-custom-menu">
                                  <ul class="nav navbar-nav">
-                                     <li>
-                                         <a href="@Url.Action("Index", "Designer")">
-                                             <i class="fa fa-gear"></i> <span>Admin</span>
+                                     <li class="dropdown notifications-menu">
+                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                             <i class="fa fa-gear"></i>
+                                             <span>Admin</span>
                                          </a>
+                                         <ul class="dropdown-menu">
+                                             <li>
+                                                 <div style="position: relative; overflow: hidden; width: auto;">
+                                                     <ul class="menu" style="overflow: hidden; width: 100%; ">
+                                                         <li>
+                                                             <a href="@Url.Action("Index", "Designer")">
+                                                                 <i class="fa fa-area-chart"></i> <span>Report designer</span>
+                                                             </a>
+                                                         </li>
+                                                         @if (Model.SubscriptionEnabled)
+                                                         {
+                                                             <li>
+                                                                 <a href="@Url.Action("Index", "Subscription")">
+                                                                     <i class="fa fa-envelope"></i> <span>Subscriptions</span>
+                                                                 </a>
+                                                             </li>
+                                                         }
+                                                     </ul>
+                                                 </div>
+                                             </li>
+                                         </ul>
                                      </li>
                                  </ul>
                              </div>
@@ -52,19 +88,26 @@
                    {
                        foreach (IGrouping<string, ReportInfo> reportGroup in Model.ReportGroups)
                        {
-                            <li class="treeview @if(Model.Report !=null && Model.Report.Group == reportGroup.Key){@Html.Raw("active")}">
-                                <a href="#">
-                                    <i class="fa fa-table"></i><span>@reportGroup.Key</span> <i class="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul class="treeview-menu">
-                                    @foreach (ReportInfo reportInfo in reportGroup)
-                                        {
-                                        <li class="@if (Model.Report != null && Model.Report.Id == reportInfo.Id){@Html.Raw("active")}"><a href="@Url.Action("Report", "Home", new {reportId = reportInfo.Id})"><i class="fa fa-circle-o"></i>@reportInfo.Name</a></li>
-                                        }
-                                </ul>
-                            </li>
-                            }
-                    }
+                           if (!string.IsNullOrWhiteSpace(reportGroup.Key))
+                           {
+                               <li class="treeview @if (Model.Report != null && Model.Report.Group == reportGroup.Key)
+                                                   {
+                                                       @Html.Raw("active")
+                                                   }">
+                                   <a href="#">
+                                       <i class="fa fa-table"></i><span>@reportGroup.Key</span> <i class="fa fa-angle-left pull-right"></i>
+                                   </a>
+                                   <ul class="treeview-menu">
+                                       @Menuhelper(reportGroup)
+                                   </ul>
+                               </li>
+                           }
+                           else
+                           {
+                               @Menuhelper(reportGroup)
+                           }
+                       }
+                   }
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -74,7 +117,7 @@
         </div>
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
-                <b>Version</b> 0.5
+                <b>Version</b> 0.6
             </div>
             <strong><a href="https://github.com/tronelius/simplereport" target="source">Free and Open source</a></strong> please share your changes with others
         </footer>

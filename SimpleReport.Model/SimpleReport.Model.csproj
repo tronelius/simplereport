@@ -62,7 +62,9 @@
   <ItemGroup>
     <Compile Include="Access.cs" />
     <Compile Include="Ado.cs" />
+    <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Connection.cs" />
+    <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="ErrorInfo.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -71,8 +73,10 @@
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Nlogger.cs" />
     <Compile Include="LookupReport.cs" />
+    <Compile Include="RawReportResult.cs" />
     <Compile Include="ReportInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Storage\DeleteInfo.cs" />
     <Compile Include="Storage\FileStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />
     <Compile Include="KeyValue.cs" />
@@ -83,6 +87,7 @@
     <Compile Include="ReportDataModel.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Exceptions\StorageNotInitializedException.cs" />
+    <Compile Include="Template.cs" />
     <Compile Include="ValidatableEntity.cs" />
   </ItemGroup>
   <ItemGroup>

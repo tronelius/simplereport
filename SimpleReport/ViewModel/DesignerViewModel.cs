@@ -18,18 +18,52 @@ namespace SimpleReport.ViewModel
         public IEnumerable<Connection> Connections { get; set; }
         public IEnumerable<LookupReport> LookupReports { get; set; }
         public List<Access> AccessLists { get; set; }
+        public List<Access> ReportOwnerAccessLists { get; set; }
         public Settings Settings { get; set; }
+        public IEnumerable<AccessEditorViewModel> AccessEditorViewModel { get; set; }
+        public bool SubscriptionEnabled { get; set; }
 
-        public DesignerViewModel(IStorage reportStorage, IPrincipal user)
+        public DesignerViewModel(IStorage reportStorage, IPrincipal user, IApplicationSettings applicationSettings)
         {
             Reports = reportStorage.GetAllReports();
             Connections = reportStorage.GetConnections();
             LookupReports = reportStorage.GetLookupReports();
             AccessLists = reportStorage.GetAccessLists().ToList();
+            ReportOwnerAccessLists = reportStorage.GetAccessLists().ToList();
             ParameterInputType types = new ParameterInputType();
             InputTypes = types.ToKeyValues();
             AccessLists.Insert(0,new Access(Guid.Empty,"Free for all",""));
+            ReportOwnerAccessLists.Insert(0, new Access(Guid.Empty, "None selected", ""));
             Settings = reportStorage.GetSettings();
+            AccessEditorViewModel = Enum.GetValues(typeof(AccessStyle)).Cast<AccessStyle>().Select(x => new AccessEditorViewModel(x, GetTextForTemplateEditor(x)));
+            SubscriptionEnabled = applicationSettings.SubscriptionEnabled;
+        }
+
+        private string GetTextForTemplateEditor(AccessStyle editor)
+        {
+            switch (editor)
+            {
+                case AccessStyle.Administrators:
+                    return "Admininstrators";
+                case  AccessStyle.Anyone:
+                    return "Anyone with report access";
+                case AccessStyle.ReportOwner:
+                        return "Report owner";
+                default:
+                    return editor.ToString();
+            }    
+        }
+    }
+
+    public class AccessEditorViewModel
+    {
+        public AccessStyle Value { get; set; }
+        public string Text { get; set; }
+
+        public AccessEditorViewModel(AccessStyle value, string text)
+        {
+            Value = value;
+            Text = text;
         }
     }
 }

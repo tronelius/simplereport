@@ -1,111 +1,135 @@
-﻿@using SimpleReport.Model
+﻿@using Newtonsoft.Json
+@using SimpleReport.Model
 @model SimpleReport.ViewModel.ReportViewModel
 @{
     ViewBag.Title = "View Report";
 }
-  @if (!ViewData.ModelState.IsValid)
-  {
-      <section class="content-header">
-          <h1>
-              Errors in request
-          </h1>
-      </section>
+<script type="text/javascript">
+    @{
+        //NOTE: reuse model to avoid getting data again. temporary during conversion.
+    }
+    angular.module("report").value("reportViewModel", @Html.Raw(JsonConvert.SerializeObject(Model)));
+</script>
+
+<div ng-cloak ng-app="report" ng-controller="reportController">
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <section class="content-header">
+            <h1>
+                Errors in request
+            </h1>
+        </section>
+        <section class="content">
+            @Html.ValidationSummary(false)
+        </section>
+    }
+    else
+    {
+        <section class="content-header">
+            <h1>
+                {{:: viewModel.Report.Name }}
+            </h1>
+        </section>
     <section class="content">
-        @Html.ValidationSummary(false)
-    </section>
-  }
-  else
-  {
-    <script>
-        $(function () {
-            $("form").validate(
-            {
-                rules: {
-                    @String.Join(",", Model.Report.Parameters.Where(r => r.Mandatory).Select(par => Html.Raw(par.Key + ": {required:true}")))
-                },
-                highlight: function (label) {
-                    $(label).closest('.control-group').removeClass('success').addClass('error');
-                },
-                success: function (label) {
-                    label.html('&nbsp;').closest('.control-group').removeClass('error').addClass('success');
-                }
-            });
-            $(".numeric").numeric();
-            $(".datepicker").datepicker();
-        });
-    </script>
-<section class="content-header">
-    <h1>
-        @Model.Report.Name
-    </h1>
-</section>
-    <section class="content">
-        <p class="lead">@Model.Report.Description</p>
-        @using (Html.BeginForm("ExecuteReport", "Home", FormMethod.Get, new {role = "form"}))
+        <p class="lead">{{:: viewModel.Report.Description}}</p>
+        @using (Html.BeginForm("ExecuteReport", "Home", FormMethod.Get, new { role = "form" }))
         {
             <input type="hidden" name="reportId" value="@Model.Report.Id" class="form-control">
 
-            if (Model.Report.Parameters.Count > 0)
-            {
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">Parameters</h3>
-                    </div>
+            <div class="box box-primary" data-ng-if="viewModel.Report.Parameters.length">
+                <div class="box-header">
+                    <h3 class="box-title">Parameters</h3>
+                </div>
 
-                    <div class="box-body">
-                        <div class="row">
+                <div class="box-body">
+                    <div class="row">
 
-                            @foreach (Parameter par in Model.Report.Parameters)
-                            {
-                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                    <div class="form-group">
-                                        <label class="control-label" for="@par.Key">@par.Label</label>
 
-                                        @switch (par.InputType)
-                                        {
-                                            case ParameterInputType.Integer:
-                                                <input type="text" name="@par.Key" value="@par.Value" placeholder="Integer" class="numeric form-control">
-                                                break;
-                                            case ParameterInputType.Date:
-                                                <div class="input-group">
-                                                    <div class="input-group-addon">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </div>
-                                                    <input type="text" name="@par.Key" value="@par.Value" class="form-control datepicker pull-right">
-                                                </div>
-                                                break;
-                                            case ParameterInputType.Period:
-                                            case ParameterInputType.Lookup:
-                                                <select name="@par.Key" class="form-control">
-                                                    <option value="">[Please Choose...]</option>
-                                                    @foreach (KeyValuePair<string, string> p in par.Choices)
-                                                    {
-                                                        <option value="@p.Key">@p.Value</option>
-                                                    }
-                                                </select>
-                                                break;
-                                            default:
-                                                <input type="text" name="@par.Key" value="@par.Value" class="form-control" placeholder="String">
-                                                break;
-                                        }
+                        <div data-ng-repeat="par in viewModel.Report.Parameters track by par.Key" data-ng-class="{ 'col-xs-12 col-sm-6 col-md-4 col-lg-3' : par.InputType != @((int)ParameterInputType.Period), 'col-xs-12 col-sm-12 col-md-8 col-lg-6' : par.InputType == @((int)ParameterInputType.Period)}">
+                            <div class="form-group">
+                                <label class="control-label" for="{{par.Key}}">{{par.Label}}</label>
 
-                                        <span class="help-block">@par.HelpText</span>
-                                        <label for="@par.Key" generated="true" class="help-block error" style=""></label>
+                                <div data-ng-switch="par.InputType">
+                                    <input data-ng-switch-when="@((int) ParameterInputType.Integer)" data-numeric data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" data-ng-model="par.Value" placeholder="Integer" class="numeric form-control">
+
+                                    <div data-ng-switch-when="@((int) ParameterInputType.Date)" class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" name="{{par.Key}}" datepicker-popup="{{dateFormat}}" data-ng-change="dateChanged(par)" data-ng-model="par.Value" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.open" ng-focus="par.open=true">
                                     </div>
-                                </div>
-                            }
 
+                                    <div data-ng-switch-when="@((int) ParameterInputType.Period)">
+                                        <input type="hidden" value="{{par.Value}}" name="{{par.Key}}" />
+                                        <select data-ng-required="{{par.Mandatory}}" class="form-control" data-ng-options="k as v for (k,v) in par.Choices" data-ng-model="par.EnumValue" data-ng-change="periodChanged(par)">
+                                            <option value="">[Please Choose...]</option>
+                                        </select>
+                                        <div data-ng-show="par.EnumValue === '9999'">
+                                            <datepicker class="pull-left" ng-model="par.from" max-date="par.to" show-weeks="true" data-ng-change="periodChanged(par)"></datepicker>
+                                            <datepicker class="pull-left" ng-model="par.to" min-date="par.from" show-weeks="true" data-ng-change="periodChanged(par)"></datepicker>
+                                        </div>
+                                    </div>
+
+                                    <select data-ng-switch-when="@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.Value">
+                                        <option value="">[Please Choose...]</option>
+                                        <option data-ng-repeat="(k,v) in par.Choices" value="{{k}}">{{v}}</option>
+                                    </select>
+
+                                    <input data-ng-switch-default type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="String">
+                                </div>
+
+                                <span class="help-block">{{par.HelpText}}</span>
+                                <label for="{{par.Key}}" generated="true" class="help-block error"></label>
+                            </div>
                         </div>
+
                     </div>
                 </div>
-            }
-            else
-            {
-                <p>This report has no parameters, just click on execute.</p>
-            }
-            <div class="box-footer">              
-                 <button type="submit" class="btn btn-primary">Execute</button>
             </div>
+
+            <p data-ng-if="!viewModel.Report.Parameters.length">This report has no parameters, just click on execute.</p>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary" data-ng-disabled="!hasValidParameters()"><i class="fa fa-fw fa-file-excel-o"></i>Excel</button>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" data-ng-click="triggerOnScreen()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()">On screen</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="triggerBookmark()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()"><i class="fa fa-bookmark"></i></button>
+                        </div>
+
+                    </div>
+                    <div class="col-xs-4">
+                        <button type="button" class="btn btn-primary" data-ng-click="triggerSubscribe()" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Subscribe</button>
+                        <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editSubscriptions'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Edit subscriptions</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button type="button" class="btn btn-primary pull-right" data-ng-click="selectedAction = 'editTemplate'" data-ng-show="viewModel.CanEditTemplate">Edit template</button>
+                    </div>
+                </div>
+            </div>
+
+            <div data-ng-show="selectedAction" data-ng-switch="selectedAction" class="box box-actions" style="margin-top: 20px;">
+                <div data-ng-switch-when="onScreen">
+                    <div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters"></div>
+                </div>
+
+                <div data-ng-switch-when="subscribe">
+                    <div data-subscription-editor data-report-id="viewModel.Report.Id" data-report-parameters="viewModel.Report.Parameters" data-subscription-id="subscriptionId" data-save-cb="onSubscriptionSaved()"></div>
+                </div>
+
+                <div data-ng-switch-when="editSubscriptions">
+                    <div data-subscription-list data-report-id="viewModel.Report.Id"></div>
+                </div>
+
+                <div data-ng-switch-when="editTemplate">
+                    <div data-template-upload data-reportid="viewModel.Report.Id" data-has-report-template="viewModel.Report.HasTemplate"></div>
+                </div>
+            </div>
+
         }
     </section>
-  }
+    }
+</div>

@@ -11,12 +11,16 @@ namespace SimpleReport.Controllers
 {
     public class DesignerController : BaseController
     {
-        public DesignerController(ReportResolver reportResolver, ILogger logger) : base(reportResolver.Storage, logger){}
+        public DesignerController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings) : base(reportResolver.Storage, logger, applicationSettings) { }
 
         public ActionResult Index()
         {
-            HasAdminAccess();
-            return View(GetReportViewModel());
+            if (!_adminAccess.IsAvailableForMe(User)) {
+               Response.Redirect("~", true);
+                return new EmptyResult();
+            }
+            else
+                return View(GetReportViewModel());
         }
 
 
