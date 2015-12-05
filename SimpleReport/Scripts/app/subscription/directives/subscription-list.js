@@ -43,7 +43,7 @@
 
                 function sendSubscription(id) {
                     subscriptionRepository.send($scope.reportId, id);
-                    toastr.success("Subscription is schedule for resend, can take up to 1 minute before send is complete.");
+                    toastr.success("Subscription is schedule for resend, it can take up to 1 minute before send is complete.");
                 }
 
                 function editSubscription(sub) {
