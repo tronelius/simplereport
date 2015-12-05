@@ -67,7 +67,7 @@ namespace SimpleReportTests
             rpt.MailText = "TestText";
             rpt.OnScreenFormatAllowed = true;
             rpt.ReportOwnerAccessId = Guid.Empty;
-            //rpt.ResultType = ResultType.SimpleExcel;
+            rpt.TemplateFormat = TemplateFormat.Excel;
             rpt.SubscriptionAccessStyle = AccessStyle.Anyone;
             rpt.TemplateEditorAccessStyle = AccessStyle.Anyone;
             rpt.AccessId = _accessId;

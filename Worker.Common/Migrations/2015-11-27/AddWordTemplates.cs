@@ -7,14 +7,14 @@ namespace Worker.Common.Migrations
     {
         public override void Up()
         {
-            Alter.Table("Report").AddColumn("HasWordTemplate").AsBoolean().NotNullable().WithDefault(0);
+            Alter.Table("Report").AddColumn("TemplateFormat").AsInt32().NotNullable().WithDefaultValue(0);
             Delete.Column("ResultType").FromTable("Report");
         }
 
         public override void Down()
         {
-            Delete.Column("HasWordTemplate").FromTable("Report");
-            Alter.Table("Report").AddColumn("ResultType").AsInt32().NotNullable().WithDefault(0);
+            Delete.Column("TemplateFormat").FromTable("Report");
+            Alter.Table("Report").AddColumn("ResultType").AsInt32().NotNullable().WithDefaultValue(0);
         }
     }
 }
