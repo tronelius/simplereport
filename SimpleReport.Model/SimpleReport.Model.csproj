@@ -98,6 +98,7 @@
     <Compile Include="RawReportResult.cs" />
     <Compile Include="ReportInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Storage\SQL\SQLSetting.cs" />
     <Compile Include="Storage\StorageHelper.cs" />
     <Compile Include="Storage\SQL\BaseDapperRepo.cs" />
     <Compile Include="Storage\SQL\DapperExtension.cs" />
