@@ -112,7 +112,7 @@
     function hasvalidParametersForSubscription() {
         var valid = true;
         $scope.viewModel.Report.Parameters.forEach(function (param) {
-            if (param.InputType !== 5 && param.InputType !== 6) { //Exclude syncparameters
+            if (param.InputType !== 7 && param.InputType !== 6) { //Exclude syncparameters
                 if (param.Mandatory && !param.Value) {
                     valid = false;
                 }

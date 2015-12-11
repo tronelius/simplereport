@@ -28,7 +28,7 @@ namespace SimpleReport.Model
             if (report == null)
                 throw new EntityNotFoundException("Report not found");
 
-            IEnumerable<Parameter> lookupParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Lookup);
+            IEnumerable<Parameter> lookupParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Lookup || s.InputType == ParameterInputType.LookupMultipleChoice);
             foreach (Parameter lookupParameter in lookupParameters)
             {
                 if (lookupParameter.LookupReportId.HasValue) { 

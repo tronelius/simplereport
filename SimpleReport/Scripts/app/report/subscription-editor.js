@@ -34,7 +34,7 @@
 
                 //function hasInvalidParametersForSubscription() {
                 //    return $scope.reportParameters.some(function (param) {
-                //        if (param.Mandatory && !param.Value && !(param.InputType === 5 || param.InputType === 6)) {
+                //        if (param.Mandatory && !param.Value && !(param.InputType === 6 || param.InputType === 7)) {
                 //            return true;
                 //        }
                 //        return false;

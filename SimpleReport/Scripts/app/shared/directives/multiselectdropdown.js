@@ -34,7 +34,9 @@
                         });
                     },
                     enableFiltering: true,
-                    buttonContainer: $scope.required ? '<div class="btn-group required" />' : '<div class="btn-group" />'
+                    enableCaseInsensitiveFiltering: true,
+                    enableFullValueFiltering: false,
+                    buttonContainer: $scope.required ? '<div class="required" />' : '<div />'
             });
                 element.multiselect('dataprovider', options);
 
