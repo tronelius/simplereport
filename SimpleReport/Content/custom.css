@@ -23,7 +23,7 @@
     padding: 20px;
 }
 
-input.ng-invalid, select.ng-invalid {
+.required, input.ng-invalid, select.ng-invalid {
       border: 1px solid red;
 }
 

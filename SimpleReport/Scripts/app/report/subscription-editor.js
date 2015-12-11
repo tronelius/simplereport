@@ -19,7 +19,6 @@
                     });
 
                     fetchData();
-
                     $scope.save = save;
                 }
                 init();
@@ -32,6 +31,15 @@
                         return false;
                     });
                 }
+
+                //function hasInvalidParametersForSubscription() {
+                //    return $scope.reportParameters.some(function (param) {
+                //        if (param.Mandatory && !param.Value && !(param.InputType === 5 || param.InputType === 6)) {
+                //            return true;
+                //        }
+                //        return false;
+                //    });
+                //}
 
                 function save() {
 

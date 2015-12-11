@@ -46,6 +46,7 @@
         $scope.dateChanged = dateChanged;
         $scope.onSubscriptionSaved = onSubscriptionSaved;
         $scope.hasValidParameters = hasValidParameters;
+        $scope.hasvalidParametersForSubscription = hasvalidParametersForSubscription;
     };
     $scope.init();
 
@@ -92,6 +93,7 @@
     }
 
     function triggerSubscribe() {
+
         $scope.selectedAction = 'subscribe';
         $scope.subscriptionId = null;
     }
@@ -104,6 +106,18 @@
             }
         });
 
+        return valid;
+    }
+
+    function hasvalidParametersForSubscription() {
+        var valid = true;
+        $scope.viewModel.Report.Parameters.forEach(function (param) {
+            if (param.InputType !== 5 && param.InputType !== 6) { //Exclude syncparameters
+                if (param.Mandatory && !param.Value) {
+                    valid = false;
+                }
+            }
+        });
         return valid;
     }
 }

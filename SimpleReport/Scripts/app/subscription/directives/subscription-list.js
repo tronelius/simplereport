@@ -47,7 +47,7 @@
                 }
 
                 function editSubscription(sub) {
-                    location.href = 'Home/Report?' + sub.ReportParams + '&subscriptionid=' + sub.Id;
+                    location.href = '/Home/Report?' + sub.ReportParams + '&subscriptionid=' + sub.Id;
                 }
 
                 function deleteSubscription(id) {
