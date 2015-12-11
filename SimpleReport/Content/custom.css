@@ -34,3 +34,9 @@ a {
 .boxheight {
     min-height: 360px;
 }
+
+.multiselect-container {
+    top: 45%;
+    left: 15px;
+    width: 94%;
+}
