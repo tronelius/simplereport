@@ -101,13 +101,13 @@
             <div class="box-footer">
                 <div class="row">
                     <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary" data-ng-disabled="!hasValidParameters()"><i class="fa fa-fw fa-file-excel-o"></i>Excel</button>
+                        <button type="submit" class="btn btn-primary" ng-show="viewModel.Report.TemplateFormat===1 || viewModel.Report.TemplateFormat===0" data-ng-disabled="!hasValidParameters()"><i class="fa fa-fw fa-file-excel-o" ></i>Excel</button>
+                        <button type="submit" class="btn btn-primary" ng-show="viewModel.Report.TemplateFormat===2" data-ng-disabled="!hasValidParameters()"><i class="fa fa-fw fa-file-word-o" ></i>Word</button>
 
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary" data-ng-click="triggerOnScreen()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()">On screen</button>
                             <button type="button" class="btn btn-primary" data-ng-click="triggerBookmark()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()"><i class="fa fa-bookmark"></i></button>
                         </div>
-
                     </div>
                     <div class="col-xs-4">
                         <button type="button" class="btn btn-primary" data-ng-click="triggerSubscribe()" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions" data-ng-disabled="!hasvalidParametersForSubscription()">Subscribe</button>
@@ -133,7 +133,7 @@
                 </div>
 
                 <div data-ng-switch-when="editTemplate">
-                    <div data-template-upload data-reportid="viewModel.Report.Id" data-has-report-template="viewModel.Report.HasTemplate"></div>
+                    <div data-template-upload data-reportid="viewModel.Report.Id" data-has-report-template="viewModel.Report.HasTemplate"  data-template-format="viewModel.Report.TemplateFormat"></div>
                 </div>
             </div>
 

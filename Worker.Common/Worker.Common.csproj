@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\2015-12-14\ReportAdjustments.cs" />
     <Compile Include="Migrations\2015-11-27\AddWordTemplates.cs" />
     <Compile Include="Model\ReportResult.cs" />
     <Compile Include="Api\WorkerApiClient.cs" />

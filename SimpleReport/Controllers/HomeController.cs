@@ -124,7 +124,7 @@ namespace SimpleReport.Controllers
                 }
             }
                     
-            return Json(new { status = "ok" });
+            return Json(new { status = "ok", TemplateFormat = report.TemplateFormat });
         }
 
         private void HandleExcel(Report report, Guid reportId, byte[] data)

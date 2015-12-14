@@ -1,7 +1,7 @@
 ﻿angular.module('shared').directive('templateUpload', function () {
         return {
             templateUrl: 'scripts/app/templates/templateUpload.html',
-            scope: { reportid: '=', hasReportTemplate: '=' },
+            scope: { reportid: '=', hasReportTemplate: '=', templateFormat:'=' },
             controller: [
                 '$scope', 'Upload', function ($scope, upload) {
                     var baseDownloadUrl = 'Home/DownloadTemplate?ReportId=';
@@ -35,6 +35,7 @@
                                         $scope.downloadLink = baseDownloadUrl + $scope.reportid;
                                         toastr.success("Template file uploaded");
                                         $scope.progress = null;
+                                        $scope.templateFormat = data.TemplateFormat;
                                     } else {
                                         $scope.progress = 0;
                                         toastr.error(data.error);
