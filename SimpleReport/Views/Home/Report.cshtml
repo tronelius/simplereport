@@ -36,16 +36,12 @@
         @using (Html.BeginForm("ExecuteReport", "Home", FormMethod.Get, new { role = "form" }))
         {
             <input type="hidden" name="reportId" value="@Model.Report.Id" class="form-control">
-
             <div class="box box-primary" data-ng-if="viewModel.Report.Parameters.length">
                 <div class="box-header">
                     <h3 class="box-title">Parameters</h3>
                 </div>
-
                 <div class="box-body">
                     <div class="row">
-
-
                         <div data-ng-repeat="par in viewModel.Report.Parameters track by par.Key" data-ng-class="{ 'col-xs-12 col-sm-6 col-md-4 col-lg-3' : par.InputType != @((int)ParameterInputType.Period), 'col-xs-12 col-sm-12 col-md-8 col-lg-6' : par.InputType == @((int)ParameterInputType.Period)}">
                             <div class="form-group">
                                 <label class="control-label" for="{{par.Key}}">{{par.Label}}</label>

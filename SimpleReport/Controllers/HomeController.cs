@@ -54,7 +54,7 @@ namespace SimpleReport.Controllers
 
                 Result result= null;
 
-                if (report.TemplateFormat==TemplateFormat.Excel)
+                if (report.TemplateFormat==TemplateFormat.Excel || report.TemplateFormat==TemplateFormat.Empty)
                     result = report.ExecuteWithTemplate(templateData);
                 else if (report.TemplateFormat == TemplateFormat.Word)
                     result = report.ExecuteWithWordTemplate(templateData);
