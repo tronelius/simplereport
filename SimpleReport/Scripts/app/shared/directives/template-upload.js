@@ -3,9 +3,9 @@
             templateUrl: 'scripts/app/templates/templateUpload.html',
             scope: { reportid: '=', hasReportTemplate: '=', templateFormat:'=' },
             controller: [
-                '$scope', 'Upload', function ($scope, upload) {
+                '$scope', 'Upload','$http', function ($scope, upload, $http) {
                     var baseDownloadUrl = 'Home/DownloadTemplate?ReportId=';
-
+                    $scope.showDeleteConfirmation = false;
                     $scope.$watch('hasReportTemplate', function (val) {
                         if (val)
                             $scope.downloadLink = baseDownloadUrl + $scope.reportid;
@@ -15,6 +15,23 @@
 
                     if ($scope.hasReportTemplate === 'true')
                         $scope.downloadLink = baseDownloadUrl + $scope.reportid;
+                    
+
+                    $scope.deleteTemplate = function (really) {
+                        if (really) {
+                            $http.post("Home/DeleteTemplate", { reportId: $scope.reportid }).success(function(data) {
+                                toastr.success("Template deleted");
+                                $scope.downloadLink = null;
+                                $scope.hasReportTemplate = false;
+                                $scope.templateFormat = 0;
+                            }).error(function() {
+                                toastr.error('Something went wrong, please try again later or contact support');
+                            });
+                            $scope.showDeleteConfirmation = false;
+                        } else {
+                            $scope.showDeleteConfirmation = true;
+                        }
+                    }
 
                     $scope.upload = function (files) {
                         if (files && files.length) {

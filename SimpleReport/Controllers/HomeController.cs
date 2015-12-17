@@ -13,10 +13,12 @@ namespace SimpleReport.Controllers
     public class HomeController : BaseController
     {
         private readonly ReportResolver _reportResolver;
+        private readonly ILogger _logger;
 
         public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings) : base(reportResolver.Storage, logger, applicationSettings)
         {
             _reportResolver = reportResolver;
+            _logger = logger;
         }
 
         public ActionResult Index()
@@ -82,49 +84,73 @@ namespace SimpleReport.Controllers
 
         public ActionResult UploadTemplate(Guid reportId)
         {
+            try
+            {
+                Report report = _reportResolver.GetReport(reportId);
+                if (!report.IsAvailableToEditTemplate(User, _adminAccess))
+                    return Json(new {error = "Not Authorized"});
+
+                if (Request.Files.Count > 0)
+                {
+                    var file = Request.Files[0];
+
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        byte[] data;
+                        using (Stream inputStream = file.InputStream)
+                        {
+                            MemoryStream memoryStream = inputStream as MemoryStream;
+                            if (memoryStream == null)
+                            {
+                                memoryStream = new MemoryStream();
+                                inputStream.CopyTo(memoryStream);
+                            }
+                            data = memoryStream.ToArray();
+                        }
+
+                        var mimeType = MimeMapping.GetMimeMapping(file.FileName);
+
+                        try
+                        {
+                            if (MimeTypeHelper.IsWord(mimeType))
+                            {
+                                HandleWord(report, reportId, data);
+                            }
+                            else
+                            {
+                                HandleExcel(report, reportId, data);
+                            }
+                        }
+                        catch (ValidationException vex)
+                        {
+                            return Json(new {error = vex.Message});
+                        }
+                    }
+                }
+                return Json(new { status = "ok", TemplateFormat = report.TemplateFormat });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in UploadTemplate", ex);
+                return Json(new {error = "Error Uploading Template for Report"});
+            }
+        }
+
+        public ActionResult DeleteTemplate(Guid reportId)
+        {
             Report report = _reportResolver.GetReport(reportId);
             if (!report.IsAvailableToEditTemplate(User, _adminAccess))
-                return Json(new { error = "Not Authorized" });
-            
-            if (Request.Files.Count > 0)
+                return Json(new {error = "Not Authorized"});
+            try
             {
-                var file = Request.Files[0];
-
-                if (file != null && file.ContentLength > 0)
-                {
-                    byte[] data;
-                    using (Stream inputStream = file.InputStream)
-                    {
-                        MemoryStream memoryStream = inputStream as MemoryStream;
-                        if (memoryStream == null)
-                        {
-                            memoryStream = new MemoryStream();
-                            inputStream.CopyTo(memoryStream);
-                        }
-                        data = memoryStream.ToArray();
-                    }
-
-                    var mimeType = MimeMapping.GetMimeMapping(file.FileName);
-
-                    try
-                    {
-                        if (MimeTypeHelper.IsWord(mimeType))
-                        {
-                            HandleWord(report, reportId, data);
-                        }
-                        else
-                        {
-                            HandleExcel(report, reportId, data);
-                    }
-                    }
-                    catch (ValidationException vex)
-                    {
-                        return Json(new { error = vex.Message });
-                    } 
-                }
+                _reportResolver.Storage.DeleteTemplate(reportId);
             }
-                    
-            return Json(new { status = "ok", TemplateFormat = report.TemplateFormat });
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in DeleteTemplate", ex);
+                return Json(new {error = "Error when deleting the Template"});
+            }
+            return Json(new {status = "ok"});
         }
 
         private void HandleExcel(Report report, Guid reportId, byte[] data)
