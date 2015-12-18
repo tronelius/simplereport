@@ -13,12 +13,10 @@ namespace SimpleReport.Controllers
     public class HomeController : BaseController
     {
         private readonly ReportResolver _reportResolver;
-        private readonly ILogger _logger;
 
         public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings) : base(reportResolver.Storage, logger, applicationSettings)
         {
             _reportResolver = reportResolver;
-            _logger = logger;
         }
 
         public ActionResult Index()

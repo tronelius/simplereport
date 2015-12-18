@@ -36,12 +36,12 @@ namespace SimpleReport.Model
                 else
                     ws = pck.Workbook.Worksheets.Add("Data");
 
-                if (_dataReader != null)
-                {
+                //if (_dataReader != null)
+                //{
 
-                    //ws.Cells["A2"].LoadFromDataReader(_dataReader, true);
-                }
-                else
+                //    //ws.Cells["A2"].LoadFromDataReader(_dataReader, true);
+                //}
+                //else
                     ws.Cells["A1"].LoadFromDataTable(Table, true);
 
                 ws.Workbook.Calculate();

@@ -143,7 +143,11 @@ namespace SimpleReport.Model
 
             var parameters = Parameters.CreateParameters(Sql, UpdateSql);
             var result = ADO.GetMultipleResults(Connection, Sql, parameters);
-            return new WordResult(result, this, templateData);
+            //var result2 = ADO.GetMultipleResultsDynamic(Connection, Sql, parameters);
+            //var columnNames = result2.Select(a => ((IDictionary<string, object>) a).Keys).FirstOrDefault();
+            //var group = result2.Select(a => ((IDictionary<string, object>) a)).GroupBy(a => a["merge_id"]);
+            return new WordResultTemplateEngine(result, this, templateData);
+            //return new WordResult(result, this, templateData);
         }
 
         public void UpdateSql(string sql)

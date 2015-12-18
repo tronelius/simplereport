@@ -77,6 +77,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TemplateEngine.Docx, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TemplateEngine.Docx.1.1.2\lib\TemplateEngine.Docx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +122,7 @@
     <Compile Include="Storage\SQL\SQLStorage.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="ValidatableEntity.cs" />
+    <Compile Include="WordResultTemplateEngine.cs" />
     <Compile Include="WordResult.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -31,13 +31,6 @@ namespace SimpleReport.Model
         {
             var sources = new List<Source>();
             var lastRow = Table.Rows[Table.Rows.Count - 1];
-            //if (Tables.Count > 1)
-            //{
-            //    foreach (DataTable dataTable in Tables)
-            //    {
-                    
-            //    }
-            //}
 
             foreach (DataRow row in Table.Rows)
             {
@@ -55,7 +48,7 @@ namespace SimpleReport.Model
                         {
                             var reportBookmark = new ReportBookmark(bookmarkStart.Name);
 
-                            if (reportBookmark.Type == "TBL")//tables are special
+                            if (reportBookmark.Type == FieldHandles.tableshort)//tables are special
                             {
                                 HandleTable(reportBookmark, bookmarkStart, row);
                             }
@@ -122,7 +115,7 @@ namespace SimpleReport.Model
 
             foreach (DataRow subRow in dataTable.Rows)
             {
-                if (!subRow["merge_id"].ToString().Equals(row["merge_id"].ToString()))//merge_id is currently the magic string that we use to merge.
+                if (!subRow[FieldHandles.Merge].ToString().Equals(row[FieldHandles.Merge].ToString()))//merge_id is currently the magic string that we use to merge.
                     continue;
 
                 TableRow rowCopy = GetNewRow(formattingTableRow);

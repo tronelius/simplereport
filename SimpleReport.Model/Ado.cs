@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using Dapper;
+using SimpleReport.Model.Storage.SQL;
 
 namespace SimpleReport.Model
 {
@@ -21,7 +23,7 @@ namespace SimpleReport.Model
                     cmd.CommandText = query;
                     if (param != null)
                         cmd.Parameters.AddRange(param.ToArray());
-                    
+
                     SqlDataAdapter da = null;
                     using (da = new SqlDataAdapter(cmd))
                     {
@@ -29,6 +31,8 @@ namespace SimpleReport.Model
                     }
 
                     return table;
+
+
                 }
                 finally
                 {
@@ -36,6 +40,31 @@ namespace SimpleReport.Model
                 }
             }
         }
+
+        public static IEnumerable<IEnumerable<dynamic>> GetMultipleResultsDynamic(Connection conn, string query, IEnumerable<SqlParameter> param)
+        {
+            using (SqlConnection cn = GetOpenConnection(conn))
+            {
+                try
+                {
+                    var args = new DynamicParameters(new { });
+                    param.ToList().ForEach(p => args.Add(p.ParameterName, p.Value));
+                    using (var gridReader = cn.QueryMultiple(query, args))
+                    {
+                        do
+                        {
+                            yield return gridReader.Read();
+                        } while (!gridReader.IsConsumed);
+                    }
+                    
+                }
+                finally
+                {
+                    cn.Close();
+                }
+            }
+        }
+
 
         public static List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<SqlParameter> param)
         {
@@ -127,8 +156,7 @@ namespace SimpleReport.Model
             }
             catch (Exception ex)
             {
-                throw new Exception(
-                    String.Format("Error when opening connection to Database, Name:{0}, Connectionstring:{1}", conn.Name, conn.ConnectionString), ex);
+                throw new Exception(String.Format("Error when opening connection to Database, Name:{0}, Connectionstring:{1}", conn.Name, conn.ConnectionString), ex);
             }
             return cn;
         }

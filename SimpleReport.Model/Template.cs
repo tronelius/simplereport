@@ -10,5 +10,6 @@ namespace SimpleReport.Model
         public byte[] Bytes { get; set; }
         public string Mime { get; set; }
         public string Filename { get; set; }
+        public TemplateFormat TemplateFormat { get; set; }
     }
 }

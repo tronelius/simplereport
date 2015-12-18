@@ -81,7 +81,7 @@ namespace SimpleReport.Model
                     valueList = GetValueListBasedOnPeriod(period);
                 }
             }
-            else if (valueList[0].Contains(":"))//this is custom, it starts with the enum value and then the actuall value. ENUM:FROM_TO
+            else if (valueList[0].Contains(":"))//this is custom, it starts with the enum value and then the actual value. ENUM:FROM_TO
             {
                 valueList = Value.Split(':')[1].Split(SPLITCHAR);
             }
