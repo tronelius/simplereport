@@ -9,6 +9,8 @@ namespace Worker.Common.Migrations
         public override void Up()
         {
             Alter.Table("Report").AlterColumn("Template").AsBinary(Int32.MaxValue).Nullable();
+            Alter.Table("Report").AlterColumn("Description").AsString(1000).Nullable();
+            Alter.Table("Report").AlterColumn("Group").AsString(50).Nullable();
         }
 
         public override void Down()

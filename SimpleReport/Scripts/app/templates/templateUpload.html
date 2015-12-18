@@ -2,7 +2,7 @@
     <label>Template</label>
     <div class="row">
         <div class="col-md-12">
-            <button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document">Upload Template</button>
+            <button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document">Upload new template</button>
             <span class="fa fa-fw fa-file-word-o" ng-show="templateFormat===2"></span>
             <span class="fa fa-fw fa-file-excel-o" ng-show="templateFormat===1"></span>
             <a href="{{downloadLink}}" ng-show="hasReportTemplate">Download</a>
