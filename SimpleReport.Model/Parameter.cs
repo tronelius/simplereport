@@ -59,8 +59,22 @@ namespace SimpleReport.Model
         public string Key { get { return SqlKey.Replace("@", ""); } }
 
         public List<KeyValuePair<string, string>> Choices { get; protected set; }
-        public Guid? LookupReportId { get; set; }
+
+        private Guid? LookupReportIdField=null;
+        public Guid? LookupReportId //because this has been serialized as Guid.empty in the past.
+        {
+            get { return LookupReportIdField; }
+            set
+            {
+                if (value == Guid.Empty)
+                    LookupReportIdField = null;
+                else
+                    LookupReportIdField = value;
+            }
+        }
+
         [NonSerialized] public LookupReport LookupReport;
+       
         public Guid ReportId { get; set; }
         public Parameter()
         {

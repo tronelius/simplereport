@@ -264,7 +264,11 @@ namespace SimpleReport.Controllers.Api
                     var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                     var buffer = await file.ReadAsStreamAsync();
                     var importModel = _storageHelper.ReadModelFromStream(buffer);
+                    importModel.Settings.AddCurrentUserToAdminAccess(User);
+                    var errors = importModel.RemoveIllegalItemsInModel();
                     _reportStorage.SaveModel(importModel);
+                    if  (errors.Count > 0)
+                        return Ok(new {message=errors});
                     return Ok();
                 }
                 return InternalServerError();

@@ -13,6 +13,13 @@ namespace SimpleReport.Model
             return new Access(AdminAccess);
         }
 
+        public void AddCurrentUserToAdminAccess(IPrincipal user)
+        {
+            var currentLoggedInUser = user.Identity.Name;
+            if (!this.AdminAccess.Contains(currentLoggedInUser))
+                this.AdminAccess += ";" + currentLoggedInUser;
+        }
+
         //default-values 
         public Settings()
         {

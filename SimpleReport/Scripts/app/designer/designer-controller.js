@@ -409,6 +409,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                     file: file
                 }).success(function (data, status, headers, config) {
                     if (!data.error) {
+                        if (data.message !== undefined) {
+                            toastr.info("Model errors:" + data.message);
+                        }
                         toastr.success("New data model imported!");
                     } else {
                         toastr.error(data.error);
