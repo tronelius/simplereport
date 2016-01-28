@@ -2,12 +2,15 @@
     return {
         scope: { choices: '=msdChoices', value: '=msdValue', required: '=msdRequired', name:'=msdName' },
         controller: [
-            '$scope', '$element', '$timeout', function ($scope, $element, $timeout) {
+            '$scope', '$element', '$timeout', function($scope, $element, $timeout) {
 
                 var element = $($element); // Get the element as a jQuery element
-
+                var valueArr = [];
+                if ($scope.value !== null) {
+                    valueArr = $scope.value.split(',');
+                }
                 var options = $scope.choices.map(function (c) {
-                    return { label: c.Value, title: c.Value, value: c.Key, selected: false };
+                    return { label: c.Value, title: c.Value, value: c.Key, selected: (valueArr.indexOf(c.Key) > -1) };
                 });
 
                 var selected = [];

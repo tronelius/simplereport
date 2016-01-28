@@ -2,9 +2,9 @@
 
     $scope.init = function () {
         viewModel.Report.Parameters.forEach(function (param) {
-            if (param.InputType === 6) //SyncedDate
+            if (param.InputType === 6 && param.Value === '') //SyncedDate
                 param.Value = 'SyncedDate';
-            if (param.InputType === 7) //SyncedRunningDate
+            if (param.InputType === 7 && param.Value === '') //SyncedRunningDate
                 param.Value = 'SyncedRunningDate';
 
             //periods of type custom comes on the format Enum:from_to
@@ -106,7 +106,7 @@
     function hasValidParameters() {
         var valid = true;
         $scope.viewModel.Report.Parameters.forEach(function (param) {
-            if (param.Mandatory && !param.Value) {
+            if (param.Mandatory && (!param.Value || (param.Value === 'SyncedDate' || param.Value === 'SyncedRunningDate'))) {
                 valid = false;
             }
         });
