@@ -18,11 +18,10 @@ namespace Worker.Common.Api
             using (var client = new WebClient())
             {
                 SetClientSettings(client);
-
                 var result = client.DownloadData(new Uri(client.BaseAddress + "Home/ExecuteReport/?" + parameters));
                 var headers = ContentDispositionHeaderValue.Parse(client.ResponseHeaders.Get("Content-Disposition"));
-                
                 return new ReportResult(result, headers.FileName.Replace("\"", ""));
+
             }
         }
 

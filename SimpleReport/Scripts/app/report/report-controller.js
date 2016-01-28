@@ -1,4 +1,4 @@
-﻿angular.module('report').controller('reportController', ['$scope', '$http', 'reportViewModel', '$filter', 'queryStringParser', 'reportUrlHelper', function ($scope, $http, viewModel, $filter, queryStringParser, reportUrlHelper) {
+﻿angular.module('report').controller('reportController', ['$scope', '$http', 'reportViewModel', '$filter', 'queryStringParser', 'reportUrlHelper', '$window', function ($scope, $http, viewModel, $filter, queryStringParser, reportUrlHelper, $window) {
 
     $scope.init = function () {
         viewModel.Report.Parameters.forEach(function (param) {
@@ -89,7 +89,7 @@
         var url = reportUrlHelper.toUrl($scope.viewModel.Report);
         url += '&selectedAction=onScreen';
 
-        location.href = 'Home/Report?' + url;
+        $window.location.href = '/Home/Report?' + url;
     }
 
     function triggerSubscribe() {

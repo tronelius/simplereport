@@ -46,12 +46,6 @@ namespace SimpleReport.Model
             Parameters = new ParameterList();
         } 
 
-        //public Report(Guid id, string name, string description, Guid connectionId, string sql, List<Parameter> parameters, ResultType resultType, string group) : base(id,name, description,connectionId,sql, group)
-        //{
-        //    Parameters = new ParameterList(parameters);
-        //    ResultType = resultType;
-        //}
-
         public bool IsParameterValueValid()
         {
             return Parameters.All(p => p.IsValid());
@@ -61,8 +55,6 @@ namespace SimpleReport.Model
         {
             return !(String.Equals(MailSubject, reportWithPossibleChanges.MailSubject, StringComparison.CurrentCulture) && String.Equals(MailText, reportWithPossibleChanges.MailText, StringComparison.CurrentCulture));
         }
-
-    
 
         public void ReadParameters(NameValueCollection queryString)
         {

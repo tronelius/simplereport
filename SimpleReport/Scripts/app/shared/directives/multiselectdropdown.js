@@ -37,7 +37,7 @@
                     enableCaseInsensitiveFiltering: true,
                     enableFullValueFiltering: false,
                     buttonContainer: $scope.required ? '<div class="required" />' : '<div />',
-                    buttonClass: 'form-control'
+                    buttonClass: 'form-control overflow'
             });
                 element.multiselect('dataprovider', options);
 

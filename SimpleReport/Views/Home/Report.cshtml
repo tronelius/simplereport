@@ -77,10 +77,10 @@
                                         </div>
                                     </div>
 
-                                    <select data-ng-if="par.InputType==@((int) ParameterInputType.Lookup)" name="{{par.Key}}" class="form-control" multiselect-dropdown data-msd-value="par.Value" data-msd-choices="par.Choices" data-msd-name="par.Key" data-msd-required="par.Mandatory" multiple="multiple">
+                                    <select data-ng-if="par.InputType==@((int) ParameterInputType.LookupMultipleChoice)" name="{{par.Key}}" class="form-control" multiselect-dropdown data-msd-value="par.Value" data-msd-choices="par.Choices" data-msd-name="par.Key" data-msd-required="par.Mandatory" multiple="multiple">
                                     </select>
 
-                                    <select data-ng-if="par.InputType==@((int) ParameterInputType.LookupMultipleChoice)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.Value">
+                                    <select data-ng-if="par.InputType==@((int) ParameterInputType.Lookup)" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" class="form-control" data-ng-model="par.Value">
                                         <option value="">[Please Choose...]</option>
                                         <option data-ng-repeat="(k,v) in par.Choices" value="{{v.Key}}">{{v.Value}}</option>
                                     </select>

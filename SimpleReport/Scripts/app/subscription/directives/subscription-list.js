@@ -3,7 +3,7 @@
         templateUrl: 'scripts/app/templates/subscriptionList.html',
         scope: { showReportName: '@', filter: '@', reportId: '=' },
         controller: [
-            '$scope', '$http', 'subscriptionRepository', 'reportRepository', '$q', function ($scope, $http, subscriptionRepository, reportRepository, $q) {
+            '$scope', '$http', 'subscriptionRepository', 'reportRepository', '$q', '$window', function ($scope, $http, subscriptionRepository, reportRepository, $q, $window) {
 
                 $scope.init = function () {
                     $scope.showReportName = $scope.showReportName === 'true';
@@ -47,7 +47,7 @@
                 }
 
                 function editSubscription(sub) {
-                    location.href = 'Home/Report?' + sub.ReportParams + '&subscriptionid=' + sub.Id;
+                    $window.location.href ='/Home/Report?' + sub.ReportParams + '&subscriptionid=' + sub.Id;
                 }
 
                 function deleteSubscription(id) {
