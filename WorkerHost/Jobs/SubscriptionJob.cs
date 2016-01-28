@@ -91,7 +91,17 @@ namespace WorkerHost.Jobs
                     reportParams = reportParams.Replace("=SyncedRunningDate", "=" + newSyncedDate);
 
                     var reportResult = _workerApiClient.GetReport(reportParams);
-                    if (reportResult != null && reportResult.Data.Length > 0 || subscription.SendEmptyEmails)
+                    if (reportResult == null)
+                    {
+                        _logger.Info("Empty report for subscription with id " + subscription.Id);
+                        if (subscription.SendEmptyEmails)
+                        {
+                            _mailSender.Send(subscription.MailSubject, subscription.MailText, subscription.To, subscription.Cc, subscription.Bcc, null, null);
+                            _logger.Info("Sent empty email for subscription with id " + subscription.Id);
+                            subscription.LastSent = DateTime.Now;
+                        }
+                    }
+                    else if (reportResult.Data.Length > 0)
                     {
                         _mailSender.Send(subscription.MailSubject, subscription.MailText, subscription.To, subscription.Cc, subscription.Bcc, reportResult.Data, reportResult.FileName);
                         subscription.LastSent = DateTime.Now;
@@ -101,6 +111,7 @@ namespace WorkerHost.Jobs
                     subscription.SyncedDate = newSyncedDate;
                     subscription.SetNextSendDate(schedule.Cron);
                     subscription.FailedAttempts = 0;
+                    subscription.ErrorMessage = "";
                 }
                 catch (Exception e)
                 {
