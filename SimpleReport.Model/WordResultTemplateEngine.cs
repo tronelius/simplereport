@@ -5,10 +5,13 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using OpenXmlPowerTools;
 using SimpleReport.Model.Helpers;
 using TemplateEngine.Docx;
+using Break = DocumentFormat.OpenXml.Wordprocessing.Break;
+using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
 using Source = OpenXmlPowerTools.Source;
 using TableRow = DocumentFormat.OpenXml.Wordprocessing.TableRow;
 using TableCell = DocumentFormat.OpenXml.Wordprocessing.TableCell;
@@ -43,13 +46,56 @@ namespace SimpleReport.Model
             DataColumn[] columns = new DataColumn[Table.Columns.Count];
             Table.Columns.CopyTo(columns, 0);
             var columnNames = columns.Select(a => a.ColumnName.ToLower()).ToList();
-            var moreTablesThanOne = Tables.Count > 1 && Table.Columns.Contains(FieldHandles.Merge) && Tables[1].Columns.Contains(FieldHandles.Merge);
-            ILookup<object, DataRow> grouped = null;
-            foreach (DataTable dataTable in Tables.Skip(1).Take(1)) //second table hardcoded for now
+            bool masterDetailDetected = Tables.Count > 1 && Table.Columns.Contains(FieldHandles.Merge) && Tables[1].Columns.Contains(FieldHandles.Merge);
+            ILookup<object, DataRow> masterDetailData = null;
+
+            if (masterDetailDetected) {
+                masterDetailData = Tables.Skip(1).Take(1).First().AsEnumerable().ToLookup(row => row[FieldHandles.Merge]);
+                RenderMasterDetailReport(masterDetailData, columnNames, lastRow, sources);
+            } else
             {
-                grouped = dataTable.AsEnumerable().ToLookup(row => row[FieldHandles.Merge]);
+                RenderSimpleTableReport(columnNames, sources);
+            }
+            
+            return MergeSources(sources);
+        }
+
+        private void RenderSimpleTableReport(List<string> columnNames, List<Source> sources)
+        {
+            using (var tdata = new MemoryStream(TemplateData))
+            using (var ms = new MemoryStream())
+            {
+                tdata.CopyTo(ms);
+                ms.Position = 0;
+                using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
+                {
+                    List<IContentItem> fieldContentsList = new List<IContentItem>();
+                    TableContent tableContent = new TableContent(FieldHandles.table);
+                    //var hasTables = doc.MainDocumentPart.Document.Body.Descendants<Table>().Any();
+                    //if (hasTables) {
+                    //    doc.MainDocumentPart.Document.Save();
+                        foreach (DataRow row in Table.Rows)
+                        {
+                            List<FieldContent> fieldContentTableList = new List<FieldContent>();
+                            foreach (DataColumn col in row.Table.Columns)
+                            {
+                                fieldContentTableList.Add(new FieldContent(col.ColumnName, row[col.ColumnName].ToString()));
+                            }
+                            tableContent.AddRow(fieldContentTableList.ToArray());
+                        }
+                        fieldContentsList.Add(tableContent);
+                    //}
+                    var content = new Content(fieldContentsList.ToArray());
+                    FillWordTemplate(doc, content, false);
+                    doc.MainDocumentPart.Document.Save();
+                    sources.Add(new Source(new WmlDocument(new OpenXmlPowerToolsDocument(ms.ToArray()))));
+                }
             }
 
+        }
+
+        private void RenderMasterDetailReport(ILookup<object, DataRow> masterDetailData, List<string> columnNames, DataRow lastRow, List<Source> sources)
+        {
             foreach (DataRow row in Table.Rows)
             {
                 using (var tdata = new MemoryStream(TemplateData))
@@ -62,12 +108,12 @@ namespace SimpleReport.Model
                         //Table fields
                         TableContent tableContent = new TableContent(FieldHandles.table);
                         List<IContentItem> FieldContentsList = new List<IContentItem>();
-                        if (moreTablesThanOne)
+                        if (masterDetailData != null)
                         {
                             List<FieldContent> FieldContentTableList = new List<FieldContent>();
 
                             var mergeValueForRow = row[FieldHandles.Merge];
-                            foreach (DataRow row2 in grouped[mergeValueForRow])
+                            foreach (DataRow row2 in masterDetailData[mergeValueForRow])
                             {
                                 FieldContentTableList = new List<FieldContent>();
                                 foreach (DataColumn col in row2.Table.Columns)
@@ -89,28 +135,28 @@ namespace SimpleReport.Model
 
                         var content = new Content(FieldContentsList.ToArray());
 
-                        XDocument document = GetXDocument(doc);
-                        using (var outputDocument = new TemplateProcessor(document).SetRemoveContentControls(true)
-                            //.SetNoticeAboutErrors(false)
-                            )
-                        {
-                            outputDocument.FillContent(content);
-                            using (var xw = XmlWriter.Create(doc.MainDocumentPart.GetStream(FileMode.Create, FileAccess.Write)))
-                            {
-                                document.Save(xw);
-                            }
-                        }
-
-                        if (row != lastRow)
-                            AddPageBreak(doc);
+                        FillWordTemplate(doc, content, lastRow != row);
 
                         doc.MainDocumentPart.Document.Save();
                         sources.Add(new Source(new WmlDocument(new OpenXmlPowerToolsDocument(ms.ToArray()))));
                     }
                 }
             }
+        }
 
-            return MergeSources(sources);
+        private static void FillWordTemplate(WordprocessingDocument doc, Content content, bool addpagebreak)
+        {
+            XDocument document = GetXDocument(doc);
+            using (var outputDocument = new TemplateProcessor(document).SetRemoveContentControls(true)) //.SetNoticeAboutErrors(false)
+            {
+                outputDocument.FillContent(content);
+                using (var xw = XmlWriter.Create(doc.MainDocumentPart.GetStream(FileMode.Create, FileAccess.Write)))
+                {
+                    document.Save(xw);
+                }
+            }
+            if (addpagebreak)
+                AddPageBreak(doc);
         }
 
         private static XDocument GetXDocument(WordprocessingDocument myDoc)

@@ -78,8 +78,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TemplateEngine.Docx, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TemplateEngine.Docx.1.1.2\lib\TemplateEngine.Docx.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalRefs\TemplateEngine.Docx.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
