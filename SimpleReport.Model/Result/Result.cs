@@ -1,15 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Security.RightsManagement;
-using DocumentFormat.OpenXml.Office.CoverPageProps;
-using Newtonsoft.Json;
-using OfficeOpenXml.Table;
 
-namespace SimpleReport.Model
+namespace SimpleReport.Model.Result
 {
     public abstract class Result
     {
@@ -29,6 +22,8 @@ namespace SimpleReport.Model
             return Table?.Rows.Count > 0;
         }
 
+        public Result(){}
+
         public Result(DataTable table, Report report, byte[] templateData)
         {
             Table = table;
@@ -36,13 +31,9 @@ namespace SimpleReport.Model
             TemplateData = templateData;
         }
 
-        public Result(Report report, byte[] templateData)
-        {
-            Report = report;
-            TemplateData = templateData;
-        }
-
         public abstract byte[] AsFile();
+
+        
     }
 
     public static class FieldHandles

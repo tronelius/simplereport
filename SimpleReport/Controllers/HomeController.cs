@@ -7,6 +7,7 @@ using SimpleReport.Model;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Helpers;
 using SimpleReport.Model.Logging;
+using SimpleReport.Model.Result;
 
 namespace SimpleReport.Controllers
 {
@@ -52,12 +53,7 @@ namespace SimpleReport.Controllers
                 if (report.HasTemplate)
                     templateData = _reportResolver.Storage.GetTemplate(reportId).Bytes;
 
-                Result result= null;
-
-                if (report.TemplateFormat==TemplateFormat.Excel || report.TemplateFormat==TemplateFormat.Empty)
-                    result = report.ExecuteWithTemplate(templateData);
-                else if (report.TemplateFormat == TemplateFormat.Word)
-                    result = report.ExecuteWithWordTemplate(templateData);
+                Result result = report.ExecuteWithTemplate(templateData);
 
                 if (result != null && result.HasData())
                     return File(result.AsFile(), result.MimeType, result.FileName);
@@ -153,7 +149,7 @@ namespace SimpleReport.Controllers
 
         private void HandleExcel(Report report, Guid reportId, byte[] data)
         {
-            ExcelValidator.Validate(data);//throws on invalid;
+            //ExcelValidator.Validate(data);//throws on invalid;
 
             _reportResolver.Storage.SaveTemplate(data, ".xlsx", reportId);
             report.TemplateFormat = TemplateFormat.Excel;

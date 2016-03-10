@@ -8,6 +8,7 @@ using System.Web;
 using Newtonsoft.Json;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
+using SimpleReport.Model.Result;
 using SimpleReport.Model.Storage.JsonConverters;
 
 namespace SimpleReport.Model.Storage

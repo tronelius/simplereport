@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
 using System.Security.Principal;
+using SimpleReport.Model.Result;
 
 namespace SimpleReport.Model
 {
@@ -25,17 +26,12 @@ namespace SimpleReport.Model
     public class Report : LookupReport
     {
         public ParameterList Parameters { get; set; }
-
         public bool HasTemplate
         {
             get { return TemplateFormat != TemplateFormat.Empty; }
         }
-
         public string MailSubject { get; set; }
         public string MailText { get; set; }
-        
-
-
         public bool OnScreenFormatAllowed { get; set; }
         public AccessStyle TemplateEditorAccessStyle { get; set; }
         public AccessStyle SubscriptionAccessStyle { get; set; }
@@ -118,28 +114,17 @@ namespace SimpleReport.Model
             return raw;
         }
 
-        public Result ExecuteWithTemplate(byte[] templateData)
-        {
-            if (Connection == null)
-                throw new Exception("Missing Connection in report");
-
-            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
-            DataTable result = ADO.GetResults(Connection, Sql, parameters);
-            return new ExcelResult(result, this, templateData);
-        }
-
-        public Result ExecuteWithWordTemplate(byte[] templateData)
+        public Result.Result ExecuteWithTemplate(byte[] templateData)
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
             var parameters = Parameters.CreateParameters(Sql, UpdateSql);
             var result = ADO.GetMultipleResults(Connection, Sql, parameters);
-            //var result2 = ADO.GetMultipleResultsDynamic(Connection, Sql, parameters);
-            //var columnNames = result2.Select(a => ((IDictionary<string, object>) a).Keys).FirstOrDefault();
-            //var group = result2.Select(a => ((IDictionary<string, object>) a)).GroupBy(a => a["merge_id"]);
-            return new WordResultTemplateEngine(result, this, templateData);
-            //return new WordResult(result, this, templateData);
+
+            if (TemplateFormat == TemplateFormat.Excel || TemplateFormat == TemplateFormat.Empty)
+                return new ExcelResultPlain(result.FirstOrDefault(), this, templateData);
+            return new WordResultPlain(result, this, templateData);
         }
 
         public void UpdateSql(string sql)

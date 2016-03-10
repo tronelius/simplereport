@@ -170,7 +170,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ApiClient.cs" />
-    <Compile Include="Helpers\ExcelValidator.cs" />
     <Compile Include="Helpers\HandleMyOwnErrorAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\DesignerViewModel.cs" />

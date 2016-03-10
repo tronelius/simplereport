@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Principal;
 using System.Web;
+using SimpleReport.Model.Result;
 
 namespace SimpleReport.Model.Storage
 {
