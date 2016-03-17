@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using SimpleReport.Model.Extensions;
+using SimpleReport.Model.Result;
 using SimpleReport.Model.Storage;
 
 namespace SimpleReport.ViewModel
@@ -22,6 +23,7 @@ namespace SimpleReport.ViewModel
         public Settings Settings { get; set; }
         public IEnumerable<AccessEditorViewModel> AccessEditorViewModel { get; set; }
         public bool SubscriptionEnabled { get; set; }
+        public List<ResultInfo> ReportResultTypes { get; set; }
 
         public DesignerViewModel(IStorage reportStorage, IPrincipal user, IApplicationSettings applicationSettings)
         {
@@ -37,6 +39,7 @@ namespace SimpleReport.ViewModel
             Settings = reportStorage.GetSettings();
             AccessEditorViewModel = Enum.GetValues(typeof(AccessStyle)).Cast<AccessStyle>().Select(x => new AccessEditorViewModel(x, GetTextForTemplateEditor(x)));
             SubscriptionEnabled = applicationSettings.SubscriptionEnabled;
+            ReportResultTypes = ResultFactory.GetList();
         }
 
         private string GetTextForTemplateEditor(AccessStyle editor)
@@ -52,18 +55,6 @@ namespace SimpleReport.ViewModel
                 default:
                     return editor.ToString();
             }    
-        }
-    }
-
-    public class AccessEditorViewModel
-    {
-        public AccessStyle Value { get; set; }
-        public string Text { get; set; }
-
-        public AccessEditorViewModel(AccessStyle value, string text)
-        {
-            Value = value;
-            Text = text;
         }
     }
 }

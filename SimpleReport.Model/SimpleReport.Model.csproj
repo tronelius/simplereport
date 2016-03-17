@@ -100,9 +100,11 @@
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Nlogger.cs" />
     <Compile Include="LookupReport.cs" />
-    <Compile Include="RawReportResult.cs" />
+    <Compile Include="Result\RawReportResult.cs" />
     <Compile Include="ReportInfo.cs" />
     <Compile Include="Result\ResultFactory.cs" />
+    <Compile Include="Result\ResultFileInfo.cs" />
+    <Compile Include="Result\ResultInfo.cs" />
     <Compile Include="Result\WordResultBase.cs" />
     <Compile Include="Result\WordResultMasterDetail.cs" />
     <Compile Include="Settings.cs" />

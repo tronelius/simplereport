@@ -1,13 +1,22 @@
 ﻿<div data-ng-show="reportid">
     <label>Template</label>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-4">
             <button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document">Upload new template</button>
-            <span class="fa fa-fw fa-file-word-o" ng-show="templateFormat===2"></span>
-            <span class="fa fa-fw fa-file-excel-o" ng-show="templateFormat===1"></span>
-            <a href="{{downloadLink}}" ng-show="hasReportTemplate">Download</a>
+            <div>
+                <span class="fa fa-fw fa-file-word-o" ng-show="templateFormat===2"></span>
+                <span class="fa fa-fw fa-file-excel-o" ng-show="templateFormat===1"></span>
+                <a href="{{downloadLink}}" ng-show="hasReportTemplate">Download</a>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <select ng-model="reportResultType" data-ng-options="r.ReportResultType as r.ReportResultName for r in reportResultTypes" class="form-control"></select>
+        </div>
+        <div class="col-xs-4">
             <button type="button" style="margin-left: 20px;" class="btn btn-primary" ng-show="hasReportTemplate" ng-click="deleteTemplate(false)">Delete template</button>
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="progress" data-ng-show="progress">
                 <div class="progress-bar" role="progressbar" ng-style="{ 'width': progress + '%' }"></div>

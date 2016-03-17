@@ -40,7 +40,7 @@ namespace SimpleReport.Model.Result
             }
         }
 
-        public override byte[] AsFile()
+        public override ResultFileInfo Render(List<DataTable> tables)
         {
             using (ExcelPackage pck = new ExcelPackage())
             {
@@ -57,21 +57,19 @@ namespace SimpleReport.Model.Result
                 }
                 else
                     ws = pck.Workbook.Worksheets.Add("Data");
-                ws.Cells["A1"].LoadFromDataTable(Table, true);
+                ws.Cells["A1"].LoadFromDataTable(tables.First(), true);
 
                 ws.Workbook.Calculate();
-                return pck.GetAsByteArray();
+                return new ResultFileInfo(this.FileName, this.MimeType, pck.GetAsByteArray());
             }
         }
+
+        public override ResultInfo ResultInfo { get { return new ResultInfo("ExcelResultPlain", "Excel");} }
 
         public ExcelResultPlain()
         {
             
         }
-        public ExcelResultPlain(DataTable table, Report report, byte[] templateData) : base(table, report, templateData)
-        {
-        }
-    }
-
-    
+        public ExcelResultPlain (Report report, Template template) :base(report, template) { }
+}
 }

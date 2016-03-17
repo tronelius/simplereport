@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using SimpleReport.Model.Result;
 
 namespace SimpleReport.Model
@@ -36,6 +37,8 @@ namespace SimpleReport.Model
         public AccessStyle TemplateEditorAccessStyle { get; set; }
         public AccessStyle SubscriptionAccessStyle { get; set; }
         public TemplateFormat TemplateFormat { get; set; }
+
+        public string ReportResultType { get; set; }
 
         public Report()
         {
@@ -114,17 +117,17 @@ namespace SimpleReport.Model
             return raw;
         }
 
-        public Result.Result ExecuteWithTemplate(byte[] templateData)
+        public ResultFileInfo ExecuteWithTemplate(Template template)
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
             var parameters = Parameters.CreateParameters(Sql, UpdateSql);
-            var result = ADO.GetMultipleResults(Connection, Sql, parameters);
+            var dataResult = ADO.GetMultipleResults(Connection, Sql, parameters);
 
-            if (TemplateFormat == TemplateFormat.Excel || TemplateFormat == TemplateFormat.Empty)
-                return new ExcelResultPlain(result.FirstOrDefault(), this, templateData);
-            return new WordResultPlain(result, this, templateData);
+            var result = ResultFactory.GetInstance(this, template);
+            return result.Render(dataResult);
+            
         }
 
         public void UpdateSql(string sql)
@@ -139,6 +142,13 @@ namespace SimpleReport.Model
                 return ((DateTime)obj).ToString("yyyy-MM-dd HH:mm:ss");
 
             return obj.ToString();
+        }
+
+        public bool HasMultipleSqlStatements()
+        {
+            string pattern = @"(?<!\()select";
+            var result = Regex.Matches(this.Sql, pattern);
+            return result.Count > 1;
         }
     }
 }

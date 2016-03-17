@@ -14,6 +14,7 @@ using SimpleReport.App_Start;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
 using SimpleReport.Model.Logging;
+using SimpleReport.Model.Result;
 using SimpleReport.Model.Storage;
 using SimpleReport.Model.Storage.SQL;
 

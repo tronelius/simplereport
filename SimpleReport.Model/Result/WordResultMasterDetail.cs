@@ -17,30 +17,37 @@ namespace SimpleReport.Model.Result
 {
     public class WordResultMasterDetail : WordResultBase
     {
-        private List<DataTable> Tables { get; set; }
-        public WordResultMasterDetail(List<DataTable> tables, Report report, byte[] templateData) : base(tables.First(), report, templateData)
+        public WordResultMasterDetail()
         {
-            Tables = tables;
+            
+        }
+        public WordResultMasterDetail(Report report, Template template) : base(report, template)
+        {
+            //Tables = tables;
         }
 
-        public override byte[] AsFile()
+        public override ResultFileInfo Render(List<DataTable> tables)
         {
             var sources = new List<Source>();
-            var lastRow = Table.Rows[Table.Rows.Count - 1];
+            var table = tables.First();
+            var lastRow = table.Rows[table.Rows.Count - 1];
 
-            DataColumn[] columns = new DataColumn[Table.Columns.Count];
-            Table.Columns.CopyTo(columns, 0);
+            DataColumn[] columns = new DataColumn[table.Columns.Count];
+            table.Columns.CopyTo(columns, 0);
             var columnNames = columns.Select(a => a.ColumnName.ToLower()).ToList();
             //bool masterDetailDetected = Tables.Count > 1 && Table.Columns.Contains(FieldHandles.Merge) && Tables[1].Columns.Contains(FieldHandles.Merge);
             ILookup<object, DataRow> masterDetailData = null;
-            masterDetailData = Tables.Skip(1).Take(1).First().AsEnumerable().ToLookup(row => row[FieldHandles.Merge]);
-            RenderMasterDetailReport(masterDetailData, columnNames, lastRow, sources);
+            masterDetailData = tables.Skip(1).Take(1).First().AsEnumerable().ToLookup(row => row[FieldHandles.Merge]);
+            RenderMasterDetailReport(tables, masterDetailData, columnNames, lastRow, sources);
             return MergeSources(sources);
         }
 
-        private void RenderMasterDetailReport(ILookup<object, DataRow> masterDetailData, List<string> columnNames, DataRow lastRow, List<Source> sources)
+        public override ResultInfo ResultInfo { get { return new ResultInfo("WordResultMasterDetail", "Word Master/Detail"); } }
+
+        private void RenderMasterDetailReport(List<DataTable> detailData, ILookup<object, DataRow> masterDetailData, List<string> columnNames, DataRow lastRow, List<Source> sources)
         {
-            foreach (DataRow row in Table.Rows)
+            var table = detailData.First();
+            foreach (DataRow row in table.Rows)
             {
                 using (var tdata = new MemoryStream(TemplateData))
                 using (var ms = new MemoryStream())
