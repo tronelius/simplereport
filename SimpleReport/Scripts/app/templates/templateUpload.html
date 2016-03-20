@@ -2,7 +2,7 @@
     <label>Template</label>
     <div class="row">
         <div class="col-xs-4">
-            <button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document">Upload new template</button>
+            <button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document">Upload</button>
             <div>
                 <span class="fa fa-fw fa-file-word-o" ng-show="templateFormat===2"></span>
                 <span class="fa fa-fw fa-file-excel-o" ng-show="templateFormat===1"></span>
@@ -10,10 +10,10 @@
             </div>
         </div>
         <div class="col-xs-4">
-            <select ng-model="reportResultType" data-ng-options="r.ReportResultType as r.ReportResultName for r in reportResultTypes" class="form-control"></select>
+            <select disabled ng-model="reportResultType" data-ng-options="r.ReportResultType as r.ReportResultName for r in reportResultTypes" class="form-control"></select>
         </div>
         <div class="col-xs-4">
-            <button type="button" style="margin-left: 20px;" class="btn btn-primary" ng-show="hasReportTemplate" ng-click="deleteTemplate(false)">Delete template</button>
+            <button type="button" style="margin-left: 20px;" class="btn btn-primary pull-right" ng-show="hasReportTemplate" ng-click="deleteTemplate(false)">Delete</button>
         </div>
     </div>
     <div class="row">
