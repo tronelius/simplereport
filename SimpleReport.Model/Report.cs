@@ -4,6 +4,8 @@ using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
+using SimpleReport.Model.Result;
 
 namespace SimpleReport.Model
 {
@@ -25,21 +27,18 @@ namespace SimpleReport.Model
     public class Report : LookupReport
     {
         public ParameterList Parameters { get; set; }
-
         public bool HasTemplate
         {
             get { return TemplateFormat != TemplateFormat.Empty; }
         }
-
         public string MailSubject { get; set; }
         public string MailText { get; set; }
-        
-
-
         public bool OnScreenFormatAllowed { get; set; }
         public AccessStyle TemplateEditorAccessStyle { get; set; }
         public AccessStyle SubscriptionAccessStyle { get; set; }
         public TemplateFormat TemplateFormat { get; set; }
+
+        public string ReportResultType { get; set; }
 
         public Report()
         {
@@ -118,28 +117,19 @@ namespace SimpleReport.Model
             return raw;
         }
 
-        public Result ExecuteWithTemplate(byte[] templateData)
+        public ResultFileInfo ExecuteWithTemplate(Template template)
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
             var parameters = Parameters.CreateParameters(Sql, UpdateSql);
-            DataTable result = ADO.GetResults(Connection, Sql, parameters);
-            return new ExcelResult(result, this, templateData);
-        }
+            var dataResult = ADO.GetMultipleResults(Connection, Sql, parameters);
+            var result = ResultFactory.GetInstance(this, template);
+            if (dataResult.Count == 0)
+                return null;
 
-        public Result ExecuteWithWordTemplate(byte[] templateData)
-        {
-            if (Connection == null)
-                throw new Exception("Missing Connection in report");
-
-            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
-            var result = ADO.GetMultipleResults(Connection, Sql, parameters);
-            //var result2 = ADO.GetMultipleResultsDynamic(Connection, Sql, parameters);
-            //var columnNames = result2.Select(a => ((IDictionary<string, object>) a).Keys).FirstOrDefault();
-            //var group = result2.Select(a => ((IDictionary<string, object>) a)).GroupBy(a => a["merge_id"]);
-            return new WordResultTemplateEngine(result, this, templateData);
-            //return new WordResult(result, this, templateData);
+            return result.Render(dataResult);
+            
         }
 
         public void UpdateSql(string sql)
@@ -154,6 +144,13 @@ namespace SimpleReport.Model
                 return ((DateTime)obj).ToString("yyyy-MM-dd HH:mm:ss");
 
             return obj.ToString();
+        }
+
+        public bool HasMultipleSqlStatements()
+        {
+            string pattern = @"(?<!\()select";
+            var result = Regex.Matches(this.Sql, pattern);
+            return result.Count > 1;
         }
     }
 }

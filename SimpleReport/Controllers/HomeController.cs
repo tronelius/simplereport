@@ -7,6 +7,7 @@ using SimpleReport.Model;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Helpers;
 using SimpleReport.Model.Logging;
+using SimpleReport.Model.Result;
 
 namespace SimpleReport.Controllers
 {
@@ -48,19 +49,14 @@ namespace SimpleReport.Controllers
             {
                 report.ReadParameters(Request.QueryString);
 
-                byte[] templateData = null;
+                Template template = null;
                 if (report.HasTemplate)
-                    templateData = _reportResolver.Storage.GetTemplate(reportId).Bytes;
+                    template = _reportResolver.Storage.GetTemplate(reportId);
 
-                Result result= null;
-
-                if (report.TemplateFormat==TemplateFormat.Excel || report.TemplateFormat==TemplateFormat.Empty)
-                    result = report.ExecuteWithTemplate(templateData);
-                else if (report.TemplateFormat == TemplateFormat.Word)
-                    result = report.ExecuteWithWordTemplate(templateData);
-
-                if (result != null && result.HasData())
-                    return File(result.AsFile(), result.MimeType, result.FileName);
+                ResultFileInfo result = report.ExecuteWithTemplate(template);
+                
+                if (result != null)
+                    return File(result.Data, result.MimeType, result.FileName);
                 return new HttpStatusCodeResult(204);
             }
             return File(GetBytes("Not allowed to execute this report"), "text/plain", "NotAllowed.txt");
@@ -125,7 +121,7 @@ namespace SimpleReport.Controllers
                         }
                     }
                 }
-                return Json(new { status = "ok", TemplateFormat = report.TemplateFormat });
+                return Json(new { status = "ok", TemplateFormat = report.TemplateFormat, ReportResultType=report.ReportResultType });
             }
             catch (Exception ex)
             {
@@ -153,10 +149,11 @@ namespace SimpleReport.Controllers
 
         private void HandleExcel(Report report, Guid reportId, byte[] data)
         {
-            ExcelValidator.Validate(data);//throws on invalid;
+            //ExcelValidator.Validate(data);//throws on invalid;
 
             _reportResolver.Storage.SaveTemplate(data, ".xlsx", reportId);
             report.TemplateFormat = TemplateFormat.Excel;
+            report.ReportResultType = ResultFactory.GetNextResult(report, new Template() { Bytes = data, Mime = MimeTypeHelper.ExcelMime, TemplateFormat = TemplateFormat.Excel }).ResultInfo.ReportResultType;
             _reportResolver.Storage.SaveReport(report);
         }
 
@@ -164,13 +161,16 @@ namespace SimpleReport.Controllers
         {
             _reportResolver.Storage.SaveTemplate(data, ".docx", reportId);
             report.TemplateFormat = TemplateFormat.Word;
+            report.ReportResultType = ResultFactory.GetNextResult(report, new Template() {Bytes=data,Mime= MimeTypeHelper.WordMime,TemplateFormat=TemplateFormat.Word}).ResultInfo.ReportResultType;
             _reportResolver.Storage.SaveReport(report);
         }
 
         public ActionResult DownloadTemplate(Guid reportId)
         {
             var template = _reportResolver.Storage.GetTemplate(reportId);
-            return File(template.Bytes, MimeMapping.GetMimeMapping(template.Filename) , template.Filename);
+            if (template != null)
+                return File(template.Bytes, MimeMapping.GetMimeMapping(template.Filename) , template.Filename);
+            return null;
         }
 
         static byte[] GetBytes(string str)

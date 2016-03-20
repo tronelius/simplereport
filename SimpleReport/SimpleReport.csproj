@@ -157,8 +157,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\ModuleFirstBundleOrderer.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
     <Compile Include="Controllers\Api\ReportController.cs" />
+    <Compile Include="Controllers\Api\ReportIdWrapper.cs" />
     <Compile Include="Controllers\Api\SubscriptionController.cs" />
     <Compile Include="Controllers\Api\ScheduleController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -170,10 +172,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ApiClient.cs" />
-    <Compile Include="Helpers\ExcelValidator.cs" />
     <Compile Include="Helpers\HandleMyOwnErrorAttribute.cs" />
+    <Compile Include="Helpers\IApiClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\AccessEditorViewModel.cs" />
     <Compile Include="ViewModel\DesignerViewModel.cs" />
+    <Compile Include="ViewModel\ReportInfoViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

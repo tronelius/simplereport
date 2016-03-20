@@ -9,13 +9,6 @@ using SimpleReport.Model.Storage;
 
 namespace SimpleReport.Controllers.Api
 {
-
-    public class ReportIdWrapper
-    {
-        public string ReportId { get; set; }
-        public object Data { get; set; }
-    }
-
     public class SubscriptionController : BaseApiController
     {
         private readonly IApiClient _apiClient;
