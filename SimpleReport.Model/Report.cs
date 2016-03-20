@@ -124,8 +124,10 @@ namespace SimpleReport.Model
 
             var parameters = Parameters.CreateParameters(Sql, UpdateSql);
             var dataResult = ADO.GetMultipleResults(Connection, Sql, parameters);
-
             var result = ResultFactory.GetInstance(this, template);
+            if (dataResult.Count == 0)
+                return null;
+
             return result.Render(dataResult);
             
         }

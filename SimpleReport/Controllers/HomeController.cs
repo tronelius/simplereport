@@ -121,7 +121,7 @@ namespace SimpleReport.Controllers
                         }
                     }
                 }
-                return Json(new { status = "ok", TemplateFormat = report.TemplateFormat });
+                return Json(new { status = "ok", TemplateFormat = report.TemplateFormat, ReportResultType=report.ReportResultType });
             }
             catch (Exception ex)
             {

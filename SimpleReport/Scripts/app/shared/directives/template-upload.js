@@ -49,6 +49,7 @@
                                 }).success(function (data, status, headers, config) {
                                     if (!data.error) {
                                         $scope.hasReportTemplate = true;
+                                        $scope.reportResultType = data.reportResultType;
                                         $scope.downloadLink = baseDownloadUrl + $scope.reportid;
                                         toastr.success("Template file uploaded");
                                         $scope.progress = null;
