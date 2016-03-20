@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
+using SimpleReport.Model.DbExecutor;
 using SimpleReport.Model.Result;
 
 namespace SimpleReport.Model
@@ -106,7 +107,7 @@ namespace SimpleReport.Model
                 throw new Exception("Missing Connection in report");
 
             var parameters = Parameters.CreateParameters(Sql, UpdateSql);
-            DataTable result = ADO.GetResults(Connection, Sql, parameters);
+            DataTable result = DbExecutorFactory.GetInstance(Connection).GetResults(Connection, Sql, parameters);
 
             var raw = new RawReportResult
             {
@@ -123,7 +124,7 @@ namespace SimpleReport.Model
                 throw new Exception("Missing Connection in report");
 
             var parameters = Parameters.CreateParameters(Sql, UpdateSql);
-            var dataResult = ADO.GetMultipleResults(Connection, Sql, parameters);
+            var dataResult = DbExecutorFactory.GetInstance(Connection).GetMultipleResults(Connection, Sql, parameters);
             var result = ResultFactory.GetInstance(this, template);
             if (dataResult.Count == 0)
                 return null;

@@ -65,6 +65,10 @@
       <HintPath>..\packages\OpenXmlPowerTools.4.0.0\lib\OpenXmlPowerTools.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.12.1.2400\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -85,10 +89,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Access.cs" />
-    <Compile Include="Ado.cs" />
+    <Compile Include="DbExecutor\ConnectionVerificationResult.cs" />
+    <Compile Include="DbExecutor\DbSqlServerExecutor.cs" />
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Connection.cs" />
+    <Compile Include="DbExecutor\DbExecutorFactory.cs" />
+    <Compile Include="DbExecutor\DbOracleExecutor.cs" />
     <Compile Include="Exceptions\ValidationResult.cs" />
+    <Compile Include="DbExecutor\IDbExecutor.cs" />
     <Compile Include="Result\ExcelResultPlain.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -131,6 +139,7 @@
     <Compile Include="Result\WordResultPlain.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

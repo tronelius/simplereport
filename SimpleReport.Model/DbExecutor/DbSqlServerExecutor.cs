@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
-using SimpleReport.Model.Storage.SQL;
 
-namespace SimpleReport.Model
+namespace SimpleReport.Model.DbExecutor
 {
-    public static class ADO
+    public class DbSqlServerExecutor : IDbExecutor
     {
-        public static DataTable GetResults(Connection conn, string query, IEnumerable<SqlParameter> param)
+        public DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
         {
             using (SqlConnection cn = GetOpenConnection(conn))
             {
@@ -41,32 +41,32 @@ namespace SimpleReport.Model
             }
         }
 
-        public static IEnumerable<IEnumerable<dynamic>> GetMultipleResultsDynamic(Connection conn, string query, IEnumerable<SqlParameter> param)
-        {
-            using (SqlConnection cn = GetOpenConnection(conn))
-            {
-                try
-                {
-                    var args = new DynamicParameters(new { });
-                    param.ToList().ForEach(p => args.Add(p.ParameterName, p.Value));
-                    using (var gridReader = cn.QueryMultiple(query, args))
-                    {
-                        do
-                        {
-                            yield return gridReader.Read();
-                        } while (!gridReader.IsConsumed);
-                    }
+        //public IEnumerable<IEnumerable<dynamic>> GetMultipleResultsDynamic(Connection conn, string query, IEnumerable<SqlParameter> param)
+        //{
+        //    using (SqlConnection cn = GetOpenConnection(conn))
+        //    {
+        //        try
+        //        {
+        //            var args = new DynamicParameters(new { });
+        //            param.ToList().ForEach(p => args.Add(p.ParameterName, p.Value));
+        //            using (var gridReader = cn.QueryMultiple(query, args))
+        //            {
+        //                do
+        //                {
+        //                    yield return gridReader.Read();
+        //                } while (!gridReader.IsConsumed);
+        //            }
                     
-                }
-                finally
-                {
-                    cn.Close();
-                }
-            }
-        }
+        //        }
+        //        finally
+        //        {
+        //            cn.Close();
+        //        }
+        //    }
+        //}
 
 
-        public static List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<SqlParameter> param)
+        public List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param)
         {
             var tables = new List<DataTable>();
             using (SqlConnection cn = GetOpenConnection(conn))
@@ -105,7 +105,7 @@ namespace SimpleReport.Model
             return tables;
         }
 
-        private static void AddRowWithData(DataTable data, SqlDataReader reader)
+        private void AddRowWithData(DataTable data, SqlDataReader reader)
         {
             var newRow = data.Rows.Add();
 
@@ -115,7 +115,7 @@ namespace SimpleReport.Model
             }
         }
 
-        private static DataTable GetDataTable(SqlDataReader reader)
+        private DataTable GetDataTable(SqlDataReader reader)
         {
             DataTable schemaTable = reader.GetSchemaTable();
             DataTable data = new DataTable();
@@ -139,14 +139,14 @@ namespace SimpleReport.Model
             return data;
         }
 
-        private static SqlCommand CreateCommand(SqlConnection cn)
+        private SqlCommand CreateCommand(SqlConnection cn)
         {
             var cmd= cn.CreateCommand();
             cmd.CommandTimeout = 60;
             return cmd;
         }
 
-        private static SqlConnection GetOpenConnection(Connection conn)
+        private SqlConnection GetOpenConnection(Connection conn)
         {
             SqlConnection cn;
             try
@@ -159,6 +159,26 @@ namespace SimpleReport.Model
                 throw new Exception(String.Format("Error when opening connection to Database, Name:{0}, Connectionstring:{1}", conn.Name, conn.ConnectionString), ex);
             }
             return cn;
+        }
+
+        public ConnectionVerificationResult VerifyConnectionstring(string connectionString)
+        {
+            try
+            {
+                string tempConnString = connectionString;
+                if (tempConnString.ToLower().IndexOf("connection timeout=") < 0)
+                    tempConnString += ";connection timeout=2";
+                using (SqlConnection conn = new SqlConnection(tempConnString))
+                {
+
+                    conn.Open(); // throws if invalid
+                }
+                return new ConnectionVerificationResult(true, "OK");
+            }
+            catch (Exception ex)
+            {
+                return new ConnectionVerificationResult(false, ex.Message);
+            }
         }
     }
 }
