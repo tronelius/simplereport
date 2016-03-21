@@ -38,7 +38,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 collection.push(updatedEntity);
             }
         }
-        $scope.$apply();
+        //$scope.$apply();
     }
 
     //Reports
@@ -179,7 +179,6 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id };
     };
     $scope.addNewParameter = function (keyOfParameter) {
-        //console.debug('new parameter');
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
     };
     $scope.saveReport = function (force) {
@@ -195,38 +194,27 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
         }
 
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/SaveReport',
-            data: JSON.stringify($scope.report),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
+        designerRepository.saveReport($scope.report).then(function(result) {
             toastr.success("Report saved", "Saved");
-            $scope.report = data;
+            $scope.report = result.data;
             $scope.reportDataChanged();
             updateCollection($scope.reportList, $scope.report);
-        }).error(function (data) {
+        }, function(error) {
             toastr.error("Server error when saving report.", "Error");
         });
     };
+
     $scope.deleteReport = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/DeleteReport',
-            data: JSON.stringify($scope.report),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
-            if (data.Success) {
+       designerRepository.deleteReport($scope.report).then(function (result) {
+            if (result.Success) {
                 toastr.success("Report is deleted", "Deleted");
                 updateCollection($scope.reportList, $scope.report, true);
                 $scope.report = null;
                 $scope.$apply();
             } else {
-                toastr.error(data.FullMessage, "Error");
+                toastr.error(result.FullMessage, "Error");
             }
-        }).error(function (data) {
+        }, function (data) {
             toastr.error("Server error when deleting report.", "Error");
         });
     };
@@ -234,17 +222,11 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     //Connections
     $scope.connectionChanged = function () { };
     $scope.saveConnection = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/SaveConnection',
-            data: JSON.stringify($scope.connection),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
+        designerRepository.saveConnection($scope.connection).then(function (result) {
             toastr.success("Connection saved", "Saved");
-            $scope.connection = data;
+            $scope.connection = result.data;
             updateCollection($scope.connections, $scope.connection);
-        }).error(function (data) {
+        }, function (data) {
             toastr.error("Server error when saving connection.", "Error");
         });
     };
@@ -252,41 +234,27 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.connection = { Id: null };
     };
     $scope.verifyConnection = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/VerifyConnection',
-            data: JSON.stringify($scope.connection),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
-            $scope.connection.Verified = data.Success;
-            $scope.$apply();
-            if (data.Success) {
+      designerRepository.verifyConnection($scope.connection).then(function (result) {
+            $scope.connection.Verified = result.data.Success;
+            if (result.data.Success) {
                 toastr.success("Connection verified", "OK!");
             } else {
                 toastr.error("Connectionstring is not valid and wont work", "Not OK!");
             }
-        }).error(function (data) {
+        },function (result) {
             toastr.error("Server error when verifing the connection.", "Error");
         });
     };
     $scope.deleteConnection = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/DeleteConnection',
-            data: JSON.stringify($scope.connection),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
-            if (data.Success) {
+        designerRepository.deleteConnection($scope.connection).then(function (result) {
+            if (result.data.Success) {
                 toastr.success("Connection is deleted", "Deleted");
                 updateCollection($scope.connections, $scope.connection, true);
                 $scope.connection = null;
-                $scope.$apply();
             } else {
-                toastr.error(data.FullMessage, "Error");
+                toastr.error(result.data.FullMessage, "Error");
             }
-        }).error(function (data) {
+        }, function (result) {
             toastr.error("Server error when deleting connection.", "Error");
         });
     };
@@ -398,6 +366,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             toastr.error("Server error when saving settings.", "Error");
         });
     };
+
     $scope.exportModel = function () {
         window.open(designerRepository.exportModelUrl(), '_blank', '');
     };
