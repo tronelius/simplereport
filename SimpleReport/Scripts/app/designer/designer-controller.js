@@ -221,7 +221,6 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
 
     //Connections
     $scope.connectionChanged = function () { };
-
     $scope.saveConnection = function () {
         designerRepository.saveConnection($scope.connection).then(function (result) {
             toastr.success("Connection saved", "Saved");
@@ -231,40 +230,31 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             toastr.error("Server error when saving connection.", "Error");
         });
     };
-
     $scope.addNewConnection = function () {
         $scope.connection = { Id: null };
     };
     $scope.verifyConnection = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/VerifyConnection',
-            data: JSON.stringify($scope.connection),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
-            $scope.connection.Verified = data.Success;
-            $scope.$apply();
-            if (data.Success) {
+      designerRepository.verifyConnection($scope.connection).then(function (result) {
+            $scope.connection.Verified = result.data.Success;
+            if (result.data.Success) {
                 toastr.success("Connection verified", "OK!");
             } else {
                 toastr.error("Connectionstring is not valid and wont work", "Not OK!");
             }
-        }).error(function (data) {
+        },function (result) {
             toastr.error("Server error when verifing the connection.", "Error");
         });
     };
     $scope.deleteConnection = function () {
         designerRepository.deleteConnection($scope.connection).then(function (result) {
-            if (result.Success) {
+            if (result.data.Success) {
                 toastr.success("Connection is deleted", "Deleted");
                 updateCollection($scope.connections, $scope.connection, true);
                 $scope.connection = null;
-                $scope.$apply();
             } else {
-                toastr.error(result.FullMessage, "Error");
+                toastr.error(result.data.FullMessage, "Error");
             }
-        }).error(function (data) {
+        }, function (result) {
             toastr.error("Server error when deleting connection.", "Error");
         });
     };

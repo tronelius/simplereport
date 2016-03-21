@@ -26,5 +26,9 @@
     repo.deleteConnection = function (connection) {
         return $http.post(urlBase + 'DeleteConnection', connection);
     };
+
+    repo.verifyConnection = function (connection) {
+        return $http.post(urlBase + 'VerifyConnection', connection);
+    };
     return repo;
 }]);
