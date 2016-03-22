@@ -175,6 +175,39 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
+        public IHttpActionResult SaveTypeAheadReport([FromBody]TypeAheadReport rpt)
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+                _reportStorage.SaveTypeAheadReport(rpt);
+                return Ok(rpt);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in SaveTypeAheadReport", ex);
+                return InternalServerError();
+            }
+        }
+
+        [AcceptVerbs("POST")]
+        public IHttpActionResult DeleteTypeAheadReport([FromBody]TypeAheadReport rpt)
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+                var deleteinfo = _reportStorage.DeleteTypeAheadReport(rpt.Id);
+                return Ok(deleteinfo);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in DeleteLookupReport", ex);
+                return InternalServerError();
+            }
+        }
+
+
+        [AcceptVerbs("POST")]
         public IHttpActionResult SaveAccessList([FromBody]Access acc)
         {
             try

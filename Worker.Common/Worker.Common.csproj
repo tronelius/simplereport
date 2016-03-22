@@ -67,6 +67,7 @@
     <Compile Include="Migrations\2016-03-11\ReportResultType.cs" />
     <Compile Include="Migrations\2015-12-14\ReportAdjustments.cs" />
     <Compile Include="Migrations\2015-11-27\AddWordTemplates.cs" />
+    <Compile Include="Migrations\2016-03-22\AddTypeAhead.cs" />
     <Compile Include="Model\ReportResult.cs" />
     <Compile Include="Api\WorkerApiClient.cs" />
     <Compile Include="Common\Logger.cs" />

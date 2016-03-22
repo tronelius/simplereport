@@ -97,6 +97,7 @@ namespace SimpleReport.Model.Storage
             File.Delete(filepath);
         }
 
+
         private string GetFilePath(Guid reportId)
         {
             var id = reportId.ToString();
@@ -293,6 +294,26 @@ namespace SimpleReport.Model.Storage
             _dataModel.Settings = settings;
             SaveModel(_dataModel);
             return true;
+        }
+
+        public TypeAheadReport GetTypeAheadReport(Guid typeAheadid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DeleteInfo DeleteTypeAheadReport(Guid typeAheadid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TypeAheadReport> GetTypeAheadReports()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SaveTypeAheadReport(TypeAheadReport report)
+        {
+            throw new NotImplementedException();
         }
     }
 }

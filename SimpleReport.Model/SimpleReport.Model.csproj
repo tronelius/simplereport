@@ -127,6 +127,7 @@
     <Compile Include="Storage\JsonConverters\ParameterJsonConverter.cs" />
     <Compile Include="Storage\SQL\SQLStorage.cs" />
     <Compile Include="Result\Template.cs" />
+    <Compile Include="TypeAheadReport.cs" />
     <Compile Include="ValidatableEntity.cs" />
     <Compile Include="Result\WordResultPlain.cs" />
   </ItemGroup>

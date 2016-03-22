@@ -19,6 +19,7 @@ namespace SimpleReport.ViewModel
         public IEnumerable<Connection> Connections { get; set; }
         public IEnumerable<LookupReport> LookupReports { get; set; }
         public List<Access> AccessLists { get; set; }
+        public IEnumerable<TypeAheadReport> TypeAheadReports { get; set; }
         public List<Access> ReportOwnerAccessLists { get; set; }
         public Settings Settings { get; set; }
         public IEnumerable<AccessEditorViewModel> AccessEditorViewModel { get; set; }
@@ -31,6 +32,7 @@ namespace SimpleReport.ViewModel
             Connections = reportStorage.GetConnections();
             LookupReports = reportStorage.GetLookupReports();
             AccessLists = reportStorage.GetAccessLists().ToList();
+            TypeAheadReports = reportStorage.GetTypeAheadReports().ToList();
             ReportOwnerAccessLists = reportStorage.GetAccessLists().ToList();
             ParameterInputType types = new ParameterInputType();
             InputTypes = types.ToKeyValues();
@@ -41,6 +43,8 @@ namespace SimpleReport.ViewModel
             SubscriptionEnabled = applicationSettings.SubscriptionEnabled;
             ReportResultTypes = ResultFactory.GetList();
         }
+
+        
 
         private string GetTextForTemplateEditor(AccessStyle editor)
         {

@@ -221,6 +221,7 @@ namespace SimpleReport.Model
         Lookup = 4,
         LookupMultipleChoice = 5,
         SyncedDate = 6,
-        SyncedRunningDate = 7
+        SyncedRunningDate = 7,
+        TypeAhead=8
     }
 }

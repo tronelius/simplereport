@@ -147,6 +147,24 @@ namespace SimpleReport.Controllers
             return Json(new {status = "ok"});
         }
 
+        public ActionResult GetTypeAheadResult(Guid reportId, Guid typeAheadid, string searchInput)
+        {
+            //Report report = _reportResolver.GetReport(reportId);
+            //if (!report.IsAvailableToEditTemplate(User, _adminAccess))
+            //    return Json(new { error = "Not Authorized" });
+            try
+            {
+                var typeahead = _reportResolver.Storage.GetTypeAheadReport(typeAheadid);
+               
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in DeleteTemplate", ex);
+                return Json(new { error = "Error when deleting the Template" });
+            }
+            return Json(new { status = "ok" });
+        }
+
         private void HandleExcel(Report report, Guid reportId, byte[] data)
         {
             //ExcelValidator.Validate(data);//throws on invalid;

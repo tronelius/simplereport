@@ -30,5 +30,22 @@
     repo.verifyConnection = function (connection) {
         return $http.post(urlBase + 'VerifyConnection', connection);
     };
+
+    repo.saveLookupReport = function (lookupReport) {
+        return $http.post(urlBase + 'SaveLookupReport', lookupReport);
+    };
+
+    repo.deleteLookupReport = function (lookupReport) {
+        return $http.post(urlBase + 'DeleteLookupReport', lookupReport);
+    };
+
+    repo.saveTypeAheadReport = function (typeaheadreport) {
+        return $http.post(urlBase + 'SaveTypeAheadReport', typeaheadreport);
+    };
+
+    repo.deleteTypeAheadReport = function (typeaheadreport) {
+        return $http.post(urlBase + 'DeleteTypeAheadReport', typeaheadreport);
+    };
+
     return repo;
 }]);
