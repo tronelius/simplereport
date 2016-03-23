@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="col-xs-4">
-            <select disabled ng-model="reportResultType" data-ng-options="r.ReportResultType as r.ReportResultName for r in reportResultTypes" class="form-control"></select>
+            <select ng-model="reportResultType" data-ng-options="r.ReportResultType as r.ReportResultName for r in reportResultTypes" class="form-control"></select>
         </div>
         <div class="col-xs-4">
             <button type="button" style="margin-left: 20px;" class="btn btn-primary pull-right" ng-show="hasReportTemplate" ng-click="deleteTemplate(false)">Delete</button>
