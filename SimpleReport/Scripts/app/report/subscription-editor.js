@@ -1,8 +1,8 @@
 ﻿angular.module('report').directive('subscriptionEditor', function () {
         return {
             templateUrl: 'scripts/app/templates/subscriptionEditor.html',
-            scope: { reportId: '=', reportParameters: '=', subscriptionId: '=', saveCb: '&' },
-            controller: ['$scope', '$http', 'reportViewModel','scheduleRepository', 'subscriptionRepository', 'reportUrlHelper', function ($scope, $http, viewModel, scheduleRepository, subscriptionRepository, reportUrlHelper) {
+            scope: { reportId: '=', reportParameters: '=', subscriptionId: '=', saveCb:'&'},
+            controller: ['$scope', '$http', 'reportViewModel','scheduleRepository', 'subscriptionRepository', 'reportUrlHelper','$window', function ($scope, $http, viewModel, scheduleRepository, subscriptionRepository, reportUrlHelper, $window) {
 
                 function init() {
 
@@ -14,14 +14,27 @@
                                 $scope.subscription = data;
                             }).error(function () {
                                 toastr.error('Something went wrong, please try again later or contact support');
-                        });
+                            });
                         }
                     });
 
                     fetchData();
                     $scope.save = save;
+                    $scope.preview = preview;
+                    $scope.previewNotOk = previewNotOk;
+                    $scope.previewOk = previewOk;
                 }
                 init();
+
+                function previewNotOk() {
+                    $scope.subscription.previewed = false;
+                    $scope.showPreviewSubscriptionConfirmation = false;
+                }
+
+                function previewOk() {
+                    $scope.subscription.previewed = true;
+                    $scope.showPreviewSubscriptionConfirmation = false;
+                }
 
                 function hasInvalidParameters() {
                     return $scope.reportParameters.some(function(param) {
@@ -32,15 +45,14 @@
                     });
                 }
 
-                function save() {
+                function preview() {
+                    $window.open(reportUrlHelper.toCompleteUrl($scope.reportId, $scope.reportParameters), '_blank');
+                    $scope.showPreviewSubscriptionConfirmation = true;
+                }
 
+                function save() {
                     if ($scope.form.$invalid) {
                         toastr.warning('Please fill in required fields');
-                        return;
-                    }
-
-                    if (!($scope.subscription.To || $scope.subscription.Cc || $scope.subscription.Bcc)) {
-                        toastr.warning('To,CC or Bcc needs to be provided.');
                         return;
                     }
 
@@ -49,24 +61,29 @@
                         return;
                     }
 
+                    if (!($scope.subscription.To || $scope.subscription.Cc || $scope.subscription.Bcc)) {
+                        toastr.warning('To,CC or Bcc needs to be provided.');
+                        return;
+                    }
+
+                    
                     var params = reportUrlHelper.toUrlByIdAndParams($scope.reportId, $scope.reportParameters);
-
                     var data = angular.extend($scope.subscription, { ReportId: $scope.reportId, ReportParams: params });
-                    subscriptionRepository.save(data).success(function (data) {
-                        if (data.Error) {
-                            toastr.error(data.Error);
-                            return;
-                        }
+                        subscriptionRepository.save(data).success(function (data) {
+                            if (data.Error) {
+                                toastr.error(data.Error);
+                                return;
+                            }
 
-                        toastr.success('Subscription saved');
-                        if (!$scope.subscription.Id)
-                            $scope.subscription.Id = data.Id;
+                            toastr.success('Subscription saved');
+                            if (!$scope.subscription.Id)
+                                $scope.subscription.Id = data.Id;
 
-                        if ($scope.saveCb)
-                            $scope.saveCb();
-                    }).error(function () {
-                        toastr.error('Something went wrong during save, please try again later or contact support');
-                    });
+                            if ($scope.saveCb)
+                                $scope.saveCb();
+                        }).error(function () {
+                            toastr.error('Something went wrong during save, please try again later or contact support');
+                        });
                 }
 
                 function fetchData() {

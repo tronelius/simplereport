@@ -20,8 +20,12 @@
         return serialize(parsedParameters);
     }
 
-    obj.toUrlByIdAndParams = toUrlByIdAndParams;
+    function toCompleteUrl(reportId, reportParameters) {
+        return "Home/ExecuteReport/?" + toUrlByIdAndParams(reportId, reportParameters);
+    }
 
+    obj.toUrlByIdAndParams = toUrlByIdAndParams;
+    obj.toCompleteUrl = toCompleteUrl;
     obj.toUrl = function (report) {
         return toUrlByIdAndParams(report.Id, report.Parameters);
     }

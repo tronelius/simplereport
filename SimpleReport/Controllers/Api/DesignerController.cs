@@ -206,7 +206,6 @@ namespace SimpleReport.Controllers.Api
             }
         }
 
-
         [AcceptVerbs("POST")]
         public IHttpActionResult SaveAccessList([FromBody]Access acc)
         {
