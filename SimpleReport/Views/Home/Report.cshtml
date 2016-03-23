@@ -90,10 +90,15 @@
                                         <option data-ng-repeat="(k,v) in par.Choices" value="{{v.Key}}">{{v.Value}}</option>
                                     </select>
 
-                                    <input data-ng-if="par.InputType==@((int) ParameterInputType.TypeAhead)" type="text" ng-model="par.Key" uib-typeahead="address for address in getData($viewValue,1)" typeahead-loading="loading" typeahead-no-results="noResults" class="form-control">
-                                    <i ng-show="loading" class="glyphicon glyphicon-refresh"></i>
-                                    <div ng-show="noResults">
-                                        <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                    <div data-ng-if="par.InputType==@((int) ParameterInputType.TypeAhead)">
+                                        <input type="hidden" value="{{par.Value}}" name="{{par.Key}}"/>
+                                        <input type="text" data-ng-model="par.selected" data-uib-typeahead="typeahead.Id as typeahead.Name for typeahead in getTypeAheadData(par.ReportId, par.TypeAheadReportId, $viewValue) | filter:{Name:$viewValue}" typeahead-loading="loading" typeahead-editable="true" typeahead-no-results="noResults" typeahead-min-length="3" typeahead-show-hint="true" class="form-control" 
+                                               typeahead-on-select="onSelect(par,$item,$model,$label)">
+                                        <i ng-show="loading" class="glyphicon glyphicon-refresh"></i>
+                                        <div ng-show="noResults">
+                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                        </div>
+                                        <div>Choosen: {{par.typeaheadLabel}}</div>
                                     </div>
 
                                     <input data-ng-if="par.InputType==@((int)ParameterInputType.String)" type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="String">

@@ -21,4 +21,10 @@ namespace SimpleReport.Model
             Value = value;
         }
     }
+
+    public class IdName
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
 }

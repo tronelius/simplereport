@@ -29,10 +29,9 @@ namespace SimpleReport.Model.Result
         public Result(Report report, Template template)
         {
             Report = report;
-            TemplateData = template.Bytes;
-
+            if (template != null)
+                TemplateData = template.Bytes;
         }
-        
         
     }
 

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace SimpleReport.Model
 {
     public class TypeAheadReport : LookupReport
     {
 
-        public Dictionary<string, string> Execute(string searchword)
+        public IEnumerable<IdName> Execute(string searchword)
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
@@ -18,23 +19,22 @@ namespace SimpleReport.Model
             paramList.Add(param);
 
             DataTable result = ADO.GetResults(Connection, Sql, paramList);
-
-            Dictionary<string, string> collection = new Dictionary<string, string>();
+            List<IdName> collection = new List<IdName>();
             if (result.Columns.Contains("id") && result.Columns.Contains("name"))
             {
                 foreach (DataRow row in result.Rows)
                 {
-                    collection.Add(row["id"].ToString(), row["name"].ToString());
+                    collection.Add(new IdName() { Id = row["id"].ToString(), Name=row["name"].ToString() });
                 }
             }
             else if (result.Columns.Count >= 2)
             {
                 foreach (DataRow row in result.Rows)
                 {
-                    collection.Add(row[0].ToString(), row[1].ToString());
+                    collection.Add(new IdName() {Id=row[0].ToString(),Name= row[1].ToString()});
                 }
             }
-            return collection;
+           return collection;
         }
     }
 }

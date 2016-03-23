@@ -126,17 +126,15 @@
         return valid;
     }
 
-    $scope.getData = function(val, id) {
-        return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
-            params: {
-                address: val,
-                sensor: false
-            }
-        }).then(function (response) {
-            return response.data.results.map(function (item) {
-                return item.formatted_address;
-            });
+    $scope.getTypeAheadData = function(reportid, typeaheadid, search) {
+        return $http.post('Home/GetTypeAheadData?reportid=' + reportid + '&typeaheadid=' + typeaheadid + '&search='+search).then(function (response) {
+            return response.data;
         });
+    };
+
+    $scope.onSelect = function (par, item, model, label) {
+        par.Value = item.Id;
+        par.typeaheadLabel = item.Name;
     };
 }
 ])

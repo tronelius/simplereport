@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
+using DapperExtensions;
 using SimpleReport.Model.Storage.SQL;
 
 namespace SimpleReport.Model
@@ -38,6 +39,22 @@ namespace SimpleReport.Model
                 {
                     cn.Close();
                 }
+            }
+        }
+
+        public static IEnumerable<IdName> getResultsAsIdName(Connection conn, string query, IEnumerable<SqlParameter> param)
+        {
+            using (SqlConnection cn = GetOpenConnection(conn))
+            {
+                return cn.Query<IdName>(query, param);
+            }
+        }
+
+        public static IEnumerable<dynamic> getResultsAsDynamic(Connection conn, string query, IEnumerable<SqlParameter> param)
+        {
+            using (SqlConnection cn = GetOpenConnection(conn))
+            {
+                return cn.Query(query, param);
             }
         }
 
