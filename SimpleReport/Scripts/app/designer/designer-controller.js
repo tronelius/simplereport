@@ -10,6 +10,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.reportList = data.Reports;
                 $scope.connections = data.Connections;
                 $scope.lookupReports = data.LookupReports;
+                $scope.typeAheadReports = data.TypeAheadReports;
                 $scope.accessLists = data.AccessLists;
                 $scope.reportOwnerAccessLists = data.ReportOwnerAccessLists;
                 $scope.settings = data.Settings;
@@ -260,7 +261,6 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     };
 
     //Dropdown parameters
-    $scope.lookupReportChanged = function () { };
     $scope.verifyLookupSql = function () {
         var re = /((\bid\b).+(\bname\b))|((\bname\b).+(\bid\b))/i;
         var match;
@@ -274,38 +274,61 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.lookupreport = { Id: null };
     };
     $scope.saveDropdownParameter = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/SaveLookupReport',
-            data: JSON.stringify($scope.lookupreport),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
+        designerRepository.saveLookupReport($scope.lookupreport).then( function (result) {
             toastr.success("Dropdown parameter saved", "Saved");
-            $scope.lookupreport = data;
+            $scope.lookupreport = result.data;
             updateCollection($scope.lookupReports, $scope.lookupreport);
-        }).error(function (data) {
+        },function (result) {
             toastr.error("Server error when saving dropdown parameter.", "Error");
         });
     };
     $scope.deleteDropdownParameter = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/DeleteLookupReport',
-            data: JSON.stringify($scope.lookupreport),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
-            if (data.Success) {
-                toastr.success("Lookup report is deleted", "Deleted");
+       designerRepository.deleteReport($scope.lookupreport).then(function (result) {
+            if (result.data.Success) {
+                toastr.success("dropdown parameter is deleted", "Deleted");
                 updateCollection($scope.lookupReports, $scope.lookupreport, true);
                 $scope.lookupreport = null;
-                $scope.$apply();
             } else {
-                toastr.error(data.FullMessage, "Error");
+                toastr.error(result.FullMessage, "Error");
             }
-        }).error(function (data) {
-            toastr.error("Server error when deleting lookup report.", "Error");
+        },function (result) {
+            toastr.error("Server error when deleting dropdown parameter.", "Error");
+        });
+    };
+
+    //TypeAheads
+    $scope.verifytypeAheadReportSql = function () {
+        var re = /((\bid\b).+(\bname\b))|((\bname\b).+(\bid\b))/i;
+        var match;
+        if ((match = re.exec($scope.typeAheadReport.Sql)) !== null) {
+            $scope.typeAheadReport.SqlOk = false;
+        } else {
+            $scope.typeAheadReport.SqlOk = true;
+        }
+    }
+    $scope.addNewtypeaheadreport = function () {
+        $scope.typeAheadReport = { Id: null };
+    };
+    $scope.saveTypeAhead = function () {
+        designerRepository.saveTypeAheadReport($scope.typeAheadReport).then(function (result) {
+            toastr.success("Typeahead parameter saved", "Saved");
+            $scope.typeAheadReport = result.data;
+            updateCollection($scope.typeAheadReports, $scope.typeAheadReport);
+        }, function (result) {
+            toastr.error("Server error when saving typeahead parameter.", "Error");
+        });
+    };
+    $scope.deleteTypeAhead = function () {
+        designerRepository.deleteTypeAheadReport($scope.typeAheadReport).then(function (result) {
+            if (result.data.Success) {
+                toastr.success("Typeahead parameter is deleted", "Deleted");
+                updateCollection($scope.typeAheadReports, $scope.typeAheadReport, true);
+                $scope.typeAheadReport = null;
+            } else {
+                toastr.error(result.FullMessage, "Error");
+            }
+        }, function (result) {
+            toastr.error("Server error when deleting typeahead parameter.", "Error");
         });
     };
 

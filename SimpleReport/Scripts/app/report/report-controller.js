@@ -125,5 +125,16 @@
         });
         return valid;
     }
+
+    $scope.getTypeAheadData = function(reportid, typeaheadid, search) {
+        return $http.post('Home/GetTypeAheadData?reportid=' + reportid + '&typeaheadid=' + typeaheadid + '&search='+search).then(function (response) {
+            return response.data;
+        });
+    };
+
+    $scope.onSelect = function (par, item, model, label) {
+        par.Value = item.Id;
+        par.typeaheadLabel = item.Name;
+    };
 }
 ])

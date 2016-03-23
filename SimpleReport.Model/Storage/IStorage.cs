@@ -14,9 +14,7 @@ namespace SimpleReport.Model.Storage
         void ClearModel();
 
         IEnumerable<ReportInfo> GetAllReportInfos();
-
         IEnumerable<Report> GetAllReports();
-
         Report GetReport(Guid id);
         bool SaveReport(Report report);
 
@@ -39,9 +37,15 @@ namespace SimpleReport.Model.Storage
         DeleteInfo DeleteConnection(Connection connection);
         DeleteInfo DeleteLookupReport(LookupReport lookupReport);
         DeleteInfo DeleteReport(ReportInfo report);
+
         void SaveTemplate(byte[] file, string fileEnding, Guid reportId);
         Template GetTemplate(Guid reportId);
         void DeleteTemplate(Guid reportId);
 
+
+        TypeAheadReport GetTypeAheadReport(Guid typeAheadid);
+        DeleteInfo DeleteTypeAheadReport(Guid typeAheadid);
+        IEnumerable<TypeAheadReport> GetTypeAheadReports();
+        bool SaveTypeAheadReport(TypeAheadReport report);
     }
 }

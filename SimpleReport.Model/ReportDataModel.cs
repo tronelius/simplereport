@@ -9,6 +9,7 @@ namespace SimpleReport.Model
         public List<Connection> Connections;
         public List<Report> Reports;
         public List<LookupReport> LookupReports;
+        public List<TypeAheadReport> TypeAheadReports;
         public List<Access> AccessLists;
         public Settings Settings;
 
@@ -30,6 +31,7 @@ namespace SimpleReport.Model
             Connections = new List<Connection>();
             Reports = new List<Report>();
             LookupReports = new List<LookupReport>();
+            TypeAheadReports = new List<TypeAheadReport>();
             AccessLists = new List<Access>();
             Settings = new Settings();
         }

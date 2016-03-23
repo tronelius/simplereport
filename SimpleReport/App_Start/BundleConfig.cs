@@ -19,7 +19,7 @@ namespace SimpleReport.App_Start
                 "~/Scripts/lib/bootstrap-datepicker.js",
                 "~/Scripts/lib/underscore.min.js",
                 "~/Scripts/lib/angular.js",
-                "~/Scripts/lib/ui-bootstrap-tpls-0.13.0.min.js",
+                "~/Scripts/lib/angular-ui/ui-bootstrap-tpls.min.js",
                 "~/Scripts/lib/toastr.js",
                 "~/Scripts/lib/ng-file-upload-all.min.js",
                 "~/Scripts/lib/jquery-cron-min.js",
@@ -34,7 +34,8 @@ namespace SimpleReport.App_Start
                       "~/Content/toastr.min.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/jquery-cron.css",
-                      "~/Content/bootstrap-multiselect.css"));
+                      "~/Content/bootstrap-multiselect.css",
+                      "~/Content/ui-bootstrap-csp.css"));
         }
     }
 }
