@@ -28,6 +28,9 @@ namespace SimpleReport.Model.Result
 
         public override ResultFileInfo Render(List<DataTable> tables)
         {
+            if (TemplateData == null) //dependent on template to function
+                return null;
+
             var sources = new List<Source>();
             var table = tables.First();
             var lastRow = table.Rows[table.Rows.Count - 1];
