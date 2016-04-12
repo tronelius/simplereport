@@ -6,7 +6,7 @@
         viewModel.Report.Parameters.forEach(function (param) {
             if (param.InputType === 6) { //SyncedDate
                 if(param.Value && param.Value !== 'SyncedDate')
-                    param.DisplayValue = param.Value;
+                    param.DisplayValue = new Date(param.Value);
 
                 if(param.Value === '')
                     param.Value = 'SyncedDate';
@@ -14,7 +14,7 @@
             }
             if (param.InputType === 7) { //SyncedRunningDate
                 if (param.Value && param.Value !== 'SyncedRunningDate')
-                    param.DisplayValue = param.Value;
+                    param.DisplayValue = new Date(param.Value);
 
                 if (param.Value === '')
                     param.Value = 'SyncedRunningDate';
@@ -40,7 +40,7 @@
 
             if (param.InputType === 2) { //date
                 if (param.Value)
-                    param.DisplayValue = param.Value;
+                    param.DisplayValue = new Date(param.Value);
             }
         });
 
@@ -71,7 +71,7 @@
     }
 
     function dateChanged(parameter) {
-        var date = $filter('date')(parameter.Value, $scope.dateFormat);
+        var date = $filter('date')(parameter.DisplayValue, $scope.dateFormat);
         parameter.Value = date;
     }
 
