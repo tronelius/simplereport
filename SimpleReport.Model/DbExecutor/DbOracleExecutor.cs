@@ -27,7 +27,7 @@ namespace SimpleReport.Model.DbExecutor
 
         public DbParameter CreateStringParameter(string name, int length)
         {
-            return new OracleParameter("@" + name, OracleDbType.NVarchar2, 100); //TODO: How does oracle work:P check @ and datatype
+            return new OracleParameter(name, OracleDbType.NVarchar2, 100);
         }
 
         public DbParameter CreateParameter(string key, object value)
