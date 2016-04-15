@@ -1,12 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
+using System.Linq;
 using Oracle.ManagedDataAccess.Client;
 
 namespace SimpleReport.Model.DbExecutor
 {
     public class DbOracleExecutor : BaseExecutor, IDbExecutor
     {
-       public ConnectionVerificationResult VerifyConnectionstring(string connectionString)
+        public override List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param)
+        {
+            var paramList = param.ToList();
+            var parsedQuery = ParseQuery(query, paramList);
+            return base.GetMultipleResults(conn, parsedQuery, paramList);
+        }
+
+        public override DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
+        {
+            var paramList = param.ToList();
+            var parsedQuery = ParseQuery(query, paramList);
+            return base.GetResults(conn, parsedQuery, paramList);
+        }
+
+        public ConnectionVerificationResult VerifyConnectionstring(string connectionString)
         {
             try
             {
@@ -53,6 +70,18 @@ namespace SimpleReport.Model.DbExecutor
         protected override DbDataAdapter GetDataAdapter(DbCommand cmd)
         {
             return new OracleDataAdapter(cmd as OracleCommand);
+        }
+
+        //The sql-editor clientside is based on @ to extract parameters. Oracle uses :param instead of @param, so we try to change all parameters to the oracle-name here.
+        private string ParseQuery(string query, List<DbParameter> param)
+        {
+            var q = query;
+            foreach (var dbParameter in param)
+            {
+                q = q.Replace("@" + dbParameter.ParameterName, ":" + dbParameter.ParameterName);//TODO: verify.
+            }
+
+            return q;
         }
     }
 }

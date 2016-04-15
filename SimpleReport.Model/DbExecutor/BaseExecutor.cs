@@ -8,7 +8,7 @@ namespace SimpleReport.Model.DbExecutor
 {
     public abstract class BaseExecutor
     {
-        public List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param)
+        public virtual List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param)
         {
             var tables = new List<DataTable>();
             using (var cn = GetOpenConnection(conn))
@@ -46,7 +46,7 @@ namespace SimpleReport.Model.DbExecutor
             return tables;
         }
 
-        public DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
+        public virtual DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
         {
             using (var cn = GetOpenConnection(conn))
             {
