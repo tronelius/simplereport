@@ -39,6 +39,7 @@ namespace SimpleReport.Model
         public TemplateFormat TemplateFormat { get; set; }
 
         public string ReportResultType { get; set; }
+        public bool ConvertToPdf { get; set; }
 
         public Report()
         {

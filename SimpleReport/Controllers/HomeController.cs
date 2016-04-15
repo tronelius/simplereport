@@ -8,16 +8,19 @@ using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Helpers;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Result;
+using SimpleReport.Model.Service;
 
 namespace SimpleReport.Controllers
 {
     public class HomeController : BaseController
     {
         private readonly ReportResolver _reportResolver;
+        private readonly IPdfService _pdfService;
 
-        public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings) : base(reportResolver.Storage, logger, applicationSettings)
+        public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings, IPdfService pdfService) : base(reportResolver.Storage, logger, applicationSettings)
         {
             _reportResolver = reportResolver;
+            _pdfService = pdfService;
         }
 
         public ActionResult Index()
@@ -54,6 +57,11 @@ namespace SimpleReport.Controllers
                     template = _reportResolver.Storage.GetTemplate(reportId);
 
                 ResultFileInfo result = report.ExecuteWithTemplate(template);
+
+                if (template != null && report.ConvertToPdf)
+                {
+                    result = _pdfService.ConvertToPdf(result);
+                }
                 
                 if (result != null)
                     return File(result.Data, result.MimeType, result.FileName);
@@ -128,6 +136,21 @@ namespace SimpleReport.Controllers
                 _logger.Error("Exception in UploadTemplate", ex);
                 return Json(new {error = "Error Uploading Template for Report"});
             }
+        }
+
+        [HttpPost]
+        public ActionResult UpdateTemplateMetadata(Guid reportId, bool convertToPdf)
+        {
+            Report report = _reportResolver.GetReport(reportId);
+            if (report.IsAvailableForMe(User, _adminAccess))
+            {
+                report.ConvertToPdf = convertToPdf;
+
+                _reportResolver.Storage.SaveReport(report);
+
+                return new HttpStatusCodeResult(200);
+            }
+            return File(GetBytes("Not allowed to execute this report"), "text/plain", "NotAllowed.txt");
         }
 
         public ActionResult DeleteTemplate(Guid reportId)

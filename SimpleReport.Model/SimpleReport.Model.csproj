@@ -37,6 +37,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Words, Version=16.3.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExternalLibs\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.1.42\lib\net40\Dapper.dll</HintPath>
       <Private>True</Private>
@@ -107,6 +111,7 @@
     <Compile Include="Result\ResultInfo.cs" />
     <Compile Include="Result\WordResultBase.cs" />
     <Compile Include="Result\WordResultMasterDetail.cs" />
+    <Compile Include="Service\PdfService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Storage\SQL\SQLSetting.cs" />
     <Compile Include="Storage\StorageHelper.cs" />

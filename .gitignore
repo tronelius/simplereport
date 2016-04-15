@@ -189,3 +189,6 @@ SimpleReport/Data/*.json
 #template files
 SimpleReport/Data/Templates/*.xlsx
 SimpleReport/Data/Templates/*.docx
+
+# External libs
+ExternalLibs/
