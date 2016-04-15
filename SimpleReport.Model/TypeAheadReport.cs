@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Linq;
 using SimpleReport.Model.DbExecutor;
 
 namespace SimpleReport.Model
@@ -14,13 +12,15 @@ namespace SimpleReport.Model
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
+            var db = DbExecutorFactory.GetInstance(Connection);
+
             List<DbParameter> paramList = new List<DbParameter>();
-            
-            SqlParameter param = new SqlParameter("@search",SqlDbType.NVarChar,100);
+
+            var param = db.CreateStringParameter("Search", 100);
             param.Value = searchword;
             paramList.Add(param);
 
-            DataTable result = DbExecutorFactory.GetInstance(Connection).GetResults(Connection, Sql, paramList);
+            DataTable result = db.GetResults(Connection, Sql, paramList);
             List<IdName> collection = new List<IdName>();
             if (result.Columns.Contains("id") && result.Columns.Contains("name"))
             {

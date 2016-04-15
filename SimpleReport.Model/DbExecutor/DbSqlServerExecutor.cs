@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 
@@ -23,6 +24,16 @@ namespace SimpleReport.Model.DbExecutor
             {
                 return new ConnectionVerificationResult(false, ex.Message);
             }
+        }
+
+        public DbParameter CreateStringParameter(string name, int length)
+        {
+            return new SqlParameter("@" + name, SqlDbType.NVarChar, length);
+        }
+
+        public DbParameter CreateParameter(string key, object value)
+        {
+            return new SqlParameter(key, value);
         }
 
         protected override DbConnection GetOpenConnection(Connection conn)

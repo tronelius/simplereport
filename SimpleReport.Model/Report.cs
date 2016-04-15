@@ -107,8 +107,9 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
-            DataTable result = DbExecutorFactory.GetInstance(Connection).GetResults(Connection, Sql, parameters);
+            var db = DbExecutorFactory.GetInstance(Connection);
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
+            DataTable result = db.GetResults(Connection, Sql, parameters);
 
             var raw = new RawReportResult
             {
@@ -124,8 +125,9 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            var parameters = Parameters.CreateParameters(Sql, UpdateSql);
-            var dataResult = DbExecutorFactory.GetInstance(Connection).GetMultipleResults(Connection, Sql, parameters);
+            var db = DbExecutorFactory.GetInstance(Connection);
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
+            var dataResult = db.GetMultipleResults(Connection, Sql, parameters);
             var result = ResultFactory.GetInstance(this, template);
             if (dataResult.Count == 0)
                 return null;

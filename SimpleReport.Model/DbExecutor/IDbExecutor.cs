@@ -11,5 +11,7 @@ namespace SimpleReport.Model.DbExecutor
         DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param);
 
         ConnectionVerificationResult VerifyConnectionstring(string connectionString);
+        DbParameter CreateStringParameter(string name, int length);
+        DbParameter CreateParameter(string key, object value);
     }
 }

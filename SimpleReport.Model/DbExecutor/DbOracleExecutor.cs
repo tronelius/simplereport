@@ -25,6 +25,16 @@ namespace SimpleReport.Model.DbExecutor
             }
         }
 
+        public DbParameter CreateStringParameter(string name, int length)
+        {
+            return new OracleParameter("@" + name, OracleDbType.NVarchar2, 100); //TODO: How does oracle work:P check @ and datatype
+        }
+
+        public DbParameter CreateParameter(string key, object value)
+        {
+            return new OracleParameter(key, value);
+        }
+
         protected override DbConnection GetOpenConnection(Connection conn)
         {
             OracleConnection cn;
