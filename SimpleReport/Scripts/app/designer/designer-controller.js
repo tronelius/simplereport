@@ -10,6 +10,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.reportList = data.Reports;
                 $scope.connections = data.Connections;
                 $scope.lookupReports = data.LookupReports;
+                $scope.typeAheadReports = data.TypeAheadReports;
                 $scope.accessLists = data.AccessLists;
                 $scope.reportOwnerAccessLists = data.ReportOwnerAccessLists;
                 $scope.settings = data.Settings;
@@ -39,7 +40,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 collection.push(updatedEntity);
             }
         }
-        $scope.$apply();
+        //$scope.$apply();
     }
 
     //Reports
@@ -180,7 +181,6 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id };
     };
     $scope.addNewParameter = function (keyOfParameter) {
-        //console.debug('new parameter');
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
     };
     $scope.saveReport = function (force) {
@@ -196,38 +196,27 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
         }
 
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/SaveReport',
-            data: JSON.stringify($scope.report),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
+        designerRepository.saveReport($scope.report).then(function(result) {
             toastr.success("Report saved", "Saved");
-            $scope.report = data;
+            $scope.report = result.data;
             $scope.reportDataChanged();
             updateCollection($scope.reportList, $scope.report);
-        }).error(function (data) {
+        }, function(error) {
             toastr.error("Server error when saving report.", "Error");
         });
     };
+
     $scope.deleteReport = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/DeleteReport',
-            data: JSON.stringify($scope.report),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
-            if (data.Success) {
+       designerRepository.deleteReport($scope.report).then(function (result) {
+            if (result.Success) {
                 toastr.success("Report is deleted", "Deleted");
                 updateCollection($scope.reportList, $scope.report, true);
                 $scope.report = null;
                 $scope.$apply();
             } else {
-                toastr.error(data.FullMessage, "Error");
+                toastr.error(result.FullMessage, "Error");
             }
-        }).error(function (data) {
+        }, function (data) {
             toastr.error("Server error when deleting report.", "Error");
         });
     };
@@ -235,17 +224,11 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     //Connections
     $scope.connectionChanged = function () { };
     $scope.saveConnection = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/SaveConnection',
-            data: JSON.stringify($scope.connection),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
+        designerRepository.saveConnection($scope.connection).then(function (result) {
             toastr.success("Connection saved", "Saved");
-            $scope.connection = data;
+            $scope.connection = result.data;
             updateCollection($scope.connections, $scope.connection);
-        }).error(function (data) {
+        }, function (data) {
             toastr.error("Server error when saving connection.", "Error");
         });
     };
@@ -253,47 +236,32 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.connection = { Id: null };
     };
     $scope.verifyConnection = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/VerifyConnection',
-            data: JSON.stringify($scope.connection),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
-            $scope.connection.Verified = data.Success;
-            $scope.$apply();
-            if (data.Success) {
+      designerRepository.verifyConnection($scope.connection).then(function (result) {
+            $scope.connection.Verified = result.data.Success;
+            if (result.data.Success) {
                 toastr.success("Connection verified", "OK!");
             } else {
                 toastr.error("Connectionstring is not valid and wont work", "Not OK!");
             }
-        }).error(function (data) {
+        },function (result) {
             toastr.error("Server error when verifing the connection.", "Error");
         });
     };
     $scope.deleteConnection = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/DeleteConnection',
-            data: JSON.stringify($scope.connection),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
-            if (data.Success) {
+        designerRepository.deleteConnection($scope.connection).then(function (result) {
+            if (result.data.Success) {
                 toastr.success("Connection is deleted", "Deleted");
                 updateCollection($scope.connections, $scope.connection, true);
                 $scope.connection = null;
-                $scope.$apply();
             } else {
-                toastr.error(data.FullMessage, "Error");
+                toastr.error(result.data.FullMessage, "Error");
             }
-        }).error(function (data) {
+        }, function (result) {
             toastr.error("Server error when deleting connection.", "Error");
         });
     };
 
     //Dropdown parameters
-    $scope.lookupReportChanged = function () { };
     $scope.verifyLookupSql = function () {
         var re = /((\bid\b).+(\bname\b))|((\bname\b).+(\bid\b))/i;
         var match;
@@ -307,38 +275,61 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.lookupreport = { Id: null };
     };
     $scope.saveDropdownParameter = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/SaveLookupReport',
-            data: JSON.stringify($scope.lookupreport),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
+        designerRepository.saveLookupReport($scope.lookupreport).then( function (result) {
             toastr.success("Dropdown parameter saved", "Saved");
-            $scope.lookupreport = data;
+            $scope.lookupreport = result.data;
             updateCollection($scope.lookupReports, $scope.lookupreport);
-        }).error(function (data) {
+        },function (result) {
             toastr.error("Server error when saving dropdown parameter.", "Error");
         });
     };
     $scope.deleteDropdownParameter = function () {
-        $.ajax({
-            type: 'post',
-            url: 'api/Designer/DeleteLookupReport',
-            data: JSON.stringify($scope.lookupreport),
-            processData: false,
-            contentType: 'application/json; charset=utf-8'
-        }).success(function (data) {
-            if (data.Success) {
-                toastr.success("Lookup report is deleted", "Deleted");
+       designerRepository.deleteReport($scope.lookupreport).then(function (result) {
+            if (result.data.Success) {
+                toastr.success("dropdown parameter is deleted", "Deleted");
                 updateCollection($scope.lookupReports, $scope.lookupreport, true);
                 $scope.lookupreport = null;
-                $scope.$apply();
             } else {
-                toastr.error(data.FullMessage, "Error");
+                toastr.error(result.FullMessage, "Error");
             }
-        }).error(function (data) {
-            toastr.error("Server error when deleting lookup report.", "Error");
+        },function (result) {
+            toastr.error("Server error when deleting dropdown parameter.", "Error");
+        });
+    };
+
+    //TypeAheads
+    $scope.verifytypeAheadReportSql = function () {
+        var re = /((\bid\b).+(\bname\b))|((\bname\b).+(\bid\b))/i;
+        var match;
+        if ((match = re.exec($scope.typeAheadReport.Sql)) !== null) {
+            $scope.typeAheadReport.SqlOk = false;
+        } else {
+            $scope.typeAheadReport.SqlOk = true;
+        }
+    }
+    $scope.addNewtypeaheadreport = function () {
+        $scope.typeAheadReport = { Id: null };
+    };
+    $scope.saveTypeAhead = function () {
+        designerRepository.saveTypeAheadReport($scope.typeAheadReport).then(function (result) {
+            toastr.success("Typeahead parameter saved", "Saved");
+            $scope.typeAheadReport = result.data;
+            updateCollection($scope.typeAheadReports, $scope.typeAheadReport);
+        }, function (result) {
+            toastr.error("Server error when saving typeahead parameter.", "Error");
+        });
+    };
+    $scope.deleteTypeAhead = function () {
+        designerRepository.deleteTypeAheadReport($scope.typeAheadReport).then(function (result) {
+            if (result.data.Success) {
+                toastr.success("Typeahead parameter is deleted", "Deleted");
+                updateCollection($scope.typeAheadReports, $scope.typeAheadReport, true);
+                $scope.typeAheadReport = null;
+            } else {
+                toastr.error(result.FullMessage, "Error");
+            }
+        }, function (result) {
+            toastr.error("Server error when deleting typeahead parameter.", "Error");
         });
     };
 
@@ -399,6 +390,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             toastr.error("Server error when saving settings.", "Error");
         });
     };
+
     $scope.exportModel = function () {
         window.open(designerRepository.exportModelUrl(), '_blank', '');
     };

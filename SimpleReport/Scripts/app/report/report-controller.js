@@ -1,11 +1,24 @@
 ﻿angular.module('report').controller('reportController', ['$scope', '$http', 'reportViewModel', '$filter', 'queryStringParser', 'reportUrlHelper', '$window', function ($scope, $http, viewModel, $filter, queryStringParser, reportUrlHelper, $window) {
 
     $scope.init = function () {
+        $scope.dateFormat = 'yyyy-MM-dd';
+
         viewModel.Report.Parameters.forEach(function (param) {
-            if (param.InputType === 6 && param.Value === '') //SyncedDate
-                param.Value = 'SyncedDate';
-            if (param.InputType === 7 && param.Value === '') //SyncedRunningDate
-                param.Value = 'SyncedRunningDate';
+            if (param.InputType === 6) { //SyncedDate
+                if(param.Value && param.Value !== 'SyncedDate')
+                    param.DisplayValue = new Date(param.Value);
+
+                if(param.Value === '')
+                    param.Value = 'SyncedDate';
+
+            }
+            if (param.InputType === 7) { //SyncedRunningDate
+                if (param.Value && param.Value !== 'SyncedRunningDate')
+                    param.DisplayValue = new Date(param.Value);
+
+                if (param.Value === '')
+                    param.Value = 'SyncedRunningDate';
+            }
 
             //periods of type custom comes on the format Enum:from_to
             if (param.InputType === 3) { //period
@@ -25,7 +38,10 @@
                 }
             }
 
-            $scope.dateFormat = 'yyyy-MM-dd';
+            if (param.InputType === 2) { //date
+                if (param.Value)
+                    param.DisplayValue = new Date(param.Value);
+            }
         });
 
         var s = queryStringParser.parse(location.search);
@@ -55,7 +71,7 @@
     }
 
     function dateChanged(parameter) {
-        var date = $filter('date')(parameter.Value, $scope.dateFormat);
+        var date = $filter('date')(parameter.DisplayValue, $scope.dateFormat);
         parameter.Value = date;
     }
 
@@ -125,5 +141,16 @@
         });
         return valid;
     }
+
+    $scope.getTypeAheadData = function(reportid, typeaheadid, search) {
+        return $http.post('Home/GetTypeAheadData?reportid=' + reportid + '&typeaheadid=' + typeaheadid + '&search='+search).then(function (response) {
+            return response.data;
+        });
+    };
+
+    $scope.onSelect = function (par, item, model, label) {
+        par.Value = item.Id;
+        par.typeaheadLabel = item.Name;
+    };
 }
 ])

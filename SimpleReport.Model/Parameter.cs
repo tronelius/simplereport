@@ -73,8 +73,13 @@ namespace SimpleReport.Model
             }
         }
 
-        [NonSerialized] public LookupReport LookupReport;
-       
+        public Guid? TypeAheadReportId { get; set; }
+
+        [NonSerialized]
+        public LookupReport LookupReport;
+        [NonSerialized]
+        public TypeAheadReport TypeAheadReport;
+
         public Guid ReportId { get; set; }
         public Parameter()
         {
@@ -221,6 +226,7 @@ namespace SimpleReport.Model
         Lookup = 4,
         LookupMultipleChoice = 5,
         SyncedDate = 6,
-        SyncedRunningDate = 7
+        SyncedRunningDate = 7,
+        TypeAhead=8
     }
 }

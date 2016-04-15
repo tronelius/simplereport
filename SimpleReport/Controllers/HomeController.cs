@@ -8,16 +8,19 @@ using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Helpers;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Result;
+using SimpleReport.Model.Service;
 
 namespace SimpleReport.Controllers
 {
     public class HomeController : BaseController
     {
         private readonly ReportResolver _reportResolver;
+        private readonly IPdfService _pdfService;
 
-        public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings) : base(reportResolver.Storage, logger, applicationSettings)
+        public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings, IPdfService pdfService) : base(reportResolver.Storage, logger, applicationSettings)
         {
             _reportResolver = reportResolver;
+            _pdfService = pdfService;
         }
 
         public ActionResult Index()
@@ -54,6 +57,11 @@ namespace SimpleReport.Controllers
                     template = _reportResolver.Storage.GetTemplate(reportId);
 
                 ResultFileInfo result = report.ExecuteWithTemplate(template);
+
+                if (template != null && report.ConvertToPdf)
+                {
+                    result = _pdfService.ConvertToPdf(result);
+                }
                 
                 if (result != null)
                     return File(result.Data, result.MimeType, result.FileName);
@@ -130,6 +138,21 @@ namespace SimpleReport.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult UpdateTemplateMetadata(Guid reportId, bool convertToPdf)
+        {
+            Report report = _reportResolver.GetReport(reportId);
+            if (report.IsAvailableForMe(User, _adminAccess))
+            {
+                report.ConvertToPdf = convertToPdf;
+
+                _reportResolver.Storage.SaveReport(report);
+
+                return new HttpStatusCodeResult(200);
+            }
+            return File(GetBytes("Not allowed to execute this report"), "text/plain", "NotAllowed.txt");
+        }
+
         public ActionResult DeleteTemplate(Guid reportId)
         {
             Report report = _reportResolver.GetReport(reportId);
@@ -145,6 +168,24 @@ namespace SimpleReport.Controllers
                 return Json(new {error = "Error when deleting the Template"});
             }
             return Json(new {status = "ok"});
+        }
+
+        public ActionResult GetTypeAheadData(Guid reportId, Guid typeaheadid, string search)
+        {
+            Report report = _reportResolver.GetReport(reportId);
+            if (!report.IsAvailableToEditTemplate(User, _adminAccess))
+                return Json(new { error = "Not Authorized" });
+            try
+            {
+                var typeahead = _reportResolver.Storage.GetTypeAheadReport(typeaheadid);
+                return Json(typeahead.Execute(search));
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in DeleteTemplate", ex);
+                return Json(new { error = "Error when deleting the Template" });
+            }
+            
         }
 
         private void HandleExcel(Report report, Guid reportId, byte[] data)

@@ -12,9 +12,10 @@
         <ul class="nav nav-tabs">
             <li ng-class="{active: activeTab == 'report', disabled: connections.length == 0}"><a data-toggle="tab" href="#tab_1" aria-expanded="true">Reports</a></li>
             <li ng-class="{active: activeTab == 'lookup', disabled: connections.length == 0}"><a data-toggle="tab" href="#tab_2" aria-expanded="false">Dropdown parameters</a></li>
-            <li ng-class="{active: activeTab == 'connection'}"><a data-toggle="tab" href="#tab_3" aria-expanded="false">Connections</a></li>
-            <li ng-class="{active: activeTab == 'accesslists'}"><a data-toggle="tab" href="#tab_4" aria-expanded="false">Access control lists</a></li>
-            <li ng-class="{active: activeTab == 'settings'}"><a data-toggle="tab" href="#tab_5" aria-expanded="false">Settings</a></li>
+            <li ng-class="{active: activeTab == 'typeahead', disabled: connections.length == 0}"><a data-toggle="tab" href="#tab_3" aria-expanded="false">Typeahead parameters</a></li>
+            <li ng-class="{active: activeTab == 'connection'}"><a data-toggle="tab" href="#tab_4" aria-expanded="false">Connections</a></li>
+            <li ng-class="{active: activeTab == 'accesslists'}"><a data-toggle="tab" href="#tab_5" aria-expanded="false">Access control lists</a></li>
+            <li ng-class="{active: activeTab == 'settings'}"><a data-toggle="tab" href="#tab_6" aria-expanded="false">Settings</a></li>
         </ul>
     </div>
 
@@ -26,12 +27,15 @@
                 @Html.Partial("_LookupReports")
             </div>
             <div class="tab-pane" id="tab_3">
-                @Html.Partial("_Connections")
+                @Html.Partial("_TypeAheadReports")
             </div>
             <div class="tab-pane" id="tab_4">
-                @Html.Partial("_AccessLists")
+                @Html.Partial("_Connections")
             </div>
             <div class="tab-pane" id="tab_5">
+                @Html.Partial("_AccessLists")
+            </div>
+            <div class="tab-pane" id="tab_6">
                 @Html.Partial("_Settings")
             </div>
         </div>
