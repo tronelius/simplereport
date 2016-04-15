@@ -1,63 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Linq;
 using Oracle.ManagedDataAccess.Client;
 
 namespace SimpleReport.Model.DbExecutor
 {
-    public class DbOracleExecutor : IDbExecutor
+    public class DbOracleExecutor : BaseExecutor, IDbExecutor
     {
-        public List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param)
+       public ConnectionVerificationResult VerifyConnectionstring(string connectionString)
         {
-            throw new NotImplementedException();
-        }
-
-        public DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
-        {
-            using (OracleConnection cn = GetOpenConnection(conn))
+            try
             {
-                try
+                string tempConnString = connectionString;
+                if (tempConnString.ToLower().IndexOf("connection timeout=") < 0)
+                    tempConnString += ";connection timeout=2";
+                using (var conn = new OracleConnection(tempConnString))
                 {
-                    OracleCommand cmd = null;
-                    DataTable table = new DataTable();
-                    cmd = CreateCommand(cn);
-                    cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
-                    cmd.CommandText = query;
-                    if (param != null)
-                        cmd.Parameters.AddRange(param.ToArray());
-
-                    OracleDataAdapter da = null;
-                    using (da = new OracleDataAdapter(cmd))
-                    {
-                        da.Fill(table);
-                    }
-
-                    return table;
-
-
+                    conn.Open(); // throws if invalid
                 }
-                finally
-                {
-                    cn.Close();
-                }
+                return new ConnectionVerificationResult(true, "OK");
+            }
+            catch (Exception ex)
+            {
+                return new ConnectionVerificationResult(false, ex.Message);
             }
         }
 
-        public ConnectionVerificationResult VerifyConnectionstring(string connectionString)
-        {
-            throw new NotImplementedException();
-        }
-
-        private OracleCommand CreateCommand(OracleConnection cn)
-        {
-            var cmd = cn.CreateCommand();
-            cmd.CommandTimeout = 60;
-            return cmd;
-        }
-        private OracleConnection GetOpenConnection(Connection conn)
+        protected override DbConnection GetOpenConnection(Connection conn)
         {
             OracleConnection cn;
             try
@@ -70,6 +38,11 @@ namespace SimpleReport.Model.DbExecutor
                 throw new Exception(String.Format("Error when opening connection to Database, Name:{0}, Connectionstring:{1}", conn.Name, conn.ConnectionString), ex);
             }
             return cn;
+        }
+
+        protected override DbDataAdapter GetDataAdapter(DbCommand cmd)
+        {
+            return new OracleDataAdapter(cmd as OracleCommand);
         }
     }
 }

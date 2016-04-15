@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Access.cs" />
+    <Compile Include="DbExecutor\BaseExecutor.cs" />
     <Compile Include="DbExecutor\ConnectionVerificationResult.cs" />
     <Compile Include="DbExecutor\DbSqlServerExecutor.cs" />
     <Compile Include="ApplicationSettings.cs" />
