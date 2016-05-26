@@ -17,6 +17,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.accessEditorViewModel = data.AccessEditorViewModel;
                 $scope.SubscriptionEnabled = data.SubscriptionEnabled;
                 $scope.reportResultTypes = data.ReportResultTypes;
+                $scope.connectionTypes = data.ConnectionTypes;
             }).
             error(function (data) {
                 toastr.error("Couldn't get list of reports from server.", "Error");

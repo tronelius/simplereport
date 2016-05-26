@@ -2,12 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Web.Script.Serialization;
+using SimpleReport.Model.DbExecutor;
 using SimpleReport.Model.Extensions;
 
 namespace SimpleReport.Model
@@ -23,12 +20,12 @@ namespace SimpleReport.Model
         {
         }
 
-        public List<SqlParameter> CreateParameters(string sql, Action<string> updateSqlAction)
+        public List<DbParameter> CreateParameters(string sql, Action<string> updateSqlAction, IDbExecutor db)
         {
-            List<SqlParameter> paramList = new List<SqlParameter>();
+            List<DbParameter> paramList = new List<DbParameter>();
             foreach (Parameter parameter in this)
             {
-                paramList.AddRange(parameter.GetSqlParameter(sql, updateSqlAction));
+                paramList.AddRange(parameter.GetDbParameter(sql, updateSqlAction, db));
             }
             return paramList;
         }
@@ -87,7 +84,7 @@ namespace SimpleReport.Model
         }
 
 
-        public IEnumerable<SqlParameter> GetSqlParameterForPeriod()
+        public IEnumerable<DbParameter> GetDbParameterForPeriod(IDbExecutor db)
         {
             string[] valueList = Value.Split(SPLITCHAR);
             string[] keyList = SqlKey.Split(SPLITCHAR);
@@ -110,15 +107,15 @@ namespace SimpleReport.Model
 
             for (int i = 0; i < valueList.Length; i++)
             {
-                yield return new SqlParameter(keyList[i], valueList[i]);
+                yield return db.CreateParameter(keyList[i], valueList[i]);
             }
         }
 
-        public List<SqlParameter> GetSqlParameterForLookup(string query, Action<string> updateSqlAction)
+        public List<DbParameter> GetDbParameterForLookup(string query, Action<string> updateSqlAction, IDbExecutor db)
         {
             string[] valueList = Value.Split(',');
 
-            var sqlparams = new List<SqlParameter>();
+            var dbParameters = new List<DbParameter>();
 
             //We replace @param with @param1,@param2 to handle in-clauses
             if (valueList.Length > 1)
@@ -128,7 +125,7 @@ namespace SimpleReport.Model
                 {
                     var np = "@" + Key + i;
                     newParams.Add(np);
-                    sqlparams.Add(new SqlParameter(np, valueList[i]));
+                    dbParameters.Add(db.CreateParameter(np, valueList[i]));
                 }
 
                 var replacement = string.Join(",", newParams);
@@ -138,10 +135,10 @@ namespace SimpleReport.Model
             }
             else
             {
-                sqlparams.Add(new SqlParameter(Key, Value));
+                dbParameters.Add(db.CreateParameter(Key, Value));
         }
 
-            return sqlparams;
+            return dbParameters;
         }
 
         private string[] GetValueListBasedOnPeriod(ParameterPeriods period)
@@ -170,13 +167,13 @@ namespace SimpleReport.Model
             }
         }
 
-        public IEnumerable<SqlParameter> GetSqlParameter(string query, Action<string> updateSqlAction)
+        public IEnumerable<DbParameter> GetDbParameter(string query, Action<string> updateSqlAction, IDbExecutor db)
         {
             if (InputType == ParameterInputType.Period)
-                return GetSqlParameterForPeriod();
+                return GetDbParameterForPeriod(db);
             if (InputType == ParameterInputType.Lookup || InputType == ParameterInputType.LookupMultipleChoice)
-                return GetSqlParameterForLookup(query, updateSqlAction);
-            return new List<SqlParameter>() { new SqlParameter(this.SqlKey, this.Value) };
+                return GetDbParameterForLookup(query, updateSqlAction, db);
+            return new List<DbParameter>() { db.CreateParameter(this.SqlKey, this.Value) };
         }
 
         public bool IsValid()

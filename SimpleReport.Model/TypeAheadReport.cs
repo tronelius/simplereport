@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+using System.Data.Common;
+using SimpleReport.Model.DbExecutor;
 
 namespace SimpleReport.Model
 {
     public class TypeAheadReport : LookupReport
     {
-
         public IEnumerable<IdName> Execute(string searchword)
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
-            List<SqlParameter> paramList = new List<SqlParameter>();
-            SqlParameter param = new SqlParameter("@search",SqlDbType.NVarChar,100);
+            var db = DbExecutorFactory.GetInstance(Connection);
+
+            List<DbParameter> paramList = new List<DbParameter>();
+
+            var param = db.CreateStringParameter("Search", 100);
             param.Value = searchword;
             paramList.Add(param);
 
-            DataTable result = ADO.GetResults(Connection, Sql, paramList);
+            DataTable result = db.GetResults(Connection, Sql, paramList);
             List<IdName> collection = new List<IdName>();
             if (result.Columns.Contains("id") && result.Columns.Contains("name"))
             {
