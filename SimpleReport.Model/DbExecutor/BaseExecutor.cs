@@ -58,13 +58,18 @@ namespace SimpleReport.Model.DbExecutor
                     cmd.CommandText = query;
                     if (param != null)
                         cmd.Parameters.AddRange(param.ToArray());
-                    
+
                     using (var da = GetDataAdapter(cmd))
                     {
                         da.Fill(table);
                     }
 
                     return table;
+                }
+                catch (Exception ex)
+                {
+                    string hepp = ex.ToString();
+                    return null;
                 }
                 finally
                 {

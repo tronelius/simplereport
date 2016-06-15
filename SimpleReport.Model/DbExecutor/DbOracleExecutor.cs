@@ -13,14 +13,25 @@ namespace SimpleReport.Model.DbExecutor
         {
             var paramList = param.ToList();
             var parsedQuery = ParseQuery(query, paramList);
-            return base.GetMultipleResults(conn, parsedQuery, paramList);
+            var parsedParamList = ParseParameters(paramList);
+            return base.GetMultipleResults(conn, parsedQuery, parsedParamList);
         }
 
         public override DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
         {
             var paramList = param.ToList();
             var parsedQuery = ParseQuery(query, paramList);
-            return base.GetResults(conn, parsedQuery, paramList);
+            var parsedParamList = ParseParameters(paramList);
+            return base.GetResults(conn, parsedQuery, parsedParamList);
+        }
+
+        private List<DbParameter> ParseParameters(List<DbParameter> paramList)
+        {
+            foreach (var dbParameter in paramList)
+            {
+                dbParameter.ParameterName = dbParameter.ParameterName.Replace("@", ":");
+            }
+            return paramList;
         }
 
         public ConnectionVerificationResult VerifyConnectionstring(string connectionString)
@@ -78,7 +89,7 @@ namespace SimpleReport.Model.DbExecutor
             var q = query;
             foreach (var dbParameter in param)
             {
-                q = q.Replace("@" + dbParameter.ParameterName, ":" + dbParameter.ParameterName);//TODO: verify.
+                q = q.Replace(dbParameter.ParameterName, ":" + dbParameter.ParameterName.Replace("@",""));//TODO: verify.
             }
 
             return q;
