@@ -92,7 +92,7 @@
 
                                     <div data-ng-if="par.InputType==@((int) ParameterInputType.TypeAhead)">
                                         <input type="hidden" value="{{par.Value}}" name="{{par.Key}}"/>
-                                        <input type="text" data-ng-model="par.selected" data-uib-typeahead="typeahead.Id as typeahead.Name for typeahead in getTypeAheadData(par.ReportId, par.TypeAheadReportId, $viewValue)" typeahead-loading="loading" typeahead-editable="true" typeahead-no-results="noResults" typeahead-min-length="3" typeahead-show-hint="true" class="form-control" 
+                                        <input type="text" data-ng-model="par.Value" data-uib-typeahead="typeahead.Id as typeahead.Name for typeahead in getTypeAheadData(par.ReportId, par.TypeAheadReportId, $viewValue)" typeahead-loading="loading" typeahead-editable="true" typeahead-no-results="noResults" typeahead-min-length="3" typeahead-show-hint="true" class="form-control" 
                                                typeahead-on-select="onSelect(par,$item,$model,$label)">
                                         <i ng-show="loading" class="glyphicon glyphicon-refresh"></i>
                                         <div ng-show="noResults">
