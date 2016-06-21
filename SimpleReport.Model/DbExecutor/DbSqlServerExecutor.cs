@@ -38,7 +38,13 @@ namespace SimpleReport.Model.DbExecutor
 
         public DbParameter CreateParameter(string key, object value)
         {
-            return new SqlParameter(key, value);
+            var parameter = new SqlParameter(key, value);
+            if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
+            {
+                parameter.IsNullable = true;
+                parameter.Value = DBNull.Value;
+            }
+            return parameter;
         }
 
         protected override DbConnection GetOpenConnection(Connection conn)

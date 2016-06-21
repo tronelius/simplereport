@@ -41,7 +41,13 @@ namespace SimpleReport.Model.DbExecutor
 
         public DbParameter CreateParameter(string key, object value)
         {
-            return new OracleParameter(key, value);
+            var parameter =  new OracleParameter(key, value);
+            if (value == null || (value is string && string.IsNullOrWhiteSpace((string) value)))
+            {
+                parameter.Value = DBNull.Value;
+                parameter.IsNullable = true;
+            }
+            return parameter;
         }
 
         protected override DbConnection GetOpenConnection(Connection conn)
