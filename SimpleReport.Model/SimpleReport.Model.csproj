@@ -100,6 +100,9 @@
     <Compile Include="Connection.cs" />
     <Compile Include="DbExecutor\DbExecutorFactory.cs" />
     <Compile Include="DbExecutor\DbOracleExecutor.cs" />
+    <Compile Include="Replacers\IReplacer.cs" />
+    <Compile Include="Replacers\NoReplacer.cs" />
+    <Compile Include="Replacers\OracleReservedWordsReplacer.cs" />
     <Compile Include="Exceptions\ValidationResult.cs" />
     <Compile Include="DbExecutor\IDbExecutor.cs" />
     <Compile Include="Result\ExcelResultPlain.cs" />

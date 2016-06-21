@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimpleReport.Model.Replacers;
 
 namespace SimpleReport.Model.DbExecutor
 {
@@ -11,11 +12,11 @@ namespace SimpleReport.Model.DbExecutor
             switch (conn.ConnectionType)
             {
                 case ConnectionType.SQL_Server:
-                    return new DbSqlServerExecutor();
+                    return new DbSqlServerExecutor(new NoReplacer());
                 case ConnectionType.Oracle:
-                    return new DbOracleExecutor();
+                    return new DbOracleExecutor(new OracleReservedWordsReplacer());
                 default:
-                    return new DbSqlServerExecutor();
+                    return new DbSqlServerExecutor(new NoReplacer());
             }
         }
     }

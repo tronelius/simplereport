@@ -4,34 +4,15 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using Oracle.ManagedDataAccess.Client;
+using SimpleReport.Model.Replacers;
 
 namespace SimpleReport.Model.DbExecutor
 {
     public class DbOracleExecutor : BaseExecutor, IDbExecutor
     {
-        public override List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param)
-        {
-            var paramList = param.ToList();
-            var parsedQuery = ParseQuery(query, paramList);
-            var parsedParamList = ParseParameters(paramList);
-            return base.GetMultipleResults(conn, parsedQuery, parsedParamList);
-        }
 
-        public override DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
+        public DbOracleExecutor(IReplacer replacer) : base(replacer)
         {
-            var paramList = param.ToList();
-            var parsedQuery = ParseQuery(query, paramList);
-            var parsedParamList = ParseParameters(paramList);
-            return base.GetResults(conn, parsedQuery, parsedParamList);
-        }
-
-        private List<DbParameter> ParseParameters(List<DbParameter> paramList)
-        {
-            foreach (var dbParameter in paramList)
-            {
-                dbParameter.ParameterName = dbParameter.ParameterName.Replace("@", ":");
-            }
-            return paramList;
         }
 
         public ConnectionVerificationResult VerifyConnectionstring(string connectionString)
@@ -83,16 +64,6 @@ namespace SimpleReport.Model.DbExecutor
             return new OracleDataAdapter(cmd as OracleCommand);
         }
 
-        //The sql-editor clientside is based on @ to extract parameters. Oracle uses :param instead of @param, so we try to change all parameters to the oracle-name here.
-        private string ParseQuery(string query, List<DbParameter> param)
-        {
-            var q = query;
-            foreach (var dbParameter in param)
-            {
-                q = q.Replace(dbParameter.ParameterName, ":" + dbParameter.ParameterName.Replace("@",""));//TODO: verify.
-            }
 
-            return q;
-        }
     }
 }

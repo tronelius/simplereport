@@ -2,11 +2,16 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using SimpleReport.Model.Replacers;
 
 namespace SimpleReport.Model.DbExecutor
 {
     public class DbSqlServerExecutor : BaseExecutor, IDbExecutor
     {
+        public DbSqlServerExecutor(IReplacer replacer) : base(replacer)
+        {
+        }
+
         public ConnectionVerificationResult VerifyConnectionstring(string connectionString)
         {
             try
@@ -55,5 +60,7 @@ namespace SimpleReport.Model.DbExecutor
         {
             return new SqlDataAdapter(cmd as SqlCommand);
         }
+
+     
     }
 }

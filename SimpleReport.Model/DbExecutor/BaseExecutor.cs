@@ -3,23 +3,53 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using SimpleReport.Model.Replacers;
 
 namespace SimpleReport.Model.DbExecutor
 {
     public abstract class BaseExecutor
     {
+        private IReplacer _replacer;// = new OracleReservedWordsReplacer();
+        public BaseExecutor(IReplacer replacer)
+        {
+            _replacer = replacer;
+        }
+
+        private List<DbParameter> ParseParameters(List<DbParameter> paramList)
+        {
+            foreach (var dbParameter in paramList)
+            {
+                dbParameter.ParameterName = _replacer.Replace(dbParameter.ParameterName);
+            }
+            return paramList;
+        }
+
+        //The sql-editor clientside is based on @ to extract parameters. Oracle uses :param instead of @param, so we try to change all parameters to the oracle-name here.
+        private string ParseQuery(string query, List<DbParameter> param)
+        {
+            var q = query;
+            foreach (var dbParameter in param)
+            {
+                q = q.Replace(dbParameter.ParameterName, _replacer.Replace(dbParameter.ParameterName));
+            }
+            return q;
+        }
+
         public virtual List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param)
         {
+            var paramList = param.ToList();
+            var parsedQuery = ParseQuery(query, paramList);
+            var parsedParamList = ParseParameters(paramList);
             var tables = new List<DataTable>();
             using (var cn = GetOpenConnection(conn))
             {
                 try
                 {
                     var cmd = CreateCommand(cn);
-                    cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
-                    cmd.CommandText = query;
-                    if (param != null)
-                        cmd.Parameters.AddRange(param.ToArray());
+                    cmd.CommandType = parsedQuery.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
+                    cmd.CommandText = parsedQuery;
+                    if (parsedParamList != null)
+                        cmd.Parameters.AddRange(parsedParamList.ToArray());
 
                     var reader = cmd.ExecuteReader();
 
@@ -48,16 +78,19 @@ namespace SimpleReport.Model.DbExecutor
 
         public virtual DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
         {
+            var paramList = param.ToList();
+            var parsedQuery = ParseQuery(query, paramList);
+            var parsedParamList = ParseParameters(paramList);
             using (var cn = GetOpenConnection(conn))
             {
                 try
                 {
                     DataTable table = new DataTable();
                     var cmd = CreateCommand(cn);
-                    cmd.CommandType = query.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
-                    cmd.CommandText = query;
-                    if (param != null)
-                        cmd.Parameters.AddRange(param.ToArray());
+                    cmd.CommandType = parsedQuery.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
+                    cmd.CommandText = parsedQuery;
+                    if (parsedParamList != null)
+                        cmd.Parameters.AddRange(parsedParamList.ToArray());
 
                     using (var da = GetDataAdapter(cmd))
                     {
