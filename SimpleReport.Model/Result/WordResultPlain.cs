@@ -57,7 +57,7 @@ namespace SimpleReport.Model.Result
                             List<FieldContent> fieldContentTableList = new List<FieldContent>();
                             foreach (DataColumn col in row.Table.Columns)
                             {
-                                fieldContentTableList.Add(new FieldContent(col.ColumnName, row[col.ColumnName].ToString()));
+                                fieldContentTableList.Add(new FieldContent(col.ColumnName, _replacer.Replace(row[col.ColumnName].ToString())));
                             }
                             tableContent.AddRow(fieldContentTableList.ToArray());
                         }

@@ -14,6 +14,7 @@ using SimpleReport.App_Start;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
 using SimpleReport.Model.Logging;
+using SimpleReport.Model.Replacers;
 using SimpleReport.Model.Result;
 using SimpleReport.Model.Service;
 using SimpleReport.Model.Storage;
@@ -47,9 +48,11 @@ namespace SimpleReport
             kernel.Bind<IPdfService>().To<PdfService>().InSingletonScope();
             kernel.BindFilter<HandleMyOwnErrorAttribute>(FilterScope.Controller, 0);
             kernel.Bind<ReportResolver>().ToSelf();
+            kernel.Bind<IXmlReplacer>().To<XmlReplacer>();
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
             return kernel;
         }
 
     }
+
 }

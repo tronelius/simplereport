@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -11,6 +13,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using OpenXmlPowerTools;
 using SimpleReport.Model.Helpers;
+using SimpleReport.Model.Replacers;
 using TemplateEngine.Docx;
 using Break = DocumentFormat.OpenXml.Wordprocessing.Break;
 using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
@@ -19,10 +22,12 @@ namespace SimpleReport.Model.Result
 {
     public abstract class WordResultBase : Result
     {
+        protected readonly IXmlReplacer _replacer = new XmlReplacer();
+
         public WordResultBase()
         {
-            
         }
+
         protected override string getMimeType()
         {
             return MimeTypeHelper.WordMime;
@@ -49,6 +54,16 @@ namespace SimpleReport.Model.Result
             if (addpagebreak)
                 AddPageBreak(doc);
         }
+
+        //private static Regex _regex = new Regex(@"\\u[a-zA-Z0-9]{4}", RegexOptions.Compiled);
+        //public string EscapeToValidXmlString(string stringtoEscape)
+        //{
+        //    //string decoded = _regex.Replace(stringtoEscape, "");
+        //    //return System.Security.SecurityElement.Escape(decoded);
+        //    Encoding enc = new ASCIIEncoding();
+        //    byte[] bytes = enc.GetBytes(stringtoEscape);
+        //    return enc.GetString(bytes);
+        //}
 
         protected XDocument GetXDocument(WordprocessingDocument myDoc)
         {

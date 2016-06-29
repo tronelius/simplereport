@@ -101,10 +101,13 @@
     <Compile Include="DbExecutor\DbExecutorFactory.cs" />
     <Compile Include="DbExecutor\DbOracleExecutor.cs" />
     <Compile Include="Replacers\IReplacer.cs" />
+    <Compile Include="Replacers\IXmlReplacer.cs" />
     <Compile Include="Replacers\NoReplacer.cs" />
     <Compile Include="Replacers\OracleReservedWordsReplacer.cs" />
     <Compile Include="Exceptions\ValidationResult.cs" />
     <Compile Include="DbExecutor\IDbExecutor.cs" />
+    <Compile Include="Replacers\XmlReplacer.cs" />
+    <Compile Include="Replacers\XmlTextEncoder.cs" />
     <Compile Include="Result\ExcelResultPlain.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

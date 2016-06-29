@@ -15,31 +15,34 @@ namespace SimpleReport.Model.DbExecutor
             _replacer = replacer;
         }
 
-        private List<DbParameter> ParseParameters(List<DbParameter> paramList)
+        private IEnumerable<DbParameter> ParseParameters(IEnumerable<DbParameter> paramList)
         {
-            foreach (var dbParameter in paramList)
-            {
-                dbParameter.ParameterName = _replacer.Replace(dbParameter.ParameterName);
+            if (paramList != null) { 
+                foreach (var dbParameter in paramList)
+                {
+                    dbParameter.ParameterName = _replacer.Replace(dbParameter.ParameterName);
+                }
             }
             return paramList;
         }
 
         //The sql-editor clientside is based on @ to extract parameters. Oracle uses :param instead of @param, so we try to change all parameters to the oracle-name here.
-        private string ParseQuery(string query, List<DbParameter> param)
+        private string ParseQuery(string query, IEnumerable<DbParameter> param)
         {
             var q = query;
-            foreach (var dbParameter in param)
-            {
-                q = q.Replace(dbParameter.ParameterName, _replacer.Replace(dbParameter.ParameterName));
+            if (param != null) { 
+                foreach (var dbParameter in param)
+                {
+                    q = q.Replace(dbParameter.ParameterName, _replacer.Replace(dbParameter.ParameterName));
+                }
             }
             return q;
         }
 
         public virtual List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param)
         {
-            var paramList = param.ToList();
-            var parsedQuery = ParseQuery(query, paramList);
-            var parsedParamList = ParseParameters(paramList);
+            var parsedQuery = ParseQuery(query, param);
+            var parsedParamList = ParseParameters(param);
             var tables = new List<DataTable>();
             using (var cn = GetOpenConnection(conn))
             {
@@ -78,9 +81,9 @@ namespace SimpleReport.Model.DbExecutor
 
         public virtual DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
         {
-            var paramList = param.ToList();
-            var parsedQuery = ParseQuery(query, paramList);
-            var parsedParamList = ParseParameters(paramList);
+
+            var parsedQuery = ParseQuery(query, param);
+            var parsedParamList = ParseParameters(param);
             using (var cn = GetOpenConnection(conn))
             {
                 try

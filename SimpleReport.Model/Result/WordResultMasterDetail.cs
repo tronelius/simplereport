@@ -59,6 +59,7 @@ namespace SimpleReport.Model.Result
                     ms.Position = 0;
                     using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
                     {
+                       
                         //Table fields
                         TableContent tableContent = new TableContent(FieldHandles.table);
                         List<IContentItem> FieldContentsList = new List<IContentItem>();
@@ -73,7 +74,8 @@ namespace SimpleReport.Model.Result
                                 foreach (DataColumn col in row2.Table.Columns)
                                 {
                                     if (col.ColumnName.ToLower() != FieldHandles.Merge)
-                                        FieldContentTableList.Add(new FieldContent(col.ColumnName, row2[col.ColumnName].ToString()));
+                                        FieldContentTableList.Add(new FieldContent(col.ColumnName, _replacer.Replace(row2[col.ColumnName].ToString())));
+
                                 }
                                 tableContent.AddRow(FieldContentTableList.ToArray());
                             }
@@ -84,7 +86,7 @@ namespace SimpleReport.Model.Result
                         foreach (string columnName in columnNames)
                         {
                             if (columnName.ToLower() != FieldHandles.Merge)
-                                FieldContentsList.Add(new FieldContent(columnName, row[columnName].ToString()));
+                                FieldContentsList.Add(new FieldContent(columnName, _replacer.Replace(row[columnName.ToLower()].ToString())));
                         }
 
                         var content = new Content(FieldContentsList.ToArray());
