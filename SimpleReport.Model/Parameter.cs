@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.Linq;
+using System.Text.RegularExpressions;
 using SimpleReport.Model.DbExecutor;
 using SimpleReport.Model.Extensions;
 
@@ -113,24 +114,28 @@ namespace SimpleReport.Model
 
         public List<DbParameter> GetDbParameterForLookup(string query, Action<string> updateSqlAction, IDbExecutor db)
         {
-            string[] valueList = Value.Split(',');
-
             var dbParameters = new List<DbParameter>();
+            string[] valueList = null;
 
+            if (!string.IsNullOrWhiteSpace(Value))
+                valueList = Value.Split(',');
+            
             //We replace @param with @param1,@param2 to handle in-clauses
-            if (valueList.Length > 1)
+            if (valueList != null && valueList.Length > 1)
             {
                 var newParams = new List<string>();
                 for (int i = 0; i < valueList.Length; i++)
                 {
-                    var np = "@" + Key + i;
+                    var np = i!=0?"@" + Key + i: "@"+Key;
                     newParams.Add(np);
                     dbParameters.Add(db.CreateParameter(np, valueList[i]));
                 }
 
                 var replacement = string.Join(",", newParams);
 
-                var newQuery = query.Replace("@" + Key, replacement);
+                //Regular expression to find only those parameters that is surrounded by parentesis to match a "in (@paramname)" situation or a "in(@paramname)" situation.
+                string findWhereIn = @"(?<=in\()@" + Key + @"(?=\))| (?<=in \()@" + Key + @"(?=\))";
+                var newQuery = Regex.Replace(query, findWhereIn, replacement);
                 updateSqlAction(newQuery);
             }
             else

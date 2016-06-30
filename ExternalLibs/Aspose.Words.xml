@@ -143,6 +143,11 @@
             </summary>
       <remarks>Only works for <see cref="F:Aspose.Words.RevisionType.Deletion" /> and <see cref="F:Aspose.Words.RevisionType.Moving" /> ('move from' type).</remarks>
     </member>
+    <member name="T:Aspose.Words.Drawing.Ole.NamespaceDoc">
+      <summary>
+        <para>Contains classes to work with OLE / ActiveX controls and forms in Microsoft Word documents.</para>
+      </summary>
+    </member>
     <member name="T:Aspose.Words.PlainTextDocument">
       <summary>
             Allows to extract plain-text representation of the document's content.
@@ -755,11 +760,6 @@ For example -1 means the last item, -2 means the second before last and so on.</
             </summary>
       <remarks>A deprecated format included in Office Open XML for legacy reasons only.</remarks>
     </member>
-    <member name="T:Aspose.Words.Fields.Expressions.NullableDouble">
-      <summary>
-            Represents a nullable double value.
-            </summary>
-    </member>
     <member name="T:Aspose.Words.Fields.FieldArgumentBuilder">
       <summary>
             Builds a complex field argument consisting of fields, nodes, and plain text.
@@ -923,6 +923,14 @@ For example -1 means the last item, -2 means the second before last and so on.</
       <summary>
             Performs the field update. Throws if the field is being updated already.
             </summary>
+    </member>
+    <member name="M:Aspose.Words.Fields.Field.Update(System.Boolean)">
+      <summary>
+            Performs a field update. Throws if the field is being updated already.
+            </summary>
+      <param name="ignoreMergeFormat">
+            If <c>true</c> then direct field result formatting is abandoned, regardless of the MERGEFORMAT switch, otherwise normal update is performed.
+            </param>
     </member>
     <member name="P:Aspose.Words.Fields.Field.Start">
       <summary>
@@ -1585,7 +1593,6 @@ Accepts a visitor.
              </summary>
       <remarks>
         <p>The returned string includes all control and special characters as described in <see cref="T:Aspose.Words.ControlChar" />.</p>
-        <seealso cref="M:Aspose.Words.Node.ToTxt" />
       </remarks>
     </member>
     <member name="M:Aspose.Words.Node.GetAncestor(System.Type)">
@@ -2002,6 +2009,26 @@ The imported node can then be inserted into the current document.</p>
       <param name="document">A template document to be populated with data.</param>
       <param name="dataSource">A data source object.</param>
       <param name="dataSourceName">A name to reference the data source object in the template.</param>
+    </member>
+    <member name="M:Aspose.Words.Reporting.ReportingEngine.BuildReport(Aspose.Words.Document,System.Object[],System.String[])">
+      <summary>
+            Populates the specified template document with data from the specified sources making it a ready report.
+            </summary>
+      <remarks>
+        <para>
+            Using this overload you can reference multiple data source objects and their members in the template. 
+            The name of the first data source can be omitted (i.e. be an empty string or null) if you are going to 
+            reference the data source's members but not the data source object itself. Names of the other data sources 
+            must be specified and unique.
+            </para>
+        <para>
+            If you are going to use a single data source, consider using of <see cref="M:Aspose.Words.Reporting.ReportingEngine.BuildReport(Aspose.Words.Document,System.Object)" /> 
+            and <see cref="M:Aspose.Words.Reporting.ReportingEngine.BuildReport(Aspose.Words.Document,System.Object,System.String)" /> overloads instead.
+            </para>
+      </remarks>
+      <param name="document">A template document to be populated with data.</param>
+      <param name="dataSources">An array of data source objects.</param>
+      <param name="dataSourceNames">An array of names to reference the data source objects within the template.</param>
     </member>
     <member name="P:Aspose.Words.Reporting.ReportingEngine.Options">
       <summary>
@@ -2503,6 +2530,12 @@ call <see cref="M:Aspose.Words.BuildingBlocks.BuildingBlock.Accept(Aspose.Words.
             Applies to Pie charts only. 
             Leader lines create a visual connection between a data label and its corresponding data point.
             </remarks>
+    </member>
+    <member name="P:Aspose.Words.Drawing.Charts.ChartDataLabel.ShowDataLabelsRange">
+      <summary>
+            Allows to specify if values from data labels range to be displayed in the data labels. 
+            Default value is false.
+            </summary>
     </member>
     <member name="P:Aspose.Words.Drawing.Charts.ChartDataLabel.Separator">
       <summary>
@@ -3353,7 +3386,21 @@ call <see cref="M:Aspose.Words.BuildingBlocks.BuildingBlock.Accept(Aspose.Words.
             <p>Document should be either <see cref="F:Aspose.Words.LoadFormat.Doc" /> or <see cref="F:Aspose.Words.LoadFormat.Docx" />.</p></summary>
       <param name="srcFileName">The file name of the document to sign.</param>
       <param name="dstFileName">The file name of the signed document output.</param>
-      <param name="certificate">Certificate object used to sign file. The certificate MUST contain private keys and have the X509KeyStorageFlags.Exportable flag set.</param>
+      <param name="certificate">Certificate object used to sign file.
+            The certificate MUST contain private keys and have the X509KeyStorageFlags.Exportable flag set.</param>
+      <param name="comments">The reason for signing.</param>
+      <param name="signTime">The date of signing.</param>
+    </member>
+    <member name="M:Aspose.Words.DigitalSignatureUtil.Sign(System.String,System.String,Aspose.Words.CertificateHolder,System.String,System.DateTime)">
+      <summary>
+            Signs source document using given <see cref="T:Aspose.Words.CertificateHolder" /> with digital signature
+            and writes signed document to destination file.
+            <p>Document should be either <see cref="F:Aspose.Words.LoadFormat.Doc" /> or <see cref="F:Aspose.Words.LoadFormat.Docx" />.</p></summary>
+      <param name="srcFileName">The file name of the document to sign.</param>
+      <param name="dstFileName">The file name of the signed document output.</param>
+      <param name="certHolder">
+        <see cref="T:Aspose.Words.CertificateHolder" /> object with certificate that used to sign file.
+            The certificate in holder MUST contain private keys and have the X509KeyStorageFlags.Exportable flag set.</param>
       <param name="comments">The reason for signing.</param>
       <param name="signTime">The date of signing.</param>
     </member>
@@ -3363,7 +3410,21 @@ call <see cref="M:Aspose.Words.BuildingBlocks.BuildingBlock.Accept(Aspose.Words.
             <p>Document should be either <see cref="F:Aspose.Words.LoadFormat.Doc" /> or <see cref="F:Aspose.Words.LoadFormat.Docx" />.</p><p><b>Output will be written to the start of stream and stream size will be updated with content length.</b></p></summary>
       <param name="srcStream">The stream which contains the document to sign.</param>
       <param name="dstStream">The stream that signed document will be written to.</param>
-      <param name="certificate">Certificate object used to sign file. The certificate MUST contain private keys and have the X509KeyStorageFlags.Exportable flag set.</param>
+      <param name="certificate">Certificate object used to sign file.
+            The certificate MUST contain private keys and have the X509KeyStorageFlags.Exportable flag set.</param>
+      <param name="comments">The reason for signing.</param>
+      <param name="signTime">The date of signing.</param>
+    </member>
+    <member name="M:Aspose.Words.DigitalSignatureUtil.Sign(System.IO.Stream,System.IO.Stream,Aspose.Words.CertificateHolder,System.String,System.DateTime)">
+      <summary>
+            Signs source document using given <see cref="T:Aspose.Words.CertificateHolder" /> with digital signature
+            and writes signed document to destination stream.
+            <p>Document should be either <see cref="F:Aspose.Words.LoadFormat.Doc" /> or <see cref="F:Aspose.Words.LoadFormat.Docx" />.</p><p><b>Output will be written to the start of stream and stream size will be updated with content length.</b></p></summary>
+      <param name="srcStream">The stream which contains the document to sign.</param>
+      <param name="dstStream">The stream that signed document will be written to.</param>
+      <param name="certHolder">
+        <see cref="T:Aspose.Words.CertificateHolder" /> object with certificate that used to sign file.
+            The certificate in holder MUST contain private keys and have the X509KeyStorageFlags.Exportable flag set.</param>
       <param name="comments">The reason for signing.</param>
       <param name="signTime">The date of signing.</param>
     </member>
@@ -5680,19 +5741,6 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
     <member name="F:Aspose.Words.Tables.TextWrapping.Default">
       <summary>
             Default value.
-            </summary>
-    </member>
-    <member name="T:Aspose.Words.RW.Doc.DocVariableNameComparer">
-      <summary>
-            Sorts variable names for binary DOC format.
-            </summary>
-      <remarks>
-            AM. According to my test Word uses very strange sort order so I prefer to move this into separate comparer.
-            </remarks>
-    </member>
-    <member name="F:Aspose.Words.RW.Doc.DocVariableNameComparer.Default">
-      <summary>
-            Do not create instances of this class. Use this instance instead.
             </summary>
     </member>
     <member name="T:Aspose.Words.SubDocument">
@@ -9237,6 +9285,12 @@ Accepts a visitor.
     <member name="P:Aspose.Words.Math.OfficeMath.ParentParagraph">
       <summary>
             Retrieves the parent <see cref="T:Aspose.Words.Paragraph" /> of this node.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Math.OfficeMath.EquationXmlEncoding">
+      <summary>
+            Gets/sets an encoding that was used to encode equation XML, if this office math object is read from
+            equation XML. We use the encoding on saving a document to write in same encoding that it was read.
             </summary>
     </member>
     <member name="T:Aspose.Words.Bookmark">
@@ -14846,6 +14900,15 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
             Allows to specify metafile rendering options.
             </summary>
     </member>
+    <member name="P:Aspose.Words.Saving.XpsSaveOptions.OptimizeOutput">
+      <summary>
+            Flag indicates whether it is required to optimize output of XPS. 
+            If this flag is set redundant nested canvases and empty canvases are removed, 
+            also neighbor glyphs with the same formating are concatenated.
+            
+            Default is false.
+            </summary>
+    </member>
     <member name="T:Aspose.Words.Tables.AutoFitBehavior">
       <summary>
             Determines how Aspose.Words resizes the table when you invoke the <see cref="M:Aspose.Words.Tables.Table.AutoFit(Aspose.Words.Tables.AutoFitBehavior)" /> method.
@@ -17389,6 +17452,8 @@ The page layout-related fields are updated when you render a document or call <s
         <p>When <i>node</i> is an inline-level node, the cursor is moved to this node
             and further content will be inserted before that node.</p>
         <p>When <i>node</i> is a <b>Paragraph</b>, the cursor is moved to the end of the paragraph
+            and further content will be inserted just before the paragraph break.</p>
+        <p>When <i>node</i> is a block-level node but not a Paragraph, the cursor is moved to the end of the first paragraph into block-level node
             and further content will be inserted just before the paragraph break.</p>
       </remarks>
       <param name="node">The node must be a paragraph or a direct child of a paragraph.</param>
@@ -25412,6 +25477,14 @@ of the source node is created.</p>
             The default value is <b>false</b>.
             </remarks>
     </member>
+    <member name="P:Aspose.Words.MailMerging.MailMerge.MergeWholeDocument">
+      <summary>
+            Gets or sets a value indicating whether fields in whole document is updated while executing of a mail merge with regions.
+            </summary>
+      <remarks>
+            The default value is <b>false</b>.
+            </remarks>
+    </member>
     <member name="P:Aspose.Words.MailMerging.MailMerge.UseWholeParagraphAsRegion">
       <summary>
             Gets or sets a value indicating whether whole paragraph with TableStart or TableEnd field 
@@ -28700,6 +28773,496 @@ For example -1 means the last item, -2 means the second before last and so on.</
       <summary>
       </summary>
     </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable1Light">
+      <summary>
+            Grid Table 1 Light
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable2">
+      <summary>
+            Grid Table 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable3">
+      <summary>
+            Grid Table 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable4">
+      <summary>
+            Grid Table 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable5Dark">
+      <summary>
+            Grid Table 5 Dark
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable6Colorful">
+      <summary>
+            Grid Table 6 Colorful
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable7Colorful">
+      <summary>
+            Grid Table 7 Colorful
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable1LightAccent1">
+      <summary>
+            Grid Table 1 Light - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable2Accent1">
+      <summary>
+            Grid Table 2 - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable3Accent1">
+      <summary>
+            Grid Table 3 - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable4Accent1">
+      <summary>
+            Grid Table 4 - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable5DarkAccent1">
+      <summary>
+            Grid Table 5 Dark - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable6ColorfulAccent1">
+      <summary>
+            Grid Table 6 Colorful - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable7ColorfulAccent1">
+      <summary>
+            Grid Table 7 Colorful - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable1LightAccent2">
+      <summary>
+            Grid Table 1 Light - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable2Accent2">
+      <summary>
+            Grid Table 2 - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable3Accent2">
+      <summary>
+            Grid Table 3 - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable4Accent2">
+      <summary>
+            Grid Table 4 - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable5DarkAccent2">
+      <summary>
+            Grid Table 5 Dark - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable6ColorfulAccent2">
+      <summary>
+            Grid Table 6 Colorful - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable7ColorfulAccent2">
+      <summary>
+            Grid Table 7 Colorful - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable1LightAccent3">
+      <summary>
+            Grid Table 1 Light - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable2Accent3">
+      <summary>
+            Grid Table 2 - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable3Accent3">
+      <summary>
+            Grid Table 3 - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable4Accent3">
+      <summary>
+            Grid Table 4 - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable5DarkAccent3">
+      <summary>
+            Grid Table 5 Dark - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable6ColorfulAccent3">
+      <summary>
+            Grid Table 6 Colorful - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable7ColorfulAccent3">
+      <summary>
+            Grid Table 7 Colorful - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable1LightAccent4">
+      <summary>
+            Grid Table 1 Light - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable2Accent4">
+      <summary>
+            Grid Table 2 - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable3Accent4">
+      <summary>
+            Grid Table 3 - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable4Accent4">
+      <summary>
+            Grid Table 4 - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable5DarkAccent4">
+      <summary>
+            Grid Table 5 Dark - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable6ColorfulAccent4">
+      <summary>
+            Grid Table 6 Colorful - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable7ColorfulAccent4">
+      <summary>
+            Grid Table 7 Colorful - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable1LightAccent5">
+      <summary>
+            Grid Table 1 Light - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable2Accent5">
+      <summary>
+            Grid Table 2 - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable3Accent5">
+      <summary>
+            Grid Table 3 - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable4Accent5">
+      <summary>
+            Grid Table 4 - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable5DarkAccent5">
+      <summary>
+            Grid Table 5 Dark - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable6ColorfulAccent5">
+      <summary>
+            Grid Table 6 Colorful - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable7ColorfulAccent5">
+      <summary>
+            Grid Table 7 Colorful - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable1LightAccent6">
+      <summary>
+            Grid Table 1 Light - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable2Accent6">
+      <summary>
+            Grid Table 2 - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable3Accent6">
+      <summary>
+            Grid Table 3 - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable4Accent6">
+      <summary>
+            Grid Table 4 - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable5DarkAccent6">
+      <summary>
+            Grid Table 5 Dark - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable6ColorfulAccent6">
+      <summary>
+            Grid Table 6 Colorful - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.GridTable7ColorfulAccent6">
+      <summary>
+            Grid Table 7 Colorful - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable1Light">
+      <summary>
+            List Table 1 Light
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable2">
+      <summary>
+            List Table 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable3">
+      <summary>
+            List Table 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable4">
+      <summary>
+            List Table 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable5Dark">
+      <summary>
+            List Table 5 Dark
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable6Colorful">
+      <summary>
+            List Table 6 Colorful
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable7Colorful">
+      <summary>
+            List Table 7 Colorful
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable1LightAccent1">
+      <summary>
+            List Table 1 Light - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable2Accent1">
+      <summary>
+            List Table 2 - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable3Accent1">
+      <summary>
+            List Table 3 - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable4Accent1">
+      <summary>
+            List Table 4 - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable5DarkAccent1">
+      <summary>
+            List Table 5 Dark - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable6ColorfulAccent1">
+      <summary>
+            List Table 6 Colorful - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable7ColorfulAccent1">
+      <summary>
+            List Table 7 Colorful - Accent 1
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable1LightAccent2">
+      <summary>
+            List Table 1 Light - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable2Accent2">
+      <summary>
+            List Table 2 - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable3Accent2">
+      <summary>
+            List Table 3 - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable4Accent2">
+      <summary>
+            List Table 4 - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable5DarkAccent2">
+      <summary>
+            List Table 5 Dark - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable6ColorfulAccent2">
+      <summary>
+            List Table 6 Colorful - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable7ColorfulAccent2">
+      <summary>
+            List Table 7 Colorful - Accent 2
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable1LightAccent3">
+      <summary>
+            List Table 1 Light - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable2Accent3">
+      <summary>
+            List Table 2 - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable3Accent3">
+      <summary>
+            List Table 3 - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable4Accent3">
+      <summary>
+            List Table 4 - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable5DarkAccent3">
+      <summary>
+            List Table 5 Dark - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable6ColorfulAccent3">
+      <summary>
+            List Table 6 Colorful - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable7ColorfulAccent3">
+      <summary>
+            List Table 7 Colorful - Accent 3
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable1LightAccent4">
+      <summary>
+            List Table 1 Light - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable2Accent4">
+      <summary>
+            List Table 2 - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable3Accent4">
+      <summary>
+            List Table 3 - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable4Accent4">
+      <summary>
+            List Table 4 - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable5DarkAccent4">
+      <summary>
+            List Table 5 Dark - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable6ColorfulAccent4">
+      <summary>
+            List Table 6 Colorful - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable7ColorfulAccent4">
+      <summary>
+            List Table 7 Colorful - Accent 4
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable1LightAccent5">
+      <summary>
+            List Table 1 Light - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable2Accent5">
+      <summary>
+            List Table 2 - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable3Accent5">
+      <summary>
+            List Table 3 - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable4Accent5">
+      <summary>
+            List Table 4 - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable5DarkAccent5">
+      <summary>
+            List Table 5 Dark - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable6ColorfulAccent5">
+      <summary>
+            List Table 6 Colorful - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable7ColorfulAccent5">
+      <summary>
+            List Table 7 Colorful - Accent 5
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable1LightAccent6">
+      <summary>
+            List Table 1 Light - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable2Accent6">
+      <summary>
+            List Table 2 - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable3Accent6">
+      <summary>
+            List Table 3 - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable4Accent6">
+      <summary>
+            List Table 4 - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable5DarkAccent6">
+      <summary>
+            List Table 5 Dark - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable6ColorfulAccent6">
+      <summary>
+            List Table 6 Colorful - Accent 6
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.StyleIdentifier.ListTable7ColorfulAccent6">
+      <summary>
+            List Table 7 Colorful - Accent 6
+            </summary>
+    </member>
     <member name="F:Aspose.Words.StyleIdentifier.User">
       <summary>
             A user defined style.
@@ -30528,24 +31091,24 @@ Accepts a visitor.
     <member name="M:Aspose.Words.Paragraph.AppendField(Aspose.Words.Fields.FieldType,System.Boolean)">
       <overloads>Apppends a Word field to this paragraph.</overloads>
       <summary>
-            Apppends a field to this paragraph.
+            Appends a field to this paragraph.
             </summary>
       <param name="fieldType">The type of the field to append.</param>
       <param name="updateField">Specifies whether to update the field immediately.</param>
       <returns>A <see cref="T:Aspose.Words.Fields.Field" /> object that represents the appended field.</returns>
     </member>
     <member name="M:Aspose.Words.Paragraph.AppendField(System.String)">
-      <overloads>Apppends a Word field to this paragraph.</overloads>
+      <overloads>Appends a Word field to this paragraph.</overloads>
       <summary>
-            Apppends a field to this paragraph.
+            Appends a field to this paragraph.
             </summary>
       <param name="fieldCode">The field code to append (without curly braces).</param>
       <returns>A <see cref="T:Aspose.Words.Fields.Field" /> object that represents the appended field.</returns>
     </member>
     <member name="M:Aspose.Words.Paragraph.AppendField(System.String,System.String)">
-      <overloads>Apppends a Word field to this paragraph.</overloads>
+      <overloads>Appends a Word field to this paragraph.</overloads>
       <summary>
-            Apppends a field to this paragraph.
+            Appends a field to this paragraph.
             </summary>
       <param name="fieldCode">The field code to append (without curly braces).</param>
       <param name="fieldValue">The field value to append. Pass null for fields that do not have a value.</param>
@@ -30666,7 +31229,7 @@ Returns true if formatting of the object was changed in Microsoft Word while cha
     </member>
     <member name="P:Aspose.Words.Paragraph.IsListItem">
       <summary>
-            True when the paragraph is an item in a bulleted or numbered list.
+            True when the paragraph is an item in a bulleted or numbered list in original revision.
             </summary>
     </member>
     <member name="T:Aspose.Words.ParagraphAlignment">
