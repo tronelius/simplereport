@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -10,6 +12,7 @@ using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi;
+using NLog.Internal;
 using SimpleReport.App_Start;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
@@ -34,7 +37,7 @@ namespace SimpleReport
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            
+            FindAndSetLicences();
         }
 
         protected override IKernel CreateKernel()
@@ -53,6 +56,16 @@ namespace SimpleReport
             return kernel;
         }
 
+        protected void FindAndSetLicences()
+        {
+            var licensefilePath = System.Configuration.ConfigurationManager.AppSettings["licenseFilePath"];
+            if (!string.IsNullOrWhiteSpace(licensefilePath) && File.Exists(licensefilePath))
+            {
+                Aspose.Words.License license = new Aspose.Words.License();
+                license.SetLicense(licensefilePath);
+            }
+
+        }
     }
 
 }
