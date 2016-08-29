@@ -89,6 +89,7 @@ namespace WorkerHost.Jobs
                     //there are basically here so that we can run the report with known dates. like, we want everything that happened since last sync to now, where now is a known date so that if we run the query again an hour later, we known exactly where we left off
                     reportParams = reportParams.Replace("=SyncedDate", "=" + oldSyncedDate);
                     reportParams = reportParams.Replace("=SyncedRunningDate", "=" + newSyncedDate);
+                    _logger.Info("Executing report with parameters= "+reportParams);
 
                     var reportResult = _workerApiClient.GetReport(reportParams);
                     if (reportResult == null)
