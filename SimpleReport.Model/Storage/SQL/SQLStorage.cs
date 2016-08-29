@@ -278,7 +278,13 @@ namespace SimpleReport.Model.Storage.SQL
 
        public DeleteInfo DeleteReport(ReportInfo report)
        {
-           var rowsAffected = Execute("Delete from report where Id=@reportID", new { reportID = report.Id});
+           int rowsAffected = 0;
+           ExecuteInTransaction((con, transaction) =>
+           {
+               con.Execute("Delete from Parameter where reportid=@reportID", new {reportID = report.Id}, transaction);
+               rowsAffected = con.Execute("Delete from report where Id=@reportID", new {reportID = report.Id}, transaction);
+
+           });
            if (rowsAffected == 0)
                 return new DeleteInfo(false, "Report doesn't exists");
             return new DeleteInfo(true, "Report was deleted");

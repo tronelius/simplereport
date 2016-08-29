@@ -208,7 +208,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
 
     $scope.deleteReport = function () {
        designerRepository.deleteReport($scope.report).then(function (result) {
-            if (result.Success) {
+           if (result.data.Success) {
                 toastr.success("Report is deleted", "Deleted");
                 updateCollection($scope.reportList, $scope.report, true);
                 $scope.report = null;
