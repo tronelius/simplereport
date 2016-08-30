@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Globalization;
 
-namespace SimpleReport.Model.Extensions //Original namespace, NExtra.Extensions, Kudos goes to Daniel saidi.
+namespace SimpleReport.Model.Extensions 
 {
-    /// <summary>
-    /// Extension methods for System.DateTime.
-    /// </summary>
-    /// <remarks>
-    /// Author:     Daniel Saidi [daniel.saidi@gmail.com]
-    /// Link:       http://www.dotnextra.com
-    /// </remarks>
+  
     public static class DateTimeExtensions
     {
         const int JAN = 1;
@@ -51,7 +45,7 @@ namespace SimpleReport.Model.Extensions //Original namespace, NExtra.Extensions,
         /// </summary>
         public static DateTime GetLastDateOfMonth(this DateTime date)
         {
-            return date == DateTime.MaxValue ? date : new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1);
+            return date == DateTime.MaxValue ? date : new DateTime(date.Year, date.Month, 1).AddMonths(1);
         }
 
         /// <summary>
@@ -67,7 +61,7 @@ namespace SimpleReport.Model.Extensions //Original namespace, NExtra.Extensions,
             var week = date.GetWeekNumber(iso8601, weekRule, firstDayOfWeek);
             while (week == date.GetWeekNumber(iso8601, weekRule, firstDayOfWeek))
                 date = date.AddDays(1);
-            return date.AddDays(-1);
+            return date;
         }
 
         /// <summary>
@@ -146,7 +140,7 @@ namespace SimpleReport.Model.Extensions //Original namespace, NExtra.Extensions,
         public static DateTime GetLastDayOfQuarter(this DateTime date)
         {
             DateTime quarterstart = date.GetFirstDayOfQuarter();
-            return quarterstart.AddMonths(3).AddDays(-1);
+            return quarterstart.AddMonths(3);
         }
 
         public static DateTime GetFirstDayOfLastQuarter(this DateTime date)
@@ -166,7 +160,7 @@ namespace SimpleReport.Model.Extensions //Original namespace, NExtra.Extensions,
 
         public static DateTime GetLastDayOfYear(this DateTime date)
         {
-            return new DateTime(date.Year, 12, 31);
+            return new DateTime(date.Year+1, 1, 1);
         }
 
         public static DateTime GetFirstDayOfLastYear(this DateTime date)
