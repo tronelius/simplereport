@@ -173,7 +173,7 @@ namespace SimpleReport.Controllers
         public ActionResult GetTypeAheadData(Guid reportId, Guid typeaheadid, string search)
         {
             Report report = _reportResolver.GetReport(reportId);
-            if (!report.IsAvailableToEditTemplate(User, _adminAccess))
+            if (!report.IsAvailableForMe(User, _adminAccess))
                 return Json(new { error = "Not Authorized" });
             try
             {
