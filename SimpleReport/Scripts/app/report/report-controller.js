@@ -88,8 +88,7 @@
 
             parameter.Value = parameter.EnumValue + ':' + from + '_' + to;
 
-            var text = parameter.Choices['9999'].split(':')[0] + ': ' + from + ' - ' + to;
-            parameter.Choices['9999'] = text;
+            parameter.Choices[parameter.Choices.length - 1].Value = 'Custom: ' + from + ' - ' + to;
         } else
             parameter.Value = parameter.EnumValue;
     }

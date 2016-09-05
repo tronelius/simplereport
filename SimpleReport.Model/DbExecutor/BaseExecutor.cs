@@ -105,7 +105,8 @@ namespace SimpleReport.Model.DbExecutor
                 catch (Exception ex)
                 {
                     string hepp = ex.ToString();
-                    return null;
+                    //return null;
+                    throw;
                 }
                 finally
                 {
