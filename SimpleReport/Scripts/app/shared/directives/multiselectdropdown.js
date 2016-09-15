@@ -36,6 +36,7 @@
                             $scope.value = selected.join(',');
                         });
                     },
+                    maxHeight:400,
                     enableFiltering: true,
                     enableCaseInsensitiveFiltering: true,
                     enableFullValueFiltering: false,
