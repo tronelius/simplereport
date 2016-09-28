@@ -134,14 +134,14 @@ namespace SimpleReport.Model
                 var replacement = string.Join(",", newParams);
 
                 //Regular expression to find only those parameters that is surrounded by parentesis to match a "in (@paramname)" situation or a "in(@paramname)" situation.
-                string findWhereIn = @"(?<=in\()@" + Key + @"(?=\))| (?<=in \()@" + Key + @"(?=\))";
+                string findWhereIn = @"(?<=in\()@" + Key + @"(?=\))|(?<=in \()@" + Key + @"(?=\))";
                 var newQuery = Regex.Replace(query, findWhereIn, replacement);
                 updateSqlAction(newQuery);
             }
             else
             {
                 dbParameters.Add(db.CreateParameter(Key, Value));
-        }
+            }
 
             return dbParameters;
         }
