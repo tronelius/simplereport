@@ -38,6 +38,7 @@
                     var params = reportUrlHelper.toUrlByIdAndParams($scope.reportId, $scope.reportParameters);
                     var data = angular.extend($scope.subscription, { ReportId: $scope.reportId, ReportParams: params });
                     data.SubscriptionType = 1;
+                    data.SendEmptyEmails = true;
                         subscriptionRepository.save(data).success(function (data) {
                             if (data.Error) {
                                 toastr.error(data.Error);
