@@ -72,7 +72,7 @@
     }
 
     function onSendOnceSaved() {
-        //TODO: do anything?
+        $scope.selectedAction = null;
     }
 
     function dateChanged(parameter) {
