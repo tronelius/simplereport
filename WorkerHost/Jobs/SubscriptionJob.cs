@@ -126,8 +126,15 @@ namespace WorkerHost.Jobs
                 }
                 finally
                 {
-                    subscription.LastRun = DateTime.Now;
-                    _subscriptionRepository.Update(subscription);
+                    if (subscription.SubscriptionType == SubscriptionTypeEnum.OneTime && subscription.Status == SubscriptionStatus.Success)
+                    {
+                        _subscriptionRepository.Delete(subscription.Id);
+                    }
+                    else
+                    {
+                        subscription.LastRun = DateTime.Now;
+                        _subscriptionRepository.Update(subscription);
+                    }
                 }
             }
             catch (Exception e)

@@ -63,11 +63,16 @@
         $scope.onSubscriptionSaved = onSubscriptionSaved;
         $scope.hasValidParameters = hasValidParameters;
         $scope.hasvalidParametersForSubscription = hasvalidParametersForSubscription;
+        $scope.onSendOnceSaved = onSendOnceSaved;
     };
     $scope.init();
 
     function onSubscriptionSaved() {
         $scope.selectedAction = 'editSubscriptions';
+    }
+
+    function onSendOnceSaved() {
+        //TODO: do anything?
     }
 
     function dateChanged(parameter) {

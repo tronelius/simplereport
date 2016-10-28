@@ -22,7 +22,13 @@
                  $scope.data = null;
 
                  scheduleRepository.getAll().success(function (data) {
-                     $scope.data = data;
+                     $scope.data = [];
+
+                     for (var i = 0; i < data.length; i++) {
+                         if (data[i].ScheduleType === 0)
+                             $scope.data.push(data[i]);
+                     }
+
                  }).error(function () {
                      toastr.error('Something went wrong, please try again later or contact support');
                  });

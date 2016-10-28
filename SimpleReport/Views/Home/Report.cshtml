@@ -135,6 +135,7 @@
                             </div>
                         </div>
                         <div class="col-xs-4">
+                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'sendOnce'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions" data-ng-disabled="!hasvalidParametersForSubscription()">One time</button>
                             <button type="button" class="btn btn-primary" data-ng-click="triggerSubscribe()" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions" data-ng-disabled="!hasvalidParametersForSubscription()">Subscribe</button>
                             <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editSubscriptions'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Edit subscriptions</button>
                         </div>
@@ -151,6 +152,10 @@
 
                     <div data-ng-switch-when="subscribe">
                         <div data-subscription-editor data-report-id="viewModel.Report.Id" data-report-parameters="viewModel.Report.Parameters" data-subscription-id="subscriptionId" data-save-cb="onSubscriptionSaved()"></div>
+                    </div>
+                    
+                    <div data-ng-switch-when="sendOnce">
+                        <div data-send-once-editor data-report-id="viewModel.Report.Id" data-report-parameters="viewModel.Report.Parameters" data-save-cb="onSendOnceSaved()"></div>
                     </div>
 
                     <div data-ng-switch-when="editSubscriptions">

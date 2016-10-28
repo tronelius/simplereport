@@ -61,5 +61,13 @@ namespace Worker.Common.Repository
                 return cn.Count<Subscription>(predicate) > 0;
             }
         }
+
+        public Schedule GetOneTimeSchedule()
+        {
+            using (SqlConnection cn = EnsureOpenConnection())
+            {
+                return cn.GetList<Schedule>(new { Name = "OneTime", ScheduleType = (int)Schedule.ScheduleTypeEnum.Internal}).First();
+            }
+        }
     }
 }

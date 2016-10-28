@@ -1,0 +1,77 @@
+﻿<div>
+    <div class="row">
+        <div class="col-md-12">
+            <label>Send one-time email with report attached</label>
+        </div>
+    </div>
+
+    <form role="form" name="form" novalidate class="">
+        <div class="row">
+            <div class="col-md-6 col-lg-5">
+                <div class="">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <div class="form-group">
+                                    <label class="control-label" title="Primary recipient(s). Separate with ;">To</label>
+                                    <div>
+                                        <input type="text" ng-model="subscription.To" data-emails class="form-control" placeholder="To" title="Primary recipient(s). Separate with ;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                               
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label" title="Others that might be interested in this report">Copy to (cc)</label>
+                                    <div>
+                                        <input type="text" ng-model="subscription.Cc" data-emails class="form-control" placeholder="CC" title="Others that might be interested in this report">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="control-label" title="Recipients that are hidden">Blind copy (bcc)</label>
+                                    <div>
+                                        <input type="text" ng-model="subscription.Bcc" data-emails class="form-control" placeholder="BCC" title="Recipients that are hidden">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-5">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label" title="The subject of the sent email">Subject</label>
+                        <div>
+                            <input type="text" ng-model="subscription.MailSubject" class="form-control" placeholder="Subject" title="The subject of the sent email">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label" title="The main body text in subscrition email">Message</label>
+                        <div>
+                            <textarea cols="2" ng-model="subscription.MailText" class="form-control" placeholder="The main body text in subscrition email" title="The main body text in subscrition email"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-footer">
+                    <button type="button" class="btn btn-success" ng-click="save()">Send</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
