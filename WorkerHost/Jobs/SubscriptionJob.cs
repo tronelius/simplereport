@@ -4,11 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Owin;
 using Quartz;
+using SimpleReport.Model.Logging;
+using SimpleReport.Model.Service;
+using SimpleReport.Model.Subscriptions;
 using Worker.Common.Api;
-using Worker.Common.Common;
-using Worker.Common.Model;
-using Worker.Common.Repository;
-using Worker.Common.Service;
 
 namespace WorkerHost.Jobs
 {
@@ -18,9 +17,9 @@ namespace WorkerHost.Jobs
         private readonly ILogger _logger;
         private readonly ISubscriptionRepository _subscriptionRepository;
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IWorkerApiClient _workerApiClient;
         private readonly IMailSender _mailSender;
         private readonly IApplicationSettings _applicationSettings;
+        private readonly IWorkerApiClient _workerApiClient;
         private const int MaxFailedAttempts = 5;
 
         public SubscriptionJob(ILogger logger, ISubscriptionRepository subscriptionRepository, IScheduleRepository scheduleRepository, IWorkerApiClient workerApiClient, IMailSender mailSender, IApplicationSettings applicationSettings)

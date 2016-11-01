@@ -6,15 +6,18 @@ using SimpleReport.Helpers;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
+using SimpleReport.Model.Subscriptions;
 
 namespace SimpleReport.Controllers.Api
 {
     public class SubscriptionController : BaseApiController
     {
+        private readonly ISubscriptionRepository _subscriptionRepository;
         private readonly IApiClient _apiClient;
 
-        public SubscriptionController(IStorage reportStorage, ILogger logger, IApiClient apiClient) : base(reportStorage, logger)
+        public SubscriptionController(IStorage reportStorage, ILogger logger, ISubscriptionRepository subscriptionRepository, IApiClient apiClient) : base(reportStorage, logger)
         {
+            _subscriptionRepository = subscriptionRepository;
             _apiClient = apiClient;
         }
 
@@ -24,8 +27,8 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportId);
-
-                var result = await _apiClient.Get("api/subscription/get?id=" + id);
+                var result = _subscriptionRepository.Get(id);
+                //var result = await _apiClient.Get("api/subscription/get?id=" + id);
                 return Ok(result);
             }
             catch (Exception ex)

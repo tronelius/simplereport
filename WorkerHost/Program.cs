@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 using Topshelf;
-using Worker.Common.Migrations;
+using SimpleReport.Model.Migrations;
 
 namespace WorkerHost
 {

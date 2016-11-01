@@ -3,7 +3,7 @@ using Microsoft.Owin.Hosting;
 using Ninject;
 using Quartz;
 using Quartz.Impl;
-using Worker.Common.Common;
+using SimpleReport.Model.Logging;
 using WorkerHost.Config;
 using WorkerHost.Jobs;
 using WorkerWebApi.Config;
@@ -18,7 +18,7 @@ namespace WorkerHost
 
         public void Start()
         {
-            StartAPI();
+            //StartAPI();
             StartJobs();
         }
 
@@ -53,14 +53,14 @@ namespace WorkerHost
             }
         }
 
-        private void StartAPI()
-        {
-            _webApplication = WebApp.Start<WebPipeline>(System.Configuration.ConfigurationManager.AppSettings["HostUrl"]);
-        }
+        //private void StartAPI()
+        //{
+        //    _webApplication = WebApp.Start<WebPipeline>(System.Configuration.ConfigurationManager.AppSettings["HostUrl"]);
+        //}
 
         public void Stop()
         {
-            _webApplication.Dispose();
+            //_webApplication.Dispose();
             _scheduler.Shutdown();
         }
     }

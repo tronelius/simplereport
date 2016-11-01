@@ -57,6 +57,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EPPlus.4.0.2\lib\net20\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentMigrator.Runner.1.6.2\lib\40\FluentMigrator.Runner.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NCrontab, Version=2.0.16709.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ncrontab.2.0.0\lib\net20\NCrontab.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -100,6 +112,24 @@
     <Compile Include="Connection.cs" />
     <Compile Include="DbExecutor\DbExecutorFactory.cs" />
     <Compile Include="DbExecutor\DbOracleExecutor.cs" />
+    <Compile Include="Migrations\2015-06-11\AddInitialTables.cs" />
+    <Compile Include="Migrations\2015-06-18\AddTemplateInfo.cs" />
+    <Compile Include="Migrations\2015-06-18\RenameReportUrlToReportParams.cs" />
+    <Compile Include="Migrations\2015-06-22\AddSendEmptyEmails.cs" />
+    <Compile Include="Migrations\2015-06-23\AddLastRun.cs" />
+    <Compile Include="Migrations\2015-06-24\MakeFailedAttemptsNonNullable.cs" />
+    <Compile Include="Migrations\2015-10-04\AddTablesForReports.cs" />
+    <Compile Include="Migrations\2015-10-23\AddSyncedDateToSubscription.cs" />
+    <Compile Include="Migrations\2015-11-27\AddWordTemplates.cs" />
+    <Compile Include="Migrations\2015-12-14\ReportAdjustments.cs" />
+    <Compile Include="Migrations\2016-03-11\ReportResultType.cs" />
+    <Compile Include="Migrations\2016-03-20\OracleConnections.cs" />
+    <Compile Include="Migrations\2016-03-22\AddTypeAhead.cs" />
+    <Compile Include="Migrations\2016-03-22\AddTypeAhead_to_Parameter.cs" />
+    <Compile Include="Migrations\2016-04-15\AddConvertToPdfToReport.cs" />
+    <Compile Include="Migrations\2016-10-28\AddSubscriptionType.cs" />
+    <Compile Include="Migrations\Migrator.cs" />
+    <Compile Include="Migrations\Tables.cs" />
     <Compile Include="Replacers\IReplacer.cs" />
     <Compile Include="Replacers\IXmlReplacer.cs" />
     <Compile Include="Replacers\NoReplacer.cs" />
@@ -126,8 +156,16 @@
     <Compile Include="Result\ResultInfo.cs" />
     <Compile Include="Result\WordResultBase.cs" />
     <Compile Include="Result\WordResultMasterDetail.cs" />
+    <Compile Include="Service\IMailSender.cs" />
+    <Compile Include="Service\MailSender.cs" />
     <Compile Include="Service\PdfService.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Subscriptions\ApplicationSettings.cs" />
+    <Compile Include="Subscriptions\IScheduleRepository.cs" />
+    <Compile Include="Subscriptions\ISubscriptionRepository.cs" />
+    <Compile Include="Subscriptions\ReportResult.cs" />
+    <Compile Include="Subscriptions\Schedule.cs" />
+    <Compile Include="Subscriptions\ScheduleRepository.cs" />
     <Compile Include="Storage\SQL\SQLSetting.cs" />
     <Compile Include="Storage\StorageHelper.cs" />
     <Compile Include="Storage\SQL\BaseDapperRepo.cs" />
@@ -147,14 +185,21 @@
     <Compile Include="Storage\JsonConverters\ParameterJsonConverter.cs" />
     <Compile Include="Storage\SQL\SQLStorage.cs" />
     <Compile Include="Result\Template.cs" />
+    <Compile Include="Subscriptions\Subscription.cs" />
+    <Compile Include="Subscriptions\SubscriptionRepository.cs" />
+    <Compile Include="Subscriptions\UpdateTemplate.cs" />
     <Compile Include="TypeAheadReport.cs" />
     <Compile Include="ValidatableEntity.cs" />
     <Compile Include="Result\WordResultPlain.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Migrations\Development_transformations\Config.ps1" />
+    <None Include="Migrations\Development_transformations\Down.ps1" />
+    <None Include="Migrations\Development_transformations\Up.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

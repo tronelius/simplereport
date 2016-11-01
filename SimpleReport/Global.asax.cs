@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Configuration;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -22,6 +23,10 @@ using SimpleReport.Model.Result;
 using SimpleReport.Model.Service;
 using SimpleReport.Model.Storage;
 using SimpleReport.Model.Storage.SQL;
+using SimpleReport.Model.Subscriptions;
+using ApplicationSettings = SimpleReport.Model.ApplicationSettings;
+using ConfigurationManager = System.Configuration.ConfigurationManager;
+using IApplicationSettings = SimpleReport.Model.IApplicationSettings;
 
 namespace SimpleReport
 {
@@ -52,6 +57,9 @@ namespace SimpleReport
             kernel.BindFilter<HandleMyOwnErrorAttribute>(FilterScope.Controller, 0);
             kernel.Bind<ReportResolver>().ToSelf();
             kernel.Bind<IXmlReplacer>().To<XmlReplacer>();
+            kernel.Bind<IScheduleRepository>().To<ScheduleRepository>().WithConstructorArgument("connectionstring", ConfigurationManager.ConnectionStrings["db"].ConnectionString);
+            kernel.Bind<ISubscriptionRepository>().To<SubscriptionRepository>().WithConstructorArgument("connectionstring", ConfigurationManager.ConnectionStrings["db"].ConnectionString);
+
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
             return kernel;
         }

@@ -8,6 +8,10 @@ namespace SimpleReport.Model.Logging
     public class Nlogger : ILogger
     {
 
+        public void Trace(string message)
+        {
+            NLog.LogManager.GetCurrentClassLogger().Trace(message);
+        }
         public void Info(string message)
         {
             NLog.LogManager.GetCurrentClassLogger().Info(message);
