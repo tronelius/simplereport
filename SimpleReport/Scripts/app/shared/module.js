@@ -1,1 +1,1 @@
-﻿angular.module('shared', ['ngFileUpload']);
+﻿angular.module('shared', ['ngFileUpload', 'ngSanitize']);

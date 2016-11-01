@@ -68,6 +68,7 @@
     <Compile Include="Migrations\2015-12-14\ReportAdjustments.cs" />
     <Compile Include="Migrations\2015-11-27\AddWordTemplates.cs" />
     <Compile Include="Migrations\2016-03-20\OracleConnections.cs" />
+    <Compile Include="Migrations\2016-10-28\AddDetailReportIdToReport.cs" />
     <Compile Include="Migrations\2016-10-28\AddSubscriptionType.cs" />
     <Compile Include="Migrations\2016-04-15\AddConvertToPdfToReport.cs" />
     <Compile Include="Migrations\2016-03-22\AddTypeAhead_to_Parameter.cs" />

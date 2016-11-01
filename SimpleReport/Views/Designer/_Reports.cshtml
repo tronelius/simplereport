@@ -57,6 +57,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label class="control-label" title="The report used to show details from items in this report">Detail-report</label>
+                                <div>
+                                    <select ng-model="report.DetailReportId" ng-options="item.Id as item.Name group by item.Group for item in reportList | orderBy:['Group','Name']" class="form-control">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>

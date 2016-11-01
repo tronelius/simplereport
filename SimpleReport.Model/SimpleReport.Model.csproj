@@ -100,6 +100,7 @@
     <Compile Include="Connection.cs" />
     <Compile Include="DbExecutor\DbExecutorFactory.cs" />
     <Compile Include="DbExecutor\DbOracleExecutor.cs" />
+    <Compile Include="Helpers\DetailReportUrlHelper.cs" />
     <Compile Include="Replacers\IReplacer.cs" />
     <Compile Include="Replacers\IXmlReplacer.cs" />
     <Compile Include="Replacers\NoReplacer.cs" />

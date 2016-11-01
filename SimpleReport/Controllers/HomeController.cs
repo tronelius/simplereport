@@ -9,6 +9,7 @@ using SimpleReport.Model.Helpers;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Result;
 using SimpleReport.Model.Service;
+using WebGrease.Css.Extensions;
 
 namespace SimpleReport.Controllers
 {
@@ -56,7 +57,13 @@ namespace SimpleReport.Controllers
                 if (report.HasTemplate)
                     template = _reportResolver.Storage.GetTemplate(reportId);
 
-                ResultFileInfo result = report.ExecuteWithTemplate(template);
+                Report detailReport = null;
+                if (report.DetailReportId.HasValue)
+                {
+                    detailReport = _reportResolver.GetReport(report.DetailReportId.Value);
+                }
+
+                ResultFileInfo result = report.ExecuteWithTemplate(template, detailReport);
 
                 if (template != null && report.ConvertToPdf)
                 {
@@ -76,8 +83,21 @@ namespace SimpleReport.Controllers
             if (report.IsAvailableForMe(User, _adminAccess))
             {
                 report.ReadParameters(Request.QueryString);
-                
+
                 var data = report.ExecuteAsRawData();
+
+                if (report.DetailReportId.HasValue)
+                {
+                    var detailReport = _reportResolver.GetReport(report.DetailReportId.Value);
+
+                    data.Rows.ForEach(r =>
+                    {
+                        var url = DetailReportUrlHelper.GetUrl(report, detailReport, data.Headers, r);
+
+                        r[0] = $"<a href=\"{url}\" target=\"_blank\">{r[0]}</a>";
+                    });
+                }
+
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
 
