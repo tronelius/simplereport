@@ -1,7 +1,9 @@
-﻿angular.module('report').controller('reportController', ['$scope', '$http', 'reportViewModel', '$filter', 'queryStringParser', 'reportUrlHelper', '$window', function ($scope, $http, viewModel, $filter, queryStringParser, reportUrlHelper, $window) {
+﻿angular.module('report').controller('reportController', ['$scope', '$http', 'reportViewModel', '$filter', 'queryStringParser', 'reportUrlHelper', '$window', 'reportParameterHelper', function ($scope, $http, viewModel, $filter, queryStringParser, reportUrlHelper, $window, reportParameterHelper) {
 
     $scope.init = function () {
         $scope.dateFormat = 'yyyy-MM-dd';
+
+        viewModel.Report.Parameters = reportParameterHelper.sortedParameters(viewModel.Report.Parameters, viewModel.Report.Sql);
 
         viewModel.Report.Parameters.forEach(function (param) {
             if (param.InputType === 6) { //SyncedDate
