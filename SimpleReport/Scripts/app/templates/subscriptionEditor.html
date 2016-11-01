@@ -27,7 +27,7 @@
                                 <div class="form-group">
                                     <label class="control-label" title="The name of the schedule">Schedule</label>
                                     <div>
-                                        <select ng-model="subscription.ScheduleId" class="form-control" placeholder="Schedule" title="The name of the schedule to use for this subscription" ng-options="schedule.Id as schedule.Name for schedule in schedules" required data-ng-disabled="subscription.ScheduleType !== 0">
+                                        <select ng-model="subscription.ScheduleId" class="form-control" placeholder="Schedule" title="The name of the schedule to use for this subscription" ng-options="schedule.Id as schedule.Name for schedule in schedules" required data-ng-disabled="isInternalSchedule()">
                                             <option value=""></option>
                                         </select>
                                     </div>

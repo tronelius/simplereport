@@ -23,8 +23,17 @@
                     $scope.preview = preview;
                     $scope.previewNotOk = previewNotOk;
                     $scope.previewOk = previewOk;
+                    $scope.isInternalSchedule = isInternalSchedule;
                 }
                 init();
+
+                function isInternalSchedule() {
+                    if (!$scope.subscription || !$scope.subscription.ScheduleId)
+                        return false;
+
+                    var schedule = _.findWhere($scope.schedules, { Id: $scope.subscription.ScheduleId });
+                    return schedule.ScheduleType === 1;
+                }
 
                 function previewNotOk() {
                     $scope.subscription.previewed = false;
