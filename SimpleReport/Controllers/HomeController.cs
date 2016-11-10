@@ -159,15 +159,16 @@ namespace SimpleReport.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateTemplateMetadata(Guid reportId, bool convertToPdf)
+        public ActionResult UpdateTemplateMetadata(Guid reportId, bool convertToPdf, string reportResultType)
         {
             Report report = _reportResolver.GetReport(reportId);
             if (report.IsAvailableForMe(User, _adminAccess))
             {
                 report.ConvertToPdf = convertToPdf;
+                if (ResultFactory.GetList().Exists(a => a.ReportResultType == reportResultType))
+                    report.ReportResultType = reportResultType;
 
                 _reportResolver.Storage.SaveReport(report);
-
                 return new HttpStatusCodeResult(200);
             }
             return File(GetBytes("Not allowed to execute this report"), "text/plain", "NotAllowed.txt");

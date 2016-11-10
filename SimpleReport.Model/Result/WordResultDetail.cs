@@ -15,13 +15,13 @@ using Source = OpenXmlPowerTools.Source;
 
 namespace SimpleReport.Model.Result
 {
-    public class WordResultPlain : WordResultBase
+    public class WordResultDetail : WordResultBase
     {
-        public WordResultPlain()
+        public WordResultDetail()
         {
             
         }
-        public WordResultPlain(Report report, Template template) :base(report, template) { }
+        public WordResultDetail(Report report, Template template) :base(report, template) { }
 
         public override ResultFileInfo Render(List<DataTable> tables)
         {
@@ -38,8 +38,7 @@ namespace SimpleReport.Model.Result
             return MergeSources(sources);
         }
 
-
-        public override ResultInfo ResultInfo { get { return new ResultInfo("WordResultPlain", "Word listing"); } }
+        public override ResultInfo ResultInfo { get { return new ResultInfo("WordResultDetail", "Word one row"); } }
         
         private void RenderSimpleTableReport(DataTable table, List<string> columnNames, List<Source> sources)
         {
@@ -51,17 +50,10 @@ namespace SimpleReport.Model.Result
                 using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
                 {
                     List<IContentItem> fieldContentsList = new List<IContentItem>();
-                    TableContent tableContent = new TableContent(FieldHandles.table);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            List<FieldContent> fieldContentTableList = new List<FieldContent>();
-                            foreach (DataColumn col in row.Table.Columns)
-                            {
-                                fieldContentTableList.Add(new FieldContent(col.ColumnName, _replacer.Replace(row[col.ColumnName].ToString())));
-                            }
-                            tableContent.AddRow(fieldContentTableList.ToArray());
-                        }
-                        fieldContentsList.Add(tableContent);
+                    foreach (DataColumn col in table.Rows[0].Table.Columns)
+                    {
+                        fieldContentsList.Add(new FieldContent(col.ColumnName, _replacer.Replace(table.Rows[0][col.ColumnName].ToString())));
+                    }
                     var content = new Content(fieldContentsList.ToArray());
                     FillWordTemplate(doc, content, false);
                     doc.MainDocumentPart.Document.Save();

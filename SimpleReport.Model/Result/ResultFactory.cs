@@ -18,6 +18,8 @@ namespace SimpleReport.Model.Result
                     return new ExcelResultPlain(report, template);
                 case "WordResultPlain":
                     return new WordResultPlain(report, template);
+                case "WordResultDetail":
+                    return new WordResultDetail(report, template);
                 case "WordResultMasterDetail":
                     return new WordResultMasterDetail(report, template);
                 default:
@@ -42,6 +44,7 @@ namespace SimpleReport.Model.Result
             List<ResultInfo> resulttypes = new List<ResultInfo>();
             resulttypes.Add(new ExcelResultPlain().ResultInfo);
             resulttypes.Add(new WordResultPlain().ResultInfo);
+            resulttypes.Add(new WordResultDetail().ResultInfo);
             resulttypes.Add(new WordResultMasterDetail().ResultInfo);
             return resulttypes;
         }

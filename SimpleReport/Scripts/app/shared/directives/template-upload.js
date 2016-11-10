@@ -26,7 +26,7 @@
                     $scope.downloadLink = baseDownloadUrl + $scope.reportid;
 
                 $scope.updateMetadata = function () {
-                    $http.post("Home/UpdateTemplateMetadata", { reportId: $scope.reportid, convertToPdf: $scope.convertToPdf }).success(function (data) {
+                    $http.post("Home/UpdateTemplateMetadata", { reportId: $scope.reportid, convertToPdf: $scope.convertToPdf, reportResultType: $scope.reportResultType }).success(function (data) {
                         toastr.success("Metadata updated");
                     }).error(function () {
                         toastr.error('Something went wrong, please try again later or contact support');

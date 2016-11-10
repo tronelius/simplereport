@@ -127,6 +127,7 @@
     <Compile Include="Result\ResultInfo.cs" />
     <Compile Include="Result\WordResultBase.cs" />
     <Compile Include="Result\WordResultMasterDetail.cs" />
+    <Compile Include="Result\WordResultDetail.cs" />
     <Compile Include="Service\PdfService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Storage\SQL\SQLSetting.cs" />
