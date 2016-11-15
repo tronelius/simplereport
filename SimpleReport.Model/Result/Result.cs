@@ -41,7 +41,6 @@ namespace SimpleReport.Model.Result
         public static string from = "@from";
         public static string to = "@to";
         public static string table = "table";
-        public static string tableshort = "TBL";
     }
 
 }
