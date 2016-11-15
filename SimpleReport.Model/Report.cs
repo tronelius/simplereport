@@ -163,11 +163,13 @@ namespace SimpleReport.Model
             return obj.ToString();
         }
 
-        public bool HasMultipleSqlStatements()
+        public bool IsMasterDetailReport()
         {
             string pattern = @"(?<!\()select";
             var result = Regex.Matches(this.Sql, pattern);
-            return result.Count > 1;
+            string mergeIdPattern = @"merge_id";
+            var mergeResult = Regex.Matches(this.Sql, mergeIdPattern);
+            return result.Count > 1 && mergeResult.Count >= 2;
         }
     }
 }

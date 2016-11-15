@@ -30,7 +30,7 @@ namespace SimpleReport.Model.Result
         {
             if (report.TemplateFormat == TemplateFormat.Word)
             {
-                if (report.HasMultipleSqlStatements())
+                if (report.IsMasterDetailReport())
                     return new WordResultMasterDetail(report, template);
                 return new WordResultPlain(report, template);
             }
