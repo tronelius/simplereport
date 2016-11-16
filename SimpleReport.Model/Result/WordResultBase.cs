@@ -46,7 +46,7 @@ namespace SimpleReport.Model.Result
             XDocument document = GetXDocument(doc);
             XElement content = document.Root.Element(W.body);
             var allDescendantsAndSelf = content.DescendantsAndSelf(W.sdt).ToList();
-            return allDescendantsAndSelf.Where(d => !(d.Ancestors(W.sdt).Intersect(allDescendantsAndSelf)).Any() && !d.SdtTagName().ToLower().StartsWith("table"));
+            return allDescendantsAndSelf.Where(d => !(d.Ancestors(W.sdt).Intersect(allDescendantsAndSelf)).Any() && d.SdtTagName() != null && !d.SdtTagName().ToLower().StartsWith("table"));
         }
 
         protected IEnumerable<XElement> FindTableContentControlsInTemplate(WordprocessingDocument doc)
@@ -54,8 +54,9 @@ namespace SimpleReport.Model.Result
             XDocument document = GetXDocument(doc);
             XElement content = document.Root.Element(W.body);
             var allDescendantsAndSelf = content.DescendantsAndSelf(W.sdt).ToList();
-            return allDescendantsAndSelf.Where(d => (d.Descendants(W.sdt).Intersect(allDescendantsAndSelf)).Any() && d.SdtTagName().ToLower().StartsWith("table"));
+            return allDescendantsAndSelf.Where(d => (d.Descendants(W.sdt).Intersect(allDescendantsAndSelf)).Any() && d.SdtTagName() != null && d.SdtTagName().ToLower().StartsWith("table"));
         }
+
         protected IEnumerable<XElement> FindContentControlsInsideElement(XElement element)
         {
             return element.Descendants(W.sdt).ToList();

@@ -51,9 +51,10 @@ namespace SimpleReport.Model.Result
                     var nonTableContentControls = FindNonTableContentControlsInTemplate(doc).ToList();
 
                     int index = 0;
+                    bool nonTableContentMapped = false;
                     foreach (DataTable dataTable in tables)
                     {
-                        if (nonTableContentControls.Count > 0 && index == 0 && dataTable.Rows.Count==1) //Content controls outside of tables exists, first table has only one row of data, match these
+                        if (nonTableContentControls.Count > 0 && !nonTableContentMapped && dataTable.Rows.Count==1) //Content controls outside of tables exists, first table has only one row of data, match these
                         {
                             var firstrow = dataTable.Rows[0];
                             foreach (DataColumn column in firstrow.Table.Columns)
@@ -64,10 +65,13 @@ namespace SimpleReport.Model.Result
                             }
 
                             if (fieldContentsList.Count > 0) //First table has only one row and data matches contentControls, assume it should be excluded.
+                            {
+                                nonTableContentMapped = true;
                                 continue;
+                            }
                         }
 
-                        if (tableContentControls.Count() >= index+1) {  //check if tables exist in word-template, Match DataTable in SQL-result to table in word-template 1-1
+                        if (tableContentControls.Count() >= index+1 ) {  //check if tables exist in word-template, Match DataTable in SQL-result to table in word-template 1-1
                             string name = tableContentControls[index].SdtTagName();
                             TableContent tableContent = new TableContent(name);
                             var contentControlsInsideTable = FindContentControlsInsideElement(tableContentControls[index]);
