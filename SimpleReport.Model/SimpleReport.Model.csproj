@@ -130,6 +130,8 @@
     <Compile Include="Migrations\2016-10-28\AddSubscriptionType.cs" />
     <Compile Include="Migrations\Migrator.cs" />
     <Compile Include="Migrations\Tables.cs" />
+    <Compile Include="Extensions\XelementExtensions.cs" />
+    <Compile Include="Helpers\DetailReportUrlHelper.cs" />
     <Compile Include="Replacers\IReplacer.cs" />
     <Compile Include="Replacers\IXmlReplacer.cs" />
     <Compile Include="Replacers\NoReplacer.cs" />

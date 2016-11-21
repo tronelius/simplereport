@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using OpenXmlPowerTools;
+using SimpleReport.Model.Extensions;
 using SimpleReport.Model.Helpers;
 using TemplateEngine.Docx;
 using Break = DocumentFormat.OpenXml.Wordprocessing.Break;
@@ -29,19 +30,14 @@ namespace SimpleReport.Model.Result
                 return null;
 
             var sources = new List<Source>();
-            var table = tables.First();
-            var lastRow = table.Rows[table.Rows.Count - 1];
-            DataColumn[] columns = new DataColumn[table.Columns.Count];
-            table.Columns.CopyTo(columns, 0);
-            var columnNames = columns.Select(a => a.ColumnName.ToLower()).ToList();
-            RenderSimpleTableReport(table, columnNames, sources);
+            RenderTableReport(tables, sources);
             return MergeSources(sources);
         }
 
 
-        public override ResultInfo ResultInfo { get { return new ResultInfo("WordResultPlain", "Word"); } }
+        public override ResultInfo ResultInfo { get { return new ResultInfo("WordResultPlain", "Word listing"); } }
         
-        private void RenderSimpleTableReport(DataTable table, List<string> columnNames, List<Source> sources)
+        private void RenderTableReport(List<DataTable> tables, List<Source> sources)
         {
             using (var tdata = new MemoryStream(TemplateData))
             using (var ms = new MemoryStream())
@@ -51,26 +47,58 @@ namespace SimpleReport.Model.Result
                 using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
                 {
                     List<IContentItem> fieldContentsList = new List<IContentItem>();
-                    TableContent tableContent = new TableContent(FieldHandles.table);
-                        foreach (DataRow row in table.Rows)
+                    var tableContentControls = FindTableContentControlsInTemplate(doc).ToList();
+                    var nonTableContentControls = FindNonTableContentControlsInTemplate(doc).ToList();
+
+                    int index = 0;
+                    bool nonTableContentMapped = false;
+                    foreach (DataTable dataTable in tables)
+                    {
+                        if (nonTableContentControls.Count > 0 && !nonTableContentMapped && dataTable.Rows.Count==1) //Content controls outside of tables exists, first table has only one row of data, match these
                         {
-                            List<FieldContent> fieldContentTableList = new List<FieldContent>();
-                            foreach (DataColumn col in row.Table.Columns)
+                            var firstrow = dataTable.Rows[0];
+                            foreach (DataColumn column in firstrow.Table.Columns)
                             {
-                                fieldContentTableList.Add(new FieldContent(col.ColumnName, _replacer.Replace(row[col.ColumnName].ToString())));
+                                var foundControl = nonTableContentControls.FirstOrDefault(c => c.SdtTagName().ToLower().Equals(column.ColumnName.ToLower()));
+                                if (foundControl != null)
+                                    fieldContentsList.Add(new FieldContent(foundControl.SdtTagName(), _replacer.Replace(firstrow[column.ColumnName].ToString())));
                             }
-                            tableContent.AddRow(fieldContentTableList.ToArray());
+
+                            if (fieldContentsList.Count > 0) //First table has only one row and data matches contentControls, assume it should be excluded.
+                            {
+                                nonTableContentMapped = true;
+                                continue;
+                            }
                         }
-                        fieldContentsList.Add(tableContent);
+
+                        if (tableContentControls.Count() >= index+1 ) {  //check if tables exist in word-template, Match DataTable in SQL-result to table in word-template 1-1
+                            string name = tableContentControls[index].SdtTagName();
+                            TableContent tableContent = new TableContent(name);
+                            var contentControlsInsideTable = FindContentControlsInsideElement(tableContentControls[index]);
+                            foreach (DataRow row in dataTable.Rows)
+                            {
+                                List<FieldContent> fieldContentTableList = new List<FieldContent>();
+                                foreach (DataColumn col in row.Table.Columns)
+                                {
+                                    var foundControl = contentControlsInsideTable.FirstOrDefault(c => c.SdtTagName().ToLower().Equals(col.ColumnName.ToLower()));
+                                    if (foundControl != null)
+                                        fieldContentTableList.Add(new FieldContent(foundControl.SdtTagName(), _replacer.Replace(row[col.ColumnName].ToString())));
+                                }
+                                if (fieldContentTableList.Count > 0)
+                                    tableContent.AddRow(fieldContentTableList.ToArray());
+                            }
+                            if (tableContent.Rows?.Count > 0)
+                                fieldContentsList.Add(tableContent);
+                        }
+                        index++;
+                    }
                     var content = new Content(fieldContentsList.ToArray());
                     FillWordTemplate(doc, content, false);
                     doc.MainDocumentPart.Document.Save();
                     sources.Add(new Source(new WmlDocument(new OpenXmlPowerToolsDocument(ms.ToArray()))));
+                    
                 }
             }
-
         }
-
     }
-
 }

@@ -11,7 +11,9 @@
         </thead>
         <tbody>
         <tr data-ng-repeat="row in ::data.Rows">
-            <td data-ng-repeat="val in ::row track by $index">{{val}}</td>
+            <td data-ng-repeat="val in ::row track by $index">
+                <span ng-bind-html="val"></span>
+            </td>
         </tr>
         </tbody>
     </table>

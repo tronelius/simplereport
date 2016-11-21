@@ -1,5 +1,5 @@
 ﻿//Desperate need for refactoring... but later...
-angular.module('designer').controller('designerController', ['$scope', '$http', 'subscriptionRepository', 'designerRepository','Upload', function ($scope, $http, subscriptionRepository, designerRepository,upload) {
+angular.module('designer').controller('designerController', ['$scope', '$http', 'subscriptionRepository', 'designerRepository', 'Upload', 'reportParameterHelper', function ($scope, $http, subscriptionRepository, designerRepository, upload, reportParameterHelper) {
     $scope.activeTab = 'report';
 
     $scope.init = function () {
@@ -59,6 +59,8 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 toastr.warning('Could not load subscriptions for the report. Validation will assume there are subscriptions for your safety.');
             });
         }
+
+        $scope.report.Parameters = reportParameterHelper.sortedParameters($scope.report.Parameters, $scope.report.Sql);
 
         $scope.latestSql = $scope.report.Sql;
         parameterPositionHash = [];
@@ -123,6 +125,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
         }
 
+        $scope.report.Parameters = reportParameterHelper.sortedParameters($scope.report.Parameters, $scope.report.Sql);
         $scope.reportDataChanged();
     };
 
@@ -206,7 +209,13 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         });
     };
 
-    $scope.deleteReport = function () {
+    $scope.deleteReport = function (force) {
+        if (!force) {
+            $scope.showDeleteConfirmation = true;
+            return;
+        }
+        $scope.showDeleteConfirmation = false;
+
        designerRepository.deleteReport($scope.report).then(function (result) {
            if (result.data.Success) {
                 toastr.success("Report is deleted", "Deleted");

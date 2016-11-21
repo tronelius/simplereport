@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using OpenXmlPowerTools;
+using SimpleReport.Model.Extensions;
 using SimpleReport.Model.Helpers;
 using SimpleReport.Model.Replacers;
 using TemplateEngine.Docx;
@@ -40,6 +41,27 @@ namespace SimpleReport.Model.Result
 
         public WordResultBase(Report report, Template template) : base(report, template) { }
 
+        protected IEnumerable<XElement> FindNonTableContentControlsInTemplate(WordprocessingDocument doc)
+        {
+            XDocument document = GetXDocument(doc);
+            XElement content = document.Root.Element(W.body);
+            var allDescendantsAndSelf = content.DescendantsAndSelf(W.sdt).ToList();
+            return allDescendantsAndSelf.Where(d => !(d.Ancestors(W.sdt).Intersect(allDescendantsAndSelf)).Any() && d.SdtTagName() != null && !d.SdtTagName().ToLower().StartsWith("table"));
+        }
+
+        protected IEnumerable<XElement> FindTableContentControlsInTemplate(WordprocessingDocument doc)
+        {
+            XDocument document = GetXDocument(doc);
+            XElement content = document.Root.Element(W.body);
+            var allDescendantsAndSelf = content.DescendantsAndSelf(W.sdt).ToList();
+            return allDescendantsAndSelf.Where(d => (d.Descendants(W.sdt).Intersect(allDescendantsAndSelf)).Any() && d.SdtTagName() != null && d.SdtTagName().ToLower().StartsWith("table"));
+        }
+
+        protected IEnumerable<XElement> FindContentControlsInsideElement(XElement element)
+        {
+            return element.Descendants(W.sdt).ToList();
+        }
+
         protected void FillWordTemplate(WordprocessingDocument doc, Content content, bool addpagebreak)
         {
             XDocument document = GetXDocument(doc);
@@ -54,16 +76,6 @@ namespace SimpleReport.Model.Result
             if (addpagebreak)
                 AddPageBreak(doc);
         }
-
-        //private static Regex _regex = new Regex(@"\\u[a-zA-Z0-9]{4}", RegexOptions.Compiled);
-        //public string EscapeToValidXmlString(string stringtoEscape)
-        //{
-        //    //string decoded = _regex.Replace(stringtoEscape, "");
-        //    //return System.Security.SecurityElement.Escape(decoded);
-        //    Encoding enc = new ASCIIEncoding();
-        //    byte[] bytes = enc.GetBytes(stringtoEscape);
-        //    return enc.GetString(bytes);
-        //}
 
         protected XDocument GetXDocument(WordprocessingDocument myDoc)
         {

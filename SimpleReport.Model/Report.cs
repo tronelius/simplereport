@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using SimpleReport.Model.DbExecutor;
+using SimpleReport.Model.Helpers;
 using SimpleReport.Model.Result;
 
 namespace SimpleReport.Model
@@ -120,7 +121,7 @@ namespace SimpleReport.Model
             return raw;
         }
 
-        public ResultFileInfo ExecuteWithTemplate(Template template)
+        public ResultFileInfo ExecuteWithTemplate(Template template, Report detailReport = null)
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
@@ -128,12 +129,24 @@ namespace SimpleReport.Model
             var db = DbExecutorFactory.GetInstance(Connection);
             var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
             var dataResult = db.GetMultipleResults(Connection, Sql, parameters);
-            var result = ResultFactory.GetInstance(this, template);
+
             if (dataResult.Count == 0)
                 return null;
 
+            if (detailReport != null)
+            {
+                var table = dataResult.First();
+                table.Columns.Add(new DataColumn("detailurl"));
+                var headers = table.Columns.OfType<DataColumn>().Select(x => x.ColumnName).ToArray();
+                foreach (DataRow tableRow in table.Rows)
+                {
+                    tableRow["detailurl"] = DetailReportUrlHelper.GetUrl(this, detailReport, headers, tableRow.ItemArray.Select(x => x.ToString()).ToArray());
+                }
+            }
+
+            var result = ResultFactory.GetInstance(this, template);
+
             return result.Render(dataResult);
-            
         }
 
         public void UpdateSql(string sql)
@@ -150,11 +163,13 @@ namespace SimpleReport.Model
             return obj.ToString();
         }
 
-        public bool HasMultipleSqlStatements()
+        public bool IsMasterDetailReport()
         {
             string pattern = @"(?<!\()select";
             var result = Regex.Matches(this.Sql, pattern);
-            return result.Count > 1;
+            string mergeIdPattern = @"merge_id";
+            var mergeResult = Regex.Matches(this.Sql, mergeIdPattern);
+            return result.Count > 1 && mergeResult.Count >= 2;
         }
     }
 }

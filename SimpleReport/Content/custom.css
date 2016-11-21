@@ -44,3 +44,7 @@ a {
 .overflow {
     overflow: hidden;
 }
+
+.report-parameter {
+    height: 160px;
+}
