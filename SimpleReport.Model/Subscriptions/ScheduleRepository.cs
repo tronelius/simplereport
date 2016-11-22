@@ -32,7 +32,7 @@ namespace SimpleReport.Model.Subscriptions
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
-                var list = cn.GetList<Schedule>();
+                var list = cn.GetList<Schedule>().Where(a => a.ScheduleType == 0);
                 return list.ToList();
             }
         }

@@ -108,10 +108,6 @@
       <Project>{3cd9bb70-b04e-4c03-b9d3-803a449effdc}</Project>
       <Name>SimpleReport.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Worker.Common\Worker.Common.csproj">
-      <Project>{d4a0d1aa-7691-43ce-b200-78acd671d32d}</Project>
-      <Name>Worker.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="LocalTest.mdf">

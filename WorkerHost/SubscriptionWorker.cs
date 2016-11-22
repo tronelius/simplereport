@@ -6,7 +6,6 @@ using Quartz.Impl;
 using SimpleReport.Model.Logging;
 using WorkerHost.Config;
 using WorkerHost.Jobs;
-using WorkerWebApi.Config;
 using IoCConfig = WorkerHost.Config.IoCConfig;
 
 namespace WorkerHost
@@ -18,7 +17,7 @@ namespace WorkerHost
 
         public void Start()
         {
-            //StartAPI();
+            
             StartJobs();
         }
 
@@ -52,15 +51,10 @@ namespace WorkerHost
                 logger.Error("Could not start subscription workers",ex);
             }
         }
-
-        //private void StartAPI()
-        //{
-        //    _webApplication = WebApp.Start<WebPipeline>(System.Configuration.ConfigurationManager.AppSettings["HostUrl"]);
-        //}
+       
 
         public void Stop()
         {
-            //_webApplication.Dispose();
             _scheduler.Shutdown();
         }
     }

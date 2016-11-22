@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SimpleReport.Model;
+using SimpleReport.Model.Migrations;
 using SimpleReport.Model.Storage;
 using SimpleReport.Model.Storage.SQL;
 using Worker.Common.Migrations;

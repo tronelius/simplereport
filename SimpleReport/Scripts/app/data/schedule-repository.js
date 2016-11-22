@@ -12,7 +12,7 @@
         };
 
         repo.delete = function(id) {
-            return $http.post(urlBase + 'delete', { Id: id });
+            return $http.post(urlBase + 'delete', id );
         };
 
         return repo;

@@ -7,7 +7,6 @@ using Quartz;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Service;
 using SimpleReport.Model.Subscriptions;
-using Worker.Common.Api;
 
 namespace WorkerHost.Jobs
 {

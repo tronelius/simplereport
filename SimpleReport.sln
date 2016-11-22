@@ -1,17 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleReport", "SimpleReport\SimpleReport.csproj", "{922FCA31-5DB3-4C4D-88DE-C8B92D0332C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleReport.Model", "SimpleReport.Model\SimpleReport.Model.csproj", "{3CD9BB70-B04E-4C03-B9D3-803A449EFFDC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerHost", "WorkerHost\WorkerHost.csproj", "{DE3287A9-5576-4F4D-AE1A-477ED5451BF9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerWebApi", "WorkerWebApi\WorkerWebApi.csproj", "{8103753C-3A6B-4E1A-8ADA-FA2714BA8806}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker.Common", "Worker.Common\Worker.Common.csproj", "{D4A0D1AA-7691-43CE-B200-78ACD671D32D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleReportTests", "SimpleReportTests\SimpleReportTests.csproj", "{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}"
 EndProject
@@ -33,14 +29,6 @@ Global
 		{DE3287A9-5576-4F4D-AE1A-477ED5451BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE3287A9-5576-4F4D-AE1A-477ED5451BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE3287A9-5576-4F4D-AE1A-477ED5451BF9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8103753C-3A6B-4E1A-8ADA-FA2714BA8806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8103753C-3A6B-4E1A-8ADA-FA2714BA8806}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8103753C-3A6B-4E1A-8ADA-FA2714BA8806}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8103753C-3A6B-4E1A-8ADA-FA2714BA8806}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4A0D1AA-7691-43CE-B200-78ACD671D32D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4A0D1AA-7691-43CE-B200-78ACD671D32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4A0D1AA-7691-43CE-B200-78ACD671D32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4A0D1AA-7691-43CE-B200-78ACD671D32D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}.Release|Any CPU.ActiveCfg = Release|Any CPU

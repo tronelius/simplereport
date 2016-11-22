@@ -139,10 +139,6 @@
       <Project>{3cd9bb70-b04e-4c03-b9d3-803a449effdc}</Project>
       <Name>SimpleReport.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WorkerWebApi\WorkerWebApi.csproj">
-      <Project>{8103753c-3a6b-4e1a-8ada-fa2714ba8806}</Project>
-      <Name>WorkerWebApi</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
