@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleReport", "SimpleRepor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleReport.Model", "SimpleReport.Model\SimpleReport.Model.csproj", "{3CD9BB70-B04E-4C03-B9D3-803A449EFFDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerHost", "WorkerHost\WorkerHost.csproj", "{DE3287A9-5576-4F4D-AE1A-477ED5451BF9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleReport.SubscriptionService", "SimpleReport.SubscriptionService\SimpleReport.SubscriptionService.csproj", "{DE3287A9-5576-4F4D-AE1A-477ED5451BF9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleReportTests", "SimpleReportTests\SimpleReportTests.csproj", "{F0B8AF40-0857-495A-BD1C-FEB2DD817C62}"
 EndProject

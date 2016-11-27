@@ -46,9 +46,10 @@ namespace SimpleReport.Model.Storage
 
         public void InitializeStorage()
         {
-            using (File.Create(_filename)) ;
-            ReportDataModel model = new ReportDataModel();
-            SaveModel(model);
+            using (File.Create(_filename)) { 
+                ReportDataModel model = new ReportDataModel();
+                SaveModel(model);
+            }
         }
 
         public ReportDataModel LoadModel()

@@ -10,7 +10,6 @@ using SimpleReport.Model;
 using SimpleReport.Model.Migrations;
 using SimpleReport.Model.Storage;
 using SimpleReport.Model.Storage.SQL;
-using Worker.Common.Migrations;
 
 namespace SimpleReportTests
 {

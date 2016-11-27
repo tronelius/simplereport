@@ -1,5 +1,4 @@
 ﻿using FluentMigrator;
-using Worker.Common.Migrations;
 
 namespace SimpleReport.Model.Migrations
 {

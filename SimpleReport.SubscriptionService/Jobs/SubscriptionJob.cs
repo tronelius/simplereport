@@ -8,7 +8,7 @@ using SimpleReport.Model.Logging;
 using SimpleReport.Model.Service;
 using SimpleReport.Model.Subscriptions;
 
-namespace WorkerHost.Jobs
+namespace SimpleReport.SubscriptionService.Jobs
 {
     [DisallowConcurrentExecution]
     public class SubscriptionJob : IJob

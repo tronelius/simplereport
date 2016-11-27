@@ -7,8 +7,8 @@
     <ProjectGuid>{DE3287A9-5576-4F4D-AE1A-477ED5451BF9}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WorkerHost</RootNamespace>
-    <AssemblyName>WorkerHost</AssemblyName>
+    <RootNamespace>SimpleReport.SubscriptionService</RootNamespace>
+    <AssemblyName>SimpleReport.SubscriptionService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>

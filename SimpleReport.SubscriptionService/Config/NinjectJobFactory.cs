@@ -8,7 +8,7 @@ using Ninject.Syntax;
 using Quartz;
 using Quartz.Spi;
 
-namespace WorkerHost.Config
+namespace SimpleReport.SubscriptionService.Config
 {
     public class NinjectJobFactory : IJobFactory
     {

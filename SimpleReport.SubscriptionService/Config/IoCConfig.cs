@@ -4,7 +4,7 @@ using SimpleReport.Model.Logging;
 using SimpleReport.Model.Service;
 using SimpleReport.Model.Subscriptions;
 
-namespace WorkerHost.Config
+namespace SimpleReport.SubscriptionService.Config
 {
     public static class IoCConfig
     {

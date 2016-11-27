@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using SimpleReport.Model.Subscriptions;
 
-namespace WorkerHost
+namespace SimpleReport.SubscriptionService
 {
     public interface IWorkerApiClient
     {

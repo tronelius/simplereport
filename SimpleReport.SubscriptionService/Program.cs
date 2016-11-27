@@ -2,7 +2,7 @@
 using Topshelf;
 using SimpleReport.Model.Migrations;
 
-namespace WorkerHost
+namespace SimpleReport.SubscriptionService
 {
     class Program
     {

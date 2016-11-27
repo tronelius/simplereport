@@ -4,11 +4,11 @@ using Ninject;
 using Quartz;
 using Quartz.Impl;
 using SimpleReport.Model.Logging;
-using WorkerHost.Config;
-using WorkerHost.Jobs;
-using IoCConfig = WorkerHost.Config.IoCConfig;
+using SimpleReport.SubscriptionService.Config;
+using SimpleReport.SubscriptionService.Jobs;
+using IoCConfig = SimpleReport.SubscriptionService.Config.IoCConfig;
 
-namespace WorkerHost
+namespace SimpleReport.SubscriptionService
 {
     public class SubscriptionWorker
     {
