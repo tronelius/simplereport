@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Newtonsoft.Json;
 using SimpleReport.Helpers;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
@@ -94,9 +95,38 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportIdWrapper.ReportId);
+                Subscription subscription = JsonConvert.DeserializeObject<Subscription>(reportIdWrapper.Data.ToString());
+                _logger.Trace("Creating subscription: " + JsonConvert.SerializeObject(reportIdWrapper.Data));
 
-                var result = await _apiClient.Post("api/subscription/save", reportIdWrapper.Data);
-                return Ok(result);
+                var errorResult = subscription.Validate();
+                if (errorResult != null)
+                    return Json(new { Error = errorResult });
+
+                Schedule schedule = null;
+                if (subscription.SubscriptionType == SubscriptionTypeEnum.OneTime)
+                {
+                    schedule = _scheduleRepository.GetOneTimeSchedule();
+                    subscription.ScheduleId = schedule.Id;
+                }
+                else
+                {
+                    schedule = _scheduleRepository.Get(subscription.ScheduleId);
+                }
+                subscription.SetNextSendDate(schedule.Cron);
+
+                if (subscription.Id == 0)
+                {
+                    var id = _subscriptionRepository.Insert(subscription);
+                    return Json(new { Id = id });
+                }
+
+                if (subscription.Status == SubscriptionStatus.Suspended)
+                {
+                    subscription.FailedAttempts = 0;
+                    subscription.Status = SubscriptionStatus.NotSet;
+                }
+                _subscriptionRepository.Update(subscription);
+                return Ok(new { Id = subscription.Id });
             }
             catch (Exception ex)
             {
@@ -111,8 +141,10 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportIdWrapper.ReportId);
-
-                var result = await _apiClient.Post("api/subscription/delete", reportIdWrapper.Data);
+                _logger.Trace("Deleting subscription: " + reportIdWrapper.ReportId);
+                int id = Convert.ToInt32(reportIdWrapper.ReportId);
+                _subscriptionRepository.Delete(id);
+                var result = _subscriptionRepository.List();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -128,8 +160,11 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportIdWrapper.ReportId);
+                _logger.Trace("Set send on subscription: " + reportIdWrapper.ReportId);
+                int id = Convert.ToInt32(reportIdWrapper.ReportId);
+                _subscriptionRepository.SendNow(id);
 
-                var result = await _apiClient.Post("api/subscription/send", reportIdWrapper.Data);
+                var result = _subscriptionRepository.List();
                 return Ok(result);
             }
             catch (Exception ex)

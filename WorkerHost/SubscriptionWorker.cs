@@ -12,7 +12,6 @@ namespace WorkerHost
 {
     public class SubscriptionWorker
     {
-        protected IDisposable _webApplication;
         protected IScheduler _scheduler;
 
         public void Start()
@@ -25,7 +24,7 @@ namespace WorkerHost
         {
             var kernel = new StandardKernel();
             IoCConfig.Register(kernel);
-            
+
             try
             {
                 // Create a scheduler and give it the Ninject job factory created earlier
