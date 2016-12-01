@@ -13,12 +13,10 @@ namespace SimpleReport.Controllers.Api
     public class ScheduleController : BaseApiController
     {
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IApiClient _apiClient;
 
-        public ScheduleController(IStorage reportStorage, IScheduleRepository scheduleRepository,  ILogger logger, IApiClient apiClient) : base(reportStorage, logger)
+        public ScheduleController(IStorage reportStorage, IScheduleRepository scheduleRepository,  ILogger logger) : base(reportStorage, logger)
         {
             _scheduleRepository = scheduleRepository;
-            _apiClient = apiClient;
         }
 
         [AcceptVerbs("GET")]

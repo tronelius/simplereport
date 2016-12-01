@@ -14,5 +14,6 @@ namespace SimpleReport.Model.Subscriptions
         void SendNow(int id);
         List<Subscription> GetSubscriptionsWithSendDateBefore(DateTime now, int maxFailed);
         void DeleteAll();
+        List<Subscription> GetSubscriptionsByReportId(Guid id);
     }
 }

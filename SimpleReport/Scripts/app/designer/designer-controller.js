@@ -223,7 +223,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
                 $scope.report = null;
                 $scope.$apply();
             } else {
-                toastr.error(result.FullMessage, "Error");
+                toastr.error(result.data.FullMessage, "Error");
             }
         }, function (data) {
             toastr.error("Server error when deleting report.", "Error");

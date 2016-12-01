@@ -87,5 +87,14 @@ namespace SimpleReport.Model.Subscriptions
                 cn.Execute("Delete from Subscription");
             }
         }
+
+        public List<Subscription> GetSubscriptionsByReportId(Guid id)
+        {
+            using (SqlConnection cn = EnsureOpenConnection())
+            {
+                var list = cn.Query<Subscription>("select * from subscription where reportId=@reportId", new { reportId = id });
+                return list.ToList();
+            }
+        }
     }
 }

@@ -51,7 +51,6 @@ namespace SimpleReport
             kernel.Bind<IStorageHelper>().To<StorageHelper>();
             kernel.Bind<IStorage>().To<SQLStorage>().InRequestScope();
             kernel.Bind<ILogger>().To<Nlogger>();
-            kernel.Bind<IApiClient>().To<ApiClient>();
             kernel.Bind<IApplicationSettings>().To<ApplicationSettings>().InSingletonScope();
             kernel.Bind<IPdfService>().To<PdfService>().InSingletonScope();
             kernel.BindFilter<HandleMyOwnErrorAttribute>(FilterScope.Controller, 0);

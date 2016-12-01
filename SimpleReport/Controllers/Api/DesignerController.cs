@@ -13,22 +13,24 @@ using SimpleReport.Helpers;
 using SimpleReport.Model;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
+using SimpleReport.Model.Subscriptions;
 using SimpleReport.ViewModel;
+using IApplicationSettings = SimpleReport.Model.IApplicationSettings;
 
 namespace SimpleReport.Controllers.Api
 {
 
     public class DesignerController : BaseApiController
     {
-        private readonly IApiClient _apiClient;
         private readonly IApplicationSettings _applicationSettings;
         private readonly IStorageHelper _storageHelper;
+        private readonly ISubscriptionRepository _subscriptionRepository;
 
-        public DesignerController(IStorage reportStorage, ILogger logger, IApiClient apiClient, IApplicationSettings applicationSettings, IStorageHelper storageHelper) : base(reportStorage, logger)
+        public DesignerController(IStorage reportStorage, ILogger logger,  IApplicationSettings applicationSettings, IStorageHelper storageHelper, ISubscriptionRepository subscriptionRepository) : base(reportStorage, logger)
         {
-            _apiClient = apiClient;
             _applicationSettings = applicationSettings;
             _storageHelper = storageHelper;
+            _subscriptionRepository = subscriptionRepository;
         }
 
         [AcceptVerbs("GET")]
@@ -55,7 +57,7 @@ namespace SimpleReport.Controllers.Api
                 Report currentReport = _reportStorage.GetReport(reportToSave.Id);
                 
                 if (_applicationSettings.SubscriptionEnabled && currentReport != null && currentReport.HasMailTemplateChanged(reportToSave)) {
-                    var result = await _apiClient.Post("api/subscription/updatetemplate", new {reportguid = reportToSave.Id, subject = reportToSave.MailSubject, text = reportToSave.MailText});
+                    _subscriptionRepository.UpdateTemplateText(new UpdateTemplateText() { ReportGuid = reportToSave.Id, Subject = reportToSave.MailSubject, Text = reportToSave.MailText});
                 }
 
                 _reportStorage.SaveReport(reportToSave);
@@ -76,9 +78,8 @@ namespace SimpleReport.Controllers.Api
 
                 if (_applicationSettings.SubscriptionEnabled)
                 {
-                    var result = await _apiClient.Get("api/subscription/hasSubscriptions?reportId=" + rpt.Id);
-
-                    if ((bool) result)
+                    var subs =_subscriptionRepository.GetSubscriptionsByReportId(rpt.Id);
+                    if (subs.Count > 0)
                     {
                         return Ok(new DeleteInfo(false, "The report have subscriptions that must be removed first."));
                     }

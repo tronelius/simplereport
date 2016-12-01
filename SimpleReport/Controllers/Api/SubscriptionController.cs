@@ -16,13 +16,11 @@ namespace SimpleReport.Controllers.Api
     {
         private readonly ISubscriptionRepository _subscriptionRepository;
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IApiClient _apiClient;
 
-        public SubscriptionController(IStorage reportStorage, ILogger logger, ISubscriptionRepository subscriptionRepository, IScheduleRepository scheduleRepository, IApiClient apiClient) : base(reportStorage, logger)
+        public SubscriptionController(IStorage reportStorage, ILogger logger, ISubscriptionRepository subscriptionRepository, IScheduleRepository scheduleRepository) : base(reportStorage, logger)
         {
             _subscriptionRepository = subscriptionRepository;
             _scheduleRepository = scheduleRepository;
-            _apiClient = apiClient;
         }
 
         [AcceptVerbs("GET")]
