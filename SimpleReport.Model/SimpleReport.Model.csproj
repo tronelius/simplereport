@@ -127,6 +127,7 @@
     <Compile Include="Migrations\2016-03-22\AddTypeAhead.cs" />
     <Compile Include="Migrations\2016-03-22\AddTypeAhead_to_Parameter.cs" />
     <Compile Include="Migrations\2016-04-15\AddConvertToPdfToReport.cs" />
+    <Compile Include="Migrations\2016-10-28\AddDetailReportId.cs" />
     <Compile Include="Migrations\2016-10-28\AddSubscriptionType.cs" />
     <Compile Include="Migrations\Migrator.cs" />
     <Compile Include="Migrations\Tables.cs" />
