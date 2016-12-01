@@ -139,8 +139,8 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportIdWrapper.ReportId);
-                _logger.Trace("Deleting subscription: " + reportIdWrapper.ReportId);
-                int id = Convert.ToInt32(reportIdWrapper.ReportId);
+                _logger.Trace("Deleting subscription: " + reportIdWrapper.Data);
+                int id = Convert.ToInt32(reportIdWrapper.Data);
                 _subscriptionRepository.Delete(id);
                 var result = _subscriptionRepository.List();
                 return Ok(result);
@@ -158,8 +158,8 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportIdWrapper.ReportId);
-                _logger.Trace("Set send on subscription: " + reportIdWrapper.ReportId);
-                int id = Convert.ToInt32(reportIdWrapper.ReportId);
+                _logger.Trace("Set send on subscription: " + reportIdWrapper.Data);
+                int id = Convert.ToInt32(reportIdWrapper.Data);
                 _subscriptionRepository.SendNow(id);
 
                 var result = _subscriptionRepository.List();
