@@ -181,7 +181,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     }
 
     $scope.addNewReport = function () {
-        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id };
+        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id };
     };
     $scope.addNewParameter = function (keyOfParameter) {
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
