@@ -37,6 +37,14 @@ namespace SimpleReport.Model.Subscriptions
             }
         }
 
+        public List<Schedule> ListAll()
+        {
+            using (SqlConnection cn = EnsureOpenConnection())
+            {
+                return cn.GetList<Schedule>().ToList();
+            }
+        }
+
         public void Update(Schedule schedule)
         {
             using (SqlConnection cn = EnsureOpenConnection())
