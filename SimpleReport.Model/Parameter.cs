@@ -34,9 +34,8 @@ namespace SimpleReport.Model
         public void ReadParameters(NameValueCollection querystring)
         {
             foreach (Parameter par in this)
-            {
-                //todo validate
-                par.Value = querystring[par.Key];
+            {                
+                par.Value = querystring[par.Key] ?? par.Value;
             }
         }
     }
