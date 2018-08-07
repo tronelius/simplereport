@@ -33,6 +33,7 @@ namespace SimpleReport.Model
         {
             get { return TemplateFormat != TemplateFormat.Empty; }
         }
+        public Guid? DetailReportId { get; set; }
         public string MailSubject { get; set; }
         public string MailText { get; set; }
         public bool OnScreenFormatAllowed { get; set; }

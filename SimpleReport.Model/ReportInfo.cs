@@ -7,7 +7,7 @@ namespace SimpleReport.Model
     public class ReportInfo : ValidatableEntity, IEntity
     {
         public Guid Id { get; set; }
-        public Guid? DetailReportId { get; set; }
+      
 
         [Required][StringLength(300)] 
         public string Name { get; set; }

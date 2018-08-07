@@ -6,7 +6,7 @@
         viewModel.Report.Parameters = reportParameterHelper.sortedParameters(viewModel.Report.Parameters, viewModel.Report.Sql);
 
         viewModel.Report.Parameters.forEach(function (param) {
-            if (param.InputType === 6) { //SyncedDate
+            if (param.InputType === 6) { //listaSyncedDate
                 if(param.Value && param.Value !== 'SyncedDate')
                     param.DisplayValue = new Date(param.Value);
 
