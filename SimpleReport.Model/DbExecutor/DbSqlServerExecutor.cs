@@ -57,7 +57,8 @@ namespace SimpleReport.Model.DbExecutor
             }
             catch (Exception ex)
             {
-                throw new Exception(String.Format("Error when opening connection to Database, Name:{0}, Connectionstring:{1}", conn.Name, conn.ConnectionString), ex);
+                throw new Exception(
+                    $"Error when opening connection to Database, Name:{conn.Name}, Connectionstring:{conn.ConnectionString}", ex);
             }
             return cn;
         }

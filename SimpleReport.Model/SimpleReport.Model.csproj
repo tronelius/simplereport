@@ -92,6 +92,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -134,12 +135,12 @@
     <Compile Include="Extensions\XelementExtensions.cs" />
     <Compile Include="Helpers\DetailReportUrlHelper.cs" />
     <Compile Include="Replacers\IReplacer.cs" />
-    <Compile Include="Replacers\IXmlReplacer.cs" />
+    <Compile Include="Replacers\IValueReplacer.cs" />
     <Compile Include="Replacers\NoReplacer.cs" />
     <Compile Include="Replacers\OracleReservedWordsReplacer.cs" />
     <Compile Include="Exceptions\ValidationResult.cs" />
     <Compile Include="DbExecutor\IDbExecutor.cs" />
-    <Compile Include="Replacers\XmlReplacer.cs" />
+    <Compile Include="Replacers\ValueReplacer.cs" />
     <Compile Include="Replacers\XmlTextEncoder.cs" />
     <Compile Include="Result\ExcelResultPlain.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />

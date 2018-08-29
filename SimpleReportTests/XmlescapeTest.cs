@@ -17,7 +17,7 @@ namespace SimpleReportTests
         [TestCase("\u0081ff", "ff", Description = "unicode escaped char in string should be removed")]
         public void ShouldReplaceEscapedUnicodeChars(string inputstring, string outputstring)
         {
-            var replacer = new XmlReplacer();
+            var replacer = new ValueReplacer();
             var replaced = replacer.Replace(inputstring);
             Assert.That(replaced, Is.EqualTo(outputstring));
         }

@@ -1,6 +1,6 @@
 ﻿namespace SimpleReport.Model.Replacers
 {
-    public interface IXmlReplacer
+    public interface IValueReplacer
     {
         string Replace(string inputstring);
     }

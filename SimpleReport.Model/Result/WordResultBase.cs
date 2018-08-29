@@ -23,7 +23,7 @@ namespace SimpleReport.Model.Result
 {
     public abstract class WordResultBase : Result
     {
-        protected readonly IXmlReplacer _replacer = new XmlReplacer();
+        protected readonly IValueReplacer _replacer = new ValueReplacer();
 
         public WordResultBase()
         {

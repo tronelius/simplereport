@@ -55,7 +55,7 @@ namespace SimpleReport
             kernel.Bind<IPdfService>().To<PdfService>().InSingletonScope();
             kernel.BindFilter<HandleMyOwnErrorAttribute>(FilterScope.Controller, 0);
             kernel.Bind<ReportResolver>().ToSelf();
-            kernel.Bind<IXmlReplacer>().To<XmlReplacer>();
+            kernel.Bind<IValueReplacer>().To<ValueReplacer>();
             kernel.Bind<IScheduleRepository>().To<ScheduleRepository>().WithConstructorArgument("connectionstring", ConfigurationManager.ConnectionStrings["db"].ConnectionString);
             kernel.Bind<ISubscriptionRepository>().To<SubscriptionRepository>().WithConstructorArgument("connectionstring", ConfigurationManager.ConnectionStrings["db"].ConnectionString);
 
