@@ -10,7 +10,7 @@ namespace SimpleReport.Model.Result
         protected readonly IDataReader _dataReader;
         //protected DataTable Table { get; set; }
         protected Report Report { get; set; }
-        protected byte[] TemplateData { get; set; }
+        public byte[] TemplateData { get; set; }
         public string FileName { get { return Report.Name + "_created@" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + getFileExtension(); } }
         public string MimeType { get { return getMimeType(); } }
       

@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using SimpleReport.Model.Constants;
 using SimpleReport.Model.DbExecutor;
 using SimpleReport.Model.Extensions;
 using SimpleReport.Model.Result;
@@ -31,7 +32,7 @@ namespace SimpleReport.ViewModel
 
         public DesignerViewModel(IStorage reportStorage, IPrincipal user, IApplicationSettings applicationSettings)
         {
-            Reports = reportStorage.GetAllReports();
+            Reports = reportStorage.GetAllReports(true);
             Connections = reportStorage.GetConnections();
             LookupReports = reportStorage.GetLookupReports();
             AccessLists = reportStorage.GetAccessLists().ToList();

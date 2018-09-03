@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.RightsManagement;
 using DocumentFormat.OpenXml.Packaging;
+using SimpleReport.Model.Constants;
 using SimpleReport.Model.Helpers;
 
 namespace SimpleReport.Model.Result

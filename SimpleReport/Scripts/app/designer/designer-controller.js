@@ -61,7 +61,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }
 
         $scope.report.Parameters = reportParameterHelper.sortedParameters($scope.report.Parameters, $scope.report.Sql);
-
+        $scope.filterReports();
         $scope.latestSql = $scope.report.Sql;
         parameterPositionHash = [];
         while (match = regExParameterMatch.exec($scope.latestSql)) {
@@ -180,18 +180,61 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         return invalid;
     }
 
-    $scope.addNewReport = function () {
-        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id };
+    $scope.addNewSingleReport = function () {
+        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id, ReportType: 0 };
     };
+    $scope.addNewMultiReport = function () {
+        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id, ReportType: 1, ConvertToPdf: false, OnScreenFormatAllowed: false, ReportList: [] };
+        $scope.filterReports();
+    };
+
+    $scope.filteredReports = {};
+
+    $scope.filterReports = function () {
+        var reports = $scope.reportList;
+        var alreadyAddedReports = $scope.report.ReportList || [];
+        var filteredReports = reports.filter((report) => { return report.ReportType !== 1 && report.ReportResultType !== null && report.ReportResultType !== "ExcelResultPlain" && !alreadyAddedReports.some((r) => { return r.LinkedReportId === report.Id }) });
+        filteredReports.sort((a, b) => {
+            var nameA = a.Name.toUpperCase(); // ignore upper and lowercase
+            var nameB = b.Name.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            
+            return 0;
+        });
+        $scope.filteredReports = filteredReports;
+    };
+
+    $scope.addLinkedReport = function (report) {
+        var order = $scope.report.ReportList ? $scope.report.ReportList.length : 0;
+        var linkedReport = { LinkedReportId: report.Id, ReportId: $scope.report.Id, Name: report.Name, Order: order };
+
+        $scope.report.ReportList.push(linkedReport);
+        $scope.filterReports();
+    };
+
+    $scope.removeLinkedReport = function (report) {
+        var index = $scope.report.ReportList.indexOf(report);
+        $scope.report.ReportList.splice(index, 1);
+        $scope.filterReports();
+    };
+
     $scope.addNewParameter = function (keyOfParameter) {
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
     };
     $scope.saveReport = function (force) {
         $scope.showSaveConfirmation = false;
 
-        if (!$scope.report.ConnectionId)
+        if (!$scope.report.ReportType || $scope.report.ReportType === 0 && !$scope.report.ConnectionId)
             return;
-
+        if ($scope.report.ReportType === 1) {
+            $scope.report.ConnectionId = "F8EEEE3E-E084-44BF-9101-338637E72A70";
+            $scope.report.Sql = "";
+        }
         if ($scope.SubscriptionEnabled && !force && $scope.report.warnForParameterChanges) {
             if (hasMadeInvalidParameterChanges()) {
                 $scope.showSaveConfirmation = true;
@@ -199,12 +242,12 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             }
         }
 
-        designerRepository.saveReport($scope.report).then(function(result) {
+        designerRepository.saveReport($scope.report).then(function (result) {
             toastr.success("Report saved", "Saved");
             $scope.report = result.data;
             $scope.reportDataChanged();
             updateCollection($scope.reportList, $scope.report);
-        }, function(error) {
+        }, function (error) {
             toastr.error("Server error when saving report.", "Error");
         });
     };
@@ -216,8 +259,8 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         }
         $scope.showDeleteConfirmation = false;
 
-       designerRepository.deleteReport($scope.report).then(function (result) {
-           if (result.data.Success) {
+        designerRepository.deleteReport($scope.report).then(function (result) {
+            if (result.data.Success) {
                 toastr.success("Report is deleted", "Deleted");
                 updateCollection($scope.reportList, $scope.report, true);
                 $scope.report = null;
@@ -245,14 +288,14 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.connection = { Id: null };
     };
     $scope.verifyConnection = function () {
-      designerRepository.verifyConnection($scope.connection).then(function (result) {
+        designerRepository.verifyConnection($scope.connection).then(function (result) {
             $scope.connection.Verified = result.data.Success;
             if (result.data.Success) {
                 toastr.success("Connection verified", "OK!");
             } else {
                 toastr.error("Connectionstring is not valid and wont work", "Not OK!");
             }
-        },function (result) {
+        }, function (result) {
             toastr.error("Server error when verifing the connection.", "Error");
         });
     };
@@ -284,16 +327,16 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.lookupreport = { Id: null };
     };
     $scope.saveDropdownParameter = function () {
-        designerRepository.saveLookupReport($scope.lookupreport).then( function (result) {
+        designerRepository.saveLookupReport($scope.lookupreport).then(function (result) {
             toastr.success("Dropdown parameter saved", "Saved");
             $scope.lookupreport = result.data;
             updateCollection($scope.lookupReports, $scope.lookupreport);
-        },function (result) {
+        }, function (result) {
             toastr.error("Server error when saving dropdown parameter.", "Error");
         });
     };
     $scope.deleteDropdownParameter = function () {
-       designerRepository.deleteReport($scope.lookupreport).then(function (result) {
+        designerRepository.deleteReport($scope.lookupreport).then(function (result) {
             if (result.data.Success) {
                 toastr.success("dropdown parameter is deleted", "Deleted");
                 updateCollection($scope.lookupReports, $scope.lookupreport, true);
@@ -301,7 +344,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
             } else {
                 toastr.error(result.FullMessage, "Error");
             }
-        },function (result) {
+        }, function (result) {
             toastr.error("Server error when deleting dropdown parameter.", "Error");
         });
     };
@@ -403,7 +446,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     $scope.exportModel = function () {
         window.open(designerRepository.exportModelUrl(), '_blank', '');
     };
-    $scope.importModel = function(files) {
+    $scope.importModel = function (files) {
         if (files && files.length) {
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];

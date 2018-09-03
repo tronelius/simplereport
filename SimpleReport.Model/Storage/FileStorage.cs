@@ -112,7 +112,7 @@ namespace SimpleReport.Model.Storage
             return reports;
         }
 
-        public IEnumerable<Report> GetAllReports()
+        public IEnumerable<Report> GetAllReports(bool includeLinkedReport = false)
         {
             var reports = _dataModel.Reports;
             reports.ForEach(LoadAndSetAccess);

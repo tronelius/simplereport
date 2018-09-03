@@ -9,6 +9,7 @@ namespace SimpleReport.Model.Storage.SQL
         {
             Map(a => a.Id).Key(KeyType.Assigned);
             Map(a => a.Parameters).Ignore();
+            Map(a => a.ReportList).Ignore();
             AutoMap();
         }
     }
@@ -34,6 +35,16 @@ namespace SimpleReport.Model.Storage.SQL
         }
     }
 
+    public class LinkedReportMap : ClassMapper<LinkedReport>
+    {
+        public LinkedReportMap()
+        {
+            Map(a => a.ReportId).Key(KeyType.Assigned);
+            Map(a => a.LinkedReportId).Key(KeyType.Assigned);
+            Map(a => a.Name).Ignore();
+            AutoMap();
+        }
+    }
     public class LookupReportMap : ClassMapper<LookupReport>
     {
         public LookupReportMap()

@@ -1,4 +1,5 @@
 using SimpleReport.Model;
+using SimpleReport.Model.Constants;
 
 namespace SimpleReport.ViewModel
 {

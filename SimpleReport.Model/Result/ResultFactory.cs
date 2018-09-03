@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimpleReport.Model.Constants;
 
 namespace SimpleReport.Model.Result
 {

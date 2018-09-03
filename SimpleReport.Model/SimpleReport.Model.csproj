@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Access.cs" />
+    <Compile Include="Constants\AccessStyle.cs" />
     <Compile Include="DbExecutor\BaseExecutor.cs" />
     <Compile Include="DbExecutor\ConnectionVerificationResult.cs" />
     <Compile Include="DbExecutor\DbSqlServerExecutor.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Migrations\2016-04-15\AddConvertToPdfToReport.cs" />
     <Compile Include="Migrations\2016-10-28\AddDetailReportId.cs" />
     <Compile Include="Migrations\2016-10-28\AddSubscriptionType.cs" />
+    <Compile Include="Migrations\2018-08-30\AddTableForLinkedReport.cs" />
     <Compile Include="Migrations\Migrator.cs" />
     <Compile Include="Migrations\Tables.cs" />
     <Compile Include="Extensions\XelementExtensions.cs" />
@@ -142,6 +144,8 @@
     <Compile Include="DbExecutor\IDbExecutor.cs" />
     <Compile Include="Replacers\ValueReplacer.cs" />
     <Compile Include="Replacers\XmlTextEncoder.cs" />
+    <Compile Include="Constants\ReportType.cs" />
+    <Compile Include="LinkedReport.cs" />
     <Compile Include="Result\ExcelResultPlain.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -192,6 +196,7 @@
     <Compile Include="Subscriptions\Subscription.cs" />
     <Compile Include="Subscriptions\SubscriptionRepository.cs" />
     <Compile Include="Subscriptions\UpdateTemplate.cs" />
+    <Compile Include="Constants\TemplateFormat.cs" />
     <Compile Include="TypeAheadReport.cs" />
     <Compile Include="ValidatableEntity.cs" />
     <Compile Include="Result\WordResultPlain.cs" />

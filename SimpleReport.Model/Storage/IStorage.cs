@@ -14,7 +14,7 @@ namespace SimpleReport.Model.Storage
         void ClearModel();
 
         IEnumerable<ReportInfo> GetAllReportInfos();
-        IEnumerable<Report> GetAllReports();
+        IEnumerable<Report> GetAllReports(bool includeLinkedReport = false);
         Report GetReport(Guid id);
         bool SaveReport(Report report);
 

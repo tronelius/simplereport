@@ -5,27 +5,17 @@ using System.Data;
 using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
+using SimpleReport.Model.Constants;
 using SimpleReport.Model.DbExecutor;
 using SimpleReport.Model.Helpers;
 using SimpleReport.Model.Result;
 
+namespace SimpleReport.Model.Constants
+{
+}
+
 namespace SimpleReport.Model
 {
-
-    public enum AccessStyle
-    {
-        Administrators,
-        ReportOwner,
-        Anyone
-    }
-
-    public enum TemplateFormat
-    {
-        Empty=0,
-        Excel=1,
-        Word=2
-    }
-    
     public class Report : LookupReport
     {
         public ParameterList Parameters { get; set; }
@@ -43,7 +33,9 @@ namespace SimpleReport.Model
 
         public string ReportResultType { get; set; }
         public bool ConvertToPdf { get; set; }
+        public ReportType ReportType { get; set; } = ReportType.SingleReport;
 
+        public IEnumerable<LinkedReport> ReportList { get; set; } = new List<LinkedReport>();
         public Report()
         {
             Parameters = new ParameterList();
@@ -148,6 +140,34 @@ namespace SimpleReport.Model
             var result = ResultFactory.GetInstance(this, template);
 
             return result.Render(dataResult);
+        }
+
+        public Result.Result ExecuteWithTemplateWithoutRendering(Template template, Report detailReport = null)
+        {
+            if (Connection == null)
+                throw new Exception("Missing Connection in report");
+
+            var db = DbExecutorFactory.GetInstance(Connection);
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
+            var dataResult = db.GetMultipleResults(Connection, Sql, parameters);
+
+            if (dataResult.Count == 0)
+                return null;
+
+            if (detailReport != null)
+            {
+                var table = dataResult.First();
+                table.Columns.Add(new DataColumn("detailurl"));
+                var headers = table.Columns.OfType<DataColumn>().Select(x => x.ColumnName).ToArray();
+                foreach (DataRow tableRow in table.Rows)
+                {
+                    tableRow["detailurl"] = DetailReportUrlHelper.GetUrl(this, detailReport, headers, tableRow.ItemArray.Select(x => x.ToString()).ToArray());
+                }
+            }
+
+            var result = ResultFactory.GetInstance(this, template);
+
+            return result;
         }
 
         public void UpdateSql(string sql)
