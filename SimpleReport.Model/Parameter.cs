@@ -38,6 +38,18 @@ namespace SimpleReport.Model
                 par.Value = querystring[par.Key] ?? par.Value;
             }
         }
+
+        public void ReadMultiReportParameters(NameValueCollection querystring)
+        {
+            foreach (Parameter par in this)
+            {
+                var multiParameterName = $"{par.Key}_{par.InputType}";
+                var value = !string.IsNullOrEmpty(querystring[multiParameterName])
+                    ? querystring[multiParameterName] : !string.IsNullOrEmpty(querystring[par.Key])? querystring[par.Key] : "" ;
+              
+                par.Value = value;
+            }
+        }
     }
 
 

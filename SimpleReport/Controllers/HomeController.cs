@@ -98,7 +98,7 @@ namespace SimpleReport.Controllers
             foreach (var linkedReport in report.ReportList)
             {
                 var rep = _reportResolver.GetReport(linkedReport.LinkedReportId);
-                rep.ReadParameters(Request.QueryString);
+                rep.ReadMultiReportParameters(Request.QueryString);
 
                 Template template = null;
                 if (report.HasTemplate)

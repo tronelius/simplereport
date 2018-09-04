@@ -56,6 +56,11 @@ namespace SimpleReport.Model
             Parameters.ReadParameters(queryString);
         }
 
+        public void ReadMultiReportParameters(NameValueCollection queryString)
+        {
+            Parameters.ReadMultiReportParameters(queryString);
+        }
+
         public void IsAllowedToEditTemplate(IPrincipal user, Access adminAccess)
         {
             if (!IsAvailableToEditTemplate(user, adminAccess))
