@@ -30,36 +30,23 @@ namespace SimpleReport.Model
                 throw new EntityNotFoundException("Report not found");
 
 
-            var lookupParameters = new List<Parameter>();
-            if (report.ReportType == ReportType.SingleReport)
-            {
-                lookupParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Lookup || s.InputType == ParameterInputType.LookupMultipleChoice).ToList();
-            } else
+
+            if (report.ReportType == ReportType.MultiReport)
             {
                 report.Parameters.Clear();
                 foreach (var linkedReport in report.ReportList)
                 {
                     var fullReport = Storage.GetReport(linkedReport.LinkedReportId);
-                    IEnumerable<Parameter> parameters = fullReport.Parameters.Where(s => s.InputType == ParameterInputType.Lookup || s.InputType == ParameterInputType.LookupMultipleChoice);
-                    foreach (var param in parameters)
-                    {
-                        if (lookupParameters.All(p => p.SqlKey != param.SqlKey))
-                        {
-                            lookupParameters.Add(param);
-                        }
-                    }
 
                     var uniqueParameters = new List<Parameter>();
-                    foreach (var param in fullReport.Parameters.Where(p =>
-                        p.InputType != ParameterInputType.Lookup &&
-                        p.InputType != ParameterInputType.LookupMultipleChoice))
+                    foreach (var param in fullReport.Parameters)
                     {
                         var existingParameter = report.Parameters.Find(par => par.SqlKey == param.SqlKey);
                         if (existingParameter != null)
                         {
                             if (existingParameter.InputType != param.InputType)
                             {
-                                existingParameter.SqlKey += "_" +existingParameter.InputType;
+                                existingParameter.SqlKey += "_" + existingParameter.InputType;
                                 param.SqlKey += "_" + param.InputType;
                                 uniqueParameters.Add(param);
                             }
@@ -71,32 +58,29 @@ namespace SimpleReport.Model
                     }
                     report.Parameters.AddRange(uniqueParameters);
                 }
-                
             }
+            var lookupParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Lookup || s.InputType == ParameterInputType.LookupMultipleChoice);
 
-            foreach (Parameter lookupParameter in lookupParameters)
+            foreach (var lookupParameter in lookupParameters)
             {
                 if (lookupParameter.LookupReportId.HasValue)
                 {
-                    LookupReport rpt = lookupParameter.LookupReport ?? Storage.GetLookupReport(lookupParameter.LookupReportId.Value);
+                    var rpt = lookupParameter.LookupReport ?? Storage.GetLookupReport(lookupParameter.LookupReportId.Value);
                     if (rpt != null)
                     {
                         lookupParameter.Choices?.Clear();
                         rpt.Execute().ToList().ForEach(rp => lookupParameter.Choices.Add(new KeyValuePair<string, string>(rp.Key, rp.Value)));
                     }
-
-                    if (report.ReportType == ReportType.MultiReport)
-                    {
-                        report.Parameters.Add(lookupParameter);
-                    }
                 }
             }
 
-            IEnumerable<Parameter> periodParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Period);
-            foreach (Parameter periodParameter in periodParameters)
+            var periodParameters = report.Parameters.Where(s => s.InputType == ParameterInputType.Period);
+            foreach (var periodParameter in periodParameters)
             {
                 periodParameter.SetDefaultValuesForPeriod();
             }
+
+            var parameterNames = report.Parameters.Select(p => p.SqlKey);
             return report;
         }
 
