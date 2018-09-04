@@ -12,6 +12,8 @@ namespace SimpleReport.Model
         public List<TypeAheadReport> TypeAheadReports;
         public List<Access> AccessLists;
         public Settings Settings;
+        public List<LinkedReport> LinkedReports;
+
 
         public List<string> RemoveIllegalItemsInModel()
         {

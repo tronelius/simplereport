@@ -32,7 +32,8 @@ namespace SimpleReport.Model.Storage.SQL
             reportDataModel.LookupReports = GetLookupReports().ToList();
             reportDataModel.TypeAheadReports = GetTypeAheadReports().ToList();
             reportDataModel.Settings = GetSettings();
-            reportDataModel.Reports = GetAllReports().ToList();
+            reportDataModel.Reports = GetAllReports(true).ToList();
+            reportDataModel.LinkedReports = GetAllLinkedReports().ToList();
             return reportDataModel;
         }
 
@@ -89,7 +90,8 @@ namespace SimpleReport.Model.Storage.SQL
 
                     return Parameter;
                 }).ToLookup(p => p.ReportId);
-                foreach (var report in reports)
+                var allReports = reports as Report[] ?? reports.ToArray();
+                foreach (var report in allReports)
                 {
                     if (parameters.Contains(report.Id))
                     {
@@ -98,14 +100,14 @@ namespace SimpleReport.Model.Storage.SQL
 
                     if (includeLinkedReport && report.ReportType == ReportType.MultiReport)
                     {
-                        report.ReportList = GetAllLinkedReports(report.Id);
+                        report.ReportList = GetLinkedReports(report.Id);
                     }
                 }
-                return reports;
+                return allReports;
             }
         }
 
-        public IEnumerable<LinkedReport> GetAllLinkedReports(Guid id)
+        public IEnumerable<LinkedReport> GetLinkedReports(Guid id)
         {
             try
             {
@@ -120,6 +122,24 @@ namespace SimpleReport.Model.Storage.SQL
                             return lr;
                         }, new { id }, splitOn: "name");
 
+                    return linkedReports;
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = ex.Message;
+                return null;
+            }
+
+        }
+
+        public IEnumerable<LinkedReport> GetAllLinkedReports()
+        {
+            try
+            {
+                using (var cn = EnsureOpenConnection())
+                {
+                    var linkedReports = cn.GetList<LinkedReport>();
                     return linkedReports;
                 }
             }
@@ -181,7 +201,7 @@ namespace SimpleReport.Model.Storage.SQL
                 report.Parameters = new ParameterList(parameters);
                 if (report.ReportType == ReportType.MultiReport)
                 {
-                    report.ReportList = GetAllLinkedReports(id);
+                    report.ReportList = GetLinkedReports(id);
                 }
                 return report;
             }
@@ -337,6 +357,8 @@ namespace SimpleReport.Model.Storage.SQL
             ExecuteInTransaction((con, transaction) =>
             {
                 con.Execute("Delete from Parameter where reportid=@reportID", new { reportID = report.Id }, transaction);
+                con.Execute("Delete from LinkedReport where reportid=@reportID", new { reportID = report.Id }, transaction);
+
                 rowsAffected = con.Execute("Delete from report where Id=@reportID", new { reportID = report.Id }, transaction);
 
             });

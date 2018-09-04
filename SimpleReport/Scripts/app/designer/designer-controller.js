@@ -184,7 +184,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id, ReportType: 0 };
     };
     $scope.addNewMultiReport = function () {
-        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id, ReportType: 1, ConvertToPdf: false, OnScreenFormatAllowed: false, ReportList: [] };
+        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id, ReportType: 1, ConvertToPdf: false, OnScreenFormatAllowed: false, ReportList: [], ReportResultType: "WordResultPlain", TemplateFormat: 2 };
         $scope.filterReports();
     };
 
@@ -229,7 +229,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     $scope.saveReport = function (force) {
         $scope.showSaveConfirmation = false;
 
-        if (!$scope.report.ReportType || $scope.report.ReportType === 0 && !$scope.report.ConnectionId)
+        if (($scope.report.ReportType === null || $scope.report.ReportType === 0) && !$scope.report.ConnectionId)
             return;
         if ($scope.report.ReportType === 1) {
             $scope.report.ConnectionId = "F8EEEE3E-E084-44BF-9101-338637E72A70";

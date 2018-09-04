@@ -128,7 +128,7 @@ namespace SimpleReport.Controllers
             var resultDocument = new ResultFileInfo(fileName, mimeType, combinedDocuments);
             var file = File(combinedDocuments, mimeType, fileName);
 
-            if (combinedDocuments != null && report.ConvertToPdf)
+            if (combinedDocuments.Length > 0 && report.ConvertToPdf)
             {
                 resultDocument = _pdfService.ConvertToPdf(resultDocument);
                 file = File(resultDocument.Data, resultDocument.MimeType, resultDocument.FileName);
@@ -144,11 +144,9 @@ namespace SimpleReport.Controllers
 
         public byte[] CombineDocuments(IList<byte[]> documents)
         {
-            int i = 0;
             var sources = new List<Source>();
             foreach (var document in documents)
             {
-                //var name = "doc" + 0;
                 using (var stream = new MemoryStream())
                 {
                     stream.Write(document, 0, document.Length);
@@ -157,107 +155,10 @@ namespace SimpleReport.Controllers
                     sources.Add(source);
                 }
             }
-            var combinedDocment = DocumentBuilder.BuildDocument(sources);
-            return combinedDocment.DocumentByteArray;
+            var combinedDocument = DocumentBuilder.BuildDocument(sources);
+            return combinedDocument.DocumentByteArray;
         }
-        //public byte[] CombineDocuments(IList<byte[]> documents)
-        //{
-        //    var mainData = documents[0];
-        //    using (var mainStream = new MemoryStream(mainData))
-        //    {
 
-        //        using (var mainDocument = WordprocessingDocument.Open(mainStream, true))
-        //        {
-        //            documents.RemoveAt(0);
-        //            foreach (var doc in documents)
-        //            {
-        //                var altChunkId = "AltChunkId" + DateTime.Now.Ticks.ToString().Substring(0, 2);
-        //                var mainPart = mainDocument.MainDocumentPart;
-        //                var chunk = mainPart.AddAlternativeFormatImportPart(
-        //                    AlternativeFormatImportPartType.WordprocessingML,
-        //                    altChunkId);
-        //                using (var ms = new MemoryStream(doc))
-        //                {
-        //                    chunk.FeedData(ms);
-
-        //                    var altChunk = new AltChunk {Id = altChunkId};
-        //                    mainPart.Document.Body.InsertAfter(altChunk, mainPart.Document.Body.Elements().Last());
-        //                    mainPart.Document.Save();
-        //                    mainDocument.Package.Flush();
-
-        //                }
-        //            }
-
-        //            return mainStream.ToArray();
-        //        }
-        //    }
-
-        //}
-
-        public byte[] OpenAndCombine(IList<byte[]> documents)
-        {
-            MemoryStream mainStream = new MemoryStream();
-
-            mainStream.Write(documents[0], 0, documents[0].Length);
-            mainStream.Position = 0;
-
-            int pointer = 1;
-            byte[] ret;
-            try
-            {
-                using (WordprocessingDocument mainDocument = WordprocessingDocument.Open(mainStream, true))
-                {
-
-                    XElement newBody = XElement.Parse(mainDocument.MainDocumentPart.Document.Body.OuterXml);
-
-                    for (pointer = 1; pointer < documents.Count; pointer++)
-                    {
-                        WordprocessingDocument tempDocument = WordprocessingDocument.Open(new MemoryStream(documents[pointer]), true);
-                        XElement tempBody = XElement.Parse(tempDocument.MainDocumentPart.Document.Body.OuterXml);
-
-                        newBody.Add(tempBody);
-                        mainDocument.MainDocumentPart.Document.Body = new Body(newBody.ToString());
-                        mainDocument.MainDocumentPart.Document.Save();
-                        mainDocument.Package.Flush();
-                    }
-                }
-            }
-            catch (OpenXmlPackageException oxmle)
-            {
-                // throw new OfficeMergeControlException(string.Format(CultureInfo.CurrentCulture, "Error while merging files. Document index {0}", pointer), oxmle);
-            }
-            catch (Exception e)
-            {
-                // throw new OfficeMergeControlException(string.Format(CultureInfo.CurrentCulture, "Error while merging files. Document index {0}", pointer), e);
-            }
-            finally
-            {
-                ret = mainStream.ToArray();
-                mainStream.Close();
-                mainStream.Dispose();
-            }
-            return (ret);
-        }
-        private WordprocessingDocument CreateMultiDocumentFile(List<ResultFileInfo> data)
-        {
-            WordprocessingDocument document = null;
-            foreach (var result in data)
-            {
-                using (var tdata = new MemoryStream(result.Data))
-                using (var ms = new MemoryStream())
-                {
-                    tdata.CopyTo(ms); //we need a new template for every row.
-                    ms.Position = 0;
-                    using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
-                    {
-                        doc.MainDocumentPart.Document.Save();
-                        document = doc;
-                    }
-                }
-            }
-
-            return document;
-        }
 
         public ActionResult ExecuteOnScreenReport(Guid reportId)
         {
