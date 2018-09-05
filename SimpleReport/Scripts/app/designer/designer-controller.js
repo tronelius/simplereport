@@ -234,7 +234,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         if (!$scope.report || !$scope.report.Id) return;
         var redirectUrl =
             window.location.protocol + "//" + window.location.host + "/home/Report?reportId=" + $scope.report.Id;
-        window.location = redirectUrl;
+        window.open(redirectUrl, "rapportfliken");
     }
 
     $scope.saveReport = function (force) {
