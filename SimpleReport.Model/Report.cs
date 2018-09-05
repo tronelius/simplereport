@@ -35,7 +35,7 @@ namespace SimpleReport.Model
         public bool ConvertToPdf { get; set; }
         public ReportType ReportType { get; set; } = ReportType.SingleReport;
 
-        public IEnumerable<LinkedReport> ReportList { get; set; } = new List<LinkedReport>();
+        public IEnumerable<LinkedReportViewModel> ReportList { get; set; } = new List<LinkedReportViewModel>();
         public Report()
         {
             Parameters = new ParameterList();

@@ -114,6 +114,7 @@
     <Compile Include="Connection.cs" />
     <Compile Include="DbExecutor\DbExecutorFactory.cs" />
     <Compile Include="DbExecutor\DbOracleExecutor.cs" />
+    <Compile Include="LinkedReportViewModel.cs" />
     <Compile Include="Migrations\2015-06-11\AddInitialTables.cs" />
     <Compile Include="Migrations\2015-06-18\AddTemplateInfo.cs" />
     <Compile Include="Migrations\2015-06-18\RenameReportUrlToReportParams.cs" />

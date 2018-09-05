@@ -10,7 +10,6 @@ namespace SimpleReport.Model
     {
         public Guid ReportId { get; set; }
         public Guid LinkedReportId { get; set; }
-        public string Name { get; set; }
         public int Order { get; set; }
     }
 }

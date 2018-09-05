@@ -59,8 +59,8 @@ namespace SimpleReport.Model.Storage.SQL
                 con.Execute("Delete from TypeAheadReport", null, transaction);
                 con.Execute("Delete from Connection", null, transaction);
                 con.Execute("Delete from Access", null, transaction);
-               //con.Execute("Delete from Settings", transaction); //don't delete settings, will mess up accessrights to admin.
-           });
+                //con.Execute("Delete from Settings", transaction); //don't delete settings, will mess up accessrights to admin.
+            });
 
         }
 
@@ -107,22 +107,23 @@ namespace SimpleReport.Model.Storage.SQL
             }
         }
 
-        public IEnumerable<LinkedReport> GetLinkedReports(Guid id)
+        public IEnumerable<LinkedReportViewModel> GetLinkedReports(Guid id)
         {
             try
             {
                 using (var cn = EnsureOpenConnection())
                 {
-                    var linkedReports = cn.Query<LinkedReport, Report, LinkedReport>
+                    var linkedReports = cn.Query<LinkedReport, Report, LinkedReportViewModel>
                     ("select linkedReport.*, report.Name as name from linkedReport linkedReport " +
                      "left join report as report on linkedReport.LinkedReportId = report.Id " +
                      "where linkedReport.ReportId = @id", (lr, report) =>
-                        {
-                            lr.Name = report.Name;
-                            return lr;
-                        }, new { id }, splitOn: "name");
+                    {
+                        var viewModel = LinkedReportViewModel.FromLinkedRemport(lr);
+                        viewModel.Name = report.Name;
+                        return viewModel;
+                    }, new { id }, splitOn: "name");
 
-                    return linkedReports;
+                    return linkedReports.OrderBy(r => r.Order);
                 }
             }
             catch (Exception ex)
@@ -159,10 +160,10 @@ namespace SimpleReport.Model.Storage.SQL
                      "left join access as owner on r.reportowneraccessid = owner.id " +
                      "left join access as acs on r.accessid = acs.id ", (rpt, owner, access) =>
                        {
-                          rpt.ReportOwnerAccess = owner;
-                          rpt.Access = access;
-                          return rpt;
-                      });
+                           rpt.ReportOwnerAccess = owner;
+                           rpt.Access = access;
+                           return rpt;
+                       });
             }
         }
 
@@ -227,8 +228,13 @@ namespace SimpleReport.Model.Storage.SQL
                         {
                             foreach (var listItem in report.ReportList)
                             {
-                                listItem.ReportId = report.Id; // In case Report just was created
-                                conn.Insert(listItem);
+                                var linkedReport = new LinkedReport()
+                                {
+                                    ReportId = report.Id,
+                                    LinkedReportId = listItem.LinkedReportId,
+                                    Order = listItem.Order
+                                };
+                                conn.Insert(linkedReport);
                             }
                         }
                         catch (Exception ex)
@@ -236,7 +242,7 @@ namespace SimpleReport.Model.Storage.SQL
                             var errorMessage = ex.Message;
                         }
                     }
-                  
+
 
                 }
                 return true;

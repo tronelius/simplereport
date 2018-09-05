@@ -41,7 +41,6 @@ namespace SimpleReport.Model.Storage.SQL
         {
             Map(a => a.ReportId).Key(KeyType.Assigned);
             Map(a => a.LinkedReportId).Key(KeyType.Assigned);
-            Map(a => a.Name).Ignore();
             AutoMap();
         }
     }

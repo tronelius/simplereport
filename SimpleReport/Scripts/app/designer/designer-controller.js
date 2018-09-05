@@ -220,6 +220,9 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     $scope.removeLinkedReport = function (report) {
         var index = $scope.report.ReportList.indexOf(report);
         $scope.report.ReportList.splice(index, 1);
+        $scope.report.ReportList.forEach((linkedReport, i) => { // set new Order
+            linkedReport.Order = i;
+        });
         $scope.filterReports();
     };
 

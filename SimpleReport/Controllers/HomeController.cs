@@ -95,7 +95,7 @@ namespace SimpleReport.Controllers
             var files = new List<ResultFileInfo>();
             var mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
             var fileName = GetMultiReportName(report);
-            foreach (var linkedReport in report.ReportList)
+            foreach (var linkedReport in report.ReportList.OrderBy(r =>r.Order))
             {
                 var rep = _reportResolver.GetReport(linkedReport.LinkedReportId);
                 rep.ReadMultiReportParameters(Request.QueryString);
