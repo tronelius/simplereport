@@ -181,10 +181,10 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     }
 
     $scope.addNewSingleReport = function () {
-        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id, ReportType: 0 };
+        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id, ReportType: 0, Sql: "" };
     };
     $scope.addNewMultiReport = function () {
-        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id, ReportType: 1, ConvertToPdf: false, OnScreenFormatAllowed: false, ReportList: [], ReportResultType: "WordResultPlain", TemplateFormat: 2 };
+        $scope.report = { Id: null, Parameters: [], TemplateEditorAccessStyle: 0, SubscriptionAccessStyle: 0, ReportOwnerAccessId: $scope.reportOwnerAccessLists[0].Id, AccessId: $scope.accessLists[0].Id, ReportType: 1, ConvertToPdf: false, OnScreenFormatAllowed: false, ReportList: [], ReportResultType: "WordResultPlain", TemplateFormat: 2, Sql: "" };
         $scope.filterReports();
     };
 
@@ -229,15 +229,20 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     $scope.addNewParameter = function (keyOfParameter) {
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
     };
+
+    $scope.goToReport = function () {
+        if (!$scope.report || !$scope.report.Id) return;
+        var redirectUrl =
+            window.location.protocol + "//" + window.location.host + "/home/Report?reportId=" + $scope.report.Id;
+        window.location = redirectUrl;
+    }
+
     $scope.saveReport = function (force) {
         $scope.showSaveConfirmation = false;
 
-        if (($scope.report.ReportType === null || $scope.report.ReportType === 0) && !$scope.report.ConnectionId)
+        if ($scope.report.ReportType !== 1 && !$scope.report.ConnectionId)
             return;
-        if ($scope.report.ReportType === 1) {
-            $scope.report.ConnectionId = "F8EEEE3E-E084-44BF-9101-338637E72A70";
-            $scope.report.Sql = "";
-        }
+       
         if ($scope.SubscriptionEnabled && !force && $scope.report.warnForParameterChanges) {
             if (hasMadeInvalidParameterChanges()) {
                 $scope.showSaveConfirmation = true;

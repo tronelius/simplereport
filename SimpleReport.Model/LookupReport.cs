@@ -10,8 +10,8 @@ namespace SimpleReport.Model
     {
         [NonSerialized]
         public Connection Connection;
-        [Required]
-        public Guid ConnectionId { get; set; }
+        
+        public Guid? ConnectionId { get; set; }
         [Required]
         public string Sql { get; set; }
 

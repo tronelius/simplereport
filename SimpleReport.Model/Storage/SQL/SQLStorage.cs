@@ -172,7 +172,7 @@ namespace SimpleReport.Model.Storage.SQL
             using (var cn = EnsureOpenConnection())
             {
                 var report = cn.Query<Report, Connection, Access, Access, Report>("select r.*,conn.*,owner.*,acs.* from report r " +
-                                                                      "inner join connection conn on r.connectionid = conn.id " +
+                                                                      "left join connection conn on r.connectionid = conn.id " +
                                                                       "left join access as owner on r.reportowneraccessid = owner.id " +
                                                                       "left join access as acs on r.accessid = acs.id " +
                                                                       "where r.id = @id", (rpt, conn, owner, access) =>
@@ -210,6 +210,7 @@ namespace SimpleReport.Model.Storage.SQL
 
         public bool SaveReport(Report report)
         {
+          
             if (Upsert(report))
             {
                 Execute("delete from parameter where reportId = @reportid", new { reportid = report.Id });

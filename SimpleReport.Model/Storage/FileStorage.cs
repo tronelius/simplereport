@@ -132,10 +132,13 @@ namespace SimpleReport.Model.Storage
 
         private void LoadAndSetConnection(LookupReport report)
         {
-            var connection = GetConnection(report.ConnectionId);
-            if (connection == null)
-                throw new EntityNotFoundException("This report has a connection that cannot be found");
-            report.Connection = connection;
+            if (report.ConnectionId != null)
+            {
+                var connection = GetConnection(report.ConnectionId.Value);
+                if (connection == null)
+                    throw new EntityNotFoundException("This report has a connection that cannot be found");
+                report.Connection = connection;
+            }
         }
 
         private void LoadAndSetAccess(ReportInfo report)
