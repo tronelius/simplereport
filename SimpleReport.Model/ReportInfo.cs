@@ -1,11 +1,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 
 namespace SimpleReport.Model
 {
     public class ReportInfo : ValidatableEntity, IEntity
     {
         public Guid Id { get; set; }
+      
+
         [Required][StringLength(300)] 
         public string Name { get; set; }
         [StringLength(50)]
@@ -14,25 +17,23 @@ namespace SimpleReport.Model
         public string Description { get; set; }
         
         ///AccessId=null=>Free for all!
-        public Guid AccessId { get; set; }
+        public Guid? AccessId { get; set; }
         [NonSerialized]
         public Access Access;
-       
+
+        //who can fiddle with the template
+        public Guid ReportOwnerAccessId { get; set; }
+        [NonSerialized]
+        public Access ReportOwnerAccess; //TODO rename to reportowner
+
+        public bool IsAvailableForMe(IPrincipal user, Access adminAccess)
+        {
+            return (ReportOwnerAccess != null && ReportOwnerAccess.IsAvailableForMe(user)) || (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));
+        }
 
         public ReportInfo()
         {
             Id = Guid.NewGuid();
-        }
-
-        public ReportInfo(Guid id, string name, string description, string group)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new Exception(string.Format("Missing name in report"));
-            Id = id;
-            Name = name;
-            Description = description;
-            Group = @group;
-            //Errors = new List<ErrorInfo>();
         }
 
     }

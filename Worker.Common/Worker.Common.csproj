@@ -49,8 +49,9 @@
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.4.0.0\lib\net45\NLog.dll</HintPath>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.1.2\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -63,6 +64,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\2016-03-11\ReportResultType.cs" />
+    <Compile Include="Migrations\2015-12-14\ReportAdjustments.cs" />
+    <Compile Include="Migrations\2015-11-27\AddWordTemplates.cs" />
+    <Compile Include="Migrations\2016-03-20\OracleConnections.cs" />
+    <Compile Include="Migrations\2016-10-28\AddDetailReportIdToReport.cs" />
+    <Compile Include="Migrations\2016-10-28\AddSubscriptionType.cs" />
+    <Compile Include="Migrations\2016-04-15\AddConvertToPdfToReport.cs" />
+    <Compile Include="Migrations\2016-03-22\AddTypeAhead_to_Parameter.cs" />
+    <Compile Include="Migrations\2016-03-22\AddTypeAhead.cs" />
+    <Compile Include="Model\ReportResult.cs" />
     <Compile Include="Api\WorkerApiClient.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="IoCConfig.cs" />
@@ -72,7 +83,10 @@
     <Compile Include="Migrations\2015-06-24\MakeFailedAttemptsNonNullable.cs" />
     <Compile Include="Migrations\2015-06-23\AddLastRun.cs" />
     <Compile Include="Migrations\2015-06-22\AddSendEmptyEmails.cs" />
+    <Compile Include="Migrations\2015-10-23\AddSyncedDateToSubscription.cs" />
+    <Compile Include="Migrations\2015-10-04\AddTablesForReports.cs" />
     <Compile Include="Migrations\Migrator.cs" />
+    <Compile Include="Migrations\Tables.cs" />
     <Compile Include="Model\ApplicationSettings.cs" />
     <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\Schedule.cs" />
@@ -87,6 +101,9 @@
     <Compile Include="Service\MailSender.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Migrations\Development_transformations\Config.ps1" />
+    <None Include="Migrations\Development_transformations\Down.ps1" />
+    <None Include="Migrations\Development_transformations\Up.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

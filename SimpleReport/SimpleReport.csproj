@@ -26,6 +26,7 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +50,13 @@
   <ItemGroup>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Words, Version=16.5.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspose.Words.16.5.0\lib\net40\Aspose.Words.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="dotless.Core, Version=1.4.1.0, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,10 +83,20 @@
     <Reference Include="Ninject.Web.WebApi">
       <HintPath>..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.1.2\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OpenXmlPowerTools, Version=4.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenXmlPowerTools.4.5.3.2\lib\net45\OpenXmlPowerTools.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Management.Automation.dll.10.0.10586.0\lib\net40\System.Management.Automation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -145,11 +163,14 @@
     <Reference Include="WebGrease">
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\ModuleFirstBundleOrderer.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
     <Compile Include="Controllers\Api\ReportController.cs" />
+    <Compile Include="Controllers\Api\ReportIdWrapper.cs" />
     <Compile Include="Controllers\Api\SubscriptionController.cs" />
     <Compile Include="Controllers\Api\ScheduleController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -160,17 +181,18 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\ApiClient.cs" />
-    <Compile Include="Helpers\ExcelValidator.cs" />
     <Compile Include="Helpers\HandleMyOwnErrorAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\AccessEditorViewModel.cs" />
     <Compile Include="ViewModel\DesignerViewModel.cs" />
+    <Compile Include="ViewModel\ReportInfoViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Content\bootstrap-multiselect.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\AdminLTE.css" />
@@ -201,6 +223,7 @@
     <Content Include="Content\js\app.min.js" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
+    <Content Include="Content\ui-bootstrap-csp.css" />
     <Content Include="Data\Templates\whatisthis.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -221,6 +244,18 @@
     <Content Include="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\app\report\send-once-editor.js" />
+    <Content Include="Scripts\app\shared\helpers\report-parameter-helper.js" />
+    <Content Include="Scripts\app\templates\sendOnceEditor.html" />
+    <Content Include="Scripts\lib\angular-mocks.js" />
+    <Content Include="Scripts\lib\angular-sanitize.min.js" />
+    <Content Include="Scripts\lib\angular-ui\ui-bootstrap-tpls.js" />
+    <Content Include="Scripts\lib\angular-ui\ui-bootstrap-tpls.min.js" />
+    <Content Include="Scripts\lib\angular-ui\ui-bootstrap.js" />
+    <Content Include="Scripts\lib\angular-ui\ui-bootstrap.min.js" />
+    <Content Include="Scripts\lib\angular.js" />
+    <Content Include="Scripts\lib\angular.min.js" />
+    <Content Include="Scripts\app\data\designer-repository.js" />
     <Content Include="Scripts\app\data\report-repository.js" />
     <Content Include="Scripts\app\data\schedule-repository.js" />
     <Content Include="Scripts\app\data\subscription-repository.js" />
@@ -228,6 +263,7 @@
     <Content Include="Scripts\app\report\report-controller.js" />
     <Content Include="Scripts\app\report\subscription-editor.js" />
     <Content Include="Scripts\app\schedule\module.js" />
+    <Content Include="Scripts\app\shared\directives\multiselectdropdown.js" />
     <Content Include="Scripts\app\shared\directives\on-screen-report.js" />
     <Content Include="Scripts\app\shared\directives\template-upload.js" />
     <Content Include="Scripts\app\shared\elements\datepicker-boostrap.js" />
@@ -239,9 +275,6 @@
     <Content Include="Scripts\app\schedule\schedule-editor.js" />
     <Content Include="Scripts\app\subscription\subscription-controller.js" />
     <Content Include="Scripts\app\subscription\directives\subscription-list.js" />
-    <Content Include="Scripts\lib\angular-mocks.js" />
-    <Content Include="Scripts\lib\angular.js" />
-    <Content Include="Scripts\lib\angular.min.js" />
     <Content Include="Scripts\app\data\module.js" />
     <Content Include="Scripts\app\subscription\module.js" />
     <Content Include="Scripts\app\report\module.js" />
@@ -261,10 +294,11 @@
     <Content Include="Content\js\app.min.js.map">
       <DependentUpon>app.min.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\lib\bootstrap-multiselect.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
-    <Content Include="Scripts\lib\angular.min.js.map" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <Content Include="Scripts\lib\angular.min.js.map" />
     <None Include="Scripts\lib\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\lib\jquery-cron-min.js" />
     <Content Include="Scripts\lib\ui-bootstrap-tpls-0.13.0.min.js" />
@@ -298,6 +332,9 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Designer\_Settings.cshtml" />
     <Content Include="Views\Subscription\Index.cshtml" />
+    <Content Include="Views\Designer\_TypeAheadReports.cshtml" />
+    <Content Include="Views\Designer\_MultiReports.cshtml" />
+    <Content Include="Views\Designer\_SingleReports.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

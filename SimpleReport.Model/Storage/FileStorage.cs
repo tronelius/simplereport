@@ -8,27 +8,32 @@ using System.Web;
 using Newtonsoft.Json;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
+using SimpleReport.Model.Result;
+using SimpleReport.Model.Storage.JsonConverters;
 
 namespace SimpleReport.Model.Storage
 {
-    public class FileStorage :IStorage
+    public class FileStorage : IStorage
     {
         private readonly ILogger _logger;
+        private readonly IStorageHelper _storageHelper;
         private string _filename;
         private ReportDataModel _dataModel;
 
         //instanciate once every request, keep the model in memory during the request.
-        public FileStorage(ILogger logger)
+        public FileStorage(ILogger logger, IStorageHelper storageHelper)
         {
             _logger = logger;
+            _storageHelper = storageHelper;
             _filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "datamodel.json");
-            try {
+            try
+            {
                 _dataModel = LoadModel();
             }
             catch (FileNotFoundException fex)
             {
                 //autoinitialize storage
-                logger.Warn("filestorage not initialized, file not found at:"+fex.FileName);
+                logger.Warn("filestorage not initialized, file not found at:" + fex.FileName);
                 InitializeStorage();
                 _dataModel = LoadModel();
             }
@@ -41,57 +46,73 @@ namespace SimpleReport.Model.Storage
 
         public void InitializeStorage()
         {
-            using (File.Create(_filename));
-            ReportDataModel model = new ReportDataModel();
-            SaveModel(model);
+            using (File.Create(_filename)) { 
+                ReportDataModel model = new ReportDataModel();
+                SaveModel(model);
+            }
         }
 
         public ReportDataModel LoadModel()
         {
             using (FileStream fs = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                //serializer.TypeNameHandling = TypeNameHandling.Objects;
-                TextReader treader = new StreamReader(fs);
-                JsonReader reader = new JsonTextReader(treader);
-                ReportDataModel data = serializer.Deserialize<ReportDataModel>(reader);
-                //todo handle empty file...
-                return data;
+                return _storageHelper.ReadModelFromStream(fs);
             }   
         }
 
+       
+
         public void SaveModel(ReportDataModel data)
         {
-            using (FileStream fs = File.Open(_filename, FileMode.Truncate, FileAccess.Write))
-            using (StreamWriter sw = new StreamWriter(fs))
-            using (JsonWriter jw = new JsonTextWriter(sw))
-            {
-                jw.Formatting = Formatting.Indented;
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(jw, data);
+            using (FileStream fs = File.Open(_filename, FileMode.Truncate, FileAccess.Write)) {
+                _storageHelper.WriteModelToStream(data, fs);
             }
         }
 
-        public void SaveTemplate(byte[] data, Guid reportId)
+       
+
+        public void ClearModel()
+            {
+            SaveModel(null);
+        }
+
+        public void SaveTemplate(byte[] data, string fileEnding, Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            if (!fileEnding.StartsWith("."))
+                fileEnding = "." + fileEnding;
+
+            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + fileEnding);
             File.WriteAllBytes(filepath, data);
         }
 
         public Template GetTemplate(Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            var filepath = GetFilePath(reportId);
             var bytes = File.ReadAllBytes(filepath);
-            return new Template {Bytes = bytes, Mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel", Filename = reportId + ".xlsx"};
+            return new Template { Bytes = bytes, Filename = Path.GetFileName(filepath) };
         }
 
         public void DeleteTemplate(Guid reportId)
         {
-            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates", reportId + ".xlsx");
+            var filepath = GetFilePath(reportId);
             File.Delete(filepath);
         }
 
-        public IEnumerable<Report> GetAllReports()
+
+        private string GetFilePath(Guid reportId)
+        {
+            var id = reportId.ToString();
+            return Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Templates")).First(x => Path.GetFileNameWithoutExtension(x) == id);
+        }
+
+        public IEnumerable<ReportInfo> GetAllReportInfos()
+        {
+            var reports = _dataModel.Reports;
+            reports.ForEach(LoadAndSetAccess);
+            return reports;
+        }
+
+        public IEnumerable<Report> GetAllReports(bool includeLinkedReport = false)
         {
             var reports = _dataModel.Reports;
             reports.ForEach(LoadAndSetAccess);
@@ -100,7 +121,7 @@ namespace SimpleReport.Model.Storage
 
         public Report GetReport(Guid id)
         {
-            var report =_dataModel.Reports.FirstOrDefault(r => r.Id == id);
+            var report = _dataModel.Reports.FirstOrDefault(r => r.Id == id);
             if (report == null)
                 return null; //throw new EntityNotFoundException("Report not found");
 
@@ -111,18 +132,21 @@ namespace SimpleReport.Model.Storage
 
         private void LoadAndSetConnection(LookupReport report)
         {
-            var connection = GetConnection(report.ConnectionId);
-            if (connection == null)
-                throw new EntityNotFoundException("This report has a connection that cannot be found");
-            report.Connection = connection;
+            if (report.ConnectionId != null)
+            {
+                var connection = GetConnection(report.ConnectionId.Value);
+                if (connection == null)
+                    throw new EntityNotFoundException("This report has a connection that cannot be found");
+                report.Connection = connection;
+            }
         }
 
-        private void LoadAndSetAccess(Report report)
+        private void LoadAndSetAccess(ReportInfo report)
         {
             var access = GetAccessList(report.AccessId);
             report.Access = access;
 
-            var taccess = GetAccessList(report.ReportOwnerId);
+            var taccess = GetAccessList(report.ReportOwnerAccessId);
             report.ReportOwnerAccess = taccess;
         }
 
@@ -136,7 +160,7 @@ namespace SimpleReport.Model.Storage
             return true;
         }
 
-        public DeleteInfo DeleteReport(Report report)
+        public DeleteInfo DeleteReport(ReportInfo report)
         {
             Report existing = _dataModel.Reports.FirstOrDefault(r => r.Id == report.Id);
             if (existing == null)
@@ -145,7 +169,7 @@ namespace SimpleReport.Model.Storage
             _dataModel.Reports.Remove(existing);
             SaveModel(_dataModel);
 
-            if(report.HasTemplate)
+            if(existing.HasTemplate)
                 DeleteTemplate(report.Id);
 
             return new DeleteInfo(true, "Report was deleted");
@@ -195,7 +219,7 @@ namespace SimpleReport.Model.Storage
 
         public LookupReport GetLookupReport(Guid id)
         {
-            var report =  _dataModel.LookupReports.FirstOrDefault(c => c.Id == id);
+            var report = _dataModel.LookupReports.FirstOrDefault(c => c.Id == id);
             if (report == null)
                 throw new EntityNotFoundException("Lookup report not found");
             LoadAndSetConnection(report);
@@ -233,7 +257,7 @@ namespace SimpleReport.Model.Storage
             return _dataModel.AccessLists;
         }
 
-        public Access GetAccessList(Guid id)
+        public Access GetAccessList(Guid? id)
         {
             var accesslist = _dataModel.AccessLists.FirstOrDefault(c => c.Id == id);
             return accesslist;
@@ -274,6 +298,26 @@ namespace SimpleReport.Model.Storage
             _dataModel.Settings = settings;
             SaveModel(_dataModel);
             return true;
+        }
+
+        public TypeAheadReport GetTypeAheadReport(Guid typeAheadid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DeleteInfo DeleteTypeAheadReport(Guid typeAheadid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TypeAheadReport> GetTypeAheadReports()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SaveTypeAheadReport(TypeAheadReport report)
+        {
+            throw new NotImplementedException();
         }
     }
 }

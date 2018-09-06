@@ -3,48 +3,43 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Security.Principal;
-using System.Web.UI.WebControls;
+using System.Text.RegularExpressions;
+using SimpleReport.Model.Constants;
+using SimpleReport.Model.DbExecutor;
+using SimpleReport.Model.Helpers;
+using SimpleReport.Model.Result;
+
+namespace SimpleReport.Model.Constants
+{
+}
 
 namespace SimpleReport.Model
 {
-
-    public enum AccessStyle
-    {
-        Administrators,
-        ReportOwner,
-        Anyone
-    }
-    
     public class Report : LookupReport
     {
-        public ResultType ResultType { get; set; }
         public ParameterList Parameters { get; set; }
-        public bool HasTemplate { get; set; }
+        public bool HasTemplate
+        {
+            get { return TemplateFormat != TemplateFormat.Empty; }
+        }
+        public Guid? DetailReportId { get; set; }
         public string MailSubject { get; set; }
         public string MailText { get; set; }
-        
-        //who can fiddle with the template
-        public Guid ReportOwnerId { get; set; }
-        [NonSerialized]
-        public Access ReportOwnerAccess; //TODO rename to reportowner
-
         public bool OnScreenFormatAllowed { get; set; }
         public AccessStyle TemplateEditorAccessStyle { get; set; }
         public AccessStyle SubscriptionAccessStyle { get; set; }
+        public TemplateFormat TemplateFormat { get; set; }
 
+        public string ReportResultType { get; set; }
+        public bool ConvertToPdf { get; set; }
+        public ReportType ReportType { get; set; } = ReportType.SingleReport;
+
+        public IEnumerable<LinkedReportViewModel> ReportList { get; set; } = new List<LinkedReportViewModel>();
         public Report()
         {
-            ResultType= ResultType.SimpleExcel;
             Parameters = new ParameterList();
         } 
-
-        public Report(Guid id, string name, string description, Guid connectionId, string sql, List<Parameter> parameters, ResultType resultType, string group) : base(id,name, description,connectionId,sql, group)
-        {
-            Parameters = new ParameterList(parameters);
-            ResultType = resultType;
-        }
 
         public bool IsParameterValueValid()
         {
@@ -56,14 +51,14 @@ namespace SimpleReport.Model
             return !(String.Equals(MailSubject, reportWithPossibleChanges.MailSubject, StringComparison.CurrentCulture) && String.Equals(MailText, reportWithPossibleChanges.MailText, StringComparison.CurrentCulture));
         }
 
-        public bool IsAvailableForMe(IPrincipal user, Access adminAccess)
-        {
-            return (ReportOwnerAccess != null && ReportOwnerAccess.IsAvailableForMe(user)) ||  (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));
-        }
-
         public void ReadParameters(NameValueCollection queryString)
         {
             Parameters.ReadParameters(queryString);
+        }
+
+        public void ReadMultiReportParameters(NameValueCollection queryString)
+        {
+            Parameters.ReadMultiReportParameters(queryString);
         }
 
         public void IsAllowedToEditTemplate(IPrincipal user, Access adminAccess)
@@ -111,7 +106,9 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
+            var db = DbExecutorFactory.GetInstance(Connection);
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
+            DataTable result = db.GetResults(Connection, Sql, parameters);
 
             var raw = new RawReportResult
             {
@@ -122,13 +119,66 @@ namespace SimpleReport.Model
             return raw;
         }
 
-        public Result ExecuteWithTemplate(byte[] templateData)
+        public ResultFileInfo ExecuteWithTemplate(Template template, Report detailReport = null)
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = ADO.GetResults(Connection, Sql, Parameters.CreateParameters());
-            return new Result(this.ResultType, result, this, templateData);
+            var db = DbExecutorFactory.GetInstance(Connection);
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
+            var dataResult = db.GetMultipleResults(Connection, Sql, parameters);
+
+            if (dataResult.Count == 0)
+                return null;
+
+            if (detailReport != null)
+            {
+                var table = dataResult.First();
+                table.Columns.Add(new DataColumn("detailurl"));
+                var headers = table.Columns.OfType<DataColumn>().Select(x => x.ColumnName).ToArray();
+                foreach (DataRow tableRow in table.Rows)
+                {
+                    tableRow["detailurl"] = DetailReportUrlHelper.GetUrl(this, detailReport, headers, tableRow.ItemArray.Select(x => x.ToString()).ToArray());
+                }
+            }
+
+            var result = ResultFactory.GetInstance(this, template);
+
+            return result.Render(dataResult);
+        }
+
+        public Result.Result ExecuteWithTemplateWithoutRendering(Template template, Report detailReport = null)
+        {
+            if (Connection == null)
+                throw new Exception("Missing Connection in report");
+
+            var db = DbExecutorFactory.GetInstance(Connection);
+            var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
+            var dataResult = db.GetMultipleResults(Connection, Sql, parameters);
+
+            if (dataResult.Count == 0)
+                return null;
+
+            if (detailReport != null)
+            {
+                var table = dataResult.First();
+                table.Columns.Add(new DataColumn("detailurl"));
+                var headers = table.Columns.OfType<DataColumn>().Select(x => x.ColumnName).ToArray();
+                foreach (DataRow tableRow in table.Rows)
+                {
+                    tableRow["detailurl"] = DetailReportUrlHelper.GetUrl(this, detailReport, headers, tableRow.ItemArray.Select(x => x.ToString()).ToArray());
+                }
+            }
+
+            var result = ResultFactory.GetInstance(this, template);
+
+            return result;
+        }
+
+        public void UpdateSql(string sql)
+        {
+            //some parameters need to modify the sql to work, like when we have an in-clause and need to replace one param with many.
+            Sql = sql;
         }
 
         private string Stringify(object obj)
@@ -139,6 +189,13 @@ namespace SimpleReport.Model
             return obj.ToString();
         }
 
-       
+        public bool IsMasterDetailReport()
+        {
+            string pattern = @"(?<!\()select";
+            var result = Regex.Matches(this.Sql, pattern);
+            string mergeIdPattern = @"merge_id";
+            var mergeResult = Regex.Matches(this.Sql, mergeIdPattern);
+            return result.Count > 1 && mergeResult.Count >= 2;
+        }
     }
 }

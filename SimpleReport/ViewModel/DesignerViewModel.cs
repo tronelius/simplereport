@@ -2,10 +2,14 @@
 using SimpleReport.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using SimpleReport.Model.Constants;
+using SimpleReport.Model.DbExecutor;
 using SimpleReport.Model.Extensions;
+using SimpleReport.Model.Result;
 using SimpleReport.Model.Storage;
 
 namespace SimpleReport.ViewModel
@@ -16,28 +20,35 @@ namespace SimpleReport.ViewModel
         public IEnumerable<Report> Reports { get; set; }
         public IEnumerable<KeyValue> InputTypes {get;set;}
         public IEnumerable<Connection> Connections { get; set; }
+        public IEnumerable<KeyValue> ConnectionTypes { get; set; }
         public IEnumerable<LookupReport> LookupReports { get; set; }
         public List<Access> AccessLists { get; set; }
+        public IEnumerable<TypeAheadReport> TypeAheadReports { get; set; }
         public List<Access> ReportOwnerAccessLists { get; set; }
         public Settings Settings { get; set; }
         public IEnumerable<AccessEditorViewModel> AccessEditorViewModel { get; set; }
         public bool SubscriptionEnabled { get; set; }
+        public List<ResultInfo> ReportResultTypes { get; set; }
 
         public DesignerViewModel(IStorage reportStorage, IPrincipal user, IApplicationSettings applicationSettings)
         {
-            Reports = reportStorage.GetAllReports();
+            Reports = reportStorage.GetAllReports(true);
             Connections = reportStorage.GetConnections();
             LookupReports = reportStorage.GetLookupReports();
             AccessLists = reportStorage.GetAccessLists().ToList();
+            TypeAheadReports = reportStorage.GetTypeAheadReports().ToList();
             ReportOwnerAccessLists = reportStorage.GetAccessLists().ToList();
-            ParameterInputType types = new ParameterInputType();
-            InputTypes = types.ToKeyValues();
+            InputTypes = new ParameterInputType().ToKeyValues();
             AccessLists.Insert(0,new Access(Guid.Empty,"Free for all",""));
             ReportOwnerAccessLists.Insert(0, new Access(Guid.Empty, "None selected", ""));
             Settings = reportStorage.GetSettings();
             AccessEditorViewModel = Enum.GetValues(typeof(AccessStyle)).Cast<AccessStyle>().Select(x => new AccessEditorViewModel(x, GetTextForTemplateEditor(x)));
             SubscriptionEnabled = applicationSettings.SubscriptionEnabled;
+            ReportResultTypes = ResultFactory.GetList();
+            ConnectionTypes = new ConnectionType().ToKeyValues();
         }
+
+        
 
         private string GetTextForTemplateEditor(AccessStyle editor)
         {
@@ -52,18 +63,6 @@ namespace SimpleReport.ViewModel
                 default:
                     return editor.ToString();
             }    
-        }
-    }
-
-    public class AccessEditorViewModel
-    {
-        public AccessStyle Value { get; set; }
-        public string Text { get; set; }
-
-        public AccessEditorViewModel(AccessStyle value, string text)
-        {
-            Value = value;
-            Text = text;
         }
     }
 }

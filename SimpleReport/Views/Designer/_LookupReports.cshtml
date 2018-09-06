@@ -6,7 +6,7 @@
         <div class="form-inline">
             <div class="form-group">
                 <label class="control-label">Choose dropdown parameter to edit</label>
-                <select ng-model="lookupreport" class="form-control" ng-options="item as item.Name for item in lookupReports" ng-change="lookupReportChanged()"></select>
+                <select ng-model="lookupreport" class="form-control" ng-options="item as item.Name for item in lookupReports"></select>
             </div>
             <button class="btn btn-primary" ng-click="addNewDropdownParameter()"><i class="fa fa-plus"></i> Add new</button>
         </div>
@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-xs-12">
                             <div class="form-group">
-                                <label class="control-label" title="All reports are grouped in the navigation menu by this group name.">Connection</label>
+                                <label class="control-label" >Connection</label>
                                 <div>
                                     <select ng-model="lookupreport.ConnectionId" ng-options="item.Id as item.Name for item in connections" class="form-control"></select>
                                 </div>

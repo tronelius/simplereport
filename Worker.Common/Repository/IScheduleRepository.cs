@@ -11,5 +11,6 @@ namespace Worker.Common.Repository
         void Update(Schedule schedule);
         void Delete(int id);
         bool IsInUse(int id);
+        Schedule GetOneTimeSchedule();
     }
 }

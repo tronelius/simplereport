@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Newtonsoft.Json;
 using SimpleReport.Helpers;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
+using SimpleReport.Model.Subscriptions;
 
 namespace SimpleReport.Controllers.Api
 {
-
-    public class ReportIdWrapper
-    {
-        public string ReportId { get; set; }
-        public object Data { get; set; }
-    }
-
     public class SubscriptionController : BaseApiController
     {
-        private readonly IApiClient _apiClient;
+        private readonly ISubscriptionRepository _subscriptionRepository;
+        private readonly IScheduleRepository _scheduleRepository;
 
-        public SubscriptionController(IStorage reportStorage, ILogger logger, IApiClient apiClient) : base(reportStorage, logger)
+        public SubscriptionController(IStorage reportStorage, ILogger logger, ISubscriptionRepository subscriptionRepository, IScheduleRepository scheduleRepository) : base(reportStorage, logger)
         {
-            _apiClient = apiClient;
+            _subscriptionRepository = subscriptionRepository;
+            _scheduleRepository = scheduleRepository;
         }
 
         [AcceptVerbs("GET")]
@@ -31,8 +29,7 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportId);
-
-                var result = await _apiClient.Get("api/subscription/get?id=" + id);
+                var result = _subscriptionRepository.Get(id);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -48,8 +45,7 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(null);
-
-                var result = await _apiClient.Get("api/subscription/all");
+                var result = _subscriptionRepository.List();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -65,8 +61,23 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportId);
+                var subs = _subscriptionRepository.List();
 
-                var result = await _apiClient.Get("api/subscription/list?filter=" + filter + "&reportId=" + reportId);
+                //TODO: do we want a more complex filtering? would be nice to merge filter and reportid and have some kind of dsl for it?
+                if (filter == "failed")
+                {
+                    subs = subs.Where(x => x.Status == SubscriptionStatus.Failed || x.Status == SubscriptionStatus.Suspended).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(reportId))
+                {
+                    var id = Guid.Parse(reportId);
+                    subs = subs.Where(x => x.ReportId == id).ToList();
+                }
+
+                var scheds = _scheduleRepository.ListAll();
+                var result = subs.Select(x => new { x.Id, x.ReportId, x.To, x.Cc, x.Bcc, Status = x.Status.ToString(), x.LastSent, Schedule = scheds.FirstOrDefault(y => y.Id == x.ScheduleId)?.Name, x.ErrorMessage, x.ReportParams }).ToArray();
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -82,9 +93,38 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportIdWrapper.ReportId);
+                Subscription subscription = JsonConvert.DeserializeObject<Subscription>(reportIdWrapper.Data.ToString());
+                _logger.Trace("Creating subscription: " + JsonConvert.SerializeObject(reportIdWrapper.Data));
 
-                var result = await _apiClient.Post("api/subscription/save", reportIdWrapper.Data);
-                return Ok(result);
+                var errorResult = subscription.Validate();
+                if (errorResult != null)
+                    return Json(new { Error = errorResult });
+
+                Schedule schedule = null;
+                if (subscription.SubscriptionType == SubscriptionTypeEnum.OneTime)
+                {
+                    schedule = _scheduleRepository.GetOneTimeSchedule();
+                    subscription.ScheduleId = schedule.Id;
+                }
+                else
+                {
+                    schedule = _scheduleRepository.Get(subscription.ScheduleId);
+                }
+                subscription.SetNextSendDate(schedule.Cron);
+
+                if (subscription.Id == 0)
+                {
+                    var id = _subscriptionRepository.Insert(subscription);
+                    return Json(new { Id = id });
+                }
+
+                if (subscription.Status == SubscriptionStatus.Suspended)
+                {
+                    subscription.FailedAttempts = 0;
+                    subscription.Status = SubscriptionStatus.NotSet;
+                }
+                _subscriptionRepository.Update(subscription);
+                return Ok(new { Id = subscription.Id });
             }
             catch (Exception ex)
             {
@@ -99,8 +139,10 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportIdWrapper.ReportId);
-
-                var result = await _apiClient.Post("api/subscription/delete", reportIdWrapper.Data);
+                _logger.Trace("Deleting subscription: " + reportIdWrapper.Data);
+                int id = Convert.ToInt32(reportIdWrapper.Data);
+                _subscriptionRepository.Delete(id);
+                var result = _subscriptionRepository.List();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -116,8 +158,11 @@ namespace SimpleReport.Controllers.Api
             try
             {
                 CheckAccess(reportIdWrapper.ReportId);
+                _logger.Trace("Set send on subscription: " + reportIdWrapper.Data);
+                int id = Convert.ToInt32(reportIdWrapper.Data);
+                _subscriptionRepository.SendNow(id);
 
-                var result = await _apiClient.Post("api/subscription/send", reportIdWrapper.Data);
+                var result = _subscriptionRepository.List();
                 return Ok(result);
             }
             catch (Exception ex)

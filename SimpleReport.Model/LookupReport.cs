@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using SimpleReport.Model.DbExecutor;
 
 namespace SimpleReport.Model
 {
@@ -9,8 +10,8 @@ namespace SimpleReport.Model
     {
         [NonSerialized]
         public Connection Connection;
-        [Required]
-        public Guid ConnectionId { get; set; }
+        
+        public Guid? ConnectionId { get; set; }
         [Required]
         public string Sql { get; set; }
 
@@ -18,20 +19,13 @@ namespace SimpleReport.Model
         {
         }
 
-        public LookupReport(Guid id, string name, string description, Guid connectionId,string sql, string group) : base(id, name, description, group)
-        {
-            if (string.IsNullOrWhiteSpace(sql))
-                throw new Exception(string.Format("Missing SQL in report with Name:{0}", name));
-            ConnectionId = connectionId;
-            Sql = sql;
-        }
 
         public Dictionary<string, string> Execute()
         {
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = ADO.GetResults(Connection, Sql,null);
+            DataTable result = DbExecutorFactory.GetInstance(Connection).GetResults(Connection, Sql, null);
             Dictionary<string, string> collection = new Dictionary<string, string>();
             if (result.Columns.Contains("id") && result.Columns.Contains("name"))
             {

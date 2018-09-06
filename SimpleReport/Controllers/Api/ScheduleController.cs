@@ -5,17 +5,18 @@ using System.Web.Http;
 using SimpleReport.Helpers;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
+using SimpleReport.Model.Subscriptions;
 
 namespace SimpleReport.Controllers.Api
 {
 
     public class ScheduleController : BaseApiController
     {
-        private readonly IApiClient _apiClient;
+        private readonly IScheduleRepository _scheduleRepository;
 
-        public ScheduleController(IStorage reportStorage, ILogger logger, IApiClient apiClient) : base(reportStorage, logger)
+        public ScheduleController(IStorage reportStorage, IScheduleRepository scheduleRepository,  ILogger logger) : base(reportStorage, logger)
         {
-            _apiClient = apiClient;
+            _scheduleRepository = scheduleRepository;
         }
 
         [AcceptVerbs("GET")]
@@ -23,7 +24,7 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                var result = await _apiClient.Get("api/schedule/all");
+                var result = _scheduleRepository.List();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -34,14 +35,14 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
-        public async Task<IHttpActionResult> Save(object schedule)
+        public async Task<IHttpActionResult> Save(Schedule schedule)
         {
             try
             {
                 _adminAccess.IsAllowedForMe(User);
 
-                var result = await _apiClient.Post("api/schedule/save", schedule);
-                return Ok(result);
+                var id = _scheduleRepository.Insert(schedule);
+                return Ok(new { Id = id });
             }
             catch (Exception ex)
             {
@@ -51,13 +52,19 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("POST")]
-        public async Task<IHttpActionResult> Delete(Dictionary<string,object> obj)//this is really {id : int}, but webapi model binding is evil when it comes to simple values, hence we use this.
+        [Route("delete")]
+        public async Task<IHttpActionResult> Delete([FromBody]int id)
         {
             try
             {
                 _adminAccess.IsAllowedForMe(User);
+                if (_scheduleRepository.IsInUse(id))
+                {
+                    return Ok(new { error = "The schedule is in use in subsciptions and cant be removed." });
+                }
 
-                var result = await _apiClient.Post("api/schedule/delete", obj["Id"]);
+                _scheduleRepository.Delete(id);
+                var result = _scheduleRepository.List();
                 return Ok(result);
             }
             catch (Exception ex)

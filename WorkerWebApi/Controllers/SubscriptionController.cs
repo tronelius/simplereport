@@ -29,14 +29,24 @@ namespace WorkerWebApi.Controllers
         [HttpPost]
         public IHttpActionResult Save(Subscription subscription)
         {
-            _logger.Trace("Creating schedule: " + JsonConvert.SerializeObject(subscription));
+            _logger.Trace("Creating subscription: " + JsonConvert.SerializeObject(subscription));
 
             var errorResult = subscription.Validate();
 
             if (errorResult != null)
                 return Json(new { Error = errorResult });
 
-            var schedule = _scheduleRepository.Get(subscription.ScheduleId);
+            Schedule schedule = null;
+            if (subscription.SubscriptionType == SubscriptionTypeEnum.OneTime)
+            {
+                schedule = _scheduleRepository.GetOneTimeSchedule();
+                subscription.ScheduleId = schedule.Id;
+            }
+            else
+            {
+                schedule = _scheduleRepository.Get(subscription.ScheduleId);
+            }
+            
             subscription.SetNextSendDate(schedule.Cron);
 
             if (subscription.Id == 0)
@@ -62,6 +72,17 @@ namespace WorkerWebApi.Controllers
             _logger.Trace("Deleting subscription: " + id);
 
             _subscriptionRepository.Delete(id);
+            var result = _subscriptionRepository.List();
+            return Json(result);
+        }
+
+        [Route("deleteAll")]
+        [HttpPost]
+        public IHttpActionResult DeleteAll()
+        {
+            _logger.Trace("Deleting all subscriptions: ");
+
+            _subscriptionRepository.DeleteAll();
             var result = _subscriptionRepository.List();
             return Json(result);
         }

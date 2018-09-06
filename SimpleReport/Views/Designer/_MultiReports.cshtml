@@ -1,0 +1,212 @@
+﻿
+<div class="row">
+    <div ng-class="SubscriptionEnabled ? 'col-md-6 col-lg-5' :'col-md-6' ">
+        <div class="box box-primary boxheight">
+            <div class="box-header with-border">
+                <h3 class="box-title">Name and group</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label class="control-label" title="This Name is also the link in the report menu">Name</label>
+                            <div>
+                                <input type="text" ng-model="report.Name" class="form-control" placeholder="Give your report a name" title="This Name is also the link in the report menu" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label class="control-label" title="All reports are grouped in the navigation menu by this group name.">Group</label>
+                            <div>
+                                <input type="text" ng-model="report.Group" class="form-control" placeholder="Folder group name" title="All reports are grouped in the navigation menu by this group name.">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" title="This description is shown to the user when he executes the report">Description</label>
+                            <div>
+                                <textarea cols="2" ng-model="report.Description" class="form-control" placeholder="Give your report a user-friendly description" title="This description is shown to the user when he executes the report"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div ng-class="SubscriptionEnabled ? 'col-md-6 col-lg-7' : 'col-md-6'">
+        <div class="box box-primary boxheight">
+            <div class="box-header with-border">
+                <h3 class="box-title">Settings & template</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label class="control-label" title="Who should be able to edit the template of this report?">Report owner</label>
+                            <div>
+                                <select ng-model="report.ReportOwnerAccessId" ng-options="item.Id as item.Name for item in reportOwnerAccessLists" class="form-control"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label class="control-label" title="Who should be able to look at this report?">Access</label>
+                            <div>
+                                <select ng-model="report.AccessId" ng-options="item.Id as item.Name for item in accessLists" class="form-control"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label class="control-label" title="Who can edit the template.">Who can edit template?</label>
+                            <div>
+                                <ul class="list-unstyled">
+                                    <li data-ng-repeat="editor in accessEditorViewModel">
+                                        <div class="radio">
+                                            <label>
+                                                <input value="{{editor.Value}}" type="radio" name="whocanedittemplate" data-ng-model="report.TemplateEditorAccessStyle">
+                                                {{editor.Text}}
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 form-inline">
+                        <label class="checkbox inline no_indent">
+                            <input type="checkbox" data-ng-model="report.ConvertToPdf">Convert to Pdf
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-lg-5" data-ng-show="SubscriptionEnabled">
+        <div class="box box-primary boxheight">
+            <div class="box-header with-border">
+                <h3 class="box-title">Subscriptions</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" title="">Mail subject</label>
+                            <div>
+                                <input type="text" ng-model="report.MailSubject" class="form-control" placeholder="Subject text in subscription email" title="Subject text in subscription email">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" title="">Mail body text</label>
+                            <div>
+                                <textarea cols="2" ng-model="report.MailText" class="form-control" placeholder="The main body text in subscrition email" title="The main body text in subscrition email"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" title="Who can create/edit subscriptions?">Who can create/edit subscriptions?</label>
+                            <div>
+                                <div class="col-xs-7">
+                                    <ul class="list-unstyled">
+                                        <li data-ng-repeat="editor in accessEditorViewModel">
+                                            <div class="radio">
+                                                <label>
+                                                    <input value="{{editor.Value}}" type="radio" data-ng-model="report.SubscriptionAccessStyle">
+                                                    {{editor.Text}}
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-xs-5">
+                                    <div class="form-group">
+                                        <a class="btn btn-primary pull-right" ng-show="report.SubscriptionCount !== undefined" href="Home/Report?reportId={{report.Id}}&selectedAction=editSubscriptions">Subscriptions ({{report.SubscriptionCount}})</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-class="SubscriptionEnabled ? 'col-md-6 col-lg-7' : 'col-md-6'">
+        <div class="box box-primary boxheight">
+            <div class="box-header with-border">
+                <h3 class="box-title">Reports</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-xs-6">
+                            <label class="control-label" title="Available reports">Available Reports</label>    
+                            <div class="scroll-container">
+                                <ul class="report-list">
+                                    <li class="row report-list-item" data-ng-repeat="linkedReport in filteredReports">
+                                        <div class="col-xs-10 vertical-align small-vertical-padding trunkate-text">{{linkedReport.Name}}</div>
+                                        <div class="col-xs-2 vertical-align small-vertical-padding float-right"><button class="btn-primary float-right" ng-click="addLinkedReport(linkedReport)">>></button></div>
+                                    </li>
+                                </ul>
+                            </div>  
+                        </div>
+
+                        <div class="col-xs-6">
+                            <label class="control-label" title="Reports added to this report">Added Reports</label>
+                            <ul class="report-list">
+                                <li class="row report-list-item" data-ng-repeat="linkedReport in report.ReportList">
+                                    <div class="col-xs-10 vertical-align small-vertical-padding trunkate-text">{{linkedReport.Name}}</div>
+                                    <div class="col-xs-2 vertical-align small-vertical-padding "><button class="btn-primary float-right" ng-click="removeLinkedReport(linkedReport)"><<</button></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div data-ng-show="showSaveConfirmation">
+    <div class="modal" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" data-ng-click="showSaveConfirmation = false"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Incompatible parameter changes</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some of the changes made to the parameters might cause subscriptions depending on them to stop working. Are you really sure?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" data-ng-click="showSaveConfirmation = false">Close</button>
+                    <button type="button" class="btn btn-primary" data-ng-click="saveReport(true)">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Optimization;
 
 namespace SimpleReport.App_Start
@@ -21,10 +19,12 @@ namespace SimpleReport.App_Start
                 "~/Scripts/lib/bootstrap-datepicker.js",
                 "~/Scripts/lib/underscore.min.js",
                 "~/Scripts/lib/angular.js",
-                "~/Scripts/lib/ui-bootstrap-tpls-0.13.0.min.js",
+                "~/Scripts/lib/angular-sanitize.min.js",
+                "~/Scripts/lib/angular-ui/ui-bootstrap-tpls.min.js",
                 "~/Scripts/lib/toastr.js",
                 "~/Scripts/lib/ng-file-upload-all.min.js",
                 "~/Scripts/lib/jquery-cron-min.js",
+                "~/Scripts/lib/bootstrap-multiselect.js",
                 "~/Content/js/app.js"));
 
             bundles.Add(new StyleBundle("~/bundles/css").Include(
@@ -34,15 +34,9 @@ namespace SimpleReport.App_Start
                       "~/Content/css/skins/_all-skins.css",
                       "~/Content/toastr.min.css",
                       "~/Content/font-awesome.min.css",
-                      "~/Content/jquery-cron.css"));
-        }
-    }
-
-    public class ModuleFirstBundleOrderer : IBundleOrderer
-    {
-        public IEnumerable<BundleFile> OrderFiles(BundleContext context, IEnumerable<BundleFile> files)
-        {
-            return files.OrderByDescending(x => x.VirtualFile.Name == "module.js");
+                      "~/Content/jquery-cron.css",
+                      "~/Content/bootstrap-multiselect.css",
+                      "~/Content/ui-bootstrap-csp.css"));
         }
     }
 }

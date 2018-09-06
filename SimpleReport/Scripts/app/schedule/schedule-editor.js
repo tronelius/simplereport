@@ -22,7 +22,13 @@
                  $scope.data = null;
 
                  scheduleRepository.getAll().success(function (data) {
-                     $scope.data = data;
+                     $scope.data = [];
+
+                     for (var i = 0; i < data.length; i++) {
+                         if (data[i].ScheduleType === 0)
+                             $scope.data.push(data[i]);
+                     }
+
                  }).error(function () {
                      toastr.error('Something went wrong, please try again later or contact support');
                  });
@@ -39,7 +45,7 @@
 
              function save() {
                  if (!$scope.schedule.Name || !$scope.schedule.Cron) {
-                     toastr.warn('A Schedule needs both a name and an interval');
+                     toastr.warn('A schedule needs both a name and an interval');
                  }
 
                  scheduleRepository.save($scope.schedule).success(function (data) {

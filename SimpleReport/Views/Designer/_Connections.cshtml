@@ -10,7 +10,6 @@
     </div>
 </div>
 
-
 <form role="form" ng-hide="!connection">
     <div class="row">
         <div class="col-sm-12">
@@ -25,6 +24,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" title="Choose type of connection">Type</label>
+                                <div>
+                                    <select ng-model="connection.ConnectionType" ng-options="item.Key as item.Value for item in connectionTypes" class="form-control"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="control-label" title="The connectionstring to use for reports">Connectionstring</label>
@@ -38,9 +47,9 @@
                             <div class="form-group">
                                 <label class="control-label" title="Is the connectionstring verified?">Verified</label>
                                 <div>
-                                    <button class="btn btn-primary" ng-click="verifyConnection()"><i class="fa fa-check"></i> Verify</button> <h4><span ng-show="connection.Verified" class="label label-success"><i class="fa fa-thumbs-up"></i> Connection valid!</span><span ng-show="!connection.Verified" class="label label-danger"><i class="fa fa-thumbs-down"></i> Connection not valid!</span></h4> 
+                                    <button class="btn btn-primary" ng-click="verifyConnection()"><i class="fa fa-check"></i> Verify</button> <h4><span ng-show="connection.Verified" class="label label-success"><i class="fa fa-thumbs-up"></i> Connection valid!</span><span ng-show="!connection.Verified" class="label label-danger"><i class="fa fa-thumbs-down"></i> Connection not valid!</span></h4>
                                 </div>
-                             </div>
+                            </div>
                         </div>
 
                     </div>

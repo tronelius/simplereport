@@ -10,8 +10,8 @@ namespace Worker.Common.Repository
 {
     public class SubscriptionRepository : BaseRepository, ISubscriptionRepository
     {
-        public SubscriptionRepository(string connectionstring) : base(connectionstring){}
-      
+        public SubscriptionRepository(string connectionstring) : base(connectionstring) { }
+
         public Subscription Get(int id)
         {
             using (SqlConnection cn = EnsureOpenConnection())
@@ -21,11 +21,11 @@ namespace Worker.Common.Repository
             }
         }
 
-        public int Insert(Subscription schedule)
+        public int Insert(Subscription sub)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
-                var id = cn.Insert(schedule);
+                var id = cn.Insert(sub);
                 return id;
             }
         }
@@ -39,11 +39,11 @@ namespace Worker.Common.Repository
             }
         }
 
-        public void Update(Subscription schedule)
+        public void Update(Subscription sub)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Update(schedule);
+                cn.Update(sub);
             }
         }
 
@@ -59,7 +59,7 @@ namespace Worker.Common.Repository
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Execute("Update Subscription set Mailsubject=@mailsubject, MailText=@MailText where reportid=@reportid",new {mailsubject=updateTemplateText.Subject, mailtext =updateTemplateText.Text, reportid=updateTemplateText.ReportGuid});
+                cn.Execute("Update Subscription set Mailsubject=@mailsubject, MailText=@MailText where reportid=@reportid", new { mailsubject = updateTemplateText.Subject, mailtext = updateTemplateText.Text, reportid = updateTemplateText.ReportGuid });
             }
         }
 
@@ -67,7 +67,7 @@ namespace Worker.Common.Repository
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
-                cn.Execute("Update Subscription set NextSend = @date where Id = @Id", new { Date = DateTime.Now, Id = id});
+                cn.Execute("Update Subscription set NextSend = @date where Id = @Id", new { Date = DateTime.Now, Id = id });
             }
         }
 
@@ -77,6 +77,14 @@ namespace Worker.Common.Repository
             {
                 var list = cn.Query<Subscription>("select * from subscription where NextSend < @nextsend and (FailedAttempts is null or FailedAttempts < @maxFailed)", new { NextSend = now, MaxFailed = maxFailed });
                 return list.ToList();
+            }
+        }
+
+        public void DeleteAll()
+        {
+            using (SqlConnection cn = EnsureOpenConnection())
+            {
+                cn.Execute("Delete from Subscription");
             }
         }
     }

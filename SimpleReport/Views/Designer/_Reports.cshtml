@@ -1,308 +1,52 @@
-﻿
-<div class="row content-text" ng-hide="!reportList">
-    <div class="col-xs-12">
-        <div class="form-inline">
-            <div class="form-group">
-                <label class="control-label">Choose report to edit</label>
-                <select ng-model="report" class="form-control" ng-options="item as item.Name group by item.Group for item in reportList | orderBy:['Group','Name']" ng-change="reportDataChanged()"></select>
-            </div>
-            <button class="btn btn-primary" ng-click="addNewReport()"><i class="fa fa-plus"></i> Add new</button>
-        </div>
-    </div>
-</div>
+﻿<form role="form">
 
-<form role="form" ng-hide="!report">
-    <div class="row">
-        <div ng-class="SubscriptionEnabled ? 'col-md-6 col-lg-5' :'col-md-6' ">
-            <div class="box box-primary boxheight">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Name and group</h3>
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="control-label" title="This Name is also the link in the report menu">Name</label>
-                                <div>
-                                    <input type="text" ng-model="report.Name" class="form-control" placeholder="Give your report a name" title="This Name is also the link in the report menu">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="control-label" title="All reports are grouped in the navigation menu by this group name.">Group</label>
-                                <div>
-                                    <input type="text" ng-model="report.Group" class="form-control" placeholder="Folder group name" title="All reports are grouped in the navigation menu by this group name.">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <label class="control-label" title="This description is shown to the user when he executes the report">Description</label>
-                                <div>
-                                    <textarea cols="2" ng-model="report.Description" class="form-control" placeholder="Give your report a user-friendly description" title="This description is shown to the user when he executes the report"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="control-label" title="the SQL connection that the query is executed on">Connection</label>
-                                <div>
-                                    <select ng-model="report.ConnectionId" ng-options="item.Id as item.Name for item in connections" class="form-control"></select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div ng-class="SubscriptionEnabled ? 'col-md-6 col-lg-7' : 'col-md-6'">
-            <div class="box box-primary boxheight">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Settings & template</h3>
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="control-label" title="Who should be able to edit the template of this report?">Report owner</label>
-                                <div>
-                                    <select ng-model="report.ReportOwnerId" ng-options="item.Id as item.Name for item in reportOwnerAccessLists" class="form-control"></select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="control-label" title="Who should be able to look at this report?">Access</label>
-                                <div>
-                                    <select ng-model="report.AccessId" ng-options="item.Id as item.Name for item in accessLists" class="form-control"></select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <div data-template-upload data-reportid="report.Id" data-has-report-template="report.HasTemplate"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="control-label" title="Who can edit the template.">Who can edit template?</label>
-                                <div>
-                                    <ul class="list-unstyled">
-                                        <li data-ng-repeat="editor in accessEditorViewModel">
-                                            <div class="radio">
-                                                <label>
-                                                    <input value="{{editor.Value}}" type="radio" name="whocanedittemplate" data-ng-model="report.TemplateEditorAccessStyle">
-                                                    {{editor.Text}}
-                                                </label>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="control-label" title="What formats does this report allow?">Formats</label>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="report.OnScreenFormatAllowed" />
-                                        On screen format allowed
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-<div class="row">
-    <div class="col-md-6 col-lg-5" data-ng-show="SubscriptionEnabled">
-        <div class="box box-primary boxheight">
-            <div class="box-header with-border">
-                <h3 class="box-title">Subscriptions</h3>
-            </div>
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label class="control-label" title="">Mail subject</label>
-                            <div>
-                                <input type="text" ng-model="report.MailSubject" class="form-control" placeholder="Subject text in subscription email" title="Subject text in subscription email">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label class="control-label" title="">Mail body text</label>
-                            <div>
-                                <textarea cols="2" ng-model="report.MailText" class="form-control" placeholder="The main body text in subscrition email" title="The main body text in subscrition email"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label class="control-label" title="Who can create/edit subscriptions?">Who can create/edit subscriptions?</label>
-                            <div>
-                                <div class="col-xs-7">
-                                    <ul class="list-unstyled">
-                                        <li data-ng-repeat="editor in accessEditorViewModel">
-                                            <div class="radio">
-                                                <label>
-                                                    <input value="{{editor.Value}}" type="radio" data-ng-model="report.SubscriptionAccessStyle">
-                                                    {{editor.Text}}
-                                                </label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-xs-5">
-                                    <div class="form-group">
-                                        <a class="btn btn-primary pull-right" ng-show="report.SubscriptionCount !== undefined" href="Home/Report?reportId={{report.Id}}&selectedAction=editSubscriptions">Subscriptions ({{report.SubscriptionCount}})</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-        </div>
-    </div>
-    <div ng-class="SubscriptionEnabled ? 'col-md-6 col-lg-7' : 'col-md-12' ">
-        <div class="box box-primary boxheight">
-            <div class="box-header with-border">
-                <h3 class="box-title">SQL statement</h3>
-            </div>
-            <div class="box-body">
+    <div class="row content-text" ng-hide="!reportList">
+        <div class="col-xs-12">
+            <div class="form-inline">
                 <div class="form-group">
-                    <div>
-                        <textarea rows="11" class="form-control" ng-model="report.Sql" ng-keyup="analyzeSQL()" id="sqlarea"></textarea>
-                        <span class="help-block">Write or paste your SQL statement here.</span>
+                    <label class="control-label">Choose report to edit</label>
+                    <select ng-model="report" class="form-control" ng-options="item as item.Name group by item.Group for item in reportList | orderBy:['Group','Name']" ng-change="reportDataChanged()"><option value="?" selected="selected" label=""></option><optgroup label="Albert"><option value="0" label="Albert Utryckningar">Albert Utryckningar</option></optgroup><optgroup label="Chiron"><option value="1" label="Diallers">Diallers</option></optgroup><optgroup label="Mallar"><option value="2" label="Antal Kunder Retail">Antal Kunder Retail</option><option value="3" label="Fjärråtgärder Retail">Fjärråtgärder Retail</option><option value="4" label="Orsaksstatistik Knr Part 15">Orsaksstatistik Knr Part 15</option><option value="5" label="Orsaksstatistik Lnr Part 15">Orsaksstatistik Lnr Part 15</option></optgroup><optgroup label="MAS"><option value="6" label="Anläggningar i Testläge">Anläggningar i Testläge</option><option value="7" label="Anläggningar på Avtalsnummer">Anläggningar på Avtalsnummer</option><option value="8" label="Anläggningar på Kundnummer">Anläggningar på Kundnummer</option><option value="9" label="Antal Sites">Antal Sites</option><option value="10" label="Användare i MAS">Användare i MAS</option><option value="11" label="Centralapparater">Centralapparater</option><option value="12" label="DHL">DHL</option><option value="13" label="Fjärråtgärder">Fjärråtgärder</option><option value="14" label="Hanteringstid Kundnummer">Hanteringstid Kundnummer</option><option value="15" label="Incidenter (Dutch)">Incidenter (Dutch)</option><option value="16" label="Kundnummer TilloFrån">Kundnummer TilloFrån</option><option value="17" label="Larmjournal Kundnnummer">Larmjournal Kundnnummer</option><option value="18" label="MAS Helgdagar Kundnummer">MAS Helgdagar Kundnummer</option><option value="19" label="MAS mobile RÄTT">MAS mobile RÄTT</option><option value="20" label="MAS Orsaksstatistik Kundnr.">MAS Orsaksstatistik Kundnr.</option><option value="21" label="MAS-mobile FEL">MAS-mobile FEL</option><option value="22" label="Orsakskoder">Orsakskoder</option><option value="23" label="Orsaksstatistik Larmnr.">Orsaksstatistik Larmnr.</option><option value="24" label="Sektioner på kund">Sektioner på kund</option><option value="25" label="Sändarbeskrivning">Sändarbeskrivning</option><option value="26" label="Utryckningar Avtalsnummer">Utryckningar Avtalsnummer</option><option value="27" label="Utryckningar Kundnummer">Utryckningar Kundnummer</option></optgroup><optgroup label="Per Brandorf"><option value="28" label="Antal Sites Per Brandorf">Antal Sites Per Brandorf</option></optgroup><optgroup label="Peter"><option value="29" label="Orsaksstatistik-Knr">Orsaksstatistik-Knr</option></optgroup><optgroup label="Statistik"><option value="30" label="Orsaksstatistik Knr">Orsaksstatistik Knr</option></optgroup><optgroup label="Telefon"><option value="31" label="Calls IN Kundtjänst">Calls IN Kundtjänst</option><option value="32" label="Calls IN Larmbord">Calls IN Larmbord</option><option value="33" label="Calls IN SOC">Calls IN SOC</option><option value="34" label="Calls OUT">Calls OUT</option><option value="35" label="ICA">ICA</option><option value="36" label="Swedavia">Swedavia</option><option value="37" label="Sökning på A-nummer">Sökning på A-nummer</option><option value="38" label="Sökning på B-nummer">Sökning på B-nummer</option></optgroup><optgroup label="TestNorge"><option value="39" label="Antall Lokasjoner">Antall Lokasjoner</option><option value="40" label="Logg InterView">Logg InterView</option><option value="41" label="PanelCodes">PanelCodes</option><option value="42" label="Systemer i MAS">Systemer i MAS</option></optgroup><optgroup label="Tom Vetterlein"><option value="43" label="Helgdagar Tom Vetterlein">Helgdagar Tom Vetterlein</option><option value="44" label="Orsakskoder Tom Vetterlein">Orsakskoder Tom Vetterlein</option></optgroup><optgroup label="Tove Christiansson"><option value="45" label="Antal Sites Tove">Antal Sites Tove</option><option value="46" label="Calls IN SOC Tove">Calls IN SOC Tove</option><option value="47" label="CallsIN KTJ Tove">CallsIN KTJ Tove</option><option value="48" label="CallsIN Larmbord Tove">CallsIN Larmbord Tove</option></optgroup></select>
+                </div>
+                <button class="btn btn-primary" ng-click="addNewSingleReport()"><i class="fa fa-plus"></i> Add New Report</button>
+                <button class="btn btn-primary" ng-click="addNewMultiReport()"><i class="fa fa-plus"></i> Add New MultiReport</button>
+
+            </div>
+        </div>
+    </div>
+    <div ng-hide="!report">
+        <div data-ng-if="report.ReportType == '0'">
+            @Html.Partial("_SingleReports") 
+        </div>
+        <div data-ng-if="report.ReportType == '1'">
+            @Html.Partial("_MultiReports")
+        </div>
+        <div data-ng-show="showDeleteConfirmation">
+            <div class="modal" style="display: block;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-label="Close" data-ng-click="showDeleteConfirmation = false"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">Confirm delete</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you really sure you want to delete the report?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal" data-ng-click="showDeleteConfirmation = false">Close</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="deleteReport(true)">Delete report</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-</div>
-    <div class="row">
-        <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="param in report.Parameters">
-            <div class="box box-solid box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title" ng-bind="param.SqlKey"></h3>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-footer">
+                    <button type="button" class="btn btn-success" ng-click="saveReport()">Save changes</button>
+                    <button type="button" class="btn btn-primary pull-right" ng-click="deleteReport()">Delete</button>
+                    <button type="button" class="btn btn-primary pull-right margin-right-large" ng-disabled="!report.Id" ng-click="goToReport()">Go to report</button>
                 </div>
-                <div class="box-body">
-
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-xs-3">
-                                <label class="control-label" title="Label for the parameter">Label</label>
-                            </div>
-                            <div class="col-xs-9">
-                                <input type="text" name="Label" ng-model="param.Label" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-xs-3">
-                                <label class="control-label" title="Help Text for the parameter">Help</label>
-                            </div>
-                            <div class="col-xs-9">
-                                <input type="text" name="HelpText" ng-model="param.HelpText" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-xs-3">
-                                <label class="control-label" title="The type of parameter to present to the user">Type</label>
-                            </div>
-                            <div class="col-xs-5">
-                                <select name="InputType" ng-model="param.InputType" ng-options="item.Key as item.Value for item in inputTypes" class="form-control"></select>
-                            </div>
-                            <div class="col-xs-4">
-                                <div class="checkbox">
-                                    <input type="checkbox" ng-model="param.Mandatory"><span title="Required/Mandatory to fill in the parameter">Req'd</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-horizontal" ng-show="param.InputType<3">
-                        <div class="form-group">
-                            <div class="col-xs-3">
-                                <label class="control-label">Default</label>
-                            </div>
-                            <div class="col-xs-9">
-                                <input type="text" name="Value" ng-model="param.Value" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-horizontal" ng-show="param.InputType==4">
-                        <div class="form-group">
-                            <div class="col-xs-3">
-                                <label class="control-label">Lookup</label>
-                            </div>
-                            <div class="col-xs-9">
-                                <select ng-model="param.LookupReportId" class="form-control" ng-options="item.Id as item.Name for item in lookupReports" ng-change="lookupReportChanged()"></select>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div data-ng-show="showSaveConfirmation">
-        <div class="modal" style="display: block;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-label="Close" data-ng-click="showSaveConfirmation = false"><span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title">Incompatible parameter changes</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Some of the changes made to the parameters might cause subscriptions depending on them to stop working. Are you really sure?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" data-ng-click="showSaveConfirmation = false">Close</button>
-                        <button type="button" class="btn btn-primary" data-ng-click="saveReport(true)">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box-footer">
-                <button type="button" class="btn btn-success" ng-click="saveReport()">Save changes</button>
-                <button type="button" class="btn btn-primary pull-right" ng-click="deleteReport()">Delete</button>
             </div>
         </div>
     </div>
 </form>
-

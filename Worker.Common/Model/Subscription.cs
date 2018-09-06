@@ -14,6 +14,7 @@ namespace Worker.Common.Model
         public string Cc { get; set; }
         public string Bcc { get; set; }
         public SubscriptionStatus Status { get; set; }//not int, should be an enum.
+        public SubscriptionTypeEnum SubscriptionType { get; set; }
         public DateTime? LastSent { get; set; }
         public DateTime NextSend { get; set; }
         public string ErrorMessage { get; set; }
@@ -24,6 +25,7 @@ namespace Worker.Common.Model
         public string MailSubject { get; set; }
         public string MailText { get; set; }
         public DateTime? LastRun { get; set; }
+        public DateTime? SyncedDate { get; set; }
 
         public string Validate()
         {
@@ -64,5 +66,11 @@ namespace Worker.Common.Model
         Ongoing,
         Failed,
         Suspended
+    }
+
+    public enum SubscriptionTypeEnum
+    {
+        Default,
+        OneTime
     }
 }

@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Web.Script.Serialization;
+using System.Data.Common;
+using System.Linq;
+using System.Text.RegularExpressions;
+using SimpleReport.Model.DbExecutor;
 using SimpleReport.Model.Extensions;
 
 namespace SimpleReport.Model
@@ -14,21 +13,20 @@ namespace SimpleReport.Model
 
     public class ParameterList : List<Parameter>
     {
-        public ParameterList(List<Parameter> parameters)
-        {
-            this.AddRange(parameters);
-        }
-
         public ParameterList()
         {
         }
 
-        public List<SqlParameter> CreateParameters()
+        public ParameterList(IEnumerable<Parameter> collection) : base(collection)
         {
-            List<SqlParameter> paramList = new List<SqlParameter>();
+        }
+
+        public List<DbParameter> CreateParameters(string sql, Action<string> updateSqlAction, IDbExecutor db)
+        {
+            List<DbParameter> paramList = new List<DbParameter>();
             foreach (Parameter parameter in this)
             {
-                paramList.AddRange(parameter.GetSqlParameter());
+                paramList.AddRange(parameter.GetDbParameter(sql, updateSqlAction, db));
             }
             return paramList;
         }
@@ -36,9 +34,20 @@ namespace SimpleReport.Model
         public void ReadParameters(NameValueCollection querystring)
         {
             foreach (Parameter par in this)
+            {                
+                par.Value = querystring[par.Key] ?? par.Value;
+            }
+        }
+
+        public void ReadMultiReportParameters(NameValueCollection querystring)
+        {
+            foreach (Parameter par in this)
             {
-                //todo validate
-                par.Value = querystring[par.Key];
+                var multiParameterName = $"{par.Key}_{par.InputType}";
+                var value = !string.IsNullOrEmpty(querystring[multiParameterName])
+                    ? querystring[multiParameterName] : !string.IsNullOrEmpty(querystring[par.Key])? querystring[par.Key] : "" ;
+              
+                par.Value = value;
             }
         }
     }
@@ -58,27 +67,36 @@ namespace SimpleReport.Model
         public string HelpText { get; set; }
         public string Key { get { return SqlKey.Replace("@", ""); } }
 
-        public Dictionary<string, string> Choices { get; protected set; }
-        public Guid LookupReportId { get; set; }
+        public List<KeyValuePair<string, string>> Choices { get; protected set; }
 
+        private Guid? LookupReportIdField=null;
+        public Guid? LookupReportId //because this has been serialized as Guid.empty in the past.
+        {
+            get { return LookupReportIdField; }
+            set
+            {
+                if (value == Guid.Empty)
+                    LookupReportIdField = null;
+                else
+                    LookupReportIdField = value;
+            }
+        }
+
+        public Guid? TypeAheadReportId { get; set; }
+
+        [NonSerialized]
+        public LookupReport LookupReport;
+        [NonSerialized]
+        public TypeAheadReport TypeAheadReport;
+
+        public Guid ReportId { get; set; }
         public Parameter()
         {
-            Choices = new Dictionary<string, string>();
+            Choices = new List<KeyValuePair<string, string>>();
         }
 
-        public Parameter(string label, string sqlKey, string value, ParameterInputType inputType, bool mandatory, string helptext)
-            : this()
-        {
-            //TODO validate
-            Label = label;
-            SqlKey = sqlKey;
-            Value = value;
-            InputType = inputType;
-            Mandatory = mandatory;
-            HelpText = helptext;
-        }
 
-        public IEnumerable<SqlParameter> GetSqlParameterForPeriod()
+        public IEnumerable<DbParameter> GetDbParameterForPeriod(IDbExecutor db)
         {
             string[] valueList = Value.Split(SPLITCHAR);
             string[] keyList = SqlKey.Split(SPLITCHAR);
@@ -90,7 +108,8 @@ namespace SimpleReport.Model
                 {
                     valueList = GetValueListBasedOnPeriod(period);
                 }
-            } else if (valueList[0].Contains(":"))//this is custom, it starts with the enum value and then the actuall value. ENUM:FROM_TO
+            }
+            else if (valueList[0].Contains(":"))//this is custom, it starts with the enum value and then the actual value. ENUM:FROM_TO
             {
                 valueList = Value.Split(':')[1].Split(SPLITCHAR);
             }
@@ -100,8 +119,42 @@ namespace SimpleReport.Model
 
             for (int i = 0; i < valueList.Length; i++)
             {
-                yield return new SqlParameter(keyList[i], valueList[i]);
+                yield return db.CreateParameter(keyList[i], valueList[i]);
             }
+        }
+
+        public List<DbParameter> GetDbParameterForLookup(string query, Action<string> updateSqlAction, IDbExecutor db)
+        {
+            var dbParameters = new List<DbParameter>();
+            string[] valueList = null;
+
+            if (!string.IsNullOrWhiteSpace(Value))
+                valueList = Value.Split(',');
+            
+            //We replace @param with @param1,@param2 to handle in-clauses
+            if (valueList != null && valueList.Length > 1)
+            {
+                var newParams = new List<string>();
+                for (int i = 0; i < valueList.Length; i++)
+                {
+                    var np = i!=0?"@" + Key + i: "@"+Key;
+                    newParams.Add(np);
+                    dbParameters.Add(db.CreateParameter(np, valueList[i]));
+                }
+
+                var replacement = string.Join(",", newParams);
+
+                //Regular expression to find only those parameters that is surrounded by parentesis to match a "in (@paramname)" situation or a "in(@paramname)" situation.
+                string findWhereIn = @"(?<=in\()@" + Key + @"(?=\))|(?<=in \()@" + Key + @"(?=\))";
+                var newQuery = Regex.Replace(query, findWhereIn, replacement, RegexOptions.IgnoreCase);
+                updateSqlAction(newQuery);
+            }
+            else
+            {
+                dbParameters.Add(db.CreateParameter(Key, Value));
+            }
+
+            return dbParameters;
         }
 
         private string[] GetValueListBasedOnPeriod(ParameterPeriods period)
@@ -130,11 +183,13 @@ namespace SimpleReport.Model
             }
         }
 
-        public IEnumerable<SqlParameter> GetSqlParameter()
+        public IEnumerable<DbParameter> GetDbParameter(string query, Action<string> updateSqlAction, IDbExecutor db)
         {
             if (InputType == ParameterInputType.Period)
-                return GetSqlParameterForPeriod();
-            return new List<SqlParameter>() { new SqlParameter(this.SqlKey, this.Value) };
+                return GetDbParameterForPeriod(db);
+            if (InputType == ParameterInputType.Lookup || InputType == ParameterInputType.LookupMultipleChoice)
+                return GetDbParameterForLookup(query, updateSqlAction, db);
+            return new List<DbParameter>() { db.CreateParameter(this.SqlKey, this.Value) };
         }
 
         public bool IsValid()
@@ -146,16 +201,18 @@ namespace SimpleReport.Model
 
         public void SetDefaultValuesForPeriod()
         {
-            Choices = new Dictionary<string, string>();
-            Choices.Add(((int)ParameterPeriods.ThisWeek).ToString(), "This Week");
-            Choices.Add(((int)ParameterPeriods.LastWeek).ToString(), "Last Week");
-            Choices.Add(((int)ParameterPeriods.ThisMonth).ToString(), "This Month");
-            Choices.Add(((int)ParameterPeriods.LastMonth).ToString(), "Last Month");
-            Choices.Add(((int)ParameterPeriods.ThisQuarter).ToString(), "This Quarter");
-            Choices.Add(((int)ParameterPeriods.LastQuarter).ToString(), "Last Quarter");
-            Choices.Add(((int)ParameterPeriods.ThisYear).ToString(), "This Year");
-            Choices.Add(((int)ParameterPeriods.LastYear).ToString(), "Last Year");
-            Choices.Add(((int)ParameterPeriods.Custom).ToString(), "Custom");
+            var dict = new Dictionary<string, string>();
+            dict.Add(((int)ParameterPeriods.ThisWeek).ToString(), "This Week");
+            dict.Add(((int)ParameterPeriods.LastWeek).ToString(), "Last Week");
+            dict.Add(((int)ParameterPeriods.ThisMonth).ToString(), "This Month");
+            dict.Add(((int)ParameterPeriods.LastMonth).ToString(), "Last Month");
+            dict.Add(((int)ParameterPeriods.ThisQuarter).ToString(), "This Quarter");
+            dict.Add(((int)ParameterPeriods.LastQuarter).ToString(), "Last Quarter");
+            dict.Add(((int)ParameterPeriods.ThisYear).ToString(), "This Year");
+            dict.Add(((int)ParameterPeriods.LastYear).ToString(), "Last Year");
+            dict.Add(((int)ParameterPeriods.Custom).ToString(), "Custom");
+
+            Choices = dict.ToList();
         }
     }
 
@@ -179,6 +236,10 @@ namespace SimpleReport.Model
         Integer = 1,
         Date = 2,
         Period = 3,
-        Lookup = 4
+        Lookup = 4,
+        LookupMultipleChoice = 5,
+        SyncedDate = 6,
+        SyncedRunningDate = 7,
+        TypeAhead=8
     }
 }
