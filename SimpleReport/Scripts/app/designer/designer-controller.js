@@ -193,7 +193,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     $scope.filterReports = function () {
         var reports = $scope.reportList;
         var alreadyAddedReports = $scope.report.ReportList || [];
-        var filteredReports = reports.filter((report) => { return report.ReportType !== 1 && report.ReportResultType !== null && report.ReportResultType !== "ExcelResultPlain" && !alreadyAddedReports.some((r) => { return r.LinkedReportId === report.Id }) });
+        var filteredReports = reports.filter(function(report) { return report.ReportType !== 1 && report.ReportResultType !== null && report.ReportResultType !== "ExcelResultPlain" && !alreadyAddedReports.some((r) => { return r.LinkedReportId === report.Id }) });
         filteredReports.sort((a, b) => {
             var nameA = a.Name.toUpperCase(); // ignore upper and lowercase
             var nameB = b.Name.toUpperCase(); // ignore upper and lowercase
