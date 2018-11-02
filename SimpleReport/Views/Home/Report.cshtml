@@ -49,20 +49,31 @@
                                         <input data-ng-if="par.InputType==@((int)ParameterInputType.Integer)" data-numeric data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" data-ng-model="par.Value" placeholder="Integer" class="numeric form-control">
 
                                         <div data-ng-if="par.InputType==@((int)ParameterInputType.SyncedDate) || par.InputType==@((int)ParameterInputType.SyncedRunningDate)" class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <div>
-                                                <input type="text" name="{{par.Key}}" uib-datepicker-popup="{{dateFormat}}" data-ng-change="dateChanged(par)" data-ng-model="par.DisplayValue" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.open" ng-focus="par.open=true" data-ng-disabled="selectedAction === 'subscribe'">
+                                            <div class="flex-container" style="display: flex; flex-direction: row; align-items: center;">
+                                                <div class="input-group-addon date-icon-container" style="padding: 9px 12px; flex: 1">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="{{par.Key}}" uib-datepicker-popup="{{dateFormat}}" data-ng-change="dateChanged(par)" data-ng-model="par.DisplayValue" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.open" ng-focus="par.open=true">
+                                                </div>
+                                                <div class="input-group">
+                                                    <uib-timepicker ng-model="par.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max">
+                                                    </uib-timepicker>
+                                                </div>
                                             </div>
                                         </div>
-
                                         <div data-ng-if="par.InputType==@((int) ParameterInputType.Date)" class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <div>
-                                                <input type="text" name="{{par.Key}}" uib-datepicker-popup="{{dateFormat}}" data-ng-change="dateChanged(par)" data-ng-model="par.DisplayValue" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.open" ng-focus="par.open=true">
+                                            <div class="flex-container" style="display: flex;flex-direction: row; align-items: center;">
+                                                <div class="input-group-addon date-icon-container" style="padding: 9px 12px; flex: 1">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="{{par.Key}}" uib-datepicker-popup="{{dateFormat}}" data-ng-change="dateChanged(par)" data-ng-model="par.DisplayValue" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.open" ng-focus="par.open=true">
+                                                </div>
+                                                <div class="input-group">
+                                                    <uib-timepicker ng-model="par.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max">
+                                                    </uib-timepicker>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -76,12 +87,16 @@
                                                     <div class="input-group">
                                                         <span class="input-group-addon text-bold">From</span>
                                                         <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.from" data-max data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-left" is-open="par.openfrom" ng-focus="par.openfrom=true">
+                                                        <uib-timepicker ng-model="par.from.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max">
+                                                        </uib-timepicker>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-6">
                                                     <div class="input-group ">
                                                         <span class="input-group-addon text-bold">To</span>
                                                         <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.to" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.opento" ng-focus="par.opento=true">
+                                                        <uib-timepicker ng-model="par.to.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max">
+                                                        </uib-timepicker>
                                                     </div>
                                                 </div>
                                             </div>
@@ -112,7 +127,6 @@
 
                                         <input data-ng-if="par.InputType==@((int)ParameterInputType.String)" type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="{{par.Value}}">
                                     </div>
-                                    <span class="help-block">{{par.HelpText}}</span>
                                     <label for="{{par.Key}}" generated="true" class="help-block error"></label>
                                 </div>
                             </div>
@@ -153,7 +167,7 @@
                     <div data-ng-switch-when="subscribe">
                         <div data-subscription-editor data-report-id="viewModel.Report.Id" data-report-parameters="viewModel.Report.Parameters" data-subscription-id="subscriptionId" data-save-cb="onSubscriptionSaved()"></div>
                     </div>
-                    
+
                     <div data-ng-switch-when="sendOnce">
                         <div data-send-once-editor data-report-id="viewModel.Report.Id" data-report-parameters="viewModel.Report.Parameters" data-save-cb="onSendOnceSaved()"></div>
                     </div>

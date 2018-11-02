@@ -1,7 +1,7 @@
 ﻿angular.module('report').controller('reportController', ['$scope', '$http', 'reportViewModel', '$filter', 'queryStringParser', 'reportUrlHelper', '$window', 'reportParameterHelper', function ($scope, $http, viewModel, $filter, queryStringParser, reportUrlHelper, $window, reportParameterHelper) {
 
     $scope.init = function () {
-        $scope.dateFormat = 'yyyy-MM-dd';
+        $scope.dateFormat = 'yyyy-MM-dd HH:mm';
 
         viewModel.Report.Parameters = reportParameterHelper.sortedParameters(viewModel.Report.Parameters, viewModel.Report.Sql);
 
