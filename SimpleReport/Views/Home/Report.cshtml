@@ -49,29 +49,29 @@
                                         <input data-ng-if="par.InputType==@((int)ParameterInputType.Integer)" data-numeric data-ng-required="{{par.Mandatory}}" type="text" name="{{par.Key}}" data-ng-model="par.Value" placeholder="Integer" class="numeric form-control">
 
                                         <div data-ng-if="par.InputType==@((int)ParameterInputType.SyncedDate) || par.InputType==@((int)ParameterInputType.SyncedRunningDate)" class="input-group">
-                                            <div class="flex-container" style="display: flex; flex-direction: row; align-items: center;">
+                                            <div class="flex-container">
                                                 <div class="input-group-addon date-icon-container" style="padding: 9px 12px; flex: 1">
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
-                                                <div>
+                                                <div style="flex: 9;">
                                                     <input type="text" name="{{par.Key}}" uib-datepicker-popup="{{dateFormat}}" data-ng-change="dateChanged(par)" data-ng-model="par.DisplayValue" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.open" ng-focus="par.open=true">
                                                 </div>
                                                 <div class="input-group">
-                                                    <uib-timepicker ng-model="par.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max">
+                                                    <uib-timepicker ng-model="par.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false">
                                                     </uib-timepicker>
                                                 </div>
                                             </div>
                                         </div>
                                         <div data-ng-if="par.InputType==@((int) ParameterInputType.Date)" class="input-group">
-                                            <div class="flex-container" style="display: flex;flex-direction: row; align-items: center;">
+                                            <div class="flex-container" >
                                                 <div class="input-group-addon date-icon-container" style="padding: 9px 12px; flex: 1">
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
-                                                <div>
+                                                <div style="flex: 9;">
                                                     <input type="text" name="{{par.Key}}" uib-datepicker-popup="{{dateFormat}}" data-ng-change="dateChanged(par)" data-ng-model="par.DisplayValue" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.open" ng-focus="par.open=true">
                                                 </div>
                                                 <div class="input-group">
-                                                    <uib-timepicker ng-model="par.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max">
+                                                    <uib-timepicker ng-model="par.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false">
                                                     </uib-timepicker>
                                                 </div>
                                             </div>
@@ -87,7 +87,7 @@
                                                     <div class="input-group">
                                                         <span class="input-group-addon text-bold">From</span>
                                                         <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.from" data-max data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-left" is-open="par.openfrom" ng-focus="par.openfrom=true">
-                                                        <uib-timepicker ng-model="par.from.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max">
+                                                        <uib-timepicker ng-model="par.from.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false">
                                                         </uib-timepicker>
                                                     </div>
                                                 </div>
@@ -95,7 +95,7 @@
                                                     <div class="input-group ">
                                                         <span class="input-group-addon text-bold">To</span>
                                                         <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.to" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.opento" ng-focus="par.opento=true">
-                                                        <uib-timepicker ng-model="par.to.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max">
+                                                        <uib-timepicker ng-model="par.to.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false">
                                                         </uib-timepicker>
                                                     </div>
                                                 </div>

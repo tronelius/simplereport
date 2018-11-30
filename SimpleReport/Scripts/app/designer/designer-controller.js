@@ -193,8 +193,15 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     $scope.filterReports = function () {
         var reports = $scope.reportList;
         var alreadyAddedReports = $scope.report.ReportList || [];
-        var filteredReports = reports.filter(function(report) { return report.ReportType !== 1 && report.ReportResultType !== null && report.ReportResultType !== "ExcelResultPlain" && !alreadyAddedReports.some((r) => { return r.LinkedReportId === report.Id }) });
-        filteredReports.sort((a, b) => {
+        var filteredReports = reports.filter(function (report) {
+            return report.ReportType !== 1 &&
+                report.ReportResultType !== null &&
+                report.ReportResultType !== "ExcelResultPlain" &&
+                !alreadyAddedReports.some(function(r) {
+                    return r.LinkedReportId === report.Id;
+                });
+        });
+        filteredReports.sort(function (a, b) {
             var nameA = a.Name.toUpperCase(); // ignore upper and lowercase
             var nameB = b.Name.toUpperCase(); // ignore upper and lowercase
             if (nameA < nameB) {
@@ -220,7 +227,7 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
     $scope.removeLinkedReport = function (report) {
         var index = $scope.report.ReportList.indexOf(report);
         $scope.report.ReportList.splice(index, 1);
-        $scope.report.ReportList.forEach((linkedReport, i) => { // set new Order
+        $scope.report.ReportList.forEach(function(linkedReport, i) { // set new Order
             linkedReport.Order = i;
         });
         $scope.filterReports();
@@ -230,11 +237,11 @@ angular.module('designer').controller('designerController', ['$scope', '$http', 
         $scope.report.Parameters.push({ SqlKey: keyOfParameter, Value: "", InputType: 0, Mandatory: false, Label: "", HelpText: "" });
     };
 
-    $scope.goToReport = function () {
+    $scope.goToReport = function() {
         if (!$scope.report || !$scope.report.Id) return;
         var redirectUrl = "/home/Report?reportId=" + $scope.report.Id;
-        $scope.saveReport(false, () => { window.open(redirectUrl, "rapportfliken"); });
-    }
+        $scope.saveReport(false, function() { window.open(redirectUrl, "rapportfliken"); });
+    };
 
     $scope.saveReport = function (force, callback = null) {
         $scope.showSaveConfirmation = false;
