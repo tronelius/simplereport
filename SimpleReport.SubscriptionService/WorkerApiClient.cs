@@ -22,20 +22,11 @@ namespace SimpleReport.SubscriptionService
                 var result = client.DownloadData(new Uri(client.BaseAddress + "Home/ExecuteReport/?" + parameters));
                 if (result.Length == 0) //only look for file if we have any result...
                     return null;
-                
-                var headerString = FixHeaderString(client.ResponseHeaders.Get("Content-Disposition"));
-                var headers = ContentDispositionHeaderValue.Parse(headerString);
-                return new ReportResult(result, headers.FileName.Replace("\"", ""));
-                
-            }
-        }
 
-        // Quickfix to fix header, for some reason it seems that the name gets wrong chars in it, and decoding it and decoding it back seems to fix it.
-        private string FixHeaderString(string headerString)
-        {
-            headerString = HttpUtility.UrlDecode(headerString);
-            headerString = HttpUtility.UrlEncode(headerString);
-            return headerString;
+                var headers = ContentDispositionHeaderValue.Parse(client.ResponseHeaders.Get("Content-Disposition"));
+                return new ReportResult(result, HttpUtility.UrlDecode(headers.FileName.Replace("\"", "")));
+
+            }
         }
 
         //we currently think this is good enough.

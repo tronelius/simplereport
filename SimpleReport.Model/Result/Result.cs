@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.Web;
 
 namespace SimpleReport.Model.Result
 {
@@ -11,7 +12,7 @@ namespace SimpleReport.Model.Result
         //protected DataTable Table { get; set; }
         protected Report Report { get; set; }
         public byte[] TemplateData { get; set; }
-        public string FileName { get { return Report.Name + "_created@" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + getFileExtension(); } }
+        public string FileName { get { return HttpUtility.UrlEncode(Report.Name + "_created@" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + getFileExtension()); } }
         public string MimeType { get { return getMimeType(); } }
       
         protected abstract string getMimeType();
