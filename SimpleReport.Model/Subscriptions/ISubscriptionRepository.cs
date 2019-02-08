@@ -10,7 +10,6 @@ namespace SimpleReport.Model.Subscriptions
         List<Subscription> List();
         void Update(Subscription sub);
         void Delete(int id);
-        void UpdateTemplateText(UpdateTemplateText updateTemplateText);
         void SendNow(int id);
         List<Subscription> GetSubscriptionsWithSendDateBefore(DateTime now, int maxFailed);
         void DeleteAll();

@@ -55,13 +55,6 @@ namespace SimpleReport.Model.Subscriptions
             }
         }
 
-        public void UpdateTemplateText(UpdateTemplateText updateTemplateText)
-        {
-            using (SqlConnection cn = EnsureOpenConnection())
-            {
-                cn.Execute("Update Subscription set Mailsubject=@mailsubject, MailText=@MailText where reportid=@reportid", new { mailsubject = updateTemplateText.Subject, mailtext = updateTemplateText.Text, reportid = updateTemplateText.ReportGuid });
-            }
-        }
 
         public void SendNow(int id)
         {

@@ -64,6 +64,22 @@
 
                 </div>
             </div>
+            <div class="col-md-6 col-lg-5">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="control-label" title="The subject of the email">Subject</label>
+                        <div>
+                            <input type="text" ng-model="subscription.MailSubject" class="form-control" placeholder="Subject" title="The subject of the email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" title="The main body text in subscription email">Message</label>
+                        <div>
+                            <textarea cols="2" rows="4" ng-model="subscription.MailText" class="form-control" placeholder="The main body text in subscription email" title="The main body text in subscription email"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row">

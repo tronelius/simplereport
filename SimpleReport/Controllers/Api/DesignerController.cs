@@ -54,12 +54,6 @@ namespace SimpleReport.Controllers.Api
         {
             try {
                 _adminAccess.IsAllowedForMe(User);
-                Report currentReport = _reportStorage.GetReport(reportToSave.Id);
-                
-                if (_applicationSettings.SubscriptionEnabled && currentReport != null && currentReport.HasMailTemplateChanged(reportToSave)) {
-                    _subscriptionRepository.UpdateTemplateText(new UpdateTemplateText() { ReportGuid = reportToSave.Id, Subject = reportToSave.MailSubject, Text = reportToSave.MailText});
-                }
-
                 _reportStorage.SaveReport(reportToSave);
                 return Ok(reportToSave);
             } catch (Exception ex)
