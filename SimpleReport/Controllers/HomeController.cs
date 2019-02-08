@@ -87,7 +87,7 @@ namespace SimpleReport.Controllers
                     return File(result.Data, result.MimeType, result.FileName);
                 return new HttpStatusCodeResult(204);
             }
-            return File(GetBytes("Not allowed to execute this report"), "text/plain", "NotAllowed.{txt");
+            return File(GetBytes("Not allowed to execute this report"), "text/plain", "NotAllowed.txt");
         }
 
         private ActionResult ExecuteMultiReport(Report report)
