@@ -12,6 +12,9 @@
                     $scope.sendSubscription = sendSubscription;
                     $scope.editSubscription = editSubscription;
                     $scope.deleteSubscription = deleteSubscription;
+                    $scope.confirmDeleteSubscription = confirmDeleteSubscription;
+                    $scope.subscriptionIdToDelete = 0;
+                    $scope.showDeleteConfirmation = false;
                 };
                 $scope.init();
 
@@ -50,7 +53,13 @@
                     $window.location.href ='/Home/Report?' + sub.ReportParams + '&subscriptionid=' + sub.Id;
                 }
 
+                function confirmDeleteSubscription(id) {
+                    $scope.subscriptionIdToDelete = id;
+                    $scope.showDeleteConfirmation = true;
+                }
+
                 function deleteSubscription(id) {
+                    $scope.showDeleteConfirmation = false;
                     subscriptionRepository.delete($scope.reportId, id).success(function () {
                         $scope.subscriptions = $scope.subscriptions.filter(function (s) {
                             return s.Id !== id;
