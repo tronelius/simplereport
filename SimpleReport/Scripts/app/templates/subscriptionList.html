@@ -64,7 +64,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-ng-repeat="row in subscriptions | orderBy:sortType:sortReverse | filter:searchText | limitTo: 10 track by row.Id">
+                    <tr data-ng-repeat="row in subscriptions | orderBy:sortType:sortReverse | filter:searchText track by row.Id">
                         <td data-ng-show="showReportName">
                             {{row.ReportName}}
                         </td>
