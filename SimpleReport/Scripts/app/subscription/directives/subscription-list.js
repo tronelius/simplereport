@@ -20,6 +20,7 @@
 
                 function fetchData() {
                     var promises = {};
+                    var replaceInUrl = /(reportId=[^&]+&*)|(fromdate=[SyncedDate]+&*)|(todate=[SyncedRunningDate]+&*)/g;
                     if ($scope.showReportName)
                         promises.reports = reportRepository.getIdToNameMappings();
 
@@ -27,10 +28,11 @@
                         promises.subscriptions = subscriptionRepository.list($scope.reportId, $scope.filter);
                     else
                         promises.subscriptions = subscriptionRepository.allForReport($scope.reportId);
-
+                    
                     $q.all(promises).then(function (data) {
                         if (data.reports) {//add the reportnames to subs based on reportid.
                             data.subscriptions.data.forEach(function (s) {
+                                s.FilteredParams = decodeURIComponent(s.ReportParams.replace(replaceInUrl, '').replace("&", "<br>")).replace(' ', '');
                                 data.reports.data.forEach(function (r) {
                                     if (r.Id === s.ReportId)
                                         s.ReportName = r.Name;

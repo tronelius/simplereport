@@ -32,6 +32,13 @@
                             </a>
                         </th>
                         <th>
+                            <a ng-click="sortType = 'Params'; sortReverse = !sortReverse">
+                                Parameters
+                                <span ng-show="sortType == 'Params' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Params' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
                             <a ng-click="sortType = 'Recipients'; sortReverse = !sortReverse">
                                 Recipients
                                 <span ng-show="sortType == 'Recipients' && !sortReverse" class="fa fa-caret-down"></span>
@@ -67,6 +74,9 @@
                     <tr data-ng-repeat="row in subscriptions | orderBy:sortType:sortReverse | filter:searchText track by row.Id">
                         <td data-ng-show="showReportName">
                             {{row.ReportName}}
+                        </td>
+                        <td data-ng-show="showReportName">
+                            <p ng-bind-html="row.FilteredParams"/>  <!-- ta bort: SyncDate, SyncRunningDate, ReportId-->
                         </td>
                         <td>
                             <div data-ng-show="row.To">{{row.To}}</div>
