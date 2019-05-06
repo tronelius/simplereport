@@ -30,15 +30,16 @@
                         promises.subscriptions = subscriptionRepository.allForReport($scope.reportId);
                     
                     $q.all(promises).then(function (data) {
+                    data.subscriptions.data.forEach(function (s) {
+                        s.FilteredParams = decodeURIComponent(s.ReportParams.replace(replaceInUrl, '').replace("&", "<br>")).replace(' ', '');
                         if (data.reports) {//add the reportnames to subs based on reportid.
-                            data.subscriptions.data.forEach(function (s) {
-                                s.FilteredParams = decodeURIComponent(s.ReportParams.replace(replaceInUrl, '').replace("&", "<br>")).replace(' ', '');
-                                data.reports.data.forEach(function (r) {
-                                    if (r.Id === s.ReportId)
-                                        s.ReportName = r.Name;
-                                });
+                            data.reports.data.forEach(function (r) {
+                                if (r.Id === s.ReportId)
+                                    s.ReportName = r.Name;
                             });
                         }
+                    });
+                        
 
                         $scope.subscriptions = data.subscriptions.data;
                     }).catch(function () {
