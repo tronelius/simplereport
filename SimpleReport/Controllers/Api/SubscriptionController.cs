@@ -76,7 +76,7 @@ namespace SimpleReport.Controllers.Api
                 }
 
                 var scheds = _scheduleRepository.ListAll();
-                var result = subs.Select(x => new { x.Id, x.ReportId, x.To, x.Cc, x.Bcc, Status = x.Status.ToString(), x.LastSent, Schedule = scheds.FirstOrDefault(y => y.Id == x.ScheduleId)?.Name, x.ErrorMessage, x.ReportParams }).ToArray();
+                var result = subs.Select(x => new { x.Id, x.ReportId, x.To, x.Cc, x.Bcc, Status = x.Status.ToString(), x.LastSent, Schedule = scheds.FirstOrDefault(y => y.Id == x.ScheduleId)?.Name, x.ErrorMessage, x.ReportParams, x.MailSubject }).ToArray();
 
                 return Ok(result);
             }

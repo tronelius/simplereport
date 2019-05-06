@@ -31,6 +31,13 @@
                                 <span ng-show="sortType == 'ReportName' && sortReverse" class="fa fa-caret-up"></span>
                             </a>
                         </th>
+                        <th data-ng-show="!showReportName">
+                            <a ng-click="sortType = 'Reportsubject'; sortReverse = !sortReverse">
+                                Subject
+                                <span ng-show="sortType == 'Reportsubject' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'Reportsubject' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
                         <th>
                             <a ng-click="sortType = 'Params'; sortReverse = !sortReverse">
                                 Parameters
@@ -66,7 +73,7 @@
                                 <span ng-show="sortType == 'Schedule' && sortReverse" class="fa fa-caret-up"></span>
                             </a>
                         </th>
-                        <th>ErrorMessage</th>
+                        <th data-ng-show="showReportName">ErrorMessage</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -75,8 +82,11 @@
                         <td data-ng-show="showReportName">
                             {{row.ReportName}}
                         </td>
+                        <td data-ng-show="!showReportName">
+                            {{row.MailSubject}}
+                        </td>
                         <td>
-                            <p ng-bind-html="row.FilteredParams"/>
+                            <p ng-bind-html="row.FilteredParams" />
                         </td>
                         <td data-ng-show="showReportName">
                             <div data-ng-show="row.To">{{row.To}}</div>
@@ -92,7 +102,7 @@
                         <td>
                             {{row.Schedule}}
                         </td>
-                        <td>
+                        <td data-ng-show="showReportName">
                             {{row.ErrorMessage}}
                         </td>
                         <td>
