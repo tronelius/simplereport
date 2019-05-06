@@ -38,7 +38,7 @@
                                 <span ng-show="sortType == 'Params' && sortReverse" class="fa fa-caret-up"></span>
                             </a>
                         </th>
-                        <th>
+                        <th data-ng-show="showReportName">
                             <a ng-click="sortType = 'Recipients'; sortReverse = !sortReverse">
                                 Recipients
                                 <span ng-show="sortType == 'Recipients' && !sortReverse" class="fa fa-caret-down"></span>
@@ -75,10 +75,10 @@
                         <td data-ng-show="showReportName">
                             {{row.ReportName}}
                         </td>
-                        <td data-ng-show="showReportName">
-                            <p ng-bind-html="row.FilteredParams"/>  <!-- ta bort: SyncDate, SyncRunningDate, ReportId-->
-                        </td>
                         <td>
+                            <p ng-bind-html="row.FilteredParams"/>
+                        </td>
+                        <td data-ng-show="showReportName">
                             <div data-ng-show="row.To">{{row.To}}</div>
                             <div data-ng-show="row.Cc">Cc: {{row.Cc}}</div>
                             <div data-ng-show="row.Bcc">Bcc: {{row.Bcc}}</div>
