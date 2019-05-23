@@ -163,7 +163,7 @@ namespace SimpleReport.Model
             switch (period)
             {
                 case ParameterPeriods.ThisWeek:
-                    return new[] { now.GetFirstDateOfWeek().ToShortDateString(), DateTime.Today.ToShortDateString() };
+                    return new[] { now.GetFirstDateOfWeek().ToShortDateString(), now.GetLastDateOfWeek().ToShortDateString() };
                 case ParameterPeriods.LastWeek:
                     return new[] { now.GetFirstDateOfWeek().AddDays(-7).ToShortDateString(), now.GetLastDateOfWeek().AddDays(-7).ToShortDateString() };
                 case ParameterPeriods.ThisMonth:
