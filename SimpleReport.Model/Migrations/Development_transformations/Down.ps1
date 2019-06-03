@@ -2,4 +2,4 @@
 
 . .\Config.ps1
 
-& $toolPath --verbose=true -a ../../bin/Debug/Worker.Common.dll -db sqlserver -conn $connString -t=rollback
+& $toolPath --verbose=true -a ../../bin/Debug/SimpleReport.Model.dll -db sqlserver -conn $connString -t=rollback
