@@ -47,12 +47,16 @@
         });
 
         var s = queryStringParser.parse(location.search);
+        $scope.autorefreshmode = false;
 
         if (s.subscriptionid) {
             $scope.subscriptionId = s.subscriptionid;
             $scope.selectedAction = 'subscribe';
         } else if (s.selectedAction) {
             $scope.selectedAction = s.selectedAction;
+            if (s.selectedAction === 'autorefresh') {
+                $scope.autorefreshmode = true;
+            }
         }
 
         $scope.viewModel = viewModel;
@@ -60,6 +64,7 @@
         $scope.triggerOnScreen = triggerOnScreen;
         $scope.triggerBookmark = triggerBookmark;
         $scope.triggerSubscribe = triggerSubscribe;
+        $scope.triggerAutoRefresh = triggerAutoRefresh;
         $scope.periodChanged = periodChanged;
         $scope.dateChanged = dateChanged;
         $scope.onSubscriptionSaved = onSubscriptionSaved;
@@ -105,6 +110,13 @@
             $scope.selectedAction = 'onScreen';
         else
             $scope.$broadcast('refreshOnScreen');
+    }
+
+    function triggerAutoRefresh() {
+        var url = reportUrlHelper.toUrl($scope.viewModel.Report);
+        url += '&selectedAction=autorefresh';
+
+        $window.location.href = '/Home/Report?' + url;
     }
 
     function triggerBookmark() {

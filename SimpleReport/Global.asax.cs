@@ -27,6 +27,7 @@ using SimpleReport.Model.Subscriptions;
 using ApplicationSettings = SimpleReport.Model.ApplicationSettings;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
 using IApplicationSettings = SimpleReport.Model.IApplicationSettings;
+using SimpleReport.Model.Migrations;
 
 namespace SimpleReport
 {
@@ -43,6 +44,13 @@ namespace SimpleReport
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             FindAndSetLicences();
+            MigrateDatabaseUp();
+        }
+
+        private void MigrateDatabaseUp()
+        {
+            var migration = new Migrator(ConfigurationManager.ConnectionStrings["db"].ConnectionString);
+            migration.Up();
         }
 
         protected override IKernel CreateKernel()

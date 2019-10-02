@@ -1,35 +1,39 @@
 ﻿<div data-ng-show="reportid">
     <label>Template</label>
     <div class="row">
-        <div class="col-xs-4">
+        <div class="col-md-4">
             <button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document">Upload</button>
-            <div>
-                <span class="fa fa-fw fa-file-word-o" ng-show="templateFormat===2"></span>
-                <span class="fa fa-fw fa-file-excel-o" ng-show="templateFormat===1"></span>
-                <a href="{{downloadLink}}" ng-show="hasReportTemplate">Download</a>
-            </div>
         </div>
-        <div class="col-xs-4 form-inline">
+        <div class="col-md-8 form-inline">
             <select ng-model="reportResultType" data-ng-options="r.ReportResultType as r.ReportResultName for r in reportResultTypes" class="form-control" style="margin-right: 10px;"></select>
             <label class="checkbox inline no_indent" data-ng-show="hasReportTemplate && templateFormat===2">
                 <input type="checkbox" data-ng-model="convertToPdf">Convert to Pdf
             </label>
         </div>
-        <div class="col-xs-4">
-            <div class="pull-right">
-                <button type="button" style="margin-left: 20px;" class="btn btn-primary" ng-show="hasReportTemplate" ng-click="deleteTemplate(false)">Delete</button>
-                <button type="button" style="margin-left: 20px;" class="btn btn-primary" data-ng-click="updateMetadata()" ng-show="hasReportTemplate && templateFormat===2">Save</button>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pull-left">
+                    <div>
+                        <span class="fa fa-fw fa-file-word-o" ng-show="templateFormat===2"></span>
+                        <span class="fa fa-fw fa-file-excel-o" ng-show="templateFormat===1"></span>
+                        <a href="{{downloadLink}}" ng-show="hasReportTemplate">Download</a>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <button type="button" style="margin-left: 20px;" class="btn btn-primary" ng-show="hasReportTemplate" ng-click="deleteTemplate(false)">Delete</button>
+                    <button type="button" style="margin-left: 20px;" class="btn btn-primary" data-ng-click="updateMetadata()" ng-show="hasReportTemplate && templateFormat===2">Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="progress" data-ng-show="progress">
+                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': progress + '%' }"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="progress" data-ng-show="progress">
-                <div class="progress-bar" role="progressbar" ng-style="{ 'width': progress + '%' }"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div data-ng-show="showDeleteConfirmation">
     <div class="modal" style="display: block;">

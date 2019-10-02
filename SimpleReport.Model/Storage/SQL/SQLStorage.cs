@@ -77,8 +77,11 @@ namespace SimpleReport.Model.Storage.SQL
                         rpt.Access = access;
                         return rpt;
                     });
-                var parameters = cn.Query<Parameter, LookupReport, Connection, TypeAheadReport, Connection, Parameter>("select p.*,look.*, conn.*, ahead.*, conn2.* from parameter p left join lookupReport look on p.lookupreportid = look.id left join connection conn on look.connectionid = conn.id" +
-                                                                                                                       " left join TypeAheadReport ahead on p.typeaheadreportid = ahead.id left join connection conn2 on ahead.connectionid = conn2.id", (Parameter, LookupReport, Connection, TypeAheadReport, Connection2) =>
+                var parameters = cn.Query<Parameter, LookupReport, Connection, TypeAheadReport, Connection, Parameter>("select p.*,look.*, conn.*, ahead.*, conn2.* from parameter p " +
+                                                                                                                       "left join lookupReport look on p.lookupreportid = look.id " +
+                                                                                                                       "left join connection conn on look.connectionid = conn.id " +
+                                                                                                                       "left join TypeAheadReport ahead on p.typeaheadreportid = ahead.id " +
+                                                                                                                       "left join connection conn2 on ahead.connectionid = conn2.id ", (Parameter, LookupReport, Connection, TypeAheadReport, Connection2) =>
                 {
                     Parameter.LookupReport = LookupReport;
                     if (LookupReport != null)

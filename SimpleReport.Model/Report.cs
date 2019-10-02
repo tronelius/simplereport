@@ -27,6 +27,9 @@ namespace SimpleReport.Model
         public string MailSubject { get; set; }
         public string MailText { get; set; }
         public bool OnScreenFormatAllowed { get; set; }
+        public bool AutoRefreshAllowed { get; set; }
+        public int AutoRefreshIntervalInSeconds { get; set; }
+
         public AccessStyle TemplateEditorAccessStyle { get; set; }
         public AccessStyle SubscriptionAccessStyle { get; set; }
         public TemplateFormat TemplateFormat { get; set; }

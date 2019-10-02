@@ -138,6 +138,7 @@
     <Compile Include="Migrations\2016-10-28\AddDetailReportId.cs" />
     <Compile Include="Migrations\2016-10-28\AddSubscriptionType.cs" />
     <Compile Include="Migrations\2018-08-30\AddTableForLinkedReport.cs" />
+    <Compile Include="Migrations\2019-10-02\AddAutorefresh.cs" />
     <Compile Include="Migrations\Migrator.cs" />
     <Compile Include="Migrations\Tables.cs" />
     <Compile Include="Extensions\XelementExtensions.cs" />

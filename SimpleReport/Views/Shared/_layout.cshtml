@@ -31,98 +31,104 @@
     @Scripts.Render("~/bundles/app")
 </head>
 <body class="skin-blue">
-    <div class="wrapper">
-        <header class="main-header">
-            <a class="logo" href="#"><b>Simple</b> reports</a>
-            <nav class="navbar navbar-static-top" role="navigation">
-                <!-- Sidebar toggle button-->
-                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                    <span class="sr-only">Toggle navigation</span>
-                </a>
+    @if (Request.QueryString.ToString().ToLower().Contains("selectedaction=autorefresh"))
+    {
+        @RenderBody()
+    }
+    else
+    {
+        <div class="wrapper">
+            <header class="main-header">
+                <a class="logo" href="#"><b>Simple</b> reports</a>
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                        <span class="sr-only">Toggle navigation</span>
+                    </a>
                     @if (Model != null && Model is ReportViewModel)
                     {
                         if (Model.HasAdminAccess)
-                         {
-                             <div class="navbar-custom-menu">
-                                 <ul class="nav navbar-nav">
-                                     <li class="dropdown notifications-menu">
-                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                             <i class="fa fa-gear"></i>
-                                             <span>Admin</span>
-                                         </a>
-                                         <ul class="dropdown-menu">
-                                             <li>
-                                                 <div style="position: relative; overflow: hidden; width: auto;">
-                                                     <ul class="menu" style="overflow: hidden; width: 100%; ">
-                                                         <li>
-                                                             <a href="@Url.Action("Index", "Designer")">
-                                                                 <i class="fa fa-area-chart"></i> <span>Report designer</span>
-                                                             </a>
-                                                         </li>
-                                                         @if (Model.SubscriptionEnabled)
-                                                         {
-                                                             <li>
-                                                                 <a href="@Url.Action("Index", "Subscription")">
-                                                                     <i class="fa fa-envelope"></i> <span>Subscriptions</span>
-                                                                 </a>
-                                                             </li>
-                                                         }
-                                                     </ul>
-                                                 </div>
-                                             </li>
-                                         </ul>
-                                     </li>
-                                 </ul>
-                             </div>
-                         }
+                        {
+                            <div class="navbar-custom-menu">
+                                <ul class="nav navbar-nav">
+                                    <li class="dropdown notifications-menu">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-gear"></i>
+                                            <span>Admin</span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <div style="position: relative; overflow: hidden; width: auto;">
+                                                    <ul class="menu" style="overflow: hidden; width: 100%; ">
+                                                        <li>
+                                                            <a href="@Url.Action("Index", "Designer")">
+                                                                <i class="fa fa-area-chart"></i> <span>Report designer</span>
+                                                            </a>
+                                                        </li>
+                                                        @if (Model.SubscriptionEnabled)
+                                                        {
+                                                            <li>
+                                                                <a href="@Url.Action("Index", "Subscription")">
+                                                                    <i class="fa fa-envelope"></i> <span>Subscriptions</span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
                     }
-            </nav>
-        </header>
-        <aside class="main-sidebar">
-            <!-- sidebar: style can be found in sidebar.less -->
-            <section class="sidebar" style="height: auto;">
-                <!-- sidebar menu: : style can be found in sidebar.less -->
-                <ul class="sidebar-menu">
-                    <li class="header">REPORTS</li>
-                   @if (Model != null && Model is ReportViewModel)
-                   {
-                       foreach (IGrouping<string, ReportInfo> reportGroup in Model.ReportGroups)
-                       {
-                           if (!string.IsNullOrWhiteSpace(reportGroup.Key))
-                           {
-                               <li class="treeview @if (Model.Report != null && Model.Report.Group == reportGroup.Key)
+                </nav>
+            </header>
+            <aside class="main-sidebar">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar" style="height: auto;">
+                    <!-- sidebar menu: : style can be found in sidebar.less -->
+                    <ul class="sidebar-menu">
+                        <li class="header">REPORTS</li>
+                        @if (Model != null && Model is ReportViewModel)
+                        {
+                            foreach (IGrouping<string, ReportInfo> reportGroup in Model.ReportGroups)
+                            {
+                                if (!string.IsNullOrWhiteSpace(reportGroup.Key))
+                                {
+                                    <li class="treeview @if (Model.Report != null && Model.Report.Group == reportGroup.Key)
                                                    {
                                                        @Html.Raw("active")
                                                    }">
-                                   <a href="#">
-                                       <i class="fa fa-table"></i><span>@reportGroup.Key</span> <i class="fa fa-angle-left pull-right"></i>
-                                   </a>
-                                   <ul class="treeview-menu">
-                                       @Menuhelper(reportGroup)
-                                   </ul>
-                               </li>
-                           }
-                           else
-                           {
-                               @Menuhelper(reportGroup)
-                           }
-                       }
-                   }
-                </ul>
-            </section>
-            <!-- /.sidebar -->
-        </aside>
-        <div class="content-wrapper">
-            @RenderBody()
-        </div>
-        <footer class="main-footer">
-            <div class="pull-right hidden-xs">
-                <b>Version</b> 0.851
+                                        <a href="#">
+                                            <i class="fa fa-table"></i><span>@reportGroup.Key</span> <i class="fa fa-angle-left pull-right"></i>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            @Menuhelper(reportGroup)
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    @Menuhelper(reportGroup)
+                                }
+                            }
+                        }
+                    </ul>
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+            <div class="content-wrapper">
+                @RenderBody()
             </div>
-            <strong><a href="https://github.com/tronelius/simplereport" target="source">Free and Open source</a></strong> please share your changes with others
-        </footer>
-    </div>
-    
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs">
+                    <b>Version</b> 0.9
+                </div>
+                <strong><a href="https://github.com/tronelius/simplereport" target="source">Free and Open source</a></strong> please share your changes with others
+            </footer>
+        </div>
+    }
 </body>
 
 </html>

@@ -26,12 +26,12 @@
     }
     else
     {
-        <section class="content-header">
+        <section class="content-header" data-ng-show="!autorefreshmode">
             <h1>
                 {{:: viewModel.Report.Name }}
             </h1>
         </section>
-        <section class="content">
+        <section class="content" data-ng-show="!autorefreshmode">
             <p class="lead">{{:: viewModel.Report.Description}}</p>
             @using (Html.BeginForm("ExecuteReport", "Home", FormMethod.Get, new { role = "form" }))
             {
@@ -63,7 +63,7 @@
                                             </div>
                                         </div>
                                         <div data-ng-if="par.InputType==@((int) ParameterInputType.Date)" class="input-group">
-                                            <div class="flex-container" >
+                                            <div class="flex-container">
                                                 <div class="input-group-addon date-icon-container" style="padding: 9px 12px; flex: 1">
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
@@ -140,7 +140,7 @@
 
                 <div class="box-footer">
                     <div class="row">
-                        <div class="col-xs-4">
+                        <div class="col-md-5">
                             <button type="submit" class="btn btn-primary" ng-show="viewModel.Report.TemplateFormat===1 || viewModel.Report.TemplateFormat===0" data-ng-disabled="!hasValidParameters()"><i class="fa fa-fw fa-file-excel-o"></i>Excel</button>
                             <button type="submit" class="btn btn-primary" ng-show="viewModel.Report.TemplateFormat===2" data-ng-disabled="!hasValidParameters()"><i class="fa fa-fw fa-file-word-o"></i>Word</button>
 
@@ -148,13 +148,16 @@
                                 <button type="button" class="btn btn-primary" data-ng-click="triggerOnScreen()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()">On screen</button>
                                 <button type="button" class="btn btn-primary" data-ng-click="triggerBookmark()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()"><i class="fa fa-bookmark"></i></button>
                             </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary" data-ng-click="triggerAutoRefresh()" data-ng-disabled="!hasValidParameters()"><i class="fa fa-area-chart"></i></button>
+                            </div>
                         </div>
-                        <div class="col-xs-4">
-                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'sendOnce'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions" data-ng-disabled="!hasvalidParametersForSubscription()">One time</button>
-                            <button type="button" class="btn btn-primary" data-ng-click="triggerSubscribe()" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions" data-ng-disabled="!hasvalidParametersForSubscription()">Subscribe</button>
-                            <button type="button" class="btn btn-primary" data-ng-click="selectedAction = 'editSubscriptions'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Edit subscriptions</button>
+                        <div class="col-md-5">
+                            <button type="button" class="btn btn-info" data-ng-click="selectedAction = 'sendOnce'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions" data-ng-disabled="!hasvalidParametersForSubscription()">One time</button>
+                            <button type="button" class="btn btn-info" data-ng-click="triggerSubscribe()" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions" data-ng-disabled="!hasvalidParametersForSubscription()">Subscribe</button>
+                            <button type="button" class="btn btn-info" data-ng-click="selectedAction = 'editSubscriptions'" data-ng-show="viewModel.SubscriptionEnabled && viewModel.CanEditSubscriptions">Edit subscriptions</button>
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-md-2">
                             <button type="button" class="btn btn-primary pull-right" data-ng-click="selectedAction = 'editTemplate'" data-ng-show="viewModel.CanEditTemplate">Edit template</button>
                         </div>
                     </div>
@@ -162,7 +165,7 @@
 
                 <div data-ng-show="selectedAction" data-ng-switch="selectedAction" class="box box-actions" style="margin-top: 20px;">
                     <div data-ng-switch-when="onScreen">
-                        <div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters"></div>
+                        @*<div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters"></div>*@
                     </div>
 
                     <div data-ng-switch-when="subscribe">
@@ -181,8 +184,13 @@
                         <div data-template-upload data-reportid="viewModel.Report.Id" data-has-report-template="viewModel.Report.HasTemplate" data-template-format="viewModel.Report.TemplateFormat" data-report-result-type="viewModel.Report.ReportResultType" data-report-result-types="viewModel.ReportResultTypes" data-showreport-result-types="false" data-convert-to-pdf="viewModel.Report.ConvertToPdf"></div>
                     </div>
                 </div>
-
             }
         </section>
+        <div class="box box-primary refreshscreen" style="margin:20px;" data-ng-show="autorefreshmode">
+            <div class="box-body">
+                {{viewmodel.Report.AutoRefreshIntervalInSeconds}}
+                <div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters" data-refreshinterval="viewModel.Report.AutoRefreshIntervalInSeconds"></div>
+            </div>
+        </div>
     }
 </div>
