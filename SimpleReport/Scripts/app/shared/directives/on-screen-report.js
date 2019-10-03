@@ -12,9 +12,7 @@
                             $scope.data = null;
                     });
 
-                    if ($scope.refreshinterval) {
-                        setInterval(fetchData, $scope.refreshinterval*1000);
-                    }
+                   
 
                     $scope.$on('refreshOnScreen', fetchData);
 
@@ -28,6 +26,9 @@
                         $http.get("Home/ExecuteOnScreenReport", { params: angular.extend({ reportId: $scope.reportid }, parsedParameters) }).success(function (data) {
                             $scope.data = data;
                             $scope.updatetime = new Date().toLocaleTimeString();
+                            if ($scope.refreshinterval) {
+                                setTimeout(fetchData, $scope.refreshinterval * 1000);
+                            }
                         }).error(function () {
                             toastr.error('Something went wrong, please try again later or contact support');
                         });

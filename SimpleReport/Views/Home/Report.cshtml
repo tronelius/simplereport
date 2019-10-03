@@ -149,7 +149,7 @@
                                 <button type="button" class="btn btn-primary" data-ng-click="triggerBookmark()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()"><i class="fa fa-bookmark"></i></button>
                             </div>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary" data-ng-click="triggerAutoRefresh()" data-ng-disabled="!hasValidParameters()"><i class="fa fa-area-chart"></i></button>
+                                <button type="button" class="btn btn-primary" data-ng-click="triggerAutoRefresh()" data-ng-disabled="!hasValidParameters()"><i class="fa fa-desktop"></i></button>
                             </div>
                         </div>
                         <div class="col-md-5">
@@ -165,7 +165,7 @@
 
                 <div data-ng-show="selectedAction" data-ng-switch="selectedAction" class="box box-actions" style="margin-top: 20px;">
                     <div data-ng-switch-when="onScreen">
-                        @*<div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters"></div>*@
+                        <div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters"></div>
                     </div>
 
                     <div data-ng-switch-when="subscribe">
@@ -188,7 +188,6 @@
         </section>
         <div class="box box-primary refreshscreen" style="margin:20px;" data-ng-show="autorefreshmode">
             <div class="box-body">
-                {{viewmodel.Report.AutoRefreshIntervalInSeconds}}
                 <div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters" data-refreshinterval="viewModel.Report.AutoRefreshIntervalInSeconds"></div>
             </div>
         </div>
