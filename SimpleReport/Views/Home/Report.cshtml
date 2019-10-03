@@ -147,7 +147,7 @@
                             <div class="btn-group">
                                 <button type="button" class="btn btn-primary" data-ng-click="triggerOnScreen()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()">On screen</button>
                                 <button type="button" class="btn btn-primary" data-ng-click="triggerBookmark()" data-ng-show="viewModel.Report.OnScreenFormatAllowed" data-ng-disabled="!hasValidParameters()"><i class="fa fa-bookmark"></i></button>
-                                <button type="button" class="btn btn-primary" data-ng-click="triggerAutoRefresh()" data-ng-disabled="!hasValidParameters()"><i class="fa fa-desktop"></i></button>
+                                <button type="button" class="btn btn-primary" data-ng-click="triggerAutoRefresh()" data-ng-show="viewModel.Report.AutoRefreshAllowed" data-ng-disabled="!hasValidParameters()"><i class="fa fa-desktop"></i></button>
                             </div>
                         </div>
                         <div class="col-lg-5 col-md-5 col-sm-7 col-xs-12">
