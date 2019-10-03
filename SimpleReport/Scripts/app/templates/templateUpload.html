@@ -1,5 +1,5 @@
 ﻿<div data-ng-show="reportid">
-    <label>Template</label>
+    <label>Template file</label>
     <div class="row">
         <div class="col-md-4">
             <button type="button" class="btn btn-primary" ngf-select ngf-change="upload($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document">Upload</button>
@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="pull-left">
+                <div class="pull-left" style="margin-top:15px;">
                     <div>
                         <span class="fa fa-fw fa-file-word-o" ng-show="templateFormat===2"></span>
                         <span class="fa fa-fw fa-file-excel-o" ng-show="templateFormat===1"></span>
@@ -22,7 +22,7 @@
                 </div>
                 <div class="pull-right">
                     <button type="button" style="margin-left: 20px;" class="btn btn-primary" ng-show="hasReportTemplate" ng-click="deleteTemplate(false)">Delete</button>
-                    <button type="button" style="margin-left: 20px;" class="btn btn-primary" data-ng-click="updateMetadata()" ng-show="hasReportTemplate && templateFormat===2">Save</button>
+                    <button type="button" style="margin-left: 20px;" class="btn btn-success" data-ng-click="updateMetadata()" ng-show="hasReportTemplate && templateFormat===2">Save</button>
                 </div>
             </div>
         </div>
