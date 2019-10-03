@@ -186,10 +186,13 @@
                 </div>
             }
         </section>
-        <div class="box box-primary refreshscreen" style="margin:20px;" data-ng-show="autorefreshmode">
-            <div class="box-body">
-                <div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters" data-refreshinterval="viewModel.Report.AutoRefreshIntervalInSeconds"></div>
+
+        <div data-ng-show="selectedAction" data-ng-switch="selectedAction">
+            <div data-ng-switch-when="autorefresh" class="box box-primary refreshscreen" style="margin:20px;" data-ng-show="autorefreshmode">
+                <div class="box-body">
+                    <div data-on-screen-report data-reportid="viewModel.Report.Id" data-parameters="viewModel.Report.Parameters" data-refreshinterval="viewModel.Report.AutoRefreshIntervalInSeconds" data-title="viewModel.Report.Name" data-disablespinner="true"></div>
+                </div>
             </div>
         </div>
-    }
+     }
 </div>

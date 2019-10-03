@@ -1,7 +1,7 @@
 ﻿angular.module('shared').directive('onScreenReport', function () {
         return {
             templateUrl: 'scripts/app/templates/onScreenReport.html',
-            scope: { reportid: '=', parameters: '=', refreshinterval: '=' },
+            scope: { reportid: '=', parameters: '=', refreshinterval: '=', title: '=', disablespinner:'=' },
             controller: [
                 '$scope', '$http', function ($scope, $http) {
 
@@ -11,8 +11,6 @@
                         else
                             $scope.data = null;
                     });
-
-                   
 
                     $scope.$on('refreshOnScreen', fetchData);
 

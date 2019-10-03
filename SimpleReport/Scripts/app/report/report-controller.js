@@ -54,6 +54,7 @@
             $scope.selectedAction = 'subscribe';
         } else if (s.selectedAction) {
             $scope.selectedAction = s.selectedAction;
+            $scope.autorefreshmode = false;
             if (s.selectedAction === 'autorefresh') {
                 $scope.autorefreshmode = true;
             }

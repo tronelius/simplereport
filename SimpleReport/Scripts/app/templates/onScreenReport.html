@@ -1,8 +1,9 @@
 ﻿<div>
-    <div class="overlay" data-ng-if="!data">
+    <div class="overlay" data-ng-if="!data && !disablespinner">
         <i class="fa fa-refresh fa-spin"></i>
     </div>
-    <span class="pull-right"> Updated: {{updatetime}}</span>
+        <h3 ng-show="title" style="float:left;margin-top:0px;">{{title}}</h3>
+        <span class="pull-right" style="margin-top:5px;"> Updated: {{updatetime}}</span>
     <table class="table table-condensed table-striped" data-ng-if="data">
         <thead>
             <tr>
