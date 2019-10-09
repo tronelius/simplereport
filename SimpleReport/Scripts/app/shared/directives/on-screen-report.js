@@ -15,7 +15,6 @@
                     $scope.$on('refreshOnScreen', fetchData);
 
                     function fetchData() {
-                        $scope.data = null;
                         var parsedParameters = {};
                         $scope.parameters.forEach(function (param) {
                             parsedParameters[param.Key] = param.Value;
@@ -28,6 +27,7 @@
                                 setTimeout(fetchData, $scope.refreshinterval * 1000);
                             }
                         }).error(function () {
+                            $scope.data = null;
                             toastr.error('Something went wrong, please try again later or contact support');
                         });
                     }
