@@ -85,8 +85,8 @@
                         <td data-ng-show="!showReportName">
                             {{row.MailSubject}}
                         </td>
-                        <td>
-                            <p ng-bind-html="row.FilteredParams" />
+                        <td style="max-width:300px;overflow:hidden;">
+                            <p ng-bind-html="row.FilteredParams"/>
                         </td>
                         <td data-ng-show="showReportName">
                             <div data-ng-show="row.To">{{row.To}}</div>
