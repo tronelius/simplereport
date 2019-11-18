@@ -18,10 +18,10 @@
     </div>
         <div class="tab-content">
             <div class="tab-pane active" data-ng-if="activeTab == 'all'">
-                <div data-subscription-list data-show-report-name="true"></div>
+                <div data-subscription-list data-show-report-name="true" data-show-recipients="true" data-show-subject="true"></div>
             </div>
             <div class="tab-pane active" data-ng-if="activeTab == 'failed'">
-                <div data-subscription-list data-show-report-name="true" data-filter="failed"></div>
+                <div data-subscription-list data-show-report-name="true" data-show-recipients="true" data-show-subject="true" data-filter="failed"></div>
             </div>
             <div class="tab-pane active" data-ng-if="activeTab == 'schedules'">
                 <div data-ng-if="activeTab == 'schedules'" data-schedule-editor></div>
