@@ -1,14 +1,14 @@
 ﻿angular.module('subscriptions').directive('subscriptionList', function () {
     return {
         templateUrl: 'scripts/app/templates/subscriptionList.html',
-        scope: { showReportName: '@', showSubject: '@', showRecipients: '@', filter: '@', reportId: '=' },
+        scope: { showReportNameAttr: '@', showSubjectAttr: '@', showRecipientsAttr: '@', filter: '@', reportId: '=' },
         controller: [
             '$scope', '$http', 'subscriptionRepository', 'reportRepository', '$q', '$window', function ($scope, $http, subscriptionRepository, reportRepository, $q, $window) {
 
-                $scope.init = function () {
-                    $scope.showReportName = $scope.showReportName === 'true';
-                    $scope.showSubject = $scope.showSubject === 'true';
-                    $scope.showRecipients = $scope.showRecipients === 'true';
+                $scope.init = function () {                  
+                    $scope.showReportName = $scope.showReportNameAttr === 'true';
+                    $scope.showSubject = $scope.showSubjectAttr === 'true';
+                    $scope.showRecipients = $scope.showRecipientsAttr === 'true';
 
                     fetchData();
                     $scope.sendSubscription = sendSubscription;
