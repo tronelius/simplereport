@@ -4,7 +4,7 @@
             scope: { reportid: '=', parameters: '=', refreshinterval: '=', title: '=', disablespinner:'=' },
             controller: [
                 '$scope', '$http', function ($scope, $http) {
-
+                    $scope.data = null;
                     $scope.$watch('reportid', function (val) {
                         if (val)
                             fetchData();
