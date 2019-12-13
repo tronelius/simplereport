@@ -125,7 +125,7 @@
                                             <div>Choosen: {{par.typeaheadLabel}}</div>
                                         </div>
 
-                                        <input data-ng-if="par.InputType==@((int)ParameterInputType.String)" type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="{{par.Value}}">
+                                        <input data-ng-if="par.InputType==@((int)ParameterInputType.String) || par.InputType==@((int)ParameterInputType.StringList)" type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="{{par.Value}}">
                                     </div>
                                     <span class="help-block">{{par.HelpText}}</span>
                                     <label for="{{par.Key}}" generated="true" class="help-block error"></label>

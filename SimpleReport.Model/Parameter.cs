@@ -187,7 +187,7 @@ namespace SimpleReport.Model
         {
             if (InputType == ParameterInputType.Period)
                 return GetDbParameterForPeriod(db);
-            if (InputType == ParameterInputType.Lookup || InputType == ParameterInputType.LookupMultipleChoice)
+            if (InputType == ParameterInputType.Lookup || InputType == ParameterInputType.LookupMultipleChoice || InputType == ParameterInputType.StringList)
                 return GetDbParameterForLookup(query, updateSqlAction, db);
             return new List<DbParameter>() { db.CreateParameter(this.SqlKey, this.Value) };
         }
@@ -240,6 +240,7 @@ namespace SimpleReport.Model
         LookupMultipleChoice = 5,
         SyncedDate = 6,
         SyncedRunningDate = 7,
-        TypeAhead=8
+        TypeAhead=8,
+        StringList = 9
     }
 }
