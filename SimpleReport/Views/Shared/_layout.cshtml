@@ -1,21 +1,9 @@
-﻿@using System.Web.Optimization
+﻿@using Newtonsoft.Json
+@using System.Web.Optimization
 @using SimpleReport.Model
 @using SimpleReport.ViewModel
 
-@helper Menuhelper(IGrouping<string, ReportInfo> reportGroup)
-{
-    foreach (ReportInfo reportInfo in reportGroup)
-    {
-        <li class="
-        @if (Model.Report != null && Model.Report.Id == reportInfo.Id)
-        {
-            @Html.Raw("active")
-        }">
-            <a href="@Url.Action("Report", "Home", new {reportId = reportInfo.Id})">
-                <i class="fa fa-circle-o"></i>@reportInfo.Name</a>
-        </li>
-    }
-}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,8 +17,12 @@
     @Styles.Render("~/bundles/css")
     @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/bundles/app")
+    <script type="text/javascript">
+        var rootApp = angular.module('rootApp', ['search','report']);
+        var search = angular.module("search").value("viewModel", @Html.Raw(JsonConvert.SerializeObject(Model)));
+    </script>
 </head>
-<body class="skin-blue">
+<body class="skin-blue" ng-app="rootApp">
     @if (Request.QueryString.ToString().ToLower().Contains("selectedaction=autorefresh"))
     {
         @RenderBody()
@@ -87,34 +79,31 @@
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar" style="height: auto;">
-                    <!-- sidebar menu: : style can be found in sidebar.less -->
-                    <ul class="sidebar-menu">
-                        <li class="header">REPORTS</li>
-                        @if (Model != null && Model is ReportViewModel)
-                        {
-                            foreach (IGrouping<string, ReportInfo> reportGroup in Model.ReportGroups)
-                            {
-                                if (!string.IsNullOrWhiteSpace(reportGroup.Key))
-                                {
-                                    <li class="treeview @if (Model.Report != null && Model.Report.Group == reportGroup.Key)
-                                                   {
-                                                       @Html.Raw("active")
-                                                   }">
-                                        <a href="#">
-                                            <i class="fa fa-table"></i><span>@reportGroup.Key</span> <i class="fa fa-angle-left pull-right"></i>
+                    <div ng-cloak ng-controller="searchController">
+                        <input class="search-box" type="text" ng-model="searchValue" data-ng-change="search(searchValue)" />
+                        <ul class="sidebar-menu">
+
+                            <li class="treeview" data-ng-repeat="group in visibleGroups()">
+                                <a href="#" ng-if="isVisible(group)">
+                                    <i class="fa fa-table"></i><span> {{:: group[0].Group }}</span> <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li data-ng-repeat="report in group">
+                                        <a ng-click="showReport(report.Id)" ng-if="report.MatchSearchResult">
+                                            <i class="fa fa-circle-o"></i>{{:: report.Name }}
                                         </a>
-                                        <ul class="treeview-menu">
-                                            @Menuhelper(reportGroup)
-                                        </ul>
                                     </li>
-                                }
-                                else
-                                {
-                                    @Menuhelper(reportGroup)
-                                }
-                            }
-                        }
-                    </ul>
+                                </ul>
+                            </li>
+
+                            <li data-ng-repeat="report in reportsMissingGroup()">
+                                <a ng-click="showReport(report.Id)" ng-if="report.MatchSearchResult">
+                                    <i class="fa fa-circle-o"></i>{{:: report.Name }}
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
                 </section>
                 <!-- /.sidebar -->
             </aside>

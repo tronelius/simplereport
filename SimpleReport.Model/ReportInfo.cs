@@ -26,6 +26,8 @@ namespace SimpleReport.Model
         [NonSerialized]
         public Access ReportOwnerAccess; //TODO rename to reportowner
 
+        public bool MatchSearchResult { get; set; } = true;
+
         public bool IsAvailableForMe(IPrincipal user, Access adminAccess)
         {
             return (ReportOwnerAccess != null && ReportOwnerAccess.IsAvailableForMe(user)) || (Access == null || Access.IsAvailableForMe(user) || adminAccess.IsAvailableForMe(user));

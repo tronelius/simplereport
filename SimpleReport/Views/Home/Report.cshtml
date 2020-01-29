@@ -8,10 +8,10 @@
     @{
         //NOTE: reuse model to avoid getting data again. temporary during conversion.
     }
-    angular.module("report").value("reportViewModel", @Html.Raw(JsonConvert.SerializeObject(Model)));
+    var report = angular.module("report").value("reportViewModel", @Html.Raw(JsonConvert.SerializeObject(Model)));
 </script>
 
-<div ng-cloak ng-app="report" ng-controller="reportController">
+<div ng-controller="reportController">
 
     @if (!ViewData.ModelState.IsValid)
     {
@@ -86,7 +86,7 @@
                                                 <div class="col-xs-6">
                                                     <div class="input-group">
                                                         <span class="input-group-addon text-bold">From</span>
-                                                        <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.from" data-max  class="form-control datepicker pull-left" is-open="par.openfrom" ng-focus="par.openfrom=true">
+                                                        <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.from" data-max class="form-control datepicker pull-left" is-open="par.openfrom" ng-focus="par.openfrom=true">
                                                         <uib-timepicker ng-model="par.from.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false" data-ng-change="dateChanged(par)">
                                                         </uib-timepicker>
                                                     </div>
@@ -94,7 +94,7 @@
                                                 <div class="col-xs-6">
                                                     <div class="input-group ">
                                                         <span class="input-group-addon text-bold">To</span>
-                                                        <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.to"  class="form-control datepicker pull-right" is-open="par.opento" ng-focus="par.opento=true">
+                                                        <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.to" class="form-control datepicker pull-right" is-open="par.opento" ng-focus="par.opento=true">
                                                         <uib-timepicker ng-model="par.to.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false" data-ng-change="dateChanged(par)">
                                                         </uib-timepicker>
                                                     </div>
@@ -158,7 +158,7 @@
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                               <button type="button" class="btn btn-primary pull-right" data-ng-click="selectedAction = 'editTemplate'" data-ng-show="viewModel.CanEditTemplate">Edit template</button>
+                            <button type="button" class="btn btn-primary pull-right" data-ng-click="selectedAction = 'editTemplate'" data-ng-show="viewModel.CanEditTemplate">Edit template</button>
                         </div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                     </div>
 
                     <div data-ng-switch-when="editSubscriptions">
-                        <div data-subscription-list  data-show-report-name-attr="false" data-show-subject-attr="false"  data-show-recipients-attr="true" data-report-id="viewModel.Report.Id"></div>
+                        <div data-subscription-list data-show-report-name-attr="false" data-show-subject-attr="false" data-show-recipients-attr="true" data-report-id="viewModel.Report.Id"></div>
                     </div>
 
                     <div data-ng-switch-when="editTemplate">
@@ -194,5 +194,5 @@
                 </div>
             </div>
         </div>
-     }
+    }
 </div>
