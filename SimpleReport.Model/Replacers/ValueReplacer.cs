@@ -18,7 +18,6 @@ namespace SimpleReport.Model.Replacers
         public string Replace(string inputstring)
         {
             var value = IsRtf(inputstring) ? RtfToText(inputstring) : inputstring;
-            value = XmlTextEncoder.Encode(value);
             return value;
         }
         private static bool IsRtf(string text)
