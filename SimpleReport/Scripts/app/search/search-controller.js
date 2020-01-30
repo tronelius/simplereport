@@ -51,19 +51,27 @@
     }
 
     function visibleGroups() {
-        return viewModel.ReportGroups.filter(hasName);
+        if (viewModel && viewModel.ReportGroups) {
+            return viewModel.ReportGroups.filter(hasName);
+        }
+
+        return [];
     }
 
     function reportsMissingGroup() {
         let reports = [];
-        let groups = viewModel.ReportGroups.filter(missingName);
-        for (let i = 0; i < groups.length; i++) {
-            let group = groups[i];
-            for (let j = 0; j < group.length; j++) {
-                let report = group[j];
-                reports.push(report);
+
+        if (viewModel && viewModel.ReportGroups) {
+            let groups = viewModel.ReportGroups.filter(missingName);
+            for (let i = 0; i < groups.length; i++) {
+                let group = groups[i];
+                for (let j = 0; j < group.length; j++) {
+                    let report = group[j];
+                    reports.push(report);
+                }
             }
         }
+
         return reports;
     }
 

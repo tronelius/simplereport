@@ -18,7 +18,7 @@
     @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/bundles/app")
     <script type="text/javascript">
-        var rootApp = angular.module('rootApp', ['search','report']);
+        var rootApp = angular.module('rootApp', ['search','report', 'designer', 'subscriptions']);
         var search = angular.module("search").value("viewModel", @Html.Raw(JsonConvert.SerializeObject(Model)));
     </script>
 </head>
