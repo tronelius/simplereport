@@ -13,6 +13,9 @@
         $scope.matchSearchValue = matchSearchValue;
         $scope.inSearchResult = inSearchResult;
         $scope.searchInProgress = searchInProgress;
+        $scope.toggleClosed = toggleClosed;
+        $scope.expandedGroup = viewModel && viewModel.Report ? viewModel.Report.Group : "";
+
     };
     $scope.init();
 
@@ -29,7 +32,6 @@
                 }
             }
         }
-        console.log(searchResult);
     }
 
     function matchSearchValue(report) {
@@ -98,6 +100,15 @@
             }
         }
         return reports;
+    }
+
+    function toggleClosed(group) {
+        var open = $scope.expandedGroup === group[0].Group;
+        if (open) {
+            $scope.expandedGroup = "";
+        } else {
+            $scope.expandedGroup = group[0].Group;
+        }
     }
 
 }]);

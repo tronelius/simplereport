@@ -82,13 +82,12 @@
                     <div ng-cloak ng-controller="searchController">
                         <input class="search-box" type="text" ng-model="searchValue" data-ng-change="search(searchValue)" />
                         <ul class="sidebar-menu">
-
-                            <li class="treeview" data-ng-repeat="group in visibleGroups()">
-                                <a href="#" ng-if="isVisible(group)">
+                            <li data-ng-repeat="group in visibleGroups()" ng-class="{treeview: true, active: group[0].Group === expandedGroup}">
+                                <a ng-if="isVisible(group)" ng-click="toggleClosed(group)">
                                     <i class="fa fa-table"></i><span> {{:: group[0].Group }}</span> <i class="fa fa-angle-left pull-right"></i>
                                 </a>
-                                <ul class="treeview-menu">
-                                    <li data-ng-repeat="report in group">
+                                <ul ng-if="group[0].Group === expandedGroup" class="treeview-menu menu-open">
+                                    <li data-ng-repeat="report in group" ng-class="{active: report.Id === viewModel.Report.Id}">
                                         <a ng-click="showReport(report.Id)" ng-if="inSearchResult(report)">
                                             <i class="fa fa-circle-o"></i>{{:: report.Name }}
                                         </a>

@@ -283,3 +283,7 @@ a {
 .search-box {
     width: 100% !important
 }
+
+.menu-open {
+    display: block !important;
+}
