@@ -1,4 +1,4 @@
-﻿angular.module('search').controller('searchController', ['$scope', 'viewModel', function ($scope, viewModel) {
+﻿angular.module('search').controller('searchController', ['$scope', 'viewModel', '$timeout', function ($scope, viewModel, $timeout) {
 
     $scope.searchValue = "";
     
@@ -103,12 +103,14 @@
     }
 
     function toggleClosed(group) {
-        var open = $scope.expandedGroup === group[0].Group;
-        if (open) {
-            $scope.expandedGroup = "";
-        } else {
-            $scope.expandedGroup = group[0].Group;
-        }
+        $timeout(function() {
+            var open = $scope.expandedGroup === group[0].Group;
+            if (open) {
+                $scope.expandedGroup = "";
+            } else {
+                $scope.expandedGroup = group[0].Group;
+            }
+        });
     }
 
 }]);
