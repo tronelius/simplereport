@@ -13,8 +13,12 @@
     function toUrlByIdAndParams(reportId, reportParameters) {
         var parsedParameters = { reportId: reportId };
         reportParameters.forEach(function (param) {
-            if(param.Value)
+            if (param.Value) {
+                if (param.InputType === 5 && param.Value.startsWith(",")) { // multichoice and starts with ","
+                    param.Value = param.Value.substr(1);
+                }
                 parsedParameters[param.Key] = param.Value;
+            }
         });
 
         return serialize(parsedParameters);
