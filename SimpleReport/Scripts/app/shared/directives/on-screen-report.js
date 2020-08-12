@@ -17,9 +17,6 @@
                     function fetchData() {
                         var parsedParameters = {};
                         $scope.parameters.forEach(function (param) {
-                            if (param.InputType === 5 && param.Value.startsWith(",")) { // multichoice and starts with ","
-                                param.Value = param.Value.substr(1);
-                            }
                             parsedParameters[param.Key] = param.Value;
                         });
 

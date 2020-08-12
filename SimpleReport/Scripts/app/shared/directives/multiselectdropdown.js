@@ -6,7 +6,7 @@
 
                 var element = $($element); // Get the element as a jQuery element
                 var valueArr = [];
-                if ($scope.value !== null) {
+                if ($scope.value !== null && $scope.value !== "") {
                     valueArr = $scope.value.split(',');
                 }
                 var options = $scope.choices.map(function (c) {
