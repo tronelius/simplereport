@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
 using SimpleReport.Helpers;
+using SimpleReport.Model;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
@@ -83,6 +84,22 @@ namespace SimpleReport.Controllers.Api
             catch (Exception ex)
             {
                 _logger.Error("Exception in List", ex);
+                return InternalServerError();
+            }
+        }
+        
+        [AcceptVerbs("GET")]
+        public async Task<IHttpActionResult> GetSettings()
+        {
+            try
+            {
+                CheckAccess(null);
+                var result = _reportStorage.GetSettings();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in All", ex);
                 return InternalServerError();
             }
         }
@@ -171,6 +188,22 @@ namespace SimpleReport.Controllers.Api
                 return InternalServerError();
             }
         }
+        
+        [AcceptVerbs("POST")]
+        public IHttpActionResult SaveSettings([FromBody]Settings settings)
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+                _reportStorage.SaveSettings(settings);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in SaveSettings", ex);
+                return InternalServerError();
+            }
+        }
 
         private void CheckAccess(string reportId)
         {
@@ -184,7 +217,10 @@ namespace SimpleReport.Controllers.Api
             }
             else
             {
-                _adminAccess.IsAllowedForMe(User);
+                if (!_subscriptionAccess.IsAllowedToSeeSubscriptions(User))
+                {
+                    _adminAccess.IsAllowedForMe(User);
+                }
             }
         }
     }
