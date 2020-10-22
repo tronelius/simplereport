@@ -16,8 +16,10 @@
         <ul class="nav nav-tabs">
             <li ng-class="{active: activeTab == 'all'}" data-ng-click="activeTab = 'all'"><a>List of all active</a></li>
             <li ng-class="{active: activeTab == 'failed'}" data-ng-click="activeTab = 'failed'"><a>Failed</a></li>
-            <li ng-class="{active: activeTab == 'schedules'}" data-ng-click="activeTab = 'schedules'"><a>Schedules</a></li>
-            <li ng-class="{active: activeTab == 'settings'}" data-ng-click="activeTab = 'settings'"><a>Settings</a></li>
+            @if(Model.HasAdminAccess){
+                <li ng-class="{active: activeTab == 'schedules'}" data-ng-click="activeTab = 'schedules'"><a>Schedules</a></li>
+                <li ng-class="{active: activeTab == 'settings'}" data-ng-click="activeTab = 'settings'"><a>Settings</a></li>
+            }
         </ul>
     </div>
     <div class="tab-content">
@@ -31,7 +33,38 @@
             <div data-ng-if="activeTab == 'schedules'" data-schedule-editor></div>
         </div>
         <div class="tab-pane active" data-ng-if="activeTab == 'settings'">
-            Not done : settings
+            <div class="row content-text">
+                <div class="col-xs-12">
+                     <label class="control-label">Settings</label>
+                </div>
+            </div>
+            <form role="form" ng-hide="!settings">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <div class="form-group">
+                                            <label class="control-label" title="Access rights to view Subscriptions">Access rights to view Subscriptions</label>
+                                            <div>
+                                                <input type="text" ng-model="settings.SubscriptionAccess" class="form-control" title="Access rights to view Subscriptions">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="box-footer">
+                            <button type="button" class="btn btn-success" ng-click="saveSettings()">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

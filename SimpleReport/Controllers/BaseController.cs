@@ -25,7 +25,6 @@ namespace SimpleReport.Controllers
             _logger = logger;
             _applicationSettings = applicationSettings;
             _adminAccess = _reportStorage.GetSettings().AdminAccessChecker();
-
         }
 
         protected ReportViewModel GetReportViewModel()
@@ -33,6 +32,8 @@ namespace SimpleReport.Controllers
             ReportViewModel vm = new ReportViewModel();
             vm.SubscriptionEnabled = _applicationSettings.SubscriptionEnabled;
             vm.HasAdminAccess = _reportStorage.GetSettings().AdminAccessChecker().IsAvailableForMe(User);
+            vm.HasSubscriptionAccess =
+                _reportStorage.GetSettings().SubscriptionSettingAccessChecker().IsAllowedToSeeSubscriptions(User);
             vm.Reports = _reportStorage.GetAllReports().Where(a => a.IsAvailableForMe(User, _adminAccess)).OrderBy(a => string.IsNullOrWhiteSpace(a.Group)).ThenBy(a => a.Group).ThenBy(b => b.Name);
             vm.ReportResultTypes = ResultFactory.GetList();
             return vm;

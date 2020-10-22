@@ -73,6 +73,32 @@
                                 </ul>
                             </div>
                         }
+                        else if (Model.HasSubscriptionAccess && Model.SubscriptionEnabled)
+                        {
+                             <div class="navbar-custom-menu">
+                                <ul class="nav navbar-nav">
+                                    <li class="dropdown notifications-menu">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-gear"></i>
+                                            <span>Admin</span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <div style="position: relative; overflow: hidden; width: auto;">
+                                                    <ul class="menu" style="overflow: hidden; width: 100%; ">
+                                                        <li>
+                                                            <a href="@Url.Action("Index", "Subscription")">
+                                                                <i class="fa fa-envelope"></i> <span>Subscriptions</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
                     }
                 </nav>
             </header>

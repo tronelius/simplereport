@@ -39,6 +39,13 @@ namespace SimpleReport.Model
 
         }
 
+        public bool IsAllowedToSeeSubscriptions(IPrincipal user)
+        {
+            if (!string.IsNullOrWhiteSpace(ADGroup) && !SplittedAdGroups.Any(user.IsInRole))
+                return false;
+            return true;
+        }
+
         public Access(Guid id, string name, string adGroup)
         {
             Id = id;
