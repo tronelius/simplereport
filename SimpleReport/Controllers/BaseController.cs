@@ -18,6 +18,7 @@ namespace SimpleReport.Controllers
         protected readonly ILogger _logger;
         private readonly IApplicationSettings _applicationSettings;
         protected readonly Access _adminAccess;
+        protected readonly Access _subscriptionAccess;
 
         public BaseController(IStorage reportStorage, ILogger logger, IApplicationSettings applicationSettings)
         {
@@ -25,6 +26,7 @@ namespace SimpleReport.Controllers
             _logger = logger;
             _applicationSettings = applicationSettings;
             _adminAccess = _reportStorage.GetSettings().AdminAccessChecker();
+            _subscriptionAccess = _reportStorage.GetSettings().SubscriptionSettingAccessChecker();
         }
 
         protected ReportViewModel GetReportViewModel()
