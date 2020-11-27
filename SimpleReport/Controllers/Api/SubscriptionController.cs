@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using SimpleReport.Helpers;
 using SimpleReport.Model;
@@ -25,7 +26,7 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("GET")]
-        public async Task<IHttpActionResult> Get(string reportId, int id)
+        public async Task<IHttpActionResult> Get(string reportId, Guid id)
         {
             try
             {
@@ -129,8 +130,9 @@ namespace SimpleReport.Controllers.Api
                 }
                 subscription.SetNextSendDate(schedule.Cron);
 
-                if (subscription.Id == 0)
+                if (subscription.Id == Guid.Empty)
                 {
+                    subscription.Id = new Guid();
                     var id = _subscriptionRepository.Insert(subscription);
                     return Json(new { Id = id });
                 }
@@ -157,7 +159,7 @@ namespace SimpleReport.Controllers.Api
             {
                 CheckAccess(reportIdWrapper.ReportId);
                 _logger.Trace("Deleting subscription: " + reportIdWrapper.Data);
-                int id = Convert.ToInt32(reportIdWrapper.Data);
+                Guid id = new Guid(reportIdWrapper.Data.ToString());
                 _subscriptionRepository.Delete(id);
                 var result = _subscriptionRepository.List();
                 return Ok(result);
@@ -176,7 +178,7 @@ namespace SimpleReport.Controllers.Api
             {
                 CheckAccess(reportIdWrapper.ReportId);
                 _logger.Trace("Set send on subscription: " + reportIdWrapper.Data);
-                int id = Convert.ToInt32(reportIdWrapper.Data);
+                Guid id = new Guid(reportIdWrapper.Data.ToString());
                 _subscriptionRepository.SendNow(id);
 
                 var result = _subscriptionRepository.List();

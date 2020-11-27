@@ -7,7 +7,7 @@ namespace SimpleReport.Model.Subscriptions
 {
     public class Subscription
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public Guid ReportId { get; set; }
         public string ReportParams { get; set; }
         public string To { get; set; }
@@ -20,13 +20,18 @@ namespace SimpleReport.Model.Subscriptions
         public string ErrorMessage { get; set; }
         public DateTime? LastErrorDate { get; set; }
         public int FailedAttempts { get; set; }
-        public int ScheduleId { get; set; }
+        public Guid ScheduleId { get; set; }
         public bool SendEmptyEmails { get; set; }
         public string MailSubject { get; set; }
         public string MailText { get; set; }
         public DateTime? LastRun { get; set; }
         public DateTime? SyncedDate { get; set; }
 
+        public Subscription()
+        {
+            Id = default(Guid);
+        }
+        
         public string Validate()
         {
             if (string.IsNullOrWhiteSpace(To + Cc + Bcc))

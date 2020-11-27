@@ -2,11 +2,13 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Dapper;
 using DapperExtensions;
 using SimpleReport.Model.Constants;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Result;
+using SimpleReport.Model.Subscriptions;
 
 namespace SimpleReport.Model.Storage.SQL
 {
@@ -34,18 +36,101 @@ namespace SimpleReport.Model.Storage.SQL
             reportDataModel.Settings = GetSettings();
             reportDataModel.Reports = GetAllReports(true).ToList();
             reportDataModel.LinkedReports = GetAllLinkedReports().ToList();
+            reportDataModel.Subscriptions = GetSubscriptions().ToList();
+            reportDataModel.Schedules = GetSchedules().ToList();
             return reportDataModel;
         }
 
+        
+
+        public IEnumerable<Subscription> GetSubscriptions()
+        {
+            return GetResults<Subscription>("SELECT * FROM Subscription");
+        }
+
+        public bool SaveSubscription(Subscription subscription)
+        {
+            var scheduleFromDb = GetFirstResult<Subscription>("SELECT * FROM Subscription WHERE Id = @subscriptionId", new { subscriptionId = subscription.Id });
+            if (scheduleFromDb == null)
+            {
+                using (var conn = EnsureOpenConnection())
+                {
+                    var values = new Dictionary<string, object>
+                    {
+                        {"@ReportId", subscription.ReportId}, 
+                        {"@ReportParams", subscription.ReportParams}, 
+                        {"@To", subscription.To}, 
+                        {"@Cc", subscription.Cc}, 
+                        {"@Bcc", subscription.Bcc},
+                        {"@Status", subscription.Status}, 
+                        {"@LastSent", subscription.LastSent}, 
+                        {"@NextSend", subscription.NextSend}, 
+                        {"@ErrorMessage", subscription.ErrorMessage}, 
+                        {"@LastErrorDate", subscription.LastErrorDate}, 
+                        {"@FailedAttempts", subscription.FailedAttempts}, 
+                        {"@MailSubject", subscription.MailSubject}, 
+                        {"@MailText", subscription.MailText}, 
+                        {"@SendEmptyEmails", subscription.SendEmptyEmails}, 
+                        {"@LastRun", subscription.LastRun}, 
+                        {"@SyncedDate", subscription.SyncedDate}, 
+                        {"@SubscriptionType", subscription.SubscriptionType}, 
+                        {"@Id", subscription.Id}, 
+                        {"@ScheduleId", subscription.ScheduleId}
+                    };
+                    return conn.Execute(
+                        "INSERT INTO Subscription" +
+                            "(ReportId, ReportParams, [To], Cc, Bcc, Status, LastSent, NextSend, ErrorMessage, LastErrorDate, FailedAttempts, MailSubject, MailText, " + 
+                                "SendEmptyEmails, LastRun, SyncedDate, SubscriptionType, Id, ScheduleId)" + 
+                            "VALUES (@ReportId, @ReportParams, @To, @Cc, @Bcc, @Status, @LastSent, @NextSend, @ErrorMessage, @LastErrorDate, @FailedAttempts, " + 
+                                "@MailSubject, @MailText, @SendEmptyEmails, @LastRun, @SyncedDate, @SubscriptionType, @Id, @ScheduleId);",
+                        values) == values.Count();
+                }
+            }
+
+            return true;
+        }
+
+        public IEnumerable<Schedule> GetSchedules()
+        {
+            var schedules = GetResults<Schedule>("SELECT * FROM Schedule");
+            return schedules;
+        }
+
+        public bool SaveSchedule(Schedule schedule)
+        {
+            var scheduleFromDb = GetFirstResult<Schedule>("SELECT * FROM Schedule WHERE Id = @scheduleId", new { scheduleId = schedule.Id });
+            if (scheduleFromDb == null)
+            {
+                using (var conn = EnsureOpenConnection())
+                {
+                    var values = new Dictionary<string, object>
+                    {
+                        {"@Name", schedule.Name},
+                        {"@Cron", schedule.Cron},
+                        {"@ScheduleType", schedule.ScheduleType},
+                        {"@Id", schedule.Id}
+                    };
+                    return conn.Execute(
+                        "INSERT INTO Schedule (Name, Cron, ScheduleType, Id) VALUES (@Name, @Cron, @ScheduleType, @Id)",
+                        values) == values.Count();
+                }
+            }
+
+            return true;
+        }
+
+       
 
 
         public void SaveModel(ReportDataModel data)
         {
-            SaveSettings(data.Settings);
+           // SaveSettings(data.Settings); //don't import settings, will potentially mess up accessrights to admin.
             data.AccessLists.ForEach(a => SaveAccessList(a));
             data.Connections.ForEach(c => SaveConnection(c));
-            data.LookupReports.ForEach(l => SaveLookupReport(l));
             data.TypeAheadReports.ForEach(l => SaveTypeAheadReport(l));
+            data.Schedules.ForEach(s => SaveSchedule(s));
+            data.Subscriptions.ForEach(s => SaveSubscription(s));
+            data.LookupReports.ForEach(l => SaveLookupReport(l));
             data.Reports.ForEach(r => SaveReport(r));
         }
 
@@ -59,6 +144,8 @@ namespace SimpleReport.Model.Storage.SQL
                 con.Execute("Delete from TypeAheadReport", null, transaction);
                 con.Execute("Delete from Connection", null, transaction);
                 con.Execute("Delete from Access", null, transaction);
+                con.Execute("DELETE FROM Subscription", null, transaction);
+                con.Execute("DELETE FROM Schedule", null, transaction);
                 //con.Execute("Delete from Settings", transaction); //don't delete settings, will mess up accessrights to admin.
             });
 
@@ -433,5 +520,9 @@ namespace SimpleReport.Model.Storage.SQL
         {
             return Upsert(report);
         }
+    }
+
+    internal class publlic
+    {
     }
 }
