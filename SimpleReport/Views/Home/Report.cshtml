@@ -87,7 +87,7 @@
                                                     <div class="input-group">
                                                         <span class="input-group-addon text-bold">From</span>
                                                         <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.from" data-max data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-left" is-open="par.openfrom" ng-focus="par.openfrom=true">
-                                                        <uib-timepicker ng-model="par.from.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false" data-ng-change="dateChanged(par)">
+                                                        <uib-timepicker ng-model="par.from" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false" data-ng-change="dateChanged(par)">
                                                         </uib-timepicker>
                                                     </div>
                                                 </div>
@@ -95,7 +95,7 @@
                                                     <div class="input-group ">
                                                         <span class="input-group-addon text-bold">To</span>
                                                         <input type="text" uib-datepicker-popup="{{dateFormat}}" data-ng-change="periodChanged(par)" show-weeks="true" data-ng-model="par.to" data-ng-required="{{par.Mandatory}}" class="form-control datepicker pull-right" is-open="par.opento" ng-focus="par.opento=true">
-                                                        <uib-timepicker ng-model="par.to.DisplayValue" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false" data-ng-change="dateChanged(par)">
+                                                        <uib-timepicker ng-model="par.to" hour-step="1" minute-step="15" name="sTime" show-meridian="false" min="min" max="max" show-spinners="false" data-ng-change="dateChanged(par)">
                                                         </uib-timepicker>
                                                     </div>
                                                 </div>
