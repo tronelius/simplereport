@@ -19,7 +19,11 @@ namespace SimpleReport.Controllers.Api
         {
             try
             {
-                _adminAccess.IsAllowedForMe(User);
+                if (!_subscriptionAccess.IsAllowedToSeeSubscriptions(User))
+                {
+                    _adminAccess.IsAllowedForMe(User);
+                }
+                
                 var result = _reportStorage.GetAllReportInfos().Select(x => new { x.Id, x.Name });
                 return Ok(result);
             }

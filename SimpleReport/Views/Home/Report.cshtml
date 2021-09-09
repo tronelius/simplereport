@@ -8,10 +8,10 @@
     @{
         //NOTE: reuse model to avoid getting data again. temporary during conversion.
     }
-    angular.module("report").value("reportViewModel", @Html.Raw(JsonConvert.SerializeObject(Model)));
+    var report = angular.module("report").value("reportViewModel", @Html.Raw(JsonConvert.SerializeObject(Model)));
 </script>
 
-<div ng-cloak ng-app="report" ng-controller="reportController">
+<div ng-controller="reportController">
 
     @if (!ViewData.ModelState.IsValid)
     {
@@ -125,7 +125,7 @@
                                             <div>Choosen: {{par.typeaheadLabel}}</div>
                                         </div>
 
-                                        <input data-ng-if="par.InputType==@((int)ParameterInputType.String)" type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="{{par.Value}}">
+                                        <input data-ng-if="par.InputType==@((int)ParameterInputType.String) || par.InputType==@((int)ParameterInputType.StringList)" type="text" data-ng-required="{{par.Mandatory}}" name="{{par.Key}}" data-ng-model="par.Value" class="form-control" placeholder="{{par.Value}}">
                                     </div>
                                     <span class="help-block">{{par.HelpText}}</span>
                                     <label for="{{par.Key}}" generated="true" class="help-block error"></label>
@@ -158,7 +158,7 @@
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                               <button type="button" class="btn btn-primary pull-right" data-ng-click="selectedAction = 'editTemplate'" data-ng-show="viewModel.CanEditTemplate">Edit template</button>
+                            <button type="button" class="btn btn-primary pull-right" data-ng-click="selectedAction = 'editTemplate'" data-ng-show="viewModel.CanEditTemplate">Edit template</button>
                         </div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                     </div>
 
                     <div data-ng-switch-when="editSubscriptions">
-                        <div data-subscription-list data-report-id="viewModel.Report.Id"></div>
+                        <div data-subscription-list data-show-report-name-attr="false" data-show-subject-attr="false" data-show-recipients-attr="true" data-report-id="viewModel.Report.Id"></div>
                     </div>
 
                     <div data-ng-switch-when="editTemplate">
@@ -194,5 +194,5 @@
                 </div>
             </div>
         </div>
-     }
+    }
 </div>

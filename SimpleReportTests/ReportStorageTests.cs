@@ -56,7 +56,7 @@ namespace SimpleReportTests
 
         private Settings GetSettings()
         {
-            return new Settings() {AdminAccess = "utvecklare;developers"};
+            return new Settings() {AdminAccess = "utvecklare;developers", SubscriptionAccess = "test;testare"};
         }
 
         private Report GetReport()

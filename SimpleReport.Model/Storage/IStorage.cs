@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Principal;
 using System.Web;
 using SimpleReport.Model.Result;
+using SimpleReport.Model.Subscriptions;
 
 namespace SimpleReport.Model.Storage
 {
@@ -47,5 +48,12 @@ namespace SimpleReport.Model.Storage
         DeleteInfo DeleteTypeAheadReport(Guid typeAheadid);
         IEnumerable<TypeAheadReport> GetTypeAheadReports();
         bool SaveTypeAheadReport(TypeAheadReport report);
+
+        IEnumerable<Subscription> GetSubscriptions();
+        bool SaveSubscription(Subscription subscription);
+
+        IEnumerable<Schedule> GetSchedules();
+        bool SaveSchedule(Schedule schedule);
+
     }
 }

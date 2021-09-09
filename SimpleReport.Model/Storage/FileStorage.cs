@@ -10,6 +10,7 @@ using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Result;
 using SimpleReport.Model.Storage.JsonConverters;
+using SimpleReport.Model.Subscriptions;
 
 namespace SimpleReport.Model.Storage
 {
@@ -68,8 +69,6 @@ namespace SimpleReport.Model.Storage
                 _storageHelper.WriteModelToStream(data, fs);
             }
         }
-
-       
 
         public void ClearModel()
             {
@@ -318,6 +317,36 @@ namespace SimpleReport.Model.Storage
         public bool SaveTypeAheadReport(TypeAheadReport report)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<Subscription> GetSubscriptions()
+        {
+            return _dataModel.Subscriptions;
+        }
+
+        public bool SaveSubscription(Subscription subscription)
+        {
+            Subscription existing = _dataModel.Subscriptions.FirstOrDefault(s => s.ReportId == subscription.ReportId);
+            if (existing != null)
+                _dataModel.Subscriptions.Remove(existing);
+            _dataModel.Subscriptions.Add(subscription);
+            SaveModel(_dataModel);
+            return true;      
+        }
+
+        public IEnumerable<Schedule> GetSchedules()
+        {
+            return _dataModel.Schedules;
+        }
+
+        public bool SaveSchedule(Schedule schedule)
+        {
+            Schedule existing = _dataModel.Schedules.FirstOrDefault(s => s.Id == schedule.Id);
+            if (existing != null)
+                _dataModel.Schedules.Remove(existing);
+            _dataModel.Schedules.Add(schedule);
+            SaveModel(_dataModel);
+            return true;      
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Newtonsoft.Json;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 using OpenXmlPowerTools;
 using SimpleReport.Helpers;
@@ -180,8 +181,8 @@ namespace SimpleReport.Controllers
                         r[0] = $"<a href=\"{url}\" target=\"_blank\">{r[0]}</a>";
                     });
                 }
-
-                return Json(data, JsonRequestBehavior.AllowGet);
+                var converted = JsonConvert.SerializeObject(data);
+                return Content(converted, "application/json");
             }
 
             return Json(new { error = "Not Authorized" }, JsonRequestBehavior.AllowGet);

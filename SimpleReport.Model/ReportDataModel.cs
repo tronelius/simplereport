@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SimpleReport.Model.Subscriptions;
 
 namespace SimpleReport.Model
 {
@@ -12,6 +13,8 @@ namespace SimpleReport.Model
         public List<TypeAheadReport> TypeAheadReports;
         public List<Access> AccessLists;
         public Settings Settings;
+        public List<Subscription> Subscriptions;
+        public List<Schedule> Schedules;
         public List<LinkedReport> LinkedReports;
 
 
@@ -36,6 +39,8 @@ namespace SimpleReport.Model
             TypeAheadReports = new List<TypeAheadReport>();
             AccessLists = new List<Access>();
             Settings = new Settings();
+            Subscriptions = new List<Subscription>();
+            Schedules = new List<Schedule>();
         }
     }
 }

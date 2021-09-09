@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using SimpleReport.Helpers;
+using SimpleReport.Model;
 using SimpleReport.Model.Exceptions;
 using SimpleReport.Model.Logging;
 using SimpleReport.Model.Storage;
@@ -24,7 +26,7 @@ namespace SimpleReport.Controllers.Api
         }
 
         [AcceptVerbs("GET")]
-        public async Task<IHttpActionResult> Get(string reportId, int id)
+        public async Task<IHttpActionResult> Get(string reportId, Guid id)
         {
             try
             {
@@ -86,6 +88,22 @@ namespace SimpleReport.Controllers.Api
                 return InternalServerError();
             }
         }
+        
+        [AcceptVerbs("GET")]
+        public async Task<IHttpActionResult> GetSettings()
+        {
+            try
+            {
+                CheckAccess(null);
+                var result = _reportStorage.GetSettings();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in All", ex);
+                return InternalServerError();
+            }
+        }
 
         [AcceptVerbs("POST")]
         public async Task<IHttpActionResult> Save(ReportIdWrapper reportIdWrapper)
@@ -112,8 +130,9 @@ namespace SimpleReport.Controllers.Api
                 }
                 subscription.SetNextSendDate(schedule.Cron);
 
-                if (subscription.Id == 0)
+                if (subscription.Id == Guid.Empty)
                 {
+                    subscription.Id = new Guid();
                     var id = _subscriptionRepository.Insert(subscription);
                     return Json(new { Id = id });
                 }
@@ -140,7 +159,7 @@ namespace SimpleReport.Controllers.Api
             {
                 CheckAccess(reportIdWrapper.ReportId);
                 _logger.Trace("Deleting subscription: " + reportIdWrapper.Data);
-                int id = Convert.ToInt32(reportIdWrapper.Data);
+                Guid id = new Guid(reportIdWrapper.Data.ToString());
                 _subscriptionRepository.Delete(id);
                 var result = _subscriptionRepository.List();
                 return Ok(result);
@@ -159,7 +178,7 @@ namespace SimpleReport.Controllers.Api
             {
                 CheckAccess(reportIdWrapper.ReportId);
                 _logger.Trace("Set send on subscription: " + reportIdWrapper.Data);
-                int id = Convert.ToInt32(reportIdWrapper.Data);
+                Guid id = new Guid(reportIdWrapper.Data.ToString());
                 _subscriptionRepository.SendNow(id);
 
                 var result = _subscriptionRepository.List();
@@ -168,6 +187,22 @@ namespace SimpleReport.Controllers.Api
             catch (Exception ex)
             {
                 _logger.Error("Exception in Send", ex);
+                return InternalServerError();
+            }
+        }
+        
+        [AcceptVerbs("POST")]
+        public IHttpActionResult SaveSettings([FromBody]Settings settings)
+        {
+            try
+            {
+                _adminAccess.IsAllowedForMe(User);
+                _reportStorage.SaveSettings(settings);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Exception in SaveSettings", ex);
                 return InternalServerError();
             }
         }
@@ -184,7 +219,10 @@ namespace SimpleReport.Controllers.Api
             }
             else
             {
-                _adminAccess.IsAllowedForMe(User);
+                if (!_subscriptionAccess.IsAllowedToSeeSubscriptions(User))
+                {
+                    _adminAccess.IsAllowedForMe(User);
+                }
             }
         }
     }

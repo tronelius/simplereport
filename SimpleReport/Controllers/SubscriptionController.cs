@@ -10,12 +10,10 @@ namespace SimpleReport.Controllers
 
         public ActionResult Index()
         {
-            if (!_adminAccess.IsAvailableForMe(User)) {
-               Response.Redirect("~", true);
-                return new EmptyResult();
-            }
-            else
-                return View(GetReportViewModel());
+            if (_subscriptionAccess.IsAllowedToSeeSubscriptions(User)) return View(GetReportViewModel());
+            if (_adminAccess.IsAvailableForMe(User)) return View(GetReportViewModel());
+            Response.Redirect("~", true);
+            return new EmptyResult();
         }
     }
 }

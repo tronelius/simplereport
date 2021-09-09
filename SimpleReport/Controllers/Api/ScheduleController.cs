@@ -53,7 +53,7 @@ namespace SimpleReport.Controllers.Api
 
         [AcceptVerbs("POST")]
         [Route("delete")]
-        public async Task<IHttpActionResult> Delete([FromBody]int id)
+        public async Task<IHttpActionResult> Delete([FromBody]Guid id)
         {
             try
             {

@@ -3,16 +3,16 @@
         <i class="fa fa-refresh fa-spin"></i>
     </div>
         <h3 ng-show="title" style="float:left;margin-top:0px;">{{title}}</h3>
-        <span class="pull-right" style="margin-top:5px;"> Updated: {{updatetime}}</span>
+        <span class="pull-right" style="margin-top:-10px;"> Updated: {{updatetime}}</span>
     <table class="table table-condensed table-striped" data-ng-if="data">
         <thead>
             <tr>
-                <th data-ng-repeat="header in ::data.Headers">{{header}}</th>
+                <th data-ng-repeat="header in data.Headers">{{header}}</th>
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="row in ::data.Rows">
-                <td data-ng-repeat="val in ::row track by $index">
+            <tr data-ng-repeat="row in data.Rows">
+                <td data-ng-repeat="val in row track by $index">
                     <span ng-bind-html="val"></span>
                 </td>
             </tr>
