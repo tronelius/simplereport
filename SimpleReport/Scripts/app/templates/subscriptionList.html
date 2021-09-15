@@ -31,7 +31,7 @@
                                 <span ng-show="sortType == 'ReportName' && sortReverse" class="fa fa-caret-up"></span>
                             </a>
                         </th>
-                        <th data-ng-show="!showReportName">
+                        <th data-ng-show="showSubject">
                             <a ng-click="sortType = 'Reportsubject'; sortReverse = !sortReverse">
                                 Subject
                                 <span ng-show="sortType == 'Reportsubject' && !sortReverse" class="fa fa-caret-down"></span>
@@ -45,7 +45,7 @@
                                 <span ng-show="sortType == 'Params' && sortReverse" class="fa fa-caret-up"></span>
                             </a>
                         </th>
-                        <th data-ng-show="showReportName">
+                        <th data-ng-show="showRecipients">
                             <a ng-click="sortType = 'Recipients'; sortReverse = !sortReverse">
                                 Recipients
                                 <span ng-show="sortType == 'Recipients' && !sortReverse" class="fa fa-caret-down"></span>
@@ -82,13 +82,13 @@
                         <td data-ng-show="showReportName">
                             {{row.ReportName}}
                         </td>
-                        <td data-ng-show="!showReportName">
+                        <td data-ng-show="showSubject">
                             {{row.MailSubject}}
                         </td>
-                        <td>
-                            <p ng-bind-html="row.FilteredParams" />
+                        <td style="max-width:300px;overflow:hidden;">
+                            <p ng-bind-html="row.FilteredParams"/>
                         </td>
-                        <td data-ng-show="showReportName">
+                        <td data-ng-show="showRecipients">
                             <div data-ng-show="row.To">{{row.To}}</div>
                             <div data-ng-show="row.Cc">Cc: {{row.Cc}}</div>
                             <div data-ng-show="row.Bcc">Bcc: {{row.Bcc}}</div>

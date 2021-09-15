@@ -12,7 +12,7 @@ namespace SimpleReport.Model.Subscriptions
     {
         public SubscriptionRepository(string connectionstring) : base(connectionstring) { }
 
-        public Subscription Get(int id)
+        public Subscription Get(Guid id)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
@@ -21,7 +21,7 @@ namespace SimpleReport.Model.Subscriptions
             }
         }
 
-        public int Insert(Subscription sub)
+        public Guid Insert(Subscription sub)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
@@ -47,7 +47,7 @@ namespace SimpleReport.Model.Subscriptions
             }
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
@@ -56,7 +56,7 @@ namespace SimpleReport.Model.Subscriptions
         }
 
 
-        public void SendNow(int id)
+        public void SendNow(Guid id)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {

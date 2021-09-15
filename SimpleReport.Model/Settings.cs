@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Security.Principal;
 
@@ -7,10 +6,16 @@ namespace SimpleReport.Model
     public class Settings 
     {
         public string AdminAccess { get; set; }
+        public string SubscriptionAccess { get; set; }
         
         public Access AdminAccessChecker()
         {
             return new Access(AdminAccess);
+        }
+
+        public Access SubscriptionSettingAccessChecker()
+        {
+            return new Access(SubscriptionAccess);
         }
 
         public void AddCurrentUserToAdminAccess(IPrincipal user)
@@ -30,6 +35,7 @@ namespace SimpleReport.Model
         {
             Dictionary<string,string> dict = new Dictionary<string, string>();
             dict.Add("AdminAccess",AdminAccess);
+            dict.Add("SubscriptionAccess", SubscriptionAccess);
             return dict;
         }
 
@@ -38,6 +44,8 @@ namespace SimpleReport.Model
             Settings settings = new Settings();
             if (fromDictionary.ContainsKey("AdminAccess"))
                 settings.AdminAccess = fromDictionary["AdminAccess"];
+            if (fromDictionary.ContainsKey("SubscriptionAccess"))
+                settings.SubscriptionAccess = fromDictionary["SubscriptionAccess"];
             return settings;
         }
 

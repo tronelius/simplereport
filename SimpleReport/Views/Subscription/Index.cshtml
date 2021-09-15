@@ -2,33 +2,70 @@
 @{
     ViewBag.Title = "Subscriptions";
 }
+
+<script type="text/javascript">
+    var subscriptions = angular.module("subscriptions");
+</script>
 <section class="content-header">
     <h1>
         Subscriptions <small>Here you can edit existing subscriptions or create new ones.</small>
     </h1>
 </section>
-<section class="content" ng-cloak ng-app="subscriptions" ng-controller="subscriptionController">
+<section class="content" ng-controller="subscriptionController">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li ng-class="{active: activeTab == 'all'}" data-ng-click="activeTab = 'all'"><a>List of all active</a></li>
             <li ng-class="{active: activeTab == 'failed'}" data-ng-click="activeTab = 'failed'"><a>Failed</a></li>
-            <li ng-class="{active: activeTab == 'schedules'}" data-ng-click="activeTab = 'schedules'"><a>Schedules</a></li>
-            <li ng-class="{active: activeTab == 'settings'}" data-ng-click="activeTab = 'settings'"><a>Settings</a></li>
+            @if(Model.HasAdminAccess){
+                <li ng-class="{active: activeTab == 'schedules'}" data-ng-click="activeTab = 'schedules'"><a>Schedules</a></li>
+                <li ng-class="{active: activeTab == 'settings'}" data-ng-click="activeTab = 'settings'"><a>Settings</a></li>
+            }
         </ul>
     </div>
-        <div class="tab-content">
-            <div class="tab-pane active" data-ng-if="activeTab == 'all'">
-                <div data-subscription-list data-show-report-name="true"></div>
-            </div>
-            <div class="tab-pane active" data-ng-if="activeTab == 'failed'">
-                <div data-subscription-list data-show-report-name="true" data-filter="failed"></div>
-            </div>
-            <div class="tab-pane active" data-ng-if="activeTab == 'schedules'">
-                <div data-ng-if="activeTab == 'schedules'" data-schedule-editor></div>
-            </div>
-            <div class="tab-pane active" data-ng-if="activeTab == 'settings'">
-                Not done : settings
-            </div>
+    <div class="tab-content">
+        <div class="tab-pane active" data-ng-if="activeTab == 'all'">
+            <div data-subscription-list data-show-report-name-attr="true" data-show-recipients-attr="true" data-show-subject-attr="true"></div>
         </div>
+        <div class="tab-pane active" data-ng-if="activeTab == 'failed'">
+            <div data-subscription-list data-show-report-name-attr="true" data-show-recipients-attr="true" data-show-subject-attr="true" data-filter="failed"></div>
+        </div>
+        <div class="tab-pane active" data-ng-if="activeTab == 'schedules'">
+            <div data-ng-if="activeTab == 'schedules'" data-schedule-editor></div>
+        </div>
+        <div class="tab-pane active" data-ng-if="activeTab == 'settings'">
+            <div class="row content-text">
+                <div class="col-xs-12">
+                     <label class="control-label">Settings</label>
+                </div>
+            </div>
+            <form role="form" ng-hide="!settings">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <div class="form-group">
+                                            <label class="control-label" title="Access rights to view Subscriptions">Access rights to view Subscriptions</label>
+                                            <div>
+                                                <input type="text" ng-model="settings.SubscriptionAccess" class="form-control" title="Access rights to view Subscriptions">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="box-footer">
+                            <button type="button" class="btn btn-success" ng-click="saveSettings()">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </section>

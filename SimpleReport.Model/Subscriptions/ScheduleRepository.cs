@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using DapperExtensions;
@@ -10,7 +11,7 @@ namespace SimpleReport.Model.Subscriptions
     {
         public ScheduleRepository(string connectionstring) : base(connectionstring){}
 
-        public Schedule Get(int id)
+        public Schedule Get(Guid id)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
@@ -19,7 +20,7 @@ namespace SimpleReport.Model.Subscriptions
             }
         }
 
-        public int Insert(Schedule schedule)
+        public Guid Insert(Schedule schedule)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
@@ -53,7 +54,7 @@ namespace SimpleReport.Model.Subscriptions
             }
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {
@@ -61,7 +62,7 @@ namespace SimpleReport.Model.Subscriptions
             }
         }
 
-        public bool IsInUse(int id)
+        public bool IsInUse(Guid id)
         {
             using (SqlConnection cn = EnsureOpenConnection())
             {

@@ -279,3 +279,11 @@ a {
 .box.box-primary.refreshscreen {
     width: inherit;
 }
+
+.search-box {
+    width: 100% !important
+}
+
+.menu-open {
+    display: block !important;
+}
