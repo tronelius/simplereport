@@ -1,0 +1,34 @@
+﻿#Martin commented out everything about ReportLog when he ran this
+
+USE SimpleReport
+ALTER TABLE Subscription DROP CONSTRAINT FK_Subscription_ScheduleId_Schedule_Id;
+ALTER TABLE Subscription ADD NEW_ID UNIQUEIDENTIFIER;
+UPDATE Subscription SET Subscription.NEW_ID = NEWID()
+ALTER TABLE Subscription DROP CONSTRAINT PK_Subscription
+ALTER TABLE Subscription DROP COLUMN Id
+sp_rename  'Subscription.NEW_ID', 'Id', 'COLUMN'
+ALTER TABLE Subscription ALTER COLUMN Id UNIQUEIDENTIFIER NOT NULL;
+ALTER TABLE Subscription ADD CONSTRAINT PK_Subscription_Id PRIMARY KEY (Id)
+ALTER TABLE Subscription ADD  NEW_ScheduleId UNIQUEIDENTIFIER
+ALTER TABLE Schedule ADD NEW_ID UNIQUEIDENTIFIER
+UPDATE Schedule SET Schedule.NEW_ID = NEWID()
+UPDATE Subscription SET NEW_ScheduleId = sh.NEW_ID
+FROM Subscription sub
+INNER JOIN Schedule sh ON sh.Id = sub.ScheduleId
+ALTER TABLE Subscription DROP COLUMN ScheduleId
+sp_rename  'Subscription.NEW_ScheduleId', 'ScheduleId', 'COLUMN'
+ALTER TABLE Subscription ALTER COLUMN ScheduleId UNIQUEIDENTIFIER NOT NULL;
+ALTER TABLE  ReportLog ADD NEW_ScheduleId UNIQUEIDENTIFIER
+UPDATE ReportLog SET NEW_ScheduleId = s.NEW_ID
+FROM ReportLog r
+INNER JOIN Schedule s ON s.Id = r.ScheduleId
+ALTER TABLE ReportLog DROP COLUMN ScheduleId
+sp_rename  'ReportLog.NEW_ScheduleId', 'ScheduleId', 'COLUMN'
+ALTER TABLE Schedule DROP CONSTRAINT PK_Schedule
+ALTER TABLE Schedule DROP COLUMN Id
+sp_rename  'Schedule.NEW_ID', 'Id', 'COLUMN'
+ALTER TABLE Schedule ALTER COLUMN Id UNIQUEIDENTIFIER NOT NULL
+ALTER TABLE Schedule ADD CONSTRAINT PK_Schedule_Id PRIMARY KEY  (Id)
+ALTER TABLE Subscription ADD CONSTRAINT FK_Subscription_Schedule FOREIGN KEY (ScheduleId) REFERENCES Schedule (Id)
+SELECT * FROM Subscription
+SELECT * FROM Schedule
