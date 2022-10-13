@@ -30,7 +30,7 @@ namespace SimpleReportTests
         {
             var par = GetParameterWithInClauseForTest();
             DbSqlServerExecutor exec = new DbSqlServerExecutor(new NoReplacer());
-            var parameterList = par.GetDbParameterForLookup(inputSQL, update, exec);
+            var parameterList = par.GetDbParameterForLookup(inputSQL, update, exec, out inputSQL);
             Assert.That(parameterList.Count, Is.EqualTo(3));
             Assert.That(SQL, Is.EqualTo(expectedOutputSQL));
         }

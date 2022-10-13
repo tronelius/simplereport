@@ -26,7 +26,7 @@ namespace SimpleReport.Model
             List<DbParameter> paramList = new List<DbParameter>();
             foreach (Parameter parameter in this)
             {
-                paramList.AddRange(parameter.GetDbParameter(sql, updateSqlAction, db));
+                paramList.AddRange(parameter.GetDbParameter(sql, updateSqlAction, db, out sql));
             }
             return paramList;
         }
@@ -123,7 +123,7 @@ namespace SimpleReport.Model
             }
         }
 
-        public List<DbParameter> GetDbParameterForLookup(string query, Action<string> updateSqlAction, IDbExecutor db)
+        public List<DbParameter> GetDbParameterForLookup(string query, Action<string> updateSqlAction, IDbExecutor db, out string outQuery)
         {
             var dbParameters = new List<DbParameter>();
             string[] valueList = null;
@@ -147,10 +147,12 @@ namespace SimpleReport.Model
                 //Regular expression to find only those parameters that is surrounded by parentesis to match a "in (@paramname)" situation or a "in(@paramname)" situation.
                 string findWhereIn = @"(?<=in\()@" + Key + @"(?=\))|(?<=in \()@" + Key + @"(?=\))";
                 var newQuery = Regex.Replace(query, findWhereIn, replacement, RegexOptions.IgnoreCase);
+                outQuery = newQuery;
                 updateSqlAction(newQuery);
-            }
+            }   
             else
             {
+                outQuery = query;
                 dbParameters.Add(db.CreateParameter(Key, Value));
             }
 
@@ -183,12 +185,19 @@ namespace SimpleReport.Model
             }
         }
 
-        public IEnumerable<DbParameter> GetDbParameter(string query, Action<string> updateSqlAction, IDbExecutor db)
+        public IEnumerable<DbParameter> GetDbParameter(string query, Action<string> updateSqlAction, IDbExecutor db, out string outQuery)
         {
             if (InputType == ParameterInputType.Period)
+            {
+                outQuery = query;
                 return GetDbParameterForPeriod(db);
+            }
             if (InputType == ParameterInputType.Lookup || InputType == ParameterInputType.LookupMultipleChoice || InputType == ParameterInputType.StringList)
-                return GetDbParameterForLookup(query, updateSqlAction, db);
+            {
+                var parameter = GetDbParameterForLookup(query, updateSqlAction, db, out outQuery);
+                return parameter;
+            }
+            outQuery = query;
             return new List<DbParameter>() { db.CreateParameter(this.SqlKey, this.Value) };
         }
 
