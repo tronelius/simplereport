@@ -20,7 +20,7 @@ namespace SimpleReport.Model
             param.Value = searchword;
             paramList.Add(param);
 
-            DataTable result = db.GetResults(Connection, Sql, paramList);
+            DataTable result = db.GetResults(Connection, Sql, paramList, SqlTimeout);
             List<IdName> collection = new List<IdName>();
             if (result.Columns.Contains("id") && result.Columns.Contains("name"))
             {

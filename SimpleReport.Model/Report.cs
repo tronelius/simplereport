@@ -111,7 +111,7 @@ namespace SimpleReport.Model
 
             var db = DbExecutorFactory.GetInstance(Connection);
             var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
-            DataTable result = db.GetResults(Connection, Sql, parameters);
+            DataTable result = db.GetResults(Connection, Sql, parameters, SqlTimeout);
 
             var raw = new RawReportResult
             {
@@ -129,7 +129,7 @@ namespace SimpleReport.Model
 
             var db = DbExecutorFactory.GetInstance(Connection);
             var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
-            var dataResult = db.GetMultipleResults(Connection, Sql, parameters);
+            var dataResult = db.GetMultipleResults(Connection, Sql, parameters, SqlTimeout);
 
             if (dataResult.Count == 0)
                 return null;
@@ -157,7 +157,7 @@ namespace SimpleReport.Model
 
             var db = DbExecutorFactory.GetInstance(Connection);
             var parameters = Parameters.CreateParameters(Sql, UpdateSql, db);
-            var dataResult = db.GetMultipleResults(Connection, Sql, parameters);
+            var dataResult = db.GetMultipleResults(Connection, Sql, parameters, SqlTimeout);
 
             if (dataResult.Count == 0)
                 return null;

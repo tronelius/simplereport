@@ -10,7 +10,8 @@ namespace SimpleReport.Model
     {
         [NonSerialized]
         public Connection Connection;
-        
+        [NonSerialized]
+        public int SqlTimeout = 60;
         public Guid? ConnectionId { get; set; }
         [Required]
         public string Sql { get; set; }
@@ -25,7 +26,7 @@ namespace SimpleReport.Model
             if (Connection == null)
                 throw new Exception("Missing Connection in report");
 
-            DataTable result = DbExecutorFactory.GetInstance(Connection).GetResults(Connection, Sql, null);
+            DataTable result = DbExecutorFactory.GetInstance(Connection).GetResults(Connection, Sql, null, SqlTimeout);
             Dictionary<string, string> collection = new Dictionary<string, string>();
             if (result.Columns.Contains("id") && result.Columns.Contains("name"))
             {

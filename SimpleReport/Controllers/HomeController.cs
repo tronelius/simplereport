@@ -27,11 +27,13 @@ namespace SimpleReport.Controllers
     {
         private readonly ReportResolver _reportResolver;
         private readonly IPdfService _pdfService;
+        private IApplicationSettings _applicationSettings;
 
         public HomeController(ReportResolver reportResolver, ILogger logger, IApplicationSettings applicationSettings, IPdfService pdfService) : base(reportResolver.Storage, logger, applicationSettings)
         {
             _reportResolver = reportResolver;
             _pdfService = pdfService;
+            _applicationSettings = applicationSettings;
         }
 
         public ActionResult Index()
@@ -59,6 +61,7 @@ namespace SimpleReport.Controllers
         public ActionResult ExecuteReport(Guid reportId)
         {
             Report report = _reportResolver.GetReport(reportId);
+            report.SqlTimeout = _applicationSettings.SqlTimeout;
             if (report.IsAvailableForMe(User, _adminAccess))
             {
                 if (report.ReportType == ReportType.MultiReport)
