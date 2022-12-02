@@ -7,8 +7,8 @@ namespace SimpleReport.Model.DbExecutor
 {
     public interface IDbExecutor
     {
-        List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param);
-        DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param);
+        List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param, int sqlTimeout);
+        DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param, int sqlTimeout);
 
         ConnectionVerificationResult VerifyConnectionstring(string connectionString);
         DbParameter CreateStringParameter(string name, int length);

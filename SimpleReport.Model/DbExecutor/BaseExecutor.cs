@@ -10,6 +10,7 @@ namespace SimpleReport.Model.DbExecutor
     public abstract class BaseExecutor
     {
         private IReplacer _replacer;// = new OracleReservedWordsReplacer();
+        private IApplicationSettings _applicationSettings;
         public BaseExecutor(IReplacer replacer)
         {
             _replacer = replacer;
@@ -39,7 +40,7 @@ namespace SimpleReport.Model.DbExecutor
             return q;
         }
 
-        public virtual List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param)
+        public virtual List<DataTable> GetMultipleResults(Connection conn, string query, IEnumerable<DbParameter> param, int sqlTimeout)
         {
             var parsedQuery = ParseQuery(query, param);
             var parsedParamList = ParseParameters(param);
@@ -48,7 +49,7 @@ namespace SimpleReport.Model.DbExecutor
             {
                 try
                 {
-                    var cmd = CreateCommand(cn);
+                    var cmd = CreateCommand(cn, sqlTimeout);
                     cmd.CommandType = parsedQuery.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
                     cmd.CommandText = parsedQuery;
                     if (parsedParamList != null)
@@ -79,7 +80,7 @@ namespace SimpleReport.Model.DbExecutor
             return tables;
         }
 
-        public virtual DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param)
+        public virtual DataTable GetResults(Connection conn, string query, IEnumerable<DbParameter> param, int sqlTimeout)
         {
 
             var parsedQuery = ParseQuery(query, param);
@@ -89,7 +90,7 @@ namespace SimpleReport.Model.DbExecutor
                 try
                 {
                     DataTable table = new DataTable();
-                    var cmd = CreateCommand(cn);
+                    var cmd = CreateCommand(cn, sqlTimeout);
                     cmd.CommandType = parsedQuery.ToLower().StartsWith("select ") ? CommandType.Text : CommandType.StoredProcedure;
                     cmd.CommandText = parsedQuery;
                     if (parsedParamList != null)
@@ -149,10 +150,10 @@ namespace SimpleReport.Model.DbExecutor
             }
         }
 
-        protected DbCommand CreateCommand(DbConnection cn)
+        protected DbCommand CreateCommand(DbConnection cn, int sqlTimeout)
         {
             var cmd = cn.CreateCommand();
-            cmd.CommandTimeout = 60;
+            cmd.CommandTimeout = sqlTimeout;
             return cmd;
         }
 
