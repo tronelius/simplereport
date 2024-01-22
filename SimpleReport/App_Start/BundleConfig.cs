@@ -13,8 +13,7 @@ namespace SimpleReport.App_Start
             bundles.Add(appbundle);
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
-                "~/Scripts/lib/jquery-{version}.js",
-                "~/Scripts/lib/jquery.numeric.js",
+                "~/Scripts/jquery-{version}.js",
                 "~/Scripts/lib/bootstrap.js",
                 "~/Scripts/lib/bootstrap-datepicker.js",
                 "~/Scripts/lib/underscore.min.js",
